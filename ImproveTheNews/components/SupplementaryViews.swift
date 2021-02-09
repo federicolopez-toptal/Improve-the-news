@@ -278,7 +278,7 @@ class seeMoreFooter: UICollectionReusableView {
     }
 }
 
-class seeMoreFooterSection0: UICollectionReusableView {
+class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
     
     static let footerId = "FooterIdSection0"
     
@@ -315,6 +315,7 @@ class seeMoreFooterSection0: UICollectionReusableView {
         scrollView = UIScrollView(frame: CGRect(x: 0, y: 40, width: bounds.width, height: 50))
         scrollView.showsHorizontalScrollIndicator = true
         scrollView.flashScrollIndicators()
+        scrollView.delegate = self
         
         var x = 0
         for i in 0..<Globals.searchTopics.count {
@@ -365,6 +366,12 @@ class seeMoreFooterSection0: UICollectionReusableView {
         let topic = buttontext.replacingOccurrences(of: "MORE ", with: "")
         let newTopic = Globals.topicmapping[String(topic)]!
         self.delegate!.pushNewTopic(newTopic: newTopic)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if(scrollView.isDragging) {
+            self.delegate?.horizontalScroll(to: scrollView.contentOffset.x)
+        }
     }
 }
 

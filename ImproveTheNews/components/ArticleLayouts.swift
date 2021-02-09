@@ -21,6 +21,7 @@ protocol TopicSelectorDelegate {
     func changeTopic(newTopic: String)
     func pushNewTopic(newTopic: String)
     func goToScrollView(atSection: Int)
+    func horizontalScroll(to: CGFloat)
 }
 
 class HeadlineCell: UICollectionViewCell {

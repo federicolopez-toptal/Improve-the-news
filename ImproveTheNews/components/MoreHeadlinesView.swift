@@ -9,21 +9,92 @@
 import Foundation
 import UIKit
 
-class MoreHeadlinesView: UIView {
+// ------------
+protocol MoreHeadlinesViewDelegate {
+    func scrollFromHeadLines(toSection: Int)
+    func horizontalScrollFromHeadLines(to: CGFloat)
+}
 
-    private var scrollView = UIScrollView()
-
-    // MARK: - Init
-    func initialize(frame: CGRect) {
-        /*
-        scrollView = UIScrollView(frame: CGRect(x: 0, y: 40, width: bounds.width, height: 50))
-        scrollView.showsHorizontalScrollIndicator = true
-        scrollView.flashScrollIndicators()
-        */
-        
-        self.frame = frame
-        self.backgroundColor = .red
+// ------------
+class customUIScrollView: UIScrollView {
+      
+      
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("Begin!")
     }
     
+    
+    override func touchesShouldBegin(_ touches: Set<UITouch>, with event: UIEvent?, in view: UIView) -> Bool {
+        
+        print("assadasdsa")
+        
+        return true
+    }
+    
+}
+
+// ------------
+class MoreHeadlinesView: UIView, UIScrollViewDelegate {
+
+    var delegate: MoreHeadlinesViewDelegate?
+    var scrollView = customUIScrollView()
+
+    // MARK: - Init
+    func initialize(width: CGFloat) {
+        self.frame = CGRect(x: 0, y: 0, width: width, height: 50)
+        self.backgroundColor = .red
+        
+        self.scrollView = customUIScrollView(frame: CGRect(x: 0, y: 0, width: width, height: 50))
+        self.scrollView.showsHorizontalScrollIndicator = true
+        self.scrollView.flashScrollIndicators()
+        self.scrollView.delegate = self
+        self.scrollView.canCancelContentTouches = false
+        self.addSubview(self.scrollView)
+
+        var x = 0
+        for i in 0..<Globals.searchTopics.count {
+            let button = UIButton(frame: CGRect(x: CGFloat(x), y: 3, width: 100, height: 30))
+            button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)
+            button.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 12)
+            button.titleLabel?.textColor = articleHeadLineColor
+            button.titleLabel?.lineBreakMode = .byWordWrapping
+            button.titleLabel?.textAlignment = .center
+            button.tag = i
+            button.addTarget(self, action: #selector(headLineTap(_:)), for: .touchUpInside)
+            scrollView.addSubview(button)
+            x += Int(button.frame.size.width)
+            
+            scrollView.contentSize = CGSize(width: CGFloat(x), height: scrollView.frame.size.height)
+            scrollView.backgroundColor = articleSourceColor
+        }
+        
+        
+    }
+    
+    func moveTo(y: CGFloat) {
+        var mFrame = self.frame
+        mFrame.origin.y = y
+        self.frame = mFrame
+    }
+    
+    func show() {
+        self.isHidden = false
+    }
+    
+    func hide() {
+        self.isHidden = true
+    }
+    
+    @objc private func headLineTap(_ sender: UIButton!) {
+        print("scrollViewButtonTapped")
+        self.delegate?.scrollFromHeadLines(toSection: sender.tag)
+    }
+    
+    // MARK: - Scrollview
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if(scrollView.isDragging) {
+            self.delegate?.horizontalScrollFromHeadLines(to: scrollView.contentOffset.x)
+        }
+    }
     
 }

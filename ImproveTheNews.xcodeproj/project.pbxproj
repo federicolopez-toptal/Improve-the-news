@@ -773,7 +773,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.5.7.15;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = SW8S5Y74E8;
 				ENABLE_PREVIEWS = YES;

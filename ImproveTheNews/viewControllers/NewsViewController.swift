@@ -10,7 +10,10 @@ import UIKit
 import LBTATools
 import SDWebImage
 
-class NewsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class NewsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, MoreHeadlinesViewDelegate {
+    
+    
+    
     
     let group = DispatchGroup()
     
@@ -32,6 +35,16 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var refresher: UIRefreshControl!
     
     var activityIndicator = UIActivityIndicatorView()
+    
+    // ---
+    let screenWidth = UIScreen.main.bounds.width
+    var navBarFrame = CGRect.zero
+    // ---
+    private var moreHeadLines = MoreHeadlinesView()
+    private var seeMoreFooterSection: seeMoreFooterSection0?
+    
+    private var moreHeadLinesInCollectionPosY: CGFloat = 0
+    
     
     // bias sliders button + view
     var biasButton: UIButton = {
@@ -387,6 +400,17 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     seeMore.delegate = self
                     seeMore.setFooterText(subtopic: "MORE " + newsParser.getTopic(index: indexPath.section))
                     seeMore.configure()
+                    
+                    self.seeMoreFooterSection = seeMore
+                    self.moreHeadLinesInCollectionPosY = seeMore.frame.origin.y
+                    
+                    var mOffset = self.moreHeadLines.scrollView.contentOffset
+                    /*if(mOffset.x < 0){ mOffset.x = 0 }
+                    else if(mOffset.x > self.moreHeadLines.scrollView.contentSize.width){
+                        mOffset.x = self.moreHeadLines.scrollView.contentSize.width
+                    }*/
+                    seeMore.scrollView.contentOffset = mOffset
+                    
                     return seeMore
                 } else {
                     // no FAQ footer unless last section
@@ -411,6 +435,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        /*
         let safeAreaTop: CGFloat = 88
         let offset = scrollView.contentOffset.y + safeAreaTop
         
@@ -419,6 +444,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         navigationController?.navigationBar.alpha = alpha
         navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0,-offset))
         
+        self.view.bringSubviewToFront(self.moreHeadLines)
+        print(self.moreHeadLines)
+        */
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -444,6 +472,34 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //        let card = cards[indexForTopCard] as? Card
 
 //        card?.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: card?.frame.size.width ?? 0.0, height: card?.frame.size.height ?? 0.0)
+
+        
+        let limit = self.moreHeadLinesInCollectionPosY-self.navBarFrame.size.height
+        if(scrollView.contentOffset.y >= limit) {
+            if let view = self.seeMoreFooterSection {
+                var mOffset = view.scrollView.contentOffset
+                /*if(mOffset.x < 0){ mOffset.x = 0 }
+                else if(mOffset.x > scrollView.contentSize.width){
+                    mOffset.x = scrollView.contentSize.width
+                }*/
+                self.moreHeadLines.scrollView.contentOffset = mOffset
+            }
+            
+            self.moreHeadLines.show()
+        } else {
+            if let view = self.seeMoreFooterSection {
+                var mOffset = self.moreHeadLines.scrollView.contentOffset
+                /*if(mOffset.x < 0){ mOffset.x = 0 }
+                else if(mOffset.x > scrollView.contentSize.width){
+                    mOffset.x = scrollView.contentSize.width
+                }*/
+                view.scrollView.contentOffset = mOffset
+            }
+        
+            self.moreHeadLines.hide()
+        }
+        self.view.bringSubviewToFront(self.moreHeadLines)
+
     }
     
     init(topic: String) {
@@ -529,10 +585,29 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         configureTopicButton()
         setUpRefresh()
         setUpActivityIndicator()
+        
+        
+        
+        
+        self.moreHeadLines.initialize(width: self.screenWidth)
+        self.view.addSubview(self.moreHeadLines)
+        self.moreHeadLines.delegate = self
+        self.moreHeadLines.hide()
+    }
+    
+    func scrollFromHeadLines(toSection: Int) {
+        let indexPath = IndexPath(item: 0, section: toSection)
+        self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
     }
     
     @objc func refreshNews(){
         self.viewWillAppear(false)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        self.navBarFrame = self.navigationController!.navigationBar.frame
+        let posY = self.navBarFrame.origin.y + self.navBarFrame.size.height
+        self.moreHeadLines.moveTo(y: posY)
     }
 }
 
@@ -902,10 +977,28 @@ extension NewsViewController: shareDelegate {
         present(ac, animated: true)
     }
     
+    func horizontalScroll(to: CGFloat) {
+        var mOffset = self.moreHeadLines.scrollView.contentOffset
+        mOffset.x = to
+        self.moreHeadLines.scrollView.setContentOffset(mOffset, animated: false)
+    }
+    
+    func horizontalScrollFromHeadLines(to: CGFloat) {
+        var mOffset = self.seeMoreFooterSection?.scrollView.contentOffset
+        mOffset?.x = to
+        
+        if let
+        offset = mOffset {
+            self.seeMoreFooterSection?.scrollView.setContentOffset(offset, animated: false)
+        }
+    }
+    
 }
 
 
 
+
+/*
 import SwiftUI
 struct MainPreview: PreviewProvider {
     static var previews: some View {
@@ -924,3 +1017,4 @@ struct MainPreview: PreviewProvider {
 
     }
 }
+*/
