@@ -502,7 +502,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
         limit += 40
         
-        if(limit<0){
+        if(limit<110) {
             self.moreHeadLines.hide()
         } else {
             if(scrollView.contentOffset.y >= limit) {
@@ -576,7 +576,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 
                 sleep(2)
                 self.loadingView.isHidden = true
-                //self.firstTime = false
+                self.firstTime = false
                 //self.activityIndicator.stopAnimating()
                 
                 self.stopRefresher()
@@ -676,13 +676,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     override func viewDidLayoutSubviews() {
-        self.navBarFrame = self.navigationController!.navigationBar.frame
-        
-        var posY = self.navBarFrame.origin.y + self.navBarFrame.size.height
-        if(!navigationController!.navigationBar.isTranslucent) {
-            posY = 0
+        if let nav = self.navigationController {
+            self.navBarFrame = nav.navigationBar.frame
+            var posY = self.navBarFrame.origin.y + self.navBarFrame.size.height
+            if(!navigationController!.navigationBar.isTranslucent) {
+                posY = 0
+            }
+            self.moreHeadLines.moveTo(y: posY)
         }
-        self.moreHeadLines.moveTo(y: posY)
     }
 }
 
@@ -723,6 +724,7 @@ extension NewsViewController {
     @objc func refresh(_ sender: UIRefreshControl!) {
         
         self.refresher.beginRefreshing()
+        self.firstTime = true
         self.loadData()
         
         /*
@@ -983,7 +985,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             self.loadArticles()
             self.reload()
-            //sleep(2)
+            sleep(2)
             //self.biasSliders.activityView.stopAnimating()
             self.biasSliders.showLoading(false)
         }

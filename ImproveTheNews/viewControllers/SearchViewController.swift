@@ -53,6 +53,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             sliderValues.setTopic(topic: topiccode!)
             
             let newsVC = navigationController!.viewControllers[0] as! NewsViewController
+            newsVC.firstTime = true
             newsVC.topic = topiccode!
             //newsVC.collectionView?.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
             navigationController!.popToRootViewController(animated: true)
