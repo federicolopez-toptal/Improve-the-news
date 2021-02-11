@@ -230,12 +230,45 @@ class seeMoreFooter: UICollectionReusableView {
     
     var delegate: TopicSelectorDelegate?
     
-    var image = UIButton(image: UIImage(systemName: "arrowtriangle.right.fill")!, tintColor: accentOrange, target: self, action: #selector(goToTopic(_:)))
-    var button = UIButton(title: "More headlines", titleColor: articleSourceColor, font: UIFont(name: "PTSerif-Bold", size: 16)!, backgroundColor: .black, target: self, action: #selector(goToTopic(_:)))
+    var label = UILabel()
+    var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 23)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
     
     public func configure() {
+        
+        label.text = "More "
+        label.font = UIFont(name: "PTSerif-Bold", size: 23)
+        label.textColor = articleSourceColor
+        label.sizeToFit()
+        label.backgroundColor = .clear
+            var mFrame = label.frame
+            mFrame.origin.x = (UIScreen.main.bounds.width/2) - mFrame.size.width
+            mFrame.origin.y = 20 + 4
+            label.frame = mFrame
+        addSubview(label)
+        
+        button.sizeToFit()
+        button.backgroundColor = .clear
+            mFrame = button.frame
+            mFrame.origin.x = (UIScreen.main.bounds.width/2)
+            mFrame.origin.y = 13 + 4
+            button.frame = mFrame
         addSubview(button)
         
+            let w = label.frame.size.width + button.frame.size.width
+            let newX = (UIScreen.main.bounds.width - w)/2
+            let diffX = newX - label.frame.origin.x
+            
+            mFrame = label.frame
+            mFrame.origin.x += diffX
+            label.frame = mFrame
+            
+            mFrame = button.frame
+            mFrame.origin.x += diffX
+            button.frame = mFrame
+        
+        
+        /*
+        addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.sizeToFit()
         button.titleLabel?.font = UIFont(name: "OpenSans-Bold", size: 12)
@@ -245,25 +278,34 @@ class seeMoreFooter: UICollectionReusableView {
             button.heightAnchor.constraint(equalToConstant: 10),
             button.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10)
         ])
+        */
         
+        /*
         addSubview(image)
-        
         image.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             image.widthAnchor.constraint(equalToConstant: 10),
             image.leadingAnchor.constraint(equalTo: button.trailingAnchor, constant: 3),
             image.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
         ])
+        */
 
-        addBottomBorder()
+        addTopBorder()
+        self.backgroundColor = bgBlue
+    }
+    
+    func addTopBorder() {
+        let border = UIView(frame: CGRect(x: 10, y: 5,
+                            width: self.frame.width - 20, height: 1))
+        border.backgroundColor = articleSourceColor
+        addSubview(border)
     }
     
     func addBottomBorder() {
-        
-        let border = UIView(frame: CGRect(x: 10, y: self.frame.height - 5, width: self.frame.width - 20, height: 2))
-        border.backgroundColor = .secondaryLabel
+        let border = UIView(frame: CGRect(x: 10, y: self.frame.height - 5,
+                            width: self.frame.width - 20, height: 2))
+        border.backgroundColor = UIColor.white.withAlphaComponent(0.15)
         addSubview(border)
-        
     }
     
     public func setFooterText(subtopic: String) {
@@ -273,8 +315,11 @@ class seeMoreFooter: UICollectionReusableView {
     @objc func goToTopic(_ sender: UIButton!) {
         let buttontext = button.titleLabel!.text!
         let topic = buttontext.replacingOccurrences(of: "MORE ", with: "")
-        let newTopic = Globals.topicmapping[String(topic)]!
-        self.delegate!.pushNewTopic(newTopic: newTopic)
+        
+        if(Globals.topicmapping[topic] != nil) {
+            let newTopic = Globals.topicmapping[topic]!
+            self.delegate!.pushNewTopic(newTopic: newTopic)
+        }
     }
 }
 
@@ -284,35 +329,45 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
     
     var delegate: TopicSelectorDelegate?
     
-    var image = UIButton(image: UIImage(systemName: "arrowtriangle.right.fill")!, tintColor: accentOrange, target: self, action: #selector(goToTopic(_:)))
-    var button = UIButton(title: "More headlines", titleColor: articleSourceColor, font: UIFont(name: "PTSerif-Bold", size: 16)!, backgroundColor: .black, target: self, action: #selector(goToTopic(_:)))
-    
+    var label = UILabel()
     var scrollView = UIScrollView()
+    var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 23)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
     
     public func configure() {
+        label.text = "More "
+        label.font = UIFont(name: "PTSerif-Bold", size: 23)
+        label.textColor = articleSourceColor
+        label.sizeToFit()
+        label.backgroundColor = .clear
+            var mFrame = label.frame
+            mFrame.origin.x = (UIScreen.main.bounds.width/2) - mFrame.size.width
+            mFrame.origin.y = 20 + 4
+            label.frame = mFrame
+        addSubview(label)
+        
+        button.sizeToFit()
+        button.backgroundColor = .clear
+            mFrame = button.frame
+            mFrame.origin.x = (UIScreen.main.bounds.width/2)
+            mFrame.origin.y = 13 + 4
+            button.frame = mFrame
         addSubview(button)
         
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.sizeToFit()
-        button.titleLabel?.font = UIFont(name: "OpenSans-Bold", size: 12)
-        
-        NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-            button.heightAnchor.constraint(equalToConstant: 10),
-            button.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10)
-        ])
-        
-        addSubview(image)
-        
-        image.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            image.widthAnchor.constraint(equalToConstant: 10),
-            image.leadingAnchor.constraint(equalTo: button.trailingAnchor, constant: 3),
-            image.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
-        ])
+            let w = label.frame.size.width + button.frame.size.width
+            let newX = (UIScreen.main.bounds.width - w)/2
+            let diffX = newX - label.frame.origin.x
+            
+            mFrame = label.frame
+            mFrame.origin.x += diffX
+            label.frame = mFrame
+            
+            mFrame = button.frame
+            mFrame.origin.x += diffX
+            button.frame = mFrame
+            
           
-        //scroll view code
-        scrollView = UIScrollView(frame: CGRect(x: 0, y: 40, width: bounds.width, height: 50))
+        //scrollView
+        scrollView = UIScrollView(frame: CGRect(x: 0, y: 80, width: bounds.width, height: 50))
         scrollView.showsHorizontalScrollIndicator = true
         scrollView.flashScrollIndicators()
         scrollView.delegate = self
@@ -341,12 +396,20 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
             ])
         }
 
-        addBottomBorder()
+        addTopBorder()
+        self.backgroundColor = bgBlue
     }
     
     @objc func scrollViewButtonTapped(_ sender: UIButton!) {
         print("scrollViewButtonTapped")
         self.delegate?.goToScrollView(atSection: sender.tag)
+    }
+    
+    func addTopBorder() {
+        let border = UIView(frame: CGRect(x: 10, y: 5,
+                            width: self.frame.width - 20, height: 1))
+        border.backgroundColor = articleSourceColor
+        addSubview(border)
     }
     
     func addBottomBorder() {

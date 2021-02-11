@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+
+var bgBlue = UIColor(rgb: 0x0D1228)
+var bgBlueLight = UIColor(rgb: 0x131b33)
+
 var accentOrange = UIColor(rgb: 0xD3592D)
 var articleHeadLineColor = UIColor(rgb: 0xE4E5DF)
 var articleSourceColor = UIColor(rgb: 0x334262)

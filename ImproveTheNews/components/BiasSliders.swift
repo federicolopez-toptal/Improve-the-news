@@ -332,7 +332,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
         
         UIView.animate(withDuration: 0.5, animations: {
             self.showMore.isHidden = true
-            self.frame = CGRect(x: 0, y: screenSize.height - height, width: screenSize.width, height: self.frame.height)
+            self.frame = CGRect(x: 0, y: screenSize.height - height - 88, width: screenSize.width, height: self.frame.height)
         })
         
         showMore.isHidden = true
@@ -351,7 +351,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
         
         UIView.animate(withDuration: 0.5, animations: {
             self.showMore.isHidden = false
-            self.frame = CGRect(x: 0, y: screenSize.height - height, width: screenSize.width, height: self.frame.height)
+            self.frame = CGRect(x: 0, y: screenSize.height - height - 88, width: screenSize.width, height: self.frame.height)
         })
         
         addShowMore()

@@ -233,9 +233,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             else if section == 0{
                 // see more footer
                 //increasing height of footer for horizontal scroll view
-                return .init(width: 0, height: 100)
+                return .init(width: 0, height: 80 + 50 + 20)
             } else {
-                return .init(width: 0, height: 30)
+                return .init(width: 0, height: 80)
             }
         
         }
@@ -401,6 +401,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //                    sectionHeader.myStack.addArrangedSubview(label2)
                     //sectionHeader.setUpStackView(atIndex: sectionHeader.tag)
                 }
+                
+                sectionHeader.backgroundColor  = bgBlue
                 return sectionHeader
                 
             
@@ -415,7 +417,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 } else if indexPath.section == 0 {
                     let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterSection0.footerId, for: indexPath) as! seeMoreFooterSection0
                     seeMore.delegate = self
-                    seeMore.setFooterText(subtopic: "MORE " + newsParser.getTopic(index: indexPath.section))
+                    // aMore
+                    seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                     seeMore.configure()
                     
                     self.seeMoreFooterSection = seeMore
@@ -433,7 +436,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     // no FAQ footer unless last section
                     let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooter.footerId, for: indexPath) as! seeMoreFooter
                     seeMore.delegate = self
-                    seeMore.setFooterText(subtopic: "MORE " + newsParser.getTopic(index: indexPath.section))
+                    // oMore
+                    seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                     seeMore.configure()
                     return seeMore
                 }
@@ -491,7 +495,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //        card?.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: card?.frame.size.width ?? 0.0, height: card?.frame.size.height ?? 0.0)
 
         
-        let limit = self.moreHeadLinesInCollectionPosY-self.navBarFrame.size.height
+        var limit = self.moreHeadLinesInCollectionPosY-self.navBarFrame.size.height
+        if(!navigationController!.navigationBar.isTranslucent) {
+            limit += (self.navBarFrame.origin.y + self.navBarFrame.size.height)
+        }
+        limit += 40
         
         if(limit<0){
             self.moreHeadLines.hide()
@@ -617,6 +625,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.view.addSubview(self.moreHeadLines)
         self.moreHeadLines.delegate = self
         self.moreHeadLines.hide()
+        
+        self.view.backgroundColor = bgBlue
+        self.collectionView.backgroundColor = bgBlue
     }
     
     func scrollFromHeadLines(toSection: Int) {
@@ -630,7 +641,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidLayoutSubviews() {
         self.navBarFrame = self.navigationController!.navigationBar.frame
-        let posY = self.navBarFrame.origin.y + self.navBarFrame.size.height
+        
+        var posY = self.navBarFrame.origin.y + self.navBarFrame.size.height
+        if(!navigationController!.navigationBar.isTranslucent) {
+            posY = 0
+        }
         self.moreHeadLines.moveTo(y: posY)
     }
 }
@@ -727,7 +742,7 @@ extension NewsViewController {
         searchBar.searchTextField.backgroundColor = .white
         searchBar.searchTextField.textColor = .black
         searchBar.tintColor = .black
-        
+
         let logo = UIImage(named: "N64")
         let titleView = UIImageView(image: logo)
         titleView.contentMode = .scaleAspectFit
@@ -735,8 +750,13 @@ extension NewsViewController {
 
 //        navigationItem.title = "Improve the News"
         navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.barTintColor = .black// bar color when scrolling down
-        navigationController?.navigationBar.backgroundColor = .black
+        navigationController?.navigationBar.barTintColor = bgBlue
+        //.black// bar color when scrolling down
+        navigationController?.navigationBar.backgroundColor = bgBlue
+        navigationController?.navigationBar.barTintColor = bgBlue
+        navigationController?.navigationBar.barTintColor = bgBlue
+        navigationController?.navigationBar.isTranslucent = false
+        
         navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: UIColor.white]
 
@@ -751,20 +771,25 @@ extension NewsViewController {
     
     func setUp() {
         
-        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 200, height: 30))
-        let img = UIImage(named: "N64")?.withRenderingMode(.alwaysOriginal)
+        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 195, height: 30))
+        let img = UIImage(named: "ITN_logo.png")?.withRenderingMode(.alwaysOriginal)
         let homeButton = UIButton(image: img!)
-        homeButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        homeButton.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
+        homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
+        homeButton.addTarget(self, action: #selector(homeButtonTapped),
+                            for: .touchUpInside)
         homeButton.isUserInteractionEnabled = false
+        
+        /*
         let label = UILabel.init(frame: CGRect(x: 35, y: 5, width: 180, height: 20))
         label.text = "IMPROVE THE NEWS"
         label.font = UIFont(name: "OpenSans-Bold", size: 17)
         label.textColor = .white
         label.textAlignment = .left
         //label.center.y = view.center.y
+        */
+        
         view.addSubview(homeButton)
-        view.addSubview(label)
+        //view.addSubview(label)
         view.center = navigationItem.titleView!.center
         self.navigationItem.titleView = view
     }
@@ -847,7 +872,13 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
     
     func configureBiasButton() {
         view.addSubview(biasButton)
-        biasButton.frame = CGRect(x: view.frame.maxX-60, y: view.frame.height - 150, width: 50, height: 50)
+        
+        var posY = view.frame.height - 150
+        if(!navigationController!.navigationBar.isTranslucent) {
+            posY -= 88
+        }
+        
+        biasButton.frame = CGRect(x: view.frame.maxX-60, y: posY, width: 50, height: 50)
         biasButton.layer.cornerRadius = 0.5 * biasButton.bounds.size.width
         let y = view.frame.height - slidersHeight
         biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550) //470
