@@ -34,6 +34,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var mainTopic = "Headlines"
     var refresher: UIRefreshControl!
     
+    let loadingView = UIView()
     var activityIndicator = UIActivityIndicatorView()
     
     // ---
@@ -44,7 +45,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     private var seeMoreFooterSection: seeMoreFooterSection0?
     
     private var moreHeadLinesInCollectionPosY: CGFloat = 0
-    
+    var firstTime = true
     
     // bias sliders button + view
     var biasButton: UIButton = {
@@ -551,32 +552,67 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.delaysContentTouches = false
         
         for view in collectionView.subviews {
-              if view is UIScrollView {
-                  (view as? UIScrollView)!.delaysContentTouches = false
-                  break
-              }
+          if view is UIScrollView {
+              (view as? UIScrollView)!.delaysContentTouches = false
+              break
           }
+        }
         
-        activityIndicator.startAnimating()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            
-            self.loadArticles()
-            self.reload()
-            self.updateTopicSliders()
-            if Globals.isSliderOn {
-                self.configureBiasSliders()
+        self.loadData()
+    }
+    
+    func loadData() {
+        if(self.firstTime){
+            //activityIndicator.startAnimating()
+            self.loadingView.isHidden = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                
+                self.loadArticles()
+                self.reload()
+                self.updateTopicSliders()
+                if Globals.isSliderOn {
+                    self.configureBiasSliders()
+                }
+                
+                sleep(2)
+                self.loadingView.isHidden = true
+                //self.firstTime = false
+                //self.activityIndicator.stopAnimating()
+                
+                self.stopRefresher()
             }
-            
-            sleep(2)
-            self.activityIndicator.stopAnimating()
         }
     }
     
+    
+    
+    
+    
     func setUpActivityIndicator() {
+        let dim: CGFloat = 65
+        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
+        self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        self.loadingView.isHidden = true
+        self.loadingView.layer.cornerRadius = 15
+    
+        let loading = UIActivityIndicatorView(style: .medium)
+        self.loadingView.addSubview(loading)
+        loading.center = CGPoint(x: dim/2, y: dim/2)
+        loading.startAnimating()
+    
+        /*
         self.activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.center = self.view.center
+        
+        self.activityIndicator.frame = CGRect(x: (UIScreen.main.bounds.width-20)/2,
+                                            y: (UIScreen.main.bounds.height-20)/2,
+                                            width: 20, height: 20)
+        
         self.view.addSubview(activityIndicator)
+        */
+        
+        self.view.addSubview(self.loadingView)
     }
 
     override func viewDidLoad() {
@@ -687,14 +723,17 @@ extension NewsViewController {
     @objc func refresh(_ sender: UIRefreshControl!) {
         
         self.refresher.beginRefreshing()
+        self.loadData()
         
+        /*
         print("refresh?")
         self.collectionView.reloadData()
         
         self.hierarchy = ""
         self.hierarchy = newsParser.getHierarchy()
+        */
         
-        stopRefresher()
+        //stopRefresher()
     }
     
     func stopRefresher() {
@@ -944,7 +983,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             self.loadArticles()
             self.reload()
-            sleep(2)
+            //sleep(2)
             //self.biasSliders.activityView.stopAnimating()
             self.biasSliders.showLoading(false)
         }

@@ -527,11 +527,11 @@ class FAQFooter: UICollectionReusableView {
         shareIcon.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             shareIcon.topAnchor.constraint(equalTo: about.bottomAnchor, constant: 20),
-            shareIcon.heightAnchor.constraint(equalToConstant: 64),
-            shareIcon.widthAnchor.constraint(equalToConstant: 64),
+            shareIcon.heightAnchor.constraint(equalToConstant: 55),
+            shareIcon.widthAnchor.constraint(equalToConstant: 55),
             shareIcon.centerXAnchor.constraint(equalTo: self.centerXAnchor),
         ])
-        shareIcon.layer.cornerRadius = 0.5 * 64
+        shareIcon.layer.cornerRadius = 0.5 * 55
         
         /*
         view.addSubview(shareBubble)
