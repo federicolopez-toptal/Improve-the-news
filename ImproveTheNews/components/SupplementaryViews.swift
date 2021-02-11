@@ -445,13 +445,19 @@ class FAQFooter: UICollectionReusableView {
     var shareDelegate: shareDelegate?
     
     let view = UIView()
+    let titleImage = UIImageView(image: UIImage(named: "ITN_logo.png"))
+    
     let title = UILabel(text: "Improve the News", font: .boldSystemFont(ofSize: 20), textColor: .label, textAlignment: .center, numberOfLines: 1)
     let about = UILabel()
+    /*
     let str = """
     Just as it’s healthier to choose what you eat deliberately than impulsively, it’s more empowering to chose your news diet deliberately on this site than to randomly read what marketers and machine-learning algorithms elsewhere predict that you’ll impulsively click on. You can make these deliberate choices about topic, stance, style, etc. by adjusting the sliders.
 
     This app was created by MIT student Mindy Long. Its news feed is based on a research research project lead by Prof. Max Tegmark on automated news classification.
     """
+    */
+    
+    let str = "A non-profit news aggregator helping you break out of your filter bubble"
     
     let shareBubble = UILabel(text: "Share with a friend", font: UIFont(name: "OpenSans-Regular", size: 12), textColor: .secondaryLabel, textAlignment: .center, numberOfLines: 1)
     
@@ -459,7 +465,7 @@ class FAQFooter: UICollectionReusableView {
     
     public func configure() {
         
-        backgroundColor = .secondarySystemBackground
+        backgroundColor = bgBlue
         
         addSubview(view)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -469,8 +475,24 @@ class FAQFooter: UICollectionReusableView {
             view.topAnchor.constraint(equalTo: self.topAnchor),
             view.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
-        
         view.addSubview(title)
+        view.backgroundColor = bgBlue
+        
+        view.addSubview(titleImage)
+        titleImage.backgroundColor = .clear
+        titleImage.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 15),
+            titleImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            titleImage.widthAnchor.constraint(equalToConstant: 195),
+            titleImage.heightAnchor.constraint(equalToConstant: 30)
+        ])
+        
+        let line = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
+        line.backgroundColor = articleSourceColor
+        view.addSubview(line)
+        
+        /*
         title.translatesAutoresizingMaskIntoConstraints = false
         title.font = UIFont(name: "PlayfairDisplay-SemiBold", size: 38)
         NSLayoutConstraint.activate([
@@ -478,35 +500,40 @@ class FAQFooter: UICollectionReusableView {
             title.heightAnchor.constraint(equalToConstant: 47),
             title.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
+        */
         
-        about.textAlignment = .center
+        about.textAlignment = .left
         about.text = str
         about.font = UIFont(name: "OpenSans-Regular", size: 12)
-        about.textColor = .secondaryLabel
+        about.textColor = UIColor(rgb: 0x737D96)
         about.numberOfLines = 18
         about.adjustsFontSizeToFitWidth = true
+        about.sizeToFit()
+        
         view.addSubview(about)
         about.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            about.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 22),
-            about.widthAnchor.constraint(equalToConstant: layer.frame.width - 20),
-            about.heightAnchor.constraint(equalToConstant: 250),
-            about.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10)
+            about.topAnchor.constraint(equalTo: titleImage.bottomAnchor, constant: 20),
+            about.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
+            about.heightAnchor.constraint(equalToConstant: 44),
+            about.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width-30)
         ])
+        about.backgroundColor = .clear
         
         view.addSubview(shareIcon)
-        shareIcon.tintColor = accentOrange
+        shareIcon.tintColor = UIColor.white
         shareIcon.addTarget(self, action: #selector(sharePressed), for: .touchUpInside)
-        shareIcon.backgroundColor = .tertiarySystemBackground
+        shareIcon.backgroundColor = accentOrange
         shareIcon.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            shareIcon.topAnchor.constraint(equalTo: about.bottomAnchor, constant: 21),
+            shareIcon.topAnchor.constraint(equalTo: about.bottomAnchor, constant: 20),
             shareIcon.heightAnchor.constraint(equalToConstant: 64),
             shareIcon.widthAnchor.constraint(equalToConstant: 64),
             shareIcon.centerXAnchor.constraint(equalTo: self.centerXAnchor),
         ])
         shareIcon.layer.cornerRadius = 0.5 * 64
         
+        /*
         view.addSubview(shareBubble)
         shareBubble.translatesAutoresizingMaskIntoConstraints = false
         shareBubble.font = UIFont(name: "OpenSans-Regular", size: 12)
@@ -516,6 +543,7 @@ class FAQFooter: UICollectionReusableView {
             shareBubble.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             shareBubble.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15)
         ])
+        */
         
     }
     

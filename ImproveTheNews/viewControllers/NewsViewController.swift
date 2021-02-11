@@ -224,7 +224,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         
         if section == self.collectionView.numberOfSections - 1 {
-            return .init(width: view.frame.width, height: 500)
+            return .init(width: view.frame.width, height: 220)
         }
         else {
             if self.artfreq == ".A50" && section == 0 {
