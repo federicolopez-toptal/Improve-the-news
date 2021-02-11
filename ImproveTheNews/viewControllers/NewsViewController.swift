@@ -56,7 +56,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         return button
     }()
     let biasSliders = SliderPopup()
-    let slidersHeight: CGFloat = 220
+    let slidersHeight: CGFloat = 270 // 220
     let shadeView = UIView()
     
     // topic sliders
@@ -850,7 +850,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         biasButton.frame = CGRect(x: view.frame.maxX-60, y: view.frame.height - 150, width: 50, height: 50)
         biasButton.layer.cornerRadius = 0.5 * biasButton.bounds.size.width
         let y = view.frame.height - slidersHeight
-        biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 470)
+        biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550) //470
         biasSliders.buildViews()
     }
     
@@ -907,13 +907,15 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
     
     func biasSliderDidChange() {
         
-        biasSliders.activityView.startAnimating()
+        //biasSliders.activityView.startAnimating()
+        biasSliders.showLoading(true)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             self.loadArticles()
             self.reload()
             sleep(2)
-            self.biasSliders.activityView.stopAnimating()
+            //self.biasSliders.activityView.stopAnimating()
+            self.biasSliders.showLoading(false)
         }
     }
 }

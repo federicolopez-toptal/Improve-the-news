@@ -41,6 +41,7 @@ class SliderPopup: UIView {
     var shadeDelegate: ShadeDelegate?
     
     var isShowingMore = false
+    var loadingView = UIView()
 }
 
 extension SliderPopup {
@@ -57,6 +58,7 @@ extension SliderPopup {
         addSubview(stackView)
         
         setUpActivityIndicator()
+        setupLoading()
         
         stackView.frame = self.frame
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -138,13 +140,31 @@ extension SliderPopup {
             miniview.addSubview(slider)
             miniview.addSubview(minLabel)
             miniview.addSubview(maxLabel)
+            
+            if(i==1) {
+                let separatorView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+                separatorView.translatesAutoresizingMaskIntoConstraints = false
+                separatorView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+                stackView.addArrangedSubview(separatorView)
+            }
+
         }
         
         // add showLess button
+        let bottomView = UIView()
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
+        bottomView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        stackView.addArrangedSubview(bottomView)
+        
         let showLess = UIButton(image: UIImage(systemName: "chevron.down.circle.fill")!, tintColor: biasSliderColor, target: self, action: #selector(handleShowLess))
-        stackView.addArrangedSubview(showLess)
         showLess.translatesAutoresizingMaskIntoConstraints = false
         showLess.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        let xConstraint = NSLayoutConstraint(item: showLess, attribute: .centerX, relatedBy: .equal, toItem: bottomView, attribute: .centerX, multiplier: 1, constant: 0)
+        bottomView.addConstraint(xConstraint)
+        
+        bottomView.addSubview(showLess)
+        
         
         //swipe gestures
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(self.handleShowMore))
@@ -163,7 +183,6 @@ extension SliderPopup {
     }
     
     func setUpActivityIndicator() {
-        
         self.activityView = UIActivityIndicatorView(style: .medium)
         activityView.frame = CGRect(x: (UIScreen.main.bounds.width/2), y: 30, width: 20, height: 20)
         activityView.hidesWhenStopped = true
@@ -205,12 +224,53 @@ extension SliderPopup {
         
     }
     
+    
+    func setupLoading() {
+        var w: CGFloat = 250
+        var x = UIScreen.main.bounds.width - w - 17
+        self.loadingView.frame = CGRect(x: x, y: 40, width: w, height: 25)
+        self.loadingView.backgroundColor = .clear
+        self.addSubview(loadingView)
+        
+        x = self.loadingView.frame.size.width - 20
+        let loading = UIActivityIndicatorView(style: .medium)
+        loading.frame = CGRect(x: x, y: 0, width: 20, height: 20)
+        loading.startAnimating()
+        loading.color = .black
+        self.loadingView.addSubview(loading)
+        
+        w = 200
+        x = loading.frame.origin.x - 7 - w
+        let label = UILabel(frame: CGRect(x: x, y: 0, width: w, height: 25))
+        label.backgroundColor = .clear
+        label.text = "Updating your feed"
+        label.textColor = .black
+        label.textAlignment = .right
+        label.font = UIFont(name: "Poppins-SemiBold", size: 12)
+        
+        self.loadingView.addSubview(label)
+        self.showLoading(false)
+    }
+    
+    func moveLoadingOnTopOfView(_ view: UIView) {
+        var mFrame = self.loadingView.frame
+        mFrame.origin.y = view.frame.origin.y - mFrame.size.height + 27
+        self.loadingView.frame = mFrame
+    }
+    
+    func showLoading(_ visibility: Bool) {
+        self.loadingView.isHidden = !visibility
+    }
+    
 }
 
 // gesture recognizers
 extension SliderPopup: UIGestureRecognizerDelegate {
     
     @objc func biasSliderValueDidChange(_ sender:UISlider!){
+        let view = sender.superview!
+        self.moveLoadingOnTopOfView(view)
+    
         print("bias slider value did change")
         switch sender.tag {
             case 50:
@@ -267,7 +327,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
             isShowingMore = true
         }
         
-        let height = CGFloat(480)
+        let height = CGFloat(550) //480
         let screenSize = UIScreen.main.bounds.size
         
         UIView.animate(withDuration: 0.5, animations: {
@@ -286,7 +346,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
             isShowingMore = false
         }
         
-        let height = CGFloat(220)
+        let height = CGFloat(270) // 220
         let screenSize = UIScreen.main.bounds.size
         
         UIView.animate(withDuration: 0.5, animations: {
