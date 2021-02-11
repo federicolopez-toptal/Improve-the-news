@@ -41,9 +41,9 @@
 		BD0FED9F25D170330079A32B /* PTSerif-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FED9E25D170330079A32B /* PTSerif-Bold.ttf */; };
 		BD0FEDA825D170500079A32B /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDA625D170500079A32B /* Poppins-SemiBold.ttf */; };
 		BD0FEDA925D170500079A32B /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */; };
-		BD0FEDC825D17AE80079A32B /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDC725D17AE80079A32B /* OpenSans-Bold.ttf */; };
 		BD0FEDD125D17AF60079A32B /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDCF25D17AF60079A32B /* OpenSans-SemiBold.ttf */; };
 		BD0FEDD225D17AF60079A32B /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */; };
+		BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */; };
 		BDEFE59C25D1B95700175C3C /* MoreHeadlinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */; };
 		D6D16EB725C1F17000D0F092 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6D16EB625C1F17000D0F092 /* GoogleService-Info.plist */; };
 		D8C1E0E4AAAC3176E6A67953 /* Pods_ImproveTheNews.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D40DE6D85DB7FEB79892932 /* Pods_ImproveTheNews.framework */; };
@@ -111,9 +111,9 @@
 		BD0FED9E25D170330079A32B /* PTSerif-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PTSerif-Bold.ttf"; sourceTree = "<group>"; };
 		BD0FEDA625D170500079A32B /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
-		BD0FEDC725D17AE80079A32B /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "../../../../../../../Downloads/Open_Sans/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		BD0FEDCF25D17AF60079A32B /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreHeadlinesView.swift; sourceTree = "<group>"; };
 		D6D16EB625C1F17000D0F092 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -167,7 +167,6 @@
 		A81B3B132481E67200A52A97 = {
 			isa = PBXGroup;
 			children = (
-				B6B87DA125626E9F00707A5C /* CustomSlider.swift */,
 				A81B3B1E2481E67200A52A97 /* ImproveTheNews */,
 				A81B3B382481E67500A52A97 /* ImproveTheNewsTests */,
 				A81B3B432481E67500A52A97 /* ImproveTheNewsUITests */,
@@ -230,7 +229,7 @@
 		A8D61B3524F1633100A0F8F5 /* fonts */ = {
 			isa = PBXGroup;
 			children = (
-				BD0FEDC725D17AE80079A32B /* OpenSans-Bold.ttf */,
+				BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */,
 				BD0FED9E25D170330079A32B /* PTSerif-Bold.ttf */,
 				BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */,
 				BD0FEDA625D170500079A32B /* Poppins-SemiBold.ttf */,
@@ -296,6 +295,7 @@
 		BD0FEDDE25D17BB00079A32B /* components */ = {
 			isa = PBXGroup;
 			children = (
+				B6B87DA125626E9F00707A5C /* CustomSlider.swift */,
 				A8B4D72424B103A4004EEE73 /* RatingsLauncher.swift */,
 				A851345124838B0700D56C04 /* SectionsViewController.swift */,
 				A8E94A1424F08E9200936E07 /* SupplementaryViews.swift */,
@@ -442,6 +442,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */,
 				A8D61B3924F1A10000A0F8F5 /* Launch Screen.storyboard in Resources */,
 				D6D16EB725C1F17000D0F092 /* GoogleService-Info.plist in Resources */,
 				BD0FEDD125D17AF60079A32B /* OpenSans-SemiBold.ttf in Resources */,
@@ -450,7 +451,6 @@
 				BD0FEDA825D170500079A32B /* Poppins-SemiBold.ttf in Resources */,
 				B6AF8732254465C900227CCC /* PlayfairDisplay-SemiBold.ttf in Resources */,
 				BD0FEDA925D170500079A32B /* Poppins-Regular.ttf in Resources */,
-				BD0FEDC825D17AE80079A32B /* OpenSans-Bold.ttf in Resources */,
 				BD0FEDD225D17AF60079A32B /* OpenSans-Regular.ttf in Resources */,
 				A81B3B292481E67500A52A97 /* Assets.xcassets in Resources */,
 			);
@@ -772,10 +772,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.7.15;
+				CURRENT_PROJECT_VERSION = 1.6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
-				DEVELOPMENT_TEAM = SW8S5Y74E8;
+				DEVELOPMENT_TEAM = C743392542;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ImproveTheNews/app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -798,10 +798,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.7.15;
+				CURRENT_PROJECT_VERSION = 1.6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
-				DEVELOPMENT_TEAM = SW8S5Y74E8;
+				DEVELOPMENT_TEAM = C743392542;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ImproveTheNews/app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

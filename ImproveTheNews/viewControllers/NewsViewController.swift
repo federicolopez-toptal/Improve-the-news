@@ -79,6 +79,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         if index < newsParser.getLength() {
             //print("section: \(indexPath.section) row \(indexPath.row): \(newsParser.getTitle(index: indexPath.row+start))")
+            
             if indexPath.section == 0 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeadlineCell.cellId, for: indexPath) as! HeadlineCell
                 
@@ -285,25 +286,34 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        var value = 0
         sliderValues.setSectionCount(num: newsParser.getNumOfSections())
         if newsParser.getNumOfSections() == 1 {
-            return 2
+            value = 2
+        } else {
+            value = newsParser.getNumOfSections()
         }
-        return newsParser.getNumOfSections()
+        
+        print("### numSections", value)
+        return value
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
+        var value = 0
         if newsParser.getNumOfSections() == 1 && section == 1 {
             print("here")
-            return 0
+            value = 0
         } else if section >= newsParser.getArticleCountInSection().count {
             print("Oops! loaded too fast")
             print("We only have ", newsParser.getNumOfSections(), " sections")
-            return newsParser.getArticleCountInSection()[newsParser.getArticleCountInSection().count-1]
+            value = 0 //newsParser.getArticleCountInSection()[newsParser.getArticleCountInSection().count-1]
         } else {
-            return newsParser.getArticleCountInSection()[section]
+            value =  newsParser.getArticleCountInSection()[section]
         }
+        
+        print("### numItems", value)
+        return value
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -346,7 +356,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 sectionHeader.prioritySlider.isHidden = false
                 //sectionHeader.isUserInteractionEnabled = false
                 
-                let globalPopularity = newsParser.getGlobalPopularities()[indexPath.section]
+                var globalPopularity: Float = 0
+                if(newsParser.getGlobalPopularities().count==0){
+                    globalPopularity = 0
+                } else if(indexPath.section<0 || indexPath.section>=self.newsParser.getGlobalPopularities().count) {
+                    globalPopularity = 0
+                } else {
+                    globalPopularity = newsParser.getGlobalPopularities()[indexPath.section]
+                }
                 sectionHeader.updateSuperSlider(num: globalPopularity)
                 
                 if indexPath.section == 0 {
@@ -475,29 +492,36 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 
         
         let limit = self.moreHeadLinesInCollectionPosY-self.navBarFrame.size.height
-        if(scrollView.contentOffset.y >= limit) {
-            if let view = self.seeMoreFooterSection {
-                var mOffset = view.scrollView.contentOffset
-                /*if(mOffset.x < 0){ mOffset.x = 0 }
-                else if(mOffset.x > scrollView.contentSize.width){
-                    mOffset.x = scrollView.contentSize.width
-                }*/
-                self.moreHeadLines.scrollView.contentOffset = mOffset
-            }
-            
-            self.moreHeadLines.show()
-        } else {
-            if let view = self.seeMoreFooterSection {
-                var mOffset = self.moreHeadLines.scrollView.contentOffset
-                /*if(mOffset.x < 0){ mOffset.x = 0 }
-                else if(mOffset.x > scrollView.contentSize.width){
-                    mOffset.x = scrollView.contentSize.width
-                }*/
-                view.scrollView.contentOffset = mOffset
-            }
         
+        if(limit<0){
             self.moreHeadLines.hide()
+        } else {
+            if(scrollView.contentOffset.y >= limit) {
+                if let view = self.seeMoreFooterSection {
+                    var mOffset = view.scrollView.contentOffset
+                    /*if(mOffset.x < 0){ mOffset.x = 0 }
+                    else if(mOffset.x > scrollView.contentSize.width){
+                        mOffset.x = scrollView.contentSize.width
+                    }*/
+                    self.moreHeadLines.scrollView.contentOffset = mOffset
+                }
+                
+                self.moreHeadLines.show()
+            } else {
+                if let view = self.seeMoreFooterSection {
+                    var mOffset = self.moreHeadLines.scrollView.contentOffset
+                    /*if(mOffset.x < 0){ mOffset.x = 0 }
+                    else if(mOffset.x > scrollView.contentSize.width){
+                        mOffset.x = scrollView.contentSize.width
+                    }*/
+                    view.scrollView.contentOffset = mOffset
+                }
+            
+                self.moreHeadLines.hide()
+            }
         }
+        
+        
         self.view.bringSubviewToFront(self.moreHeadLines)
 
     }
@@ -656,7 +680,6 @@ extension NewsViewController {
         self.hierarchy = newsParser.getHierarchy()
         
         stopRefresher()
-        
     }
     
     func stopRefresher() {
@@ -733,6 +756,7 @@ extension NewsViewController {
         let homeButton = UIButton(image: img!)
         homeButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         homeButton.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
+        homeButton.isUserInteractionEnabled = false
         let label = UILabel.init(frame: CGRect(x: 35, y: 5, width: 180, height: 20))
         label.text = "IMPROVE THE NEWS"
         label.font = UIFont(name: "OpenSans-Bold", size: 17)
@@ -746,6 +770,7 @@ extension NewsViewController {
     }
     
     @objc func homeButtonTapped() {
+        /*
         if self.topic != "news" {
             let newsVC = navigationController!.viewControllers[0] as! NewsViewController
             newsVC.topic = "news"
@@ -753,6 +778,7 @@ extension NewsViewController {
             navigationController!.popToRootViewController(animated: true)
             self.loadArticles()
         }
+        */
     }
     
     @objc func searchItemClicked(_ sender:UIBarButtonItem!) {

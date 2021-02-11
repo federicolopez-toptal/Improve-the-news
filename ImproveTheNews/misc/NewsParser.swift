@@ -284,11 +284,59 @@ class News {
     }
     
     func getArticleCountInSection(section: Int) -> Int {
-        return self.sectionCounts[section]
+        if(validateSectionIndex(section)) {
+            return self.sectionCounts[section]
+        } else {
+            return 0
+        }
     }
     
+    // ----------
+    private let defaultStrValue = ""
+    
+    private func validateSectionIndex(_ index: Int) -> Bool {
+        var value = true
+        if(self.sectionCounts.count==0){
+            value = false
+        } else if(index<0 || index>=self.sectionCounts.count) {
+            value = false
+        }
+        
+        if(!value){ print("GATO section validation FALSE") }
+        return value
+    }
+    
+    private func validateDataIndex(_ index: Int) -> Bool {
+        var value = true
+        if(self.data.count==0){
+            value = false
+        } else if(index<0 || index>=self.data.count) {
+            value = false
+        }
+        
+        if(!value){ print("GATO data validation FALSE") }
+        return value
+    }
+    
+    private func validateTopicIndex(_ index: Int) -> Bool {
+        var value = true
+        if(self.sectionTitles.count==0){
+            value = false
+        } else if(index<0 || index>=self.sectionTitles.count) {
+            value = false
+        }
+        
+        if(!value){ print("GATO topic validation FALSE") }
+        return value
+    }
+    
+    // ----------
     func getSource(index: Int) -> String {
-        return self.data[index].source
+        if(validateDataIndex(index)){
+            return self.data[index].source
+        } else {
+            return defaultStrValue
+        }
     }
     
     func getAllTopics() -> [String] {
@@ -296,27 +344,51 @@ class News {
     }
     
     func getTopic(index: Int) -> String {
-        return self.sectionTitles[index]
+        if(validateTopicIndex(index)){
+            return self.sectionTitles[index]
+        } else {
+            return defaultStrValue
+        }
     }
     
     func getTitle(index: Int) -> String {
-        return self.data[index].title
+        if(validateDataIndex(index)){
+            return self.data[index].title
+        } else {
+            return defaultStrValue
+        }
     }
     
     func getDate(index: Int) -> String {
-        return self.data[index].date
+        if(validateDataIndex(index)){
+            return self.data[index].date
+        } else {
+            return defaultStrValue
+        }
     }
     
     func getURL(index: Int) -> String {
-        return self.data[index].URL
+        if(validateDataIndex(index)){
+            return self.data[index].URL
+        } else {
+            return defaultStrValue
+        }
     }
      
     func getIMG(index: Int) -> String {
-        return self.data[index].imgURL
+        if(validateDataIndex(index)){
+            return self.data[index].imgURL
+        } else {
+            return defaultStrValue
+        }
     }
     
     func getLogo(index: Int) -> String {
-        return source_logos[self.data[index].source] ?? "Logo not found"
+        if(validateDataIndex(index)){
+            return source_logos[self.data[index].source] ?? "Logo not found"
+        } else {
+            return defaultStrValue
+        }
     }
     
     func getLength() -> Int {
@@ -340,18 +412,30 @@ class News {
     }
     
     func getAMPStatus(index: Int) -> Bool {
-        if self.data[index].ampStatus != "N" {
-            return true
+        if(validateDataIndex(index)){
+            if self.data[index].ampStatus != "N" {
+                return true
+            } else {
+                return false
+            }
         } else {
             return false
         }
     }
     
     func getAMPURL(index: Int) -> String {
-        return self.data[index].ampURL
+        if(validateDataIndex(index)){
+            return self.data[index].ampURL
+        } else {
+            return defaultStrValue
+        }
     }
     
     func getMarkups(index: Int) -> [Markups] {
-        return self.data[index].markups
+        if(validateDataIndex(index)){
+            return self.data[index].markups
+        } else {
+            return []
+        }
     }
 }
