@@ -497,10 +497,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 
         
         var limit = self.moreHeadLinesInCollectionPosY-self.navBarFrame.size.height
-        if(!navigationController!.navigationBar.isTranslucent) {
-            limit += (self.navBarFrame.origin.y + self.navBarFrame.size.height)
+        if let nav = navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                limit += (self.navBarFrame.origin.y + self.navBarFrame.size.height)
+            }
+            limit += 40
         }
-        limit += 40
         
         if(limit<110) {
             self.moreHeadLines.hide()
@@ -679,7 +681,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         if let nav = self.navigationController {
             self.navBarFrame = nav.navigationBar.frame
             var posY = self.navBarFrame.origin.y + self.navBarFrame.size.height
-            if(!navigationController!.navigationBar.isTranslucent) {
+            if(!nav.navigationBar.isTranslucent) {
                 posY = 0
             }
             self.moreHeadLines.moveTo(y: posY)
@@ -915,8 +917,11 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         view.addSubview(biasButton)
         
         var posY = view.frame.height - 150
-        if(!navigationController!.navigationBar.isTranslucent) {
-            posY -= 88
+        
+        if let nav = navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                posY -= 88
+            }
         }
         
         biasButton.frame = CGRect(x: view.frame.maxX-60, y: posY, width: 50, height: 50)
