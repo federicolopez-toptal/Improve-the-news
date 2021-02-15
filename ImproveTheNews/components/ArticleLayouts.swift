@@ -29,7 +29,7 @@ class HeadlineCell: UICollectionViewCell {
     static let cellId = "HeadlineCell"
       
     let imageView = UIImageView(backgroundColor: .clear)
-    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 17), numberOfLines: 3)
+    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
     let pubDate = UILabel()
     let logoView = UIImageView()
@@ -58,17 +58,20 @@ class HeadlineCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         
         addSubview(headline)
-        
         headline.translatesAutoresizingMaskIntoConstraints = false
+        headline.numberOfLines = 10
+        //headline.backgroundColor = .red
+        headline.adjustsFontSizeToFitWidth = true
+        headline.minimumScaleFactor = 0.8
         NSLayoutConstraint.activate([
             headline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             headline.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
             headline.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
-            headline.heightAnchor.constraint(equalToConstant: 70)
+            //headline.heightAnchor.constraint(equalToConstant: 70)
         ])
         
-        addSubview(source)
         
+        addSubview(source)
         source.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
@@ -105,7 +108,7 @@ class HeadlineCell: UICollectionViewCell {
         source.textColor = articleSourceColor
         pubDate.textColor = .secondaryLabel
         
-        pubDate.font = UIFont(name: "OpenSans-Bold", size: 14)
+        pubDate.font = UIFont(name: "OpenSans-Bold", size: 12)
         //markupView.isHidden = true
     
     }
@@ -118,7 +121,7 @@ class ArticleCell: UICollectionViewCell {
     static let cellId = "ArticleCell"
     
     let imageView = UIImageView(backgroundColor: .clear)
-    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 17), numberOfLines: 3)
+    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 14), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
     let pubDate = UILabel()
     let logoView = UIImageView()
@@ -136,12 +139,15 @@ class ArticleCell: UICollectionViewCell {
         
         addSubview(headline)
         
+        headline.numberOfLines = 10
         headline.translatesAutoresizingMaskIntoConstraints = false
+        headline.adjustsFontSizeToFitWidth = true
+        headline.minimumScaleFactor = 0.8
         NSLayoutConstraint.activate([
             headline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             headline.widthAnchor.constraint(equalToConstant: 190),
             headline.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
-            headline.heightAnchor.constraint(equalToConstant: 90)
+            //headline.heightAnchor.constraint(equalToConstant: 90)
         ])
         
         addSubview(source)
@@ -205,7 +211,7 @@ class ArticleCellAlt: UICollectionViewCell {
     static let cellId = "ArticleCellAlt"
     
     let imageView = UIImageView(backgroundColor: .clear)
-    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 17), numberOfLines: 3)
+    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 14), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
     let pubDate = UILabel()
     let logoView = UIImageView()
@@ -224,11 +230,14 @@ class ArticleCellAlt: UICollectionViewCell {
         addSubview(headline)
         
         headline.translatesAutoresizingMaskIntoConstraints = false
+        headline.numberOfLines = 10
+        headline.adjustsFontSizeToFitWidth = true
+        headline.minimumScaleFactor = 0.8
         NSLayoutConstraint.activate([
             headline.widthAnchor.constraint(equalToConstant: 190),
             headline.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
             headline.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
-            headline.heightAnchor.constraint(equalToConstant: 90)
+            //headline.heightAnchor.constraint(equalToConstant: 90)
         ])
         
         addSubview(imageView)
@@ -291,7 +300,7 @@ class ArticleCellHalf: UICollectionViewCell {
     static let cellId = "ArticleCell2"
     
     let imageView = UIImageView(backgroundColor: .clear)
-    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 17), numberOfLines: 3)
+    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
     let pubDate = UILabel()
     let logoView = UIImageView()
@@ -333,6 +342,10 @@ class ArticleCellHalf: UICollectionViewCell {
         markupView.translatesAutoresizingMaskIntoConstraints = false
         markupView.tintColor = accentOrange
         markupView.isHidden = true
+        
+        headline.numberOfLines = 10
+        headline.adjustsFontSizeToFitWidth = true
+        headline.minimumScaleFactor = 0.8
     }
     
 }
