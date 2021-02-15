@@ -67,8 +67,7 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
             scrollView.contentSize = CGSize(width: CGFloat(x), height: scrollView.frame.size.height)
             scrollView.backgroundColor = articleSourceColor
         }
-        
-        
+        scrollView.showsHorizontalScrollIndicator = false
     }
     
     func moveTo(y: CGFloat) {
@@ -94,6 +93,29 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if(scrollView.isDragging) {
             self.delegate?.horizontalScrollFromHeadLines(to: scrollView.contentOffset.x)
+        }
+    }
+    
+    func setTopics(_ topics: [String]) {
+        
+        var x = 0
+        scrollView.subviews.forEach({ $0.removeFromSuperview() })
+        //for i in 0..<Globals.searchTopics.count {
+        for (i, topic) in topics.enumerated() {
+            let button = UIButton(frame: CGRect(x: CGFloat(x), y: 3, width: 100, height: 30))
+            button.setTitle(topic.uppercased(), for: .normal)
+            //button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)
+            button.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 12)
+            button.titleLabel?.textColor = articleHeadLineColor
+            button.titleLabel?.lineBreakMode = .byWordWrapping
+            button.titleLabel?.textAlignment = .center
+            button.tag = i
+            button.addTarget(self, action: #selector(headLineTap(_:)), for: .touchUpInside)
+            scrollView.addSubview(button)
+            x += Int(button.frame.size.width)
+            
+            scrollView.contentSize = CGSize(width: CGFloat(x), height: scrollView.frame.size.height)
+            scrollView.backgroundColor = articleSourceColor
         }
     }
     

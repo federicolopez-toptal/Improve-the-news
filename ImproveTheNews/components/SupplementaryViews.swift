@@ -328,6 +328,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
     static let footerId = "FooterIdSection0"
     
     var delegate: TopicSelectorDelegate?
+    var topics: [String] = []
     
     var label = UILabel()
     var scrollView = UIScrollView()
@@ -373,9 +374,17 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         scrollView.delegate = self
         
         var x = 0
-        for i in 0..<Globals.searchTopics.count {
+        
+        
+        
+        //for i in 0..<Globals.searchTopics.count {
+        //for i in 0..<self.topics.count {
+        
+        scrollView.subviews.forEach({ $0.removeFromSuperview() })
+        for (i, topic) in self.topics.enumerated() {
             let button = UIButton(frame: CGRect(x: CGFloat(x), y: 3, width: 100, height: 30))
-            button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)
+            //button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)
+            button.setTitle(topic.uppercased(), for: .normal)
             button.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 12)
             button.titleLabel?.textColor = articleHeadLineColor
             button.titleLabel?.lineBreakMode = .byWordWrapping
@@ -395,6 +404,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
                 scrollView.heightAnchor.constraint(equalToConstant: 50),
             ])
         }
+        scrollView.showsHorizontalScrollIndicator = false
 
         addTopBorder()
         self.backgroundColor = bgBlue

@@ -347,12 +347,16 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             case UICollectionView.elementKindSectionHeader:
                 let kind = UICollectionView.elementKindSectionHeader
                 let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SubtopicHeader.headerId, for: indexPath) as! SubtopicHeader
+                
                 sectionHeader.delegate = self
                 sectionHeader.ssDelegate = self
                 sectionHeader.topicDelegate = self
                 sectionHeader.tag = indexPath.section
                 sectionHeader.configure()
-                sectionHeader.setHeaderText(subtopic: newsParser.getTopic(index: indexPath.section))
+                
+                let subTopic = newsParser.getTopic(index: indexPath.section)
+                sectionHeader.setHeaderText(subtopic: subTopic)
+                
                 sectionHeader.topicSlidersButton.isHidden = false
                 sectionHeader.prioritySlider.isHidden = false
                 //sectionHeader.isUserInteractionEnabled = false
@@ -383,7 +387,30 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     sectionHeader.topicSlidersButton.isHidden = true
                 }
                 
-                // some bugs w/ the breadcrumbs
+                // breadcrumbs                
+                if indexPath.section == 0 {
+                    sectionHeader.hierarchy.text = ""
+                } else {
+                    /*
+                    sectionHeader.hierarchy.text = self.hierarchy + newsParser.getTopic(index: indexPath.section)
+                    sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
+                    */
+                    
+                    // Example: Headlines>Money>Industries>Marketing>whateEver
+                    
+                    var text = ""
+                    let components = self.hierarchy.components(separatedBy: ">")
+                    if(components.count > 1) {
+                        text = components[components.count-2] + ">"
+                    }
+                    text += newsParser.getTopic(index: indexPath.section)
+                    
+                    sectionHeader.hierarchy.text = text
+                    sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
+                }
+                
+                
+                /*
                 if indexPath.section == 0 {
                     if self.hierarchy == "Headlines>" {
                         sectionHeader.hierarchy.text = ""
@@ -402,6 +429,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //                    sectionHeader.myStack.addArrangedSubview(label2)
                     //sectionHeader.setUpStackView(atIndex: sectionHeader.tag)
                 }
+                */
                 
                 sectionHeader.backgroundColor  = bgBlue
                 return sectionHeader
@@ -417,7 +445,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     return pageFooter
                 } else if indexPath.section == 0 {
                     let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterSection0.footerId, for: indexPath) as! seeMoreFooterSection0
+                    
                     seeMore.delegate = self
+                    seeMore.topics = newsParser.getAllTopics()
                     // aMore
                     seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                     seeMore.configure()
@@ -580,7 +610,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 self.loadingView.isHidden = true
                 self.firstTime = false
                 //self.activityIndicator.stopAnimating()
-                
+
                 self.stopRefresher()
             }
         }
@@ -769,6 +799,7 @@ extension NewsViewController: NewsDelegate {
         updateTopicSliders()
         reload()
 
+        self.moreHeadLines.setTopics(self.newsParser.getAllTopics())
     }
     
     func resendRequest() {
@@ -948,6 +979,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         shadeView.frame = view.frame
         shadeView.alpha = 0
         
+        self.biasSliders.separatorView.isHidden = false
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.shadeView.alpha = 1
                 self.biasSliders.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.biasSliders.frame.height)

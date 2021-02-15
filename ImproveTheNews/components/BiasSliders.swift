@@ -42,6 +42,8 @@ class SliderPopup: UIView {
     
     var isShowingMore = false
     var loadingView = UIView()
+    
+    var separatorView = UIView()
 }
 
 extension SliderPopup {
@@ -142,7 +144,7 @@ extension SliderPopup {
             miniview.addSubview(maxLabel)
             
             if(i==1) {
-                let separatorView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+                separatorView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
                 separatorView.translatesAutoresizingMaskIntoConstraints = false
                 separatorView.heightAnchor.constraint(equalToConstant: 50).isActive = true
                 stackView.addArrangedSubview(separatorView)
@@ -150,20 +152,22 @@ extension SliderPopup {
 
         }
         
+        
         // add showLess button
         let bottomView = UIView()
         bottomView.translatesAutoresizingMaskIntoConstraints = false
-        bottomView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        bottomView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        //bottomView.backgroundColor = .green
         stackView.addArrangedSubview(bottomView)
         
         let showLess = UIButton(image: UIImage(systemName: "chevron.down.circle.fill")!, tintColor: biasSliderColor, target: self, action: #selector(handleShowLess))
         showLess.translatesAutoresizingMaskIntoConstraints = false
         showLess.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        
         let xConstraint = NSLayoutConstraint(item: showLess, attribute: .centerX, relatedBy: .equal, toItem: bottomView, attribute: .centerX, multiplier: 1, constant: 0)
         bottomView.addConstraint(xConstraint)
         
         bottomView.addSubview(showLess)
+        showLess.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 3).isActive = true
         
         
         //swipe gestures
@@ -327,7 +331,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
             isShowingMore = true
         }
         
-        let height = CGFloat(550) //480
+        let height = CGFloat(490) //490
         let screenSize = UIScreen.main.bounds.size
         
         UIView.animate(withDuration: 0.5, animations: {
@@ -335,7 +339,8 @@ extension SliderPopup: UIGestureRecognizerDelegate {
             self.frame = CGRect(x: 0, y: screenSize.height - height - 88, width: screenSize.width, height: self.frame.height)
         })
         
-        showMore.isHidden = true
+        self.separatorView.isHidden = true
+        //showMore.isHidden = true
         //stackView.arrangedSubviews[0].removeFromSuperview()
     }
     
@@ -354,6 +359,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
             self.frame = CGRect(x: 0, y: screenSize.height - height - 88, width: screenSize.width, height: self.frame.height)
         })
         
+        self.separatorView.isHidden = false
         addShowMore()
     }
     
