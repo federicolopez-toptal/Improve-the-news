@@ -133,14 +133,16 @@ class WebViewController: UIViewController, WKUIDelegate {
     
     func showRatingsMenu() {
         
-        let height: CGFloat = 60
-        let y = view.frame.height - height
+        let screenSize: CGRect = UIScreen.main.bounds
+        
+        let height: CGFloat = 75
+        let y: CGFloat = screenSize.size.height - height - 88
         ratingsMenu.frame = CGRect(x: 0, y: y, width: view.frame.width, height: height)
         ratingsMenu.buildView()
         ratingsMenu.backgroundColor = .black
                 
         view.addSubview(ratingsMenu)
-
+        ratingsMenu.isHidden = true
     }
   
     
@@ -354,25 +356,7 @@ extension WebViewController {
     
 }
 
-import SwiftUI
-struct WebViewPreview: PreviewProvider {
-    
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<WebViewPreview.ContainerView>) -> UIViewController {
-            return UINavigationController(rootViewController: WebViewController(url: "https://www.goodreads.com/", title: "Goodreads", annotations: [Markups(type: "Conflict of interest", description: "blah blah", link: "www.google.com"), Markups(type: "Missing context", description: "Cats kill more birds", link: "www.bing.com")]))
-        }
-        
-        func updateUIViewController(_ uiViewController: WebViewPreview.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<WebViewPreview.ContainerView>) {
-            
-        }
-        
-    }
-}
+
 
 extension NSAttributedString {
     

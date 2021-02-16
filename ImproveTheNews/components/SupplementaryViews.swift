@@ -162,11 +162,30 @@ class SubtopicHeader: UICollectionReusableView {
         } else {
             print("User tapped on text")
             
-            var index = text.index(text.startIndex, offsetBy: 10)
-            var remainingText = text[index...]
-            var topicsArray = remainingText.components(separatedBy: ">")
+            let index = text.index(text.startIndex, offsetBy: 10)
+            let remainingText = text[index...]
+            let topicsArray = remainingText.components(separatedBy: ">")
+            
+            var found = false
+            for t in topicsArray {
+                let topicRange = (text as NSString).range(of: t)
+                if gesture.didTapAttributedTextInLabel(label: self.hierarchy, inRange: topicRange) {
+                    found = true
+                    self.delegate!.pushNewTopic(newTopic: Globals.topicmapping[t]!)
+                    break
+                }
+            }
+            
+            if(!found) {
+                let t = topicsArray[0]
+                self.delegate!.pushNewTopic(newTopic: Globals.topicmapping[t]!)
+            }
+
+            /*
             let newTopic = Globals.topicmapping[topicsArray[0]]
+            print("GATO3", newTopic)
             self.delegate!.pushNewTopic(newTopic: newTopic!)
+            */
         }
     }
     

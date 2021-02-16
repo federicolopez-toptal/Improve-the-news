@@ -395,30 +395,33 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     sectionHeader.topicSlidersButton.isHidden = true
                 }
                 
+                /*
                 // breadcrumbs                
                 if indexPath.section == 0 {
                     sectionHeader.hierarchy.text = ""
                 } else {
-                    /*
+                    
                     sectionHeader.hierarchy.text = self.hierarchy + newsParser.getTopic(index: indexPath.section)
-                    sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
-                    */
+                    
                     
                     // Example: Headlines>Money>Industries>Marketing>whateEver
                     
+                    /*
                     var text = ""
                     let components = self.hierarchy.components(separatedBy: ">")
                     if(components.count > 1) {
                         text = components[components.count-2] + ">"
                     }
                     text += newsParser.getTopic(index: indexPath.section)
-                    
                     sectionHeader.hierarchy.text = text
+                    
+                    */
+                    
                     sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
                 }
+                */
                 
                 
-                /*
                 if indexPath.section == 0 {
                     if self.hierarchy == "Headlines>" {
                         sectionHeader.hierarchy.text = ""
@@ -437,7 +440,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //                    sectionHeader.myStack.addArrangedSubview(label2)
                     //sectionHeader.setUpStackView(atIndex: sectionHeader.tag)
                 }
-                */
+                
                 
                 sectionHeader.backgroundColor  = bgBlue
                 return sectionHeader
@@ -749,7 +752,7 @@ extension NewsViewController {
             
             let link = self.buildApiCall()
             
-            print("GATO", "should load " + self.buildApiCall_b())
+            print("GATO2", "should load " + self.buildApiCall_b())
             self.newsParser.getJSONContents(jsonName: link)
             
         }
