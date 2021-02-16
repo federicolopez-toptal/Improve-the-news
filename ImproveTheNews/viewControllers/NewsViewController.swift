@@ -69,6 +69,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     // super sliders
     var superSliderStr = "_"
     
+    // -----------
+    var param_A = 4
+    var param_B = 4
+    var param_S = 0
+    
+    // -----------
+    
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         var start = 0
@@ -728,6 +736,7 @@ extension NewsViewController {
         
         DispatchQueue.global().async {
             
+            /*
             let firsthalf = self.homelink + self.topic + self.artfreq + self.untouchables
             let nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs()
             let link: String
@@ -736,12 +745,45 @@ extension NewsViewController {
             } else {
                 link = firsthalf + nexthalf + self.superSliderStr
             }
+            */
             
-            print("should be loading " + link)
+            let link = self.buildApiCall()
+            
+            print("GATO", "should load " + self.buildApiCall_b())
             self.newsParser.getJSONContents(jsonName: link)
             
         }
                 
+    }
+    
+    
+    private func buildApiCall_b() -> String {
+        let link = "topic=\(self.topic)" +
+            ".A\(self.param_A)" + ".B\(self.param_B)" +
+            ".S\(self.param_S)"
+            
+        return link
+    }
+    
+    private func buildApiCall() -> String {
+        /*
+            self.artfreq
+            self.untouchables
+        */
+    
+        let firsthalf = self.homelink + self.topic +
+            ".A\(self.param_A)" + ".B\(self.param_B)" +
+            ".S\(self.param_S)"
+            
+        let nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs()
+        let link: String
+        if self.superSliderStr == "_" {
+            link = firsthalf + nexthalf
+        } else {
+            link = firsthalf + nexthalf + self.superSliderStr
+        }
+            
+        return link
     }
     
     // updates UI w/ server response
@@ -800,6 +842,13 @@ extension NewsViewController: NewsDelegate {
         reload()
 
         self.moreHeadLines.setTopics(self.newsParser.getAllTopics())
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.collectionView.contentOffset.y = 0
+        })
+        
+        
+        //self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
     }
     
     func resendRequest() {
@@ -904,11 +953,26 @@ extension NewsViewController {
 extension NewsViewController: TopicSelectorDelegate {
     
     func pushNewTopic(newTopic: String) {
-        let vc = NewsViewController(topic: newTopic)
+    
         let mainTopic = newsParser.getTopic(index: 0)
+        let mainTopic_B = Globals.topicmapping[mainTopic]!
+        let subTopicsCount = newsParser.getNumOfSections()
         
+        let vc = NewsViewController(topic: newTopic)
+        
+        vc.param_S = 4 // sumar 4? o 4 fijo?
+        if newTopic == mainTopic_B {
+            if(subTopicsCount==1) {
+                vc.param_A = 40
+            }
+        } else {
+            
+        }
+        
+        
+        /*
         // Getting more article on same topic
-        if newTopic == Globals.topicmapping[mainTopic]! {
+        if newTopic == mainTopic_B {
             if self.artfreq == ".A4" {
                 vc.artfreq = ".A20"
                 vc.untouchables = ".B4.S4"
@@ -921,6 +985,7 @@ extension NewsViewController: TopicSelectorDelegate {
             vc.artfreq = ".A20"
             vc.untouchables = ".B4.S4"
         }
+        */
         
         navigationController?.pushViewController(vc, animated: true)
     }

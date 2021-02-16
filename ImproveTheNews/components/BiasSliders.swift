@@ -161,12 +161,13 @@ extension SliderPopup {
         stackView.addArrangedSubview(bottomView)
         
         let showLess = UIButton(image: UIImage(systemName: "chevron.down.circle.fill")!, tintColor: biasSliderColor, target: self, action: #selector(handleShowLess))
+        bottomView.addSubview(showLess)
         showLess.translatesAutoresizingMaskIntoConstraints = false
         showLess.heightAnchor.constraint(equalToConstant: 35).isActive = true
         let xConstraint = NSLayoutConstraint(item: showLess, attribute: .centerX, relatedBy: .equal, toItem: bottomView, attribute: .centerX, multiplier: 1, constant: 0)
         bottomView.addConstraint(xConstraint)
         
-        bottomView.addSubview(showLess)
+        
         showLess.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 3).isActive = true
         
         

@@ -39,6 +39,7 @@ class SubtopicHeader: UICollectionReusableView {
         button.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 40)
         button.addTarget(self, action: #selector(goToTopic(_:)), for: .touchUpInside)
         button.titleLabel?.adjustsFontSizeToFitWidth = true
+        
         return button
     }()
     
@@ -93,7 +94,7 @@ class SubtopicHeader: UICollectionReusableView {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: hierarchy.bottomAnchor, constant: 3),
+            label.topAnchor.constraint(equalTo: hierarchy.bottomAnchor, constant: 10),
             label.heightAnchor.constraint(equalToConstant: 40),
             label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -80)
@@ -139,6 +140,7 @@ class SubtopicHeader: UICollectionReusableView {
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
+            print("GATO", "click en titulo naranja")
             if label.titleLabel!.text! == "Headlines" {
                 self.delegate!.pushNewTopic(newTopic: "news")
             } else {
@@ -153,6 +155,7 @@ class SubtopicHeader: UICollectionReusableView {
         
         let privacyPolicyRange = (text as NSString).range(of: "Headlines")
         
+        print("GATO", "Tap on breadcrumb")
         if gesture.didTapAttributedTextInLabel(label: self.hierarchy, inRange: privacyPolicyRange) {
             print("User tapped on Headlines")
             goToTopic(topic: "news")
@@ -193,6 +196,7 @@ class SubtopicHeader: UICollectionReusableView {
     }
     
     @objc func goToTopic(topic: String) {
+        // llamado desde el breadcrumb!
         if topic == "news" {
             //add mapping code
             //let newTopic = Globals.topicmapping[withTop]
@@ -313,6 +317,7 @@ class seeMoreFooter: UICollectionReusableView {
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
+        print("GATO", "click en MORE al fondo")
         let buttontext = button.titleLabel!.text!
         let topic = buttontext.replacingOccurrences(of: "MORE ", with: "")
         
@@ -435,6 +440,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
+        print("GATO", "Click titulo naranja (0)")
         let buttontext = button.titleLabel!.text!
         let topic = buttontext.replacingOccurrences(of: "MORE ", with: "")
         let newTopic = Globals.topicmapping[String(topic)]!
