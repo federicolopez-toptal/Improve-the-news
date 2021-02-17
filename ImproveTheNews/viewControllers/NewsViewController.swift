@@ -233,18 +233,40 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         
         if section == self.collectionView.numberOfSections - 1 {
-            return .init(width: view.frame.width, height: 220)
+            // last one
+            /*
+            let subTopicsCount = newsParser.getNumOfSections()
+            if(subTopicsCount==1) {
+                return CGSize(width: view.frame.width, height: 260)
+            } else {
+                
+            }*/
+            
+            return CGSize(width: view.frame.width, height: 260)
         }
         else {
+            /*
             if self.artfreq == ".A50" && section == 0 {
                 return .zero
             }
-            else if section == 0{
-                // see more footer
-                //increasing height of footer for horizontal scroll view
-                return .init(width: 0, height: 80 + 50 + 20)
+            else
+            */
+            
+            if section == 0 {
+                let subTopicsCount = newsParser.getNumOfSections()
+                if(subTopicsCount==1) {
+                    if(self.param_A==40) {
+                        return CGSize.zero
+                    } else {
+                        return CGSize(width: 0, height: 60)
+                    }
+                } else {
+                    // SEE MORE + horizontal menu
+                    return CGSize(width: 0, height: 80 + 50 + 20)
+                }
             } else {
-                return .init(width: 0, height: 80)
+                // standard SEE MORE
+                return CGSize(width: 0, height: 80)
             }
         
         }
@@ -450,40 +472,60 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 let kind = UICollectionView.elementKindSectionFooter
                 
                 if indexPath.section == self.collectionView.numberOfSections - 1 {
-                    
+                    // last one
+                    /*
                     let pageFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: FAQFooter.footerId, for: indexPath) as! FAQFooter
                     pageFooter.shareDelegate = self
                     pageFooter.configure()
-                    
                     return pageFooter
-                    
-                    /*
-                    let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterLast.footerId, for: indexPath) as! seeMoreFooterLast
-                    seeMore.delegate = self
-                    seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
-                    seeMore.configure()
-                    return seeMore
                     */
+                    let subTopicsCount = newsParser.getNumOfSections()
+                    if(subTopicsCount==1) {
+                        let pageFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: FAQFooter.footerId, for: indexPath) as! FAQFooter
+                        pageFooter.shareDelegate = self
+                        pageFooter.configure()
+                        return pageFooter
+                    } else {
+                        let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterLast.footerId, for: indexPath) as! seeMoreFooterLast
+                        seeMore.delegate = self
+                        seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
+                        seeMore.configure()
+                        seeMore.configure2()
+                        seeMore.shareDelegate = self
+                        return seeMore
+                    }
                 } else if indexPath.section == 0 {
-                    let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterSection0.footerId, for: indexPath) as! seeMoreFooterSection0
+                    let subTopicsCount = newsParser.getNumOfSections()
+                    if(subTopicsCount==1) {
+                        let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooter.footerId, for: indexPath) as! seeMoreFooter
+                        seeMore.delegate = self
+                        // oMore
+                        seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
+                        seeMore.configure()
+                        return seeMore
+                    } else {
+                        let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterSection0.footerId, for: indexPath) as! seeMoreFooterSection0
                     
-                    seeMore.delegate = self
-                    seeMore.topics = newsParser.getAllTopics()
-                    // aMore
-                    seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
-                    seeMore.configure()
+                        seeMore.delegate = self
+                        seeMore.topics = newsParser.getAllTopics()
+                        // aMore
+                        seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
+                        seeMore.configure()
+                        
+                        self.seeMoreFooterSection = seeMore
+                        self.moreHeadLinesInCollectionPosY = seeMore.frame.origin.y
+                        
+                        var mOffset = self.moreHeadLines.scrollView.contentOffset
+                        /*if(mOffset.x < 0){ mOffset.x = 0 }
+                        else if(mOffset.x > self.moreHeadLines.scrollView.contentSize.width){
+                            mOffset.x = self.moreHeadLines.scrollView.contentSize.width
+                        }*/
+                        seeMore.scrollView.contentOffset = mOffset
+                        
+                        return seeMore
+                    }
+                
                     
-                    self.seeMoreFooterSection = seeMore
-                    self.moreHeadLinesInCollectionPosY = seeMore.frame.origin.y
-                    
-                    var mOffset = self.moreHeadLines.scrollView.contentOffset
-                    /*if(mOffset.x < 0){ mOffset.x = 0 }
-                    else if(mOffset.x > self.moreHeadLines.scrollView.contentSize.width){
-                        mOffset.x = self.moreHeadLines.scrollView.contentSize.width
-                    }*/
-                    seeMore.scrollView.contentOffset = mOffset
-                    
-                    return seeMore
                 } else {
                     // no FAQ footer unless last section
                     let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooter.footerId, for: indexPath) as! seeMoreFooter

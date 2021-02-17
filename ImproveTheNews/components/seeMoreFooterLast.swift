@@ -18,6 +18,88 @@ class seeMoreFooterLast: UICollectionReusableView {
     var label = UILabel()
     var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 23)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
     
+    // ------------------------------------------
+    // ITN Footer
+    let view = UIView()
+    
+    var shareDelegate: shareDelegate?
+    let titleImage = UIImageView(image: UIImage(named: "ITN_logo.png"))
+    
+    let title = UILabel(text: "Improve the News", font: .boldSystemFont(ofSize: 20), textColor: .label, textAlignment: .center, numberOfLines: 1)
+    let about = UILabel()
+    
+    let str = "A non-profit news aggregator helping you break out of your filter bubble"
+    
+    let shareBubble = UILabel(text: "Share with a friend", font: UIFont(name: "OpenSans-Regular", size: 12), textColor: .secondaryLabel, textAlignment: .center, numberOfLines: 1)
+    
+    let shareIcon = UIButton(image: UIImage(systemName: "square.and.arrow.up")!)
+    // ------------------------------------------
+    
+    public func configure2() {
+
+        addSubview(view)
+        view.backgroundColor = bgBlue
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            view.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 10),
+            view.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        
+        view.addSubview(title)
+        view.addSubview(titleImage)
+        titleImage.backgroundColor = .clear
+        titleImage.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 15),
+            titleImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            titleImage.widthAnchor.constraint(equalToConstant: 195),
+            titleImage.heightAnchor.constraint(equalToConstant: 30)
+        ])
+        
+        let line = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
+        line.backgroundColor = articleSourceColor
+        view.addSubview(line)
+        
+        about.textAlignment = .left
+        about.text = str
+        about.font = UIFont(name: "OpenSans-Regular", size: 12)
+        about.textColor = UIColor(rgb: 0x737D96)
+        about.numberOfLines = 18
+        about.adjustsFontSizeToFitWidth = true
+        about.sizeToFit()
+        
+        view.addSubview(about)
+        about.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            about.topAnchor.constraint(equalTo: titleImage.bottomAnchor, constant: 20),
+            about.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
+            about.heightAnchor.constraint(equalToConstant: 44),
+            about.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width-30)
+        ])
+        about.backgroundColor = .clear
+        
+        view.addSubview(shareIcon)
+        shareIcon.tintColor = UIColor.white
+        shareIcon.addTarget(self, action: #selector(sharePressed), for: .touchUpInside)
+        shareIcon.backgroundColor = accentOrange
+        shareIcon.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            shareIcon.topAnchor.constraint(equalTo: about.bottomAnchor, constant: 20),
+            shareIcon.heightAnchor.constraint(equalToConstant: 55),
+            shareIcon.widthAnchor.constraint(equalToConstant: 55),
+            shareIcon.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+        ])
+        shareIcon.layer.cornerRadius = 0.5 * 55
+    }
+    
+    @objc func sharePressed(_ sender: UIButton!) {
+        let links = ["http://www.improvethenews.org/"]
+        shareDelegate?.openSharing(items: links)
+    }
+    
+    
     public func configure() {
         
         label.text = "More "
