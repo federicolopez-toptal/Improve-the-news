@@ -142,7 +142,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         ratingsMenu.backgroundColor = .black
                 
         view.addSubview(ratingsMenu)
-        ratingsMenu.isHidden = true
+        //ratingsMenu.isHidden = true
     }
   
     

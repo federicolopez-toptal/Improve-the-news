@@ -448,12 +448,22 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             
             case UICollectionView.elementKindSectionFooter:
                 let kind = UICollectionView.elementKindSectionFooter
+                
                 if indexPath.section == self.collectionView.numberOfSections - 1 {
+                    
                     let pageFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: FAQFooter.footerId, for: indexPath) as! FAQFooter
                     pageFooter.shareDelegate = self
                     pageFooter.configure()
                     
                     return pageFooter
+                    
+                    /*
+                    let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterLast.footerId, for: indexPath) as! seeMoreFooterLast
+                    seeMore.delegate = self
+                    seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
+                    seeMore.configure()
+                    return seeMore
+                    */
                 } else if indexPath.section == 0 {
                     let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterSection0.footerId, for: indexPath) as! seeMoreFooterSection0
                     
@@ -678,6 +688,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.collectionView.register(FAQFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FAQFooter.footerId)
         self.collectionView.register(seeMoreFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooter.footerId)
         self.collectionView.register(seeMoreFooterSection0.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooterSection0.footerId)
+        self.collectionView.register(seeMoreFooterLast.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooterLast.footerId)
         self.collectionView.register(ArticleCell.self, forCellWithReuseIdentifier: ArticleCell.cellId)
         self.collectionView.backgroundColor = .systemBackground
         self.collectionView.register(ArticleCellHalf.self, forCellWithReuseIdentifier: ArticleCellHalf.cellId)
@@ -903,7 +914,7 @@ extension NewsViewController {
         homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
         homeButton.addTarget(self, action: #selector(homeButtonTapped),
                             for: .touchUpInside)
-        homeButton.isUserInteractionEnabled = false
+        //homeButton.isUserInteractionEnabled = false
         
         /*
         let label = UILabel.init(frame: CGRect(x: 35, y: 5, width: 180, height: 20))
@@ -921,16 +932,30 @@ extension NewsViewController {
     }
     
     @objc func homeButtonTapped() {
-        /*
-        if self.topic != "news" {
-            let newsVC = navigationController!.viewControllers[0] as! NewsViewController
-            newsVC.topic = "news"
-            newsVC.collectionView?.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-            navigationController!.popToRootViewController(animated: true)
-            self.loadArticles()
+        if let firstVC = navigationController?.viewControllers.first as? NewsViewController {
+            if(firstVC == self) {
+                // I'm in the first screen
+                if(self.topic == "news") {
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.collectionView.contentOffset.y = 0
+                    })
+                } else {
+                    self.firstTime = true
+                    self.topic = "news"
+                    self.loadData()
+                }
+            } else {
+                let newsVC = navigationController!.viewControllers[0] as! NewsViewController
+                
+                if(newsVC.topic == "news") {
+                    newsVC.collectionView.contentOffset.y = 0
+                } else {
+                    newsVC.firstTime = true
+                    newsVC.topic = "news"
+                }
+                navigationController!.popToRootViewController(animated: true)
         }
-        */
-    }
+    }}
     
     @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
         let searchvc = SearchViewController()

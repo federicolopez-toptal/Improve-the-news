@@ -45,6 +45,7 @@
 		BD0FEDD225D17AF60079A32B /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */; };
 		BD98C9F525D58021005106D2 /* ITN_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BD98C9F425D58021005106D2 /* ITN_logo.png */; };
 		BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */; };
+		BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */; };
 		BDEFE59C25D1B95700175C3C /* MoreHeadlinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */; };
 		D6D16EB725C1F17000D0F092 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6D16EB625C1F17000D0F092 /* GoogleService-Info.plist */; };
 		D8C1E0E4AAAC3176E6A67953 /* Pods_ImproveTheNews.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D40DE6D85DB7FEB79892932 /* Pods_ImproveTheNews.framework */; };
@@ -116,6 +117,7 @@
 		BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		BD98C9F425D58021005106D2 /* ITN_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ITN_logo.png; sourceTree = "<group>"; };
 		BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = seeMoreFooterLast.swift; sourceTree = "<group>"; };
 		BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreHeadlinesView.swift; sourceTree = "<group>"; };
 		D6D16EB625C1F17000D0F092 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -306,6 +308,7 @@
 				A8CA063324EB3B0A00B91778 /* BiasSliders.swift */,
 				A8A7935B2482F98C009A55FE /* TabBarController.swift */,
 				BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */,
+				BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				A82A270224F6A1420028272B /* TopicSliders.swift in Sources */,
 				BDEFE59C25D1B95700175C3C /* MoreHeadlinesView.swift in Sources */,
 				A8B2F846249728F40069EF76 /* NewsParser.swift in Sources */,
+				BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */,
 				A8D61B3724F1656C00A0F8F5 /* Pages.swift in Sources */,
 				A8CA063424EB3B0A00B91778 /* BiasSliders.swift in Sources */,
 				A8A7935C2482F98C009A55FE /* TabBarController.swift in Sources */,
@@ -776,7 +780,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.6.3;
+				CURRENT_PROJECT_VERSION = 1.7.2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = C743392542;
@@ -802,7 +806,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.6.3;
+				CURRENT_PROJECT_VERSION = 1.7.2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = C743392542;
