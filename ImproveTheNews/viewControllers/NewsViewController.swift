@@ -443,7 +443,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 }
                 */
                 
-                
+                /*
                 if indexPath.section == 0 {
                     if self.hierarchy == "Headlines>" {
                         sectionHeader.hierarchy.text = ""
@@ -462,7 +462,37 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //                    sectionHeader.myStack.addArrangedSubview(label2)
                     //sectionHeader.setUpStackView(atIndex: sectionHeader.tag)
                 }
+                */
                 
+                var breadcrumbText = ""
+                if indexPath.section == 0 {
+                    if self.hierarchy == "Headlines>" {
+                        breadcrumbText = ""
+                    } else {
+                        breadcrumbText = String(self.hierarchy.dropLast())
+                        hArray.append(breadcrumbText)
+                    }
+                } else {
+                    breadcrumbText = self.hierarchy + newsParser.getTopic(index: indexPath.section)
+                    sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
+                    hArray.append(breadcrumbText)
+                }
+                
+                let components = breadcrumbText.components(separatedBy: ">")
+                if(components.count > 1) {
+                    let last = components.last!
+                    breadcrumbText = breadcrumbText.replacingOccurrences(of: ">" + last, with: "")
+                    hArray.append(breadcrumbText)
+                }
+                sectionHeader.hierarchy.text = breadcrumbText
+                
+                /*
+                let components = self.hierarchy.components(separatedBy: ">")
+                    if(components.count > 1) {
+                        text = components[components.count-2] + ">"
+                    }
+                    text += newsParser.getTopic(index: indexPath.section)
+                */
                 
                 sectionHeader.backgroundColor  = bgBlue
                 return sectionHeader
@@ -763,8 +793,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func scrollFromHeadLines(toSection: Int) {
-        let indexPath = IndexPath(item: 0, section: toSection)
-        self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+        self.scrollTheNewsTo(toSection)
     }
     
     @objc func refreshNews(){
@@ -780,6 +809,48 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             }
             self.moreHeadLines.moveTo(y: posY)
         }
+    }
+    
+    func scrollTheNewsTo(_ index: Int) {
+        //let indexPath = IndexPath(item: 0, section: 0)
+        /*if let cell = self.collectionView.cellForItem(at: indexPath) {
+            self.collectionView.scrollRectToVisible(cell.frame, animated: true)
+        }
+        */
+        
+        //self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+        
+        
+        
+        /*
+        let val_y: CGFloat = CGFloat((800) * index)
+        self.collectionView.setContentOffset(CGPoint(x: 0, y: val_y), animated: true)
+        */
+        
+        /*
+        let cell = self.collectionView.cellForItem(at: indexPath)
+        self.collectionView.
+        
+        cell?.alpha = 0.25
+        */
+        
+        var offsetY: CGFloat = 0
+        
+        if(index>0) {
+            offsetY = 800
+            offsetY += CGFloat(890 * (index-1))
+            offsetY += -45 // margin
+        }
+        
+        
+        /*
+        for i in 0...index {
+            if(i==0){ offsetY += 800 }
+            else { offsetY += 890 }
+        }
+        */
+        
+        self.collectionView.setContentOffset(CGPoint(x: 0, y: offsetY), animated: true)
     }
 }
 
@@ -805,7 +876,7 @@ extension NewsViewController {
             
             let link = self.buildApiCall()
             
-            print("GATO2", "should load " + self.buildApiCall_b())
+            print("GATO", "should load " + self.buildApiCall_b())
             self.newsParser.getJSONContents(jsonName: link)
             
         }
@@ -1070,9 +1141,7 @@ extension NewsViewController: TopicSelectorDelegate {
     }
     
     func goToScrollView(atSection: Int) {
-        let indexPath = IndexPath(item: 0, section: atSection)
-        //let section = self.collectionView.
-        self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+        self.scrollTheNewsTo(atSection)
     }
 }
 
