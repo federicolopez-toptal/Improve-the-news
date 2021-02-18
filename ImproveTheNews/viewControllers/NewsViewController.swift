@@ -465,26 +465,49 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 */
                 
                 var breadcrumbText = ""
-                if indexPath.section == 0 {
-                    if self.hierarchy == "Headlines>" {
-                        breadcrumbText = ""
-                    } else {
-                        breadcrumbText = String(self.hierarchy.dropLast())
-                        hArray.append(breadcrumbText)
-                    }
+                if(indexPath.section==0 && self.hierarchy == "Headlines>") {
+                    breadcrumbText = ""
+                    sectionHeader.hierarchy.text = breadcrumbText
                 } else {
                     breadcrumbText = self.hierarchy + newsParser.getTopic(index: indexPath.section)
                     sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
                     hArray.append(breadcrumbText)
+                    
+                    let components = breadcrumbText.components(separatedBy: ">")
+                    if(components.count > 1) {
+                        let last = components.last!
+                        breadcrumbText = breadcrumbText.replacingOccurrences(of: ">" + last, with: "")
+                        hArray.append(breadcrumbText)
+                    }
+                    sectionHeader.hierarchy.text = breadcrumbText
                 }
                 
-                let components = breadcrumbText.components(separatedBy: ">")
-                if(components.count > 1) {
-                    let last = components.last!
-                    breadcrumbText = breadcrumbText.replacingOccurrences(of: ">" + last, with: "")
+                
+                
+                /*
+                    if self.hierarchy == "Headlines>" {
+                        
+                    } else {
+                        breadcrumbText = String(self.hierarchy.dropLast())
+                        hArray.append(breadcrumbText)
+                    }
                     hArray.append(breadcrumbText)
+                    sectionHeader.hierarchy.text = breadcrumbText
+                } else {
+                    breadcrumbText = self.hierarchy + newsParser.getTopic(index: indexPath.section)
+                    sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
+                    hArray.append(breadcrumbText)
+                    
+                    let components = breadcrumbText.components(separatedBy: ">")
+                    if(components.count > 1) {
+                        let last = components.last!
+                        breadcrumbText = breadcrumbText.replacingOccurrences(of: ">" + last, with: "")
+                        hArray.append(breadcrumbText)
+                    }
+                    sectionHeader.hierarchy.text = breadcrumbText
                 }
-                sectionHeader.hierarchy.text = breadcrumbText
+                */
+                
                 
                 /*
                 let components = self.hierarchy.components(separatedBy: ">")
