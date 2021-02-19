@@ -41,10 +41,10 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
 
     // MARK: - Init
     func initialize(width: CGFloat) {
-        self.frame = CGRect(x: 0, y: 0, width: width, height: 50)
-        self.backgroundColor = .red
+        self.frame = CGRect(x: 0, y: 0, width: width, height: 36)
+        self.backgroundColor = bgBlue
         
-        self.scrollView = customUIScrollView(frame: CGRect(x: 0, y: 0, width: width, height: 50))
+        self.scrollView = customUIScrollView(frame: CGRect(x: 0, y: 0, width: width, height: 36))
         self.scrollView.showsHorizontalScrollIndicator = true
         self.scrollView.flashScrollIndicators()
         self.scrollView.delegate = self
@@ -57,6 +57,38 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
                 continue
             }
         
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+            label.textColor = articleHeadLineColor
+            label.backgroundColor = articleSourceColor
+            label.font = UIFont(name: "Poppins-SemiBold", size: 12)
+            label.textAlignment = .center
+            label.text = Globals.searchTopics[i].uppercased()
+            label.sizeToFit()
+            label.isUserInteractionEnabled = false
+            
+                var mFrame = label.frame
+                mFrame.origin.y = 0
+                mFrame.origin.x = CGFloat(x)
+                mFrame.size.width += 40.0
+                mFrame.size.height = 36
+                label.frame = mFrame
+            
+            scrollView.addSubview(label)
+        
+        
+            let button = UIButton(frame: label.frame)
+            button.backgroundColor = .clear
+            button.tag = i
+            
+            button.addTarget(self, action: #selector(headLineTap(_:)), for: .touchUpInside)
+            scrollView.addSubview(button)
+            x += Int(label.frame.size.width)
+            
+            scrollView.contentSize = CGSize(width: CGFloat(x), height: scrollView.frame.size.height)
+        
+        
+        
+            /*
             let button = UIButton(frame: CGRect(x: CGFloat(x), y: 3, width: 100, height: 30))
             button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)
             button.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 12)
@@ -70,6 +102,7 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
             
             scrollView.contentSize = CGSize(width: CGFloat(x), height: scrollView.frame.size.height)
             scrollView.backgroundColor = articleSourceColor
+            */
         }
         scrollView.showsHorizontalScrollIndicator = false
     }
@@ -110,6 +143,37 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
                 continue
             }
         
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+            label.textColor = articleHeadLineColor
+            label.backgroundColor = articleSourceColor
+            label.font = UIFont(name: "Poppins-SemiBold", size: 12)
+            label.textAlignment = .center
+            label.text = topic.uppercased()
+            label.sizeToFit()
+            label.isUserInteractionEnabled = false
+            
+                var mFrame = label.frame
+                mFrame.origin.y = 0
+                mFrame.origin.x = CGFloat(x)
+                mFrame.size.width += 40.0
+                mFrame.size.height = 36
+                label.frame = mFrame
+            
+            scrollView.addSubview(label)
+        
+        
+            let button = UIButton(frame: label.frame)
+            button.backgroundColor = .clear
+            button.tag = i
+            
+            button.addTarget(self, action: #selector(headLineTap(_:)), for: .touchUpInside)
+            scrollView.addSubview(button)
+            x += Int(label.frame.size.width)
+            
+            scrollView.contentSize = CGSize(width: CGFloat(x), height: scrollView.frame.size.height)
+        
+        
+            /*
             let button = UIButton(frame: CGRect(x: CGFloat(x), y: 3, width: 100, height: 30))
             button.setTitle(topic.uppercased(), for: .normal)
             //button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)
@@ -124,6 +188,7 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
             
             scrollView.contentSize = CGSize(width: CGFloat(x), height: scrollView.frame.size.height)
             scrollView.backgroundColor = articleSourceColor
+            */
         }
     }
     

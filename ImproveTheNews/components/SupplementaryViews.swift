@@ -417,15 +417,13 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
             
           
         //scrollView
-        scrollView = UIScrollView(frame: CGRect(x: 0, y: 62, width: bounds.width, height: 50))
-        scrollView.showsHorizontalScrollIndicator = true
+        
+        scrollView.frame = CGRect(x: 0, y: 62, width: bounds.width, height: 36)
         scrollView.flashScrollIndicators()
         scrollView.delegate = self
+        scrollView.backgroundColor = .clear
         
         var x = 0
-        
-        
-        
         //for i in 0..<Globals.searchTopics.count {
         //for i in 0..<self.topics.count {
         
@@ -435,29 +433,36 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
                 continue
             }
         
-            let button = UIButton(frame: CGRect(x: CGFloat(x), y: 3, width: 100, height: 30))
-            //button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)
-            button.setTitle(topic.uppercased(), for: .normal)
-            button.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 12)
-            button.titleLabel?.textColor = articleHeadLineColor
-            button.titleLabel?.lineBreakMode = .byWordWrapping
-            button.titleLabel?.textAlignment = .center
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+            label.textColor = articleHeadLineColor
+            label.backgroundColor = articleSourceColor
+            label.font = UIFont(name: "Poppins-SemiBold", size: 12)
+            label.textAlignment = .center
+            label.text = topic.uppercased()
+            label.sizeToFit()
+            label.isUserInteractionEnabled = false
+            
+                var mFrame = label.frame
+                mFrame.origin.y = 0
+                mFrame.origin.x = CGFloat(x)
+                mFrame.size.width += 40.0
+                mFrame.size.height = 36
+                label.frame = mFrame
+            
+            scrollView.addSubview(label)
+            
+            let button = UIButton(frame: label.frame)
+            button.backgroundColor = .clear
             button.tag = i
+            
             button.addTarget(self, action: #selector(scrollViewButtonTapped(_:)), for: .touchUpInside)
             scrollView.addSubview(button)
-            x += Int(button.frame.size.width)
+            x += Int(label.frame.size.width)
             
             scrollView.contentSize = CGSize(width: CGFloat(x), height: scrollView.frame.size.height)
-            scrollView.backgroundColor = articleSourceColor
-            
-            addSubview(scrollView)
-            
-            NSLayoutConstraint.activate([
-                scrollView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 5),
-                scrollView.heightAnchor.constraint(equalToConstant: 50),
-            ])
         }
         scrollView.showsHorizontalScrollIndicator = false
+        addSubview(scrollView)
 
         addTopBorder()
         self.backgroundColor = bgBlue
