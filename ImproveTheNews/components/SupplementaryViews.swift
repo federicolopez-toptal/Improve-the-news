@@ -70,31 +70,50 @@ class SubtopicHeader: UICollectionReusableView {
     let pmax = 0.9
     let formatter = NumberFormatter()
     
+    var stackView = UIStackView()
+    
+    
     public func configure() {
         
         backgroundColor = .systemBackground
-        layer.cornerRadius = 12
+        addSubview(stackView)
         
-        
+        stackView.frame = self.frame
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: self.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = 0
+        stackView.distribution = .fillProportionally
+        //stackView.backgroundColor = UIColor.green.withAlphaComponent(0.2)
+
+
+    // Breadcrumbs
         hierarchy.isUserInteractionEnabled = true
-        //addding tap gsture for breadcrumbs
         let tapgesture = UITapGestureRecognizer(target: self, action: #selector(tappedOnLabel(_ :)))
         self.hierarchy.addGestureRecognizer(tapgesture)
-        addSubview(hierarchy)
         
+        //addSubview(hierarchy)
+        stackView.addArrangedSubview(hierarchy)
+        //hierarchy.backgroundColor = UIColor.green.withAlphaComponent(0.4)
         hierarchy.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            hierarchy.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
             hierarchy.heightAnchor.constraint(equalToConstant: 20),
             hierarchy.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             hierarchy.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
         
-        addSubview(label)
-        
+    // main orange Title
+        //addSubview(label)
+        stackView.addArrangedSubview(label)
+        //label.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: hierarchy.bottomAnchor, constant: 10),
             label.heightAnchor.constraint(equalToConstant: 40),
             label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -80)
@@ -103,24 +122,28 @@ class SubtopicHeader: UICollectionReusableView {
         addSubview(topicSlidersButton)
         topicSlidersButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            topicSlidersButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+            //topicSlidersButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+            topicSlidersButton.topAnchor.constraint(equalTo: hierarchy.bottomAnchor, constant: 0),
             topicSlidersButton.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 10),
             topicSlidersButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
         ])
-        
+        //topicSlidersButton.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         topicSlidersButton.addTarget(self, action: #selector(showTopicSliders(_:)), for: .touchUpInside)
         
-        addSubview(topicPriority)
         
+        //addSubview(topicPriority)
+        stackView.addArrangedSubview(topicPriority)
         topicPriority.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            topicPriority.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 8),
             topicPriority.heightAnchor.constraint(equalToConstant: 25),
             topicPriority.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             topicPriority.widthAnchor.constraint(equalToConstant: 250)
         ])
+        //topicPriority.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
         
-        addSubview(prioritySlider)
+        
+        //addSubview(prioritySlider)
+        stackView.addArrangedSubview(prioritySlider)
         prioritySlider.isContinuous = false
         prioritySlider.tintColor = .orange
         prioritySlider.minimumValue = 0
@@ -131,12 +154,14 @@ class SubtopicHeader: UICollectionReusableView {
         
         prioritySlider.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            prioritySlider.topAnchor.constraint(equalTo: topicPriority.bottomAnchor, constant: 20),
-            prioritySlider.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            //prioritySlider.topAnchor.constraint(equalTo: topicPriority.bottomAnchor, constant: 0),
+            //prioritySlider.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             prioritySlider.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             prioritySlider.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
+        //prioritySlider.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         
+        prioritySlider.isUserInteractionEnabled = false
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
@@ -366,7 +391,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         label.backgroundColor = .clear
             var mFrame = label.frame
             mFrame.origin.x = (UIScreen.main.bounds.width/2) - mFrame.size.width
-            mFrame.origin.y = 20 + 4
+            mFrame.origin.y = 20
             label.frame = mFrame
         addSubview(label)
         
@@ -374,7 +399,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         button.backgroundColor = .clear
             mFrame = button.frame
             mFrame.origin.x = (UIScreen.main.bounds.width/2)
-            mFrame.origin.y = 13 + 4
+            mFrame.origin.y = 13
             button.frame = mFrame
         addSubview(button)
         
@@ -392,7 +417,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
             
           
         //scrollView
-        scrollView = UIScrollView(frame: CGRect(x: 0, y: 80, width: bounds.width, height: 50))
+        scrollView = UIScrollView(frame: CGRect(x: 0, y: 62, width: bounds.width, height: 50))
         scrollView.showsHorizontalScrollIndicator = true
         scrollView.flashScrollIndicators()
         scrollView.delegate = self
@@ -406,6 +431,10 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         
         scrollView.subviews.forEach({ $0.removeFromSuperview() })
         for (i, topic) in self.topics.enumerated() {
+            if(i==0) {
+                continue
+            }
+        
             let button = UIButton(frame: CGRect(x: CGFloat(x), y: 3, width: 100, height: 30))
             //button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)
             button.setTitle(topic.uppercased(), for: .normal)
@@ -451,7 +480,6 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         let border = UIView(frame: CGRect(x: 10, y: self.frame.height - 5, width: self.frame.width - 20, height: 2))
         border.backgroundColor = .secondaryLabel
         addSubview(border)
-        
     }
     
     public func setFooterText(subtopic: String) {

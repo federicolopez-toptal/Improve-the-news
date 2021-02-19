@@ -44,6 +44,8 @@ class SliderPopup: UIView {
     var loadingView = UIView()
     
     var separatorView = UIView()
+    
+    var status: String = "SL00"
 }
 
 extension SliderPopup {
@@ -317,6 +319,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
     
     // cancel button
     @objc func handleDismiss() {
+        self.status = "SL00"
         let screenSize = UIScreen.main.bounds.size
         UIView.animate(withDuration: 0.5, animations: {
             self.frame = CGRect(x: 0, y: screenSize.height, width: screenSize.width, height: self.frame.height)
@@ -332,6 +335,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
             isShowingMore = true
         }
         
+        self.status = "SL02"
         let height = CGFloat(490) //490
         let screenSize = UIScreen.main.bounds.size
         
@@ -352,6 +356,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
             isShowingMore = false
         }
         
+        self.status = "SL01"
         let height = CGFloat(270) // 220
         let screenSize = UIScreen.main.bounds.size
         

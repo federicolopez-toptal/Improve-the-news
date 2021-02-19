@@ -53,6 +53,10 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
 
         var x = 0
         for i in 0..<Globals.searchTopics.count {
+            if(i==0) {
+                continue
+            }
+        
             let button = UIButton(frame: CGRect(x: CGFloat(x), y: 3, width: 100, height: 30))
             button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)
             button.titleLabel?.font = UIFont(name: "Poppins-SemiBold", size: 12)
@@ -102,6 +106,10 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
         scrollView.subviews.forEach({ $0.removeFromSuperview() })
         //for i in 0..<Globals.searchTopics.count {
         for (i, topic) in topics.enumerated() {
+            if(i==0) {
+                continue
+            }
+        
             let button = UIButton(frame: CGRect(x: CGFloat(x), y: 3, width: 100, height: 30))
             button.setTitle(topic.uppercased(), for: .normal)
             //button.setTitle(Globals.searchTopics[i].uppercased(), for: .normal)

@@ -227,7 +227,32 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
         
         // default
-        return .init(width: view.frame.width, height: 120)
+        //return .init(width: view.frame.width, height: 120)
+        //return .init(width: view.frame.width, height: 75)
+        
+        
+        var h: CGFloat = 120
+        /*
+        let iPath = IndexPath(item: 0, section: section)
+        let cell = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: iPath) as! SubtopicHeader
+        */
+        
+        let kind = UICollectionView.elementKindSectionHeader
+        let iPath = IndexPath(row: 0, section: section)
+        if let header = self.collectionView(self.collectionView,
+                        viewForSupplementaryElementOfKind: kind,
+                        at: iPath) as? SubtopicHeader {
+                        
+            if(header.hierarchy.text == "") {
+                h -= 20
+            }
+            
+            if(header.prioritySlider.isHidden) {
+                h -= 29
+            }
+        }
+        
+        return CGSize(width: view.frame.width, height: h)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
@@ -262,7 +287,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     }
                 } else {
                     // SEE MORE + horizontal menu
-                    return CGSize(width: 0, height: 80 + 50 + 20)
+                    return CGSize(width: 0, height: 80 + 55)
                 }
             } else {
                 // standard SEE MORE
@@ -389,10 +414,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 
                 sectionHeader.topicSlidersButton.isHidden = false
                 sectionHeader.prioritySlider.isHidden = false
-                //sectionHeader.isUserInteractionEnabled = false
                 
                 var globalPopularity: Float = 0
-                if(newsParser.getGlobalPopularities().count==0){
+                if(newsParser.getGlobalPopularities().count==0) {
                     globalPopularity = 0
                 } else if(indexPath.section<0 || indexPath.section>=self.newsParser.getGlobalPopularities().count) {
                     globalPopularity = 0
@@ -408,7 +432,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 }
                                 
                 // no super sliders on main page
-                if self.topic == "news"{
+                if self.topic == "news" {
                     sectionHeader.prioritySlider.isHidden = true
                 }
                 
@@ -647,7 +671,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             if(!nav.navigationBar.isTranslucent) {
                 limit += (self.navBarFrame.origin.y + self.navBarFrame.size.height)
             }
-            limit += 40
+            limit += 18
         }
         
         if(limit<110) {
@@ -813,6 +837,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         self.view.backgroundColor = bgBlue
         self.collectionView.backgroundColor = bgBlue
+        
+        
+        /*
+        //testing height(s)
+        let redView = UIView(frame: CGRect(x: 20, y: 736, width: 100, height: 20))
+        redView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+        self.collectionView.addSubview(redView)
+        */
     }
     
     func scrollFromHeadLines(toSection: Int) {
@@ -856,13 +888,39 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         cell?.alpha = 0.25
         */
+        //self.getItemHeight(section: 0)
+        
+        
         
         var offsetY: CGFloat = 0
         
         if(index>0) {
-            offsetY = 800
+            offsetY += 736
+
+            if(self.topic=="news") { // No sliders in header
+                offsetY += CGFloat(861 * (index-1))
+            } else {
+                offsetY += 49
+                offsetY += CGFloat((861+29) * (index-1))
+            }
+            offsetY += -52 // margin
+            
+            /*
+            print("GATO3", index)
+            for i in 0...index-1 {
+                let h = self.getItemHeight(section: i)
+                print("GATO3", i, h)
+            
+                offsetY += h
+            }
+            */
+            
+        
+            /*
+            offsetY = firstItemHeight.height
             offsetY += CGFloat(890 * (index-1))
             offsetY += -45 // margin
+            */
         }
         
         
@@ -874,6 +932,18 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         */
         
         self.collectionView.setContentOffset(CGPoint(x: 0, y: offsetY), animated: true)
+    }
+    
+    func getItemHeight(section: Int) -> CGFloat {
+        let headerHeight = self.collectionView(self.collectionView, layout: self.collectionViewLayout, referenceSizeForHeaderInSection: section).height
+        
+        let iPath = IndexPath(row: 0, section: section)
+        let itemHeight = self.collectionView(self.collectionView, layout: self.collectionViewLayout, sizeForItemAt: iPath).height
+        
+        let footerHeight = self.collectionView(self.collectionView, layout: self.collectionViewLayout, referenceSizeForFooterInSection: section).height
+        
+        let result = headerHeight + (itemHeight*2) + footerHeight
+        return result
     }
 }
 
@@ -899,7 +969,7 @@ extension NewsViewController {
             
             let link = self.buildApiCall()
             
-            print("GATO", "should load " + self.buildApiCall_b())
+            print("GATO", "should load " + link)
             self.newsParser.getJSONContents(jsonName: link)
             
         }
@@ -916,16 +986,12 @@ extension NewsViewController {
     }
     
     private func buildApiCall() -> String {
-        /*
-            self.artfreq
-            self.untouchables
-        */
-    
+
         let firsthalf = self.homelink + self.topic +
             ".A\(self.param_A)" + ".B\(self.param_B)" +
             ".S\(self.param_S)"
-            
-        let nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs()
+        let nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
+        
         let link: String
         if self.superSliderStr == "_" {
             link = firsthalf + nexthalf
@@ -1187,6 +1253,8 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         let y = view.frame.height - slidersHeight
         biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550) //470
         biasSliders.buildViews()
+        
+        self.biasSliders.status = "SL00"
     }
     
     func configureBiasSliders() {
@@ -1206,6 +1274,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         shadeView.frame = view.frame
         shadeView.alpha = 0
         
+        self.biasSliders.status = "SL01"
         self.biasSliders.separatorView.isHidden = false
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.shadeView.alpha = 1
