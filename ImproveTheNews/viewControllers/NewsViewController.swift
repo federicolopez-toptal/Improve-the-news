@@ -25,7 +25,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     // to populate CollectionView
     //changed home link from "http://www.improvethenews.org/itnserver.php/?topic=" to this one
-    let homelink = "http://ec2-user@ec2-3-16-51-0.us-east-2.compute.amazonaws.com/appserver.php/?topic="
+    //let homelink = "http://ec2-user@ec2-3-16-51-0.us-east-2.compute.amazonaws.com/appserver.php/?topic="
+    
+    let homelink = "https://www.improvethenews.org/appserver.php/?topic="
+    
     var topic = ""
     var artfreq = ".A4"
     var untouchables = ".B4.S0"
@@ -992,11 +995,16 @@ extension NewsViewController {
             ".S\(self.param_S)"
         let nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
         
-        let link: String
+        var link: String
         if self.superSliderStr == "_" {
             link = firsthalf + nexthalf
         } else {
             link = firsthalf + nexthalf + self.superSliderStr
+        }
+        
+        link += "&uid=3"
+        if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
+            link += deviceId
         }
             
         return link

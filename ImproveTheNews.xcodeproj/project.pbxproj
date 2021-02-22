@@ -45,9 +45,9 @@
 		BD0FEDD225D17AF60079A32B /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */; };
 		BD98C9F525D58021005106D2 /* ITN_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BD98C9F425D58021005106D2 /* ITN_logo.png */; };
 		BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */; };
+		BDBC97F525E3F1F3004FA5E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */; };
 		BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */; };
 		BDEFE59C25D1B95700175C3C /* MoreHeadlinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */; };
-		D6D16EB725C1F17000D0F092 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6D16EB625C1F17000D0F092 /* GoogleService-Info.plist */; };
 		D8C1E0E4AAAC3176E6A67953 /* Pods_ImproveTheNews.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D40DE6D85DB7FEB79892932 /* Pods_ImproveTheNews.framework */; };
 /* End PBXBuildFile section */
 
@@ -117,9 +117,9 @@
 		BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		BD98C9F425D58021005106D2 /* ITN_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ITN_logo.png; sourceTree = "<group>"; };
 		BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = seeMoreFooterLast.swift; sourceTree = "<group>"; };
 		BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreHeadlinesView.swift; sourceTree = "<group>"; };
-		D6D16EB625C1F17000D0F092 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,7 +276,7 @@
 		BD0FEDC625D17A8B0079A32B /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				D6D16EB625C1F17000D0F092 /* GoogleService-Info.plist */,
+				BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */,
 				A8D61B3524F1633100A0F8F5 /* fonts */,
 				BD98C9F425D58021005106D2 /* ITN_logo.png */,
 				A8D61B3824F1A10000A0F8F5 /* Launch Screen.storyboard */,
@@ -450,10 +450,10 @@
 			files = (
 				BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */,
 				A8D61B3924F1A10000A0F8F5 /* Launch Screen.storyboard in Resources */,
-				D6D16EB725C1F17000D0F092 /* GoogleService-Info.plist in Resources */,
 				BD0FEDD125D17AF60079A32B /* OpenSans-SemiBold.ttf in Resources */,
 				BD0FED9F25D170330079A32B /* PTSerif-Bold.ttf in Resources */,
 				A81B3B2C2481E67500A52A97 /* Preview Assets.xcassets in Resources */,
+				BDBC97F525E3F1F3004FA5E5 /* GoogleService-Info.plist in Resources */,
 				BD0FEDA825D170500079A32B /* Poppins-SemiBold.ttf in Resources */,
 				B6AF8732254465C900227CCC /* PlayfairDisplay-SemiBold.ttf in Resources */,
 				BD0FEDA925D170500079A32B /* Poppins-Regular.ttf in Resources */,
@@ -778,12 +778,12 @@
 			baseConfigurationReference = 7D9202F8B2FD921B4E6D8CCD /* Pods-ImproveTheNews.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.7.2;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 0.1.5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
-				DEVELOPMENT_TEAM = C743392542;
+				DEVELOPMENT_TEAM = U7V2C7L759;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ImproveTheNews/app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -791,9 +791,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "FLI.Mindy-Long.ImproveTheNews";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ITNFoundation.ITNaggregator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "ITN Dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -804,12 +805,12 @@
 			baseConfigurationReference = B10C65AB4C478E58D094B21B /* Pods-ImproveTheNews.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.7.2;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 0.1.5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
-				DEVELOPMENT_TEAM = C743392542;
+				DEVELOPMENT_TEAM = U7V2C7L759;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ImproveTheNews/app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -817,9 +818,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "FLI.Mindy-Long.ImproveTheNews";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ITNFoundation.ITNaggregator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "ITN Distribution 11/02";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

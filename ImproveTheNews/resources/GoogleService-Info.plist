@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>419401560537-vq6fcscpnueolg4kb2llkd2mqrugmrbt.apps.googleusercontent.com</string>
+	<string>419401560537-aa0uhmnb3d7toj92igvha5pet47or6po.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.419401560537-vq6fcscpnueolg4kb2llkd2mqrugmrbt</string>
+	<string>com.googleusercontent.apps.419401560537-aa0uhmnb3d7toj92igvha5pet47or6po</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCviO3NK2ZSWmB8txufmcX4hwfxplEbNPY</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>FLI.Mindy-Long.ImproveTheNews</string>
+	<string>com.ITNFoundation.ITNaggregator</string>
 	<key>PROJECT_ID</key>
 	<string>improve-the-news</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:419401560537:ios:bb800995b663db38fa69c8</string>
+	<string>1:419401560537:ios:617f6f9b263d9992fa69c8</string>
 </dict>
 </plist>
