@@ -49,6 +49,7 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
         self.scrollView.flashScrollIndicators()
         self.scrollView.delegate = self
         self.scrollView.canCancelContentTouches = false
+        self.scrollView.backgroundColor = articleSourceColor
         self.addSubview(self.scrollView)
 
         var x = 0

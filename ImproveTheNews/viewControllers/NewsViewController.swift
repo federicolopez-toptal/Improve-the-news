@@ -317,11 +317,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 
             let totalSpace = flowLayout.sectionInset.left
                 + flowLayout.sectionInset.right
-                + (flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1))
+                //+ (flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1))
 
             let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(cellsPerRow))
 
-            return CGSize(width: size, height: 250)
+            //let w: CGFloat = (UIScreen.main.bounds.width)/2
+            return CGSize(width: size, height: 240)
         }
         // section highlights
         else if indexPath.row == 0 || indexPath.row == 1 {
@@ -334,7 +335,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 
             let totalSpace = flowLayout.sectionInset.left
                 + flowLayout.sectionInset.right
-                + (flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1))
+                //+ (flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1))
 
             let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(cellsPerRow))
 
@@ -343,11 +344,37 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        
+        if(section==0) { return 0 }
+        else { return 10 }
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        
+        /*
+        if(section==0){ return 0 }
+        else { return 10 } */
+        
+        return 0
+    }
+    
+    
+    
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
         //return .init(top: 0, left: 0, bottom: 0, right: 0)
-        return .init(top: 20, left: 0, bottom: 0, right: 0)
+        
+        var top: CGFloat = 20
+        if(section==0) { top = 0 }
+        return .init(top: top, left: 0, bottom: 0, right: 0)
     }
+    
+    
     
    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         var value = 0
@@ -904,7 +931,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         var offsetY: CGFloat = 0
         
         if(index>0) {
-            offsetY += 736
+            offsetY += (736-20-20)
 
             if(self.topic=="news") { // No sliders in header
                 offsetY += CGFloat(861 * (index-1))

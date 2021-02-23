@@ -29,7 +29,7 @@ class HeadlineCell: UICollectionViewCell {
     static let cellId = "HeadlineCell"
       
     let imageView = UIImageView(backgroundColor: .clear)
-    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12), numberOfLines: 3)
+    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 11), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
     let pubDate = UILabel()
     let logoView = UIImageView()
@@ -51,7 +51,7 @@ class HeadlineCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
             imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
             imageView.heightAnchor.constraint(equalToConstant: self.frame.width * 7 / 12)
         ])
         imageView.layer.cornerRadius = 15
@@ -59,14 +59,16 @@ class HeadlineCell: UICollectionViewCell {
         
         addSubview(headline)
         headline.translatesAutoresizingMaskIntoConstraints = false
-        headline.numberOfLines = 10
+        headline.numberOfLines = 5
+        headline.textAlignment = .center
         //headline.backgroundColor = .red
         headline.adjustsFontSizeToFitWidth = true
-        headline.minimumScaleFactor = 0.8
+        headline.minimumScaleFactor = 0.5
+        headline.lineBreakMode = .byClipping
         NSLayoutConstraint.activate([
-            headline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            headline.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            headline.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
+            headline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 6),
+            headline.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6),
+            headline.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 3),
             //headline.heightAnchor.constraint(equalToConstant: 70)
         ])
         
@@ -80,7 +82,7 @@ class HeadlineCell: UICollectionViewCell {
             source.heightAnchor.constraint(equalToConstant: 20)
         ])
         source.adjustsFontSizeToFitWidth = true
-        
+        //source.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
         addSubview(pubDate)
         
         pubDate.translatesAutoresizingMaskIntoConstraints = false
@@ -90,6 +92,8 @@ class HeadlineCell: UICollectionViewCell {
             pubDate.heightAnchor.constraint(equalToConstant: 20),
             pubDate.widthAnchor.constraint(equalToConstant: 110)
         ])
+        pubDate.adjustsFontSizeToFitWidth = true
+        //pubDate.backgroundColor = UIColor.green.withAlphaComponent(0.5)
         
         markupView.image = UIImage(systemName: "exclamationmark.triangle")
         markupView.translatesAutoresizingMaskIntoConstraints = false
@@ -108,7 +112,7 @@ class HeadlineCell: UICollectionViewCell {
         source.textColor = articleSourceColor
         pubDate.textColor = .secondaryLabel
         
-        pubDate.font = UIFont(name: "OpenSans-Bold", size: 12)
+        pubDate.font = UIFont(name: "OpenSans-Bold", size: 11)
         //markupView.isHidden = true
     
     }

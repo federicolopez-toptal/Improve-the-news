@@ -421,7 +421,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         scrollView.frame = CGRect(x: 0, y: 62, width: bounds.width, height: 36)
         scrollView.flashScrollIndicators()
         scrollView.delegate = self
-        scrollView.backgroundColor = .clear
+        scrollView.backgroundColor = articleSourceColor //.clear
         
         var x = 0
         //for i in 0..<Globals.searchTopics.count {
