@@ -41,6 +41,8 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = topicsTable.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            
+            cell.textLabel?.textAlignment = .center
             cell.textLabel?.font = UIFont(name: "Poppins-SemiBold", size: 16)
             cell.textLabel?.textColor = articleHeadLineColor
             cell.textLabel?.text = filteredData[indexPath.row]

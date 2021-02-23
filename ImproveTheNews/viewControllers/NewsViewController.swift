@@ -121,6 +121,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     cell.markupView.isHidden = false
                 }
                 
+                //cell.backgroundColor = .red
                 return cell
             }
                 
@@ -343,6 +344,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        //return .init(top: 0, left: 0, bottom: 0, right: 0)
         return .init(top: 20, left: 0, bottom: 0, right: 0)
     }
     
@@ -546,7 +549,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     text += newsParser.getTopic(index: indexPath.section)
                 */
                 
-                sectionHeader.backgroundColor  = bgBlue
+                sectionHeader.backgroundColor = bgBlue
+                //sectionHeader.backgroundColor  = UIColor.green.withAlphaComponent(0.25) //!!!
                 return sectionHeader
                 
             
@@ -1209,6 +1213,11 @@ extension NewsViewController: TopicSelectorDelegate {
             
         }
         
+        if(Utils.shared.didTapOnMoreLink && newTopic=="news") {
+            vc.param_A = 10
+        }
+        Utils.shared.didTapOnMoreLink = false
+        
         
         /*
         // Getting more article on same topic
@@ -1518,3 +1527,15 @@ struct MainPreview: PreviewProvider {
     }
 }
 */
+
+
+extension NewsViewController {
+
+/*
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return 0
+    }
+    */
+
+}

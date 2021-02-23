@@ -161,7 +161,7 @@ class SubtopicHeader: UICollectionReusableView {
         ])
         //prioritySlider.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         
-        prioritySlider.isUserInteractionEnabled = false
+        //prioritySlider.isUserInteractionEnabled = false
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
@@ -492,6 +492,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
+        Utils.shared.didTapOnMoreLink = true
         print("GATO", "Click titulo naranja (0)")
         let buttontext = button.titleLabel!.text!
         let topic = buttontext.replacingOccurrences(of: "MORE ", with: "")
