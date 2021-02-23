@@ -52,15 +52,17 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     // bias sliders button + view
     var biasButton: UIButton = {
-        let button = UIButton(image: UIImage(named: "sliders")!)
+        /*let button = UIButton(image: UIImage(named: "sliders")!)
         button.backgroundColor = accentOrange
         button.tintColor = .white
+        */
+        let button = UIButton(type: .custom)
+        button.setBackgroundImage(UIImage(named: "prefsButton.png"), for: .normal)
         button.addTarget(self, action: #selector(showBiasSliders(_:)), for: .touchUpInside)
         button.clipsToBounds = true
         return button
     }()
     let biasSliders = SliderPopup()
-    let slidersHeight: CGFloat = 270 // 220
     let shadeView = UIView()
     
     // topic sliders
@@ -1246,29 +1248,66 @@ extension NewsViewController: TopicSelectorDelegate {
 extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
     
     func configureBiasButton() {
+        let factor: CGFloat = 0.9
+        let size = CGSize(width: 78 * factor, height: 82 *  factor)
+        let screenSize = UIScreen.main.bounds
+        
         view.addSubview(biasButton)
+        let posX = screenSize.width - size.width - 5
         
-        var posY = view.frame.height - 150
-        
+        var posY = screenSize.height - size.height
         if let nav = navigationController {
             if(!nav.navigationBar.isTranslucent) {
                 posY -= 88
             }
         }
+        posY += size.height - self.biasSliders.state01_height + 15
         
-        biasButton.frame = CGRect(x: view.frame.maxX-60, y: posY, width: 50, height: 50)
-        biasButton.layer.cornerRadius = 0.5 * biasButton.bounds.size.width
-        let y = view.frame.height - slidersHeight
+        biasButton.frame = CGRect(x: posX, y: posY,
+                                width: size.width, height: size.height)
+        //biasButton.layer.cornerRadius = size * 0.5
+        let y = view.frame.height - self.biasSliders.state01_height
         biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550) //470
-        biasSliders.buildViews()
         
+        /*
+        biasButton.layer.borderWidth = 2
+        biasButton.layer.borderColor = UIColor.black.withAlphaComponent(0.15).cgColor
+        */
+        
+        biasSliders.buildViews()
         self.biasSliders.status = "SL00"
+        self.updateBiasButtonPosition()
+    }
+    
+    func updateBiasButtonPosition() {
+        var mFrame = self.biasButton.frame
+        let screenSize = UIScreen.main.bounds
+        
+        var posY = screenSize.height - mFrame.size.height
+        if let nav = navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                posY -= 88
+            }
+        }
+        posY += mFrame.size.height
+        
+        let margin: CGFloat = 6
+        let status = self.biasSliders.status
+        if(status == "SL00") {
+            posY -= (mFrame.size.height * 1.75)
+        } else if(status == "SL01") {
+            posY -= self.biasSliders.state01_height - margin
+        } else if(status == "SL02") {
+            posY -= self.biasSliders.state02_height - margin
+        }
+        
+        mFrame.origin.y = posY
+        self.biasButton.frame = mFrame
     }
     
     func configureBiasSliders() {
         
-        let y = view.frame.height - slidersHeight
-        
+        let y = view.frame.height - self.biasSliders.state01_height
         biasSliders.addShowMore()
         biasSliders.backgroundColor = accentOrange
         
@@ -1286,10 +1325,20 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         self.biasSliders.separatorView.isHidden = false
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.shadeView.alpha = 1
+                
+                var mFrame = self.biasSliders.frame
+                mFrame.origin.y = y
+                self.biasSliders.frame = mFrame
+                
+                self.updateBiasButtonPosition()
+                
+                /*
                 self.biasSliders.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.biasSliders.frame.height)
+                */
                 
             }, completion: nil)
         
+        self.biasButton.superview?.bringSubviewToFront(self.biasButton)
     }
     
     func dismissShade() {
@@ -1298,8 +1347,13 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         }
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.shadeView.alpha = 0
-            
+            self.updateBiasButtonPosition()
         }, completion: nil)
+    }
+    func panelFullyOpened() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.updateBiasButtonPosition()
+        })
     }
     
     @objc func handleDismiss() {
@@ -1315,7 +1369,12 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         if !Globals.isSliderOn {
             Globals.isSliderOn = true
         }
-        configureBiasSliders()
+        
+        if(self.biasSliders.status == "SL00") {
+            configureBiasSliders()
+        } else {
+            self.biasSliders.handleDismiss()
+        }
     }
     
     func biasSliderDidChange() {

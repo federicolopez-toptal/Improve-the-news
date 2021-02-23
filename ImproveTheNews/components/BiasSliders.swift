@@ -15,9 +15,14 @@ protocol BiasSliderDelegate {
 
 protocol ShadeDelegate {
     func dismissShade()
+    func panelFullyOpened()
 }
 
 class SliderPopup: UIView {
+    
+    let state01_height: CGFloat = 230
+    let state02_height: CGFloat = 480
+    
     
     var sliderValues: SliderValues!
     
@@ -54,7 +59,7 @@ extension SliderPopup {
         
         sliderValues = SliderValues.sharedInstance
         
-        self.layer.cornerRadius = 20
+        self.layer.cornerRadius = 30
         self.layer.shadowRadius = 12
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOffset = CGSize(width: 2, height: 10)
@@ -79,7 +84,32 @@ extension SliderPopup {
         stackView.distribution = .fillProportionally
         
         // title + "x" out button
-        let controls = UIView()
+        //let controls = UIView()
+        
+        let lineContainer = UIView()
+        let w: CGFloat = 60
+        let h: CGFloat = 35
+        let valx = (UIScreen.main.bounds.width-w)/2
+        let lineView = UIView(frame: CGRect(x: valx, y: h-8-10, width: w, height: 8))
+        lineView.layer.cornerRadius = 4
+        lineView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        
+        lineContainer.addSubview(lineView)
+        stackView.addArrangedSubview(lineContainer)
+        lineContainer.translatesAutoresizingMaskIntoConstraints = false
+        lineContainer.heightAnchor.constraint(equalToConstant: h).isActive = true
+        lineContainer.backgroundColor = .clear
+        
+        /*
+        draggableLine.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            draggableLine.heightAnchor.constraint(equalToConstant: 4),
+            draggableLine.widthAnchor.constraint(equalToConstant: 50),
+            draggableLine.topAnchor.constraint(equalTo: stackView.topAnchor, constant: 5)
+        ])
+        */
+        
+        /*
         let title = createTitle(name: "Preferences")
         title.textColor = biasSliderColor
         let dismiss = UIButton(image: UIImage(systemName: "xmark.circle.fill")!, tintColor: biasSliderColor, target: self, action: #selector(handleDismiss))
@@ -87,9 +117,11 @@ extension SliderPopup {
         dismiss.frame = CGRect(x: title.frame.maxX, y: 3, width: 50, height: 40)
         controls.addSubview(title)
         controls.addSubview(dismiss)
+        controls.backgroundColor = .green
         stackView.addArrangedSubview(controls)
         controls.translatesAutoresizingMaskIntoConstraints = false
         controls.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        */
         
         // the actual sliders
         for i in 0..<labels.count {
@@ -163,22 +195,23 @@ extension SliderPopup {
         stackView.addArrangedSubview(bottomView)
         
         let showLess = UIButton(image: UIImage(systemName: "chevron.down.circle.fill")!, tintColor: biasSliderColor, target: self, action: #selector(handleShowLess))
-        bottomView.addSubview(showLess)
+        //bottomView.addSubview(showLess)
         showLess.translatesAutoresizingMaskIntoConstraints = false
         showLess.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        /*
         let xConstraint = NSLayoutConstraint(item: showLess, attribute: .centerX, relatedBy: .equal, toItem: bottomView, attribute: .centerX, multiplier: 1, constant: 0)
         bottomView.addConstraint(xConstraint)
-        
-        
         showLess.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 3).isActive = true
-        
+        */
         
         //swipe gestures
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(self.handleShowMore))
         swipeUp.direction = .up
         stackView.addGestureRecognizer(swipeUp)
         
-        if (!isShowingMore) {
+        //if (!isShowingMore) {
+        
+        if(self.status=="SL00") {
             let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.handleDismiss))
             swipeDown.direction = .down
             stackView.addGestureRecognizer(swipeDown)
@@ -209,12 +242,14 @@ extension SliderPopup {
     }
     
     func addShowMore() {
+        /*
         if (showMore.isHidden) {
             showMore.isHidden = false
         }
         stackView.insertArrangedSubview(showMore, at: 1)
         showMore.translatesAutoresizingMaskIntoConstraints = false
         showMore.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        */
     }
     
     func resetSliders() {
@@ -243,7 +278,7 @@ extension SliderPopup {
         let loading = UIActivityIndicatorView(style: .medium)
         loading.frame = CGRect(x: x, y: 0, width: 20, height: 20)
         loading.startAnimating()
-        loading.color = .black
+        loading.color = .white
         self.loadingView.addSubview(loading)
         
         w = 200
@@ -336,17 +371,19 @@ extension SliderPopup: UIGestureRecognizerDelegate {
         }
         
         self.status = "SL02"
-        let height = CGFloat(490) //490
+        //let height = CGFloat(490) //490
         let screenSize = UIScreen.main.bounds.size
         
         UIView.animate(withDuration: 0.5, animations: {
             self.showMore.isHidden = true
-            self.frame = CGRect(x: 0, y: screenSize.height - height - 88, width: screenSize.width, height: self.frame.height)
+            self.frame = CGRect(x: 0, y: screenSize.height-88-self.state02_height, width: screenSize.width, height: self.frame.height)
         })
         
         self.separatorView.isHidden = true
         //showMore.isHidden = true
         //stackView.arrangedSubviews[0].removeFromSuperview()
+        
+        self.shadeDelegate?.panelFullyOpened()
     }
     
     // hide nonessential sliders
