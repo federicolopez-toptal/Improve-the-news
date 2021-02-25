@@ -125,7 +125,7 @@ class ArticleCell: UICollectionViewCell {
     static let cellId = "ArticleCell"
     
     let imageView = UIImageView(backgroundColor: .clear)
-    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 14), numberOfLines: 3)
+    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 13), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
     let pubDate = UILabel()
     let logoView = UIImageView()
@@ -181,7 +181,7 @@ class ArticleCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: headline.trailingAnchor, constant: 10),
             imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
             imageView.heightAnchor.constraint(equalToConstant: 120)
         ])
         imageView.layer.cornerRadius = 15
@@ -204,7 +204,9 @@ class ArticleCell: UICollectionViewCell {
         source.textColor = articleSourceColor
         pubDate.textColor = .secondaryLabel
         
-        pubDate.font = UIFont(name: "OpenSans-Bold", size: 14)
+        pubDate.font = UIFont(name: "OpenSans-Bold", size: 13)
+        
+        //self.backgroundColor = UIColor.red.withAlphaComponent(0.5)
     }
     
 }
@@ -215,7 +217,7 @@ class ArticleCellAlt: UICollectionViewCell {
     static let cellId = "ArticleCellAlt"
     
     let imageView = UIImageView(backgroundColor: .clear)
-    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 14), numberOfLines: 3)
+    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 13), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
     let pubDate = UILabel()
     let logoView = UIImageView()
@@ -250,7 +252,7 @@ class ArticleCellAlt: UICollectionViewCell {
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             imageView.trailingAnchor.constraint(equalTo: headline.leadingAnchor, constant: -10),
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
             imageView.heightAnchor.constraint(equalToConstant: 120)
         ])
         imageView.layer.cornerRadius = 15
@@ -294,7 +296,9 @@ class ArticleCellAlt: UICollectionViewCell {
         source.textColor = articleSourceColor
         pubDate.textColor = .secondaryLabel
         
-        pubDate.font = UIFont(name: "OpenSans-Bold", size: 14)
+        pubDate.font = UIFont(name: "OpenSans-Bold", size: 13)
+        
+        //self.backgroundColor = UIColor.green.withAlphaComponent(0.5)
     }
     
 }
@@ -304,7 +308,7 @@ class ArticleCellHalf: UICollectionViewCell {
     static let cellId = "ArticleCell2"
     
     let imageView = UIImageView(backgroundColor: .clear)
-    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12), numberOfLines: 3)
+    var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 11), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
     let pubDate = UILabel()
     let logoView = UIImageView()
@@ -320,10 +324,17 @@ class ArticleCellHalf: UICollectionViewCell {
     
     func setupViews() {
     
-        imageView.frame = CGRect(x: 10, y: 10, width: self.frame.width-20, height: self.frame.height / 3 + 10)
+        imageView.frame = CGRect(x: 10, y: 5, width: self.frame.width-20, height: self.frame.height / 3 + 10)
         headline.frame = CGRect(x: 10, y: imageView.frame.maxY+3, width: imageView.frame.width-5, height: 90)
+        headline.numberOfLines = 5
+        headline.textAlignment = .center
+        //headline.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+        headline.adjustsFontSizeToFitWidth = true
+        headline.minimumScaleFactor = 0.5
+        headline.lineBreakMode = .byClipping
+        
         source.frame = CGRect(x: 10, y: headline.frame.maxY, width: self.frame.width - 40, height: 19)
-        pubDate.frame = CGRect(x: 10, y: headline.frame.maxY+20, width: self.frame.width - 55, height: 19)
+        pubDate.frame = CGRect(x: 10, y: source.frame.maxY, width: self.frame.width - 55, height: 19)
         markupView.frame = CGRect(x: pubDate.frame.maxX + 5, y: headline.frame.maxY+20, width: 20, height: 20)
         source.adjustsFontSizeToFitWidth = true
         
@@ -337,7 +348,7 @@ class ArticleCellHalf: UICollectionViewCell {
         source.textColor = articleSourceColor
         pubDate.textColor = .secondaryLabel
         
-        pubDate.font = UIFont(name: "OpenSans-Bold", size: 14)
+        pubDate.font = UIFont(name: "OpenSans-Bold", size: 11)
         
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
@@ -347,9 +358,31 @@ class ArticleCellHalf: UICollectionViewCell {
         markupView.tintColor = accentOrange
         markupView.isHidden = true
         
+        /*
         headline.numberOfLines = 10
         headline.adjustsFontSizeToFitWidth = true
         headline.minimumScaleFactor = 0.8
+        */
+        
+        //self.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+    }
+    
+    func adjust() {
+        headline.sizeToFit()
+        
+        var mFrame = headline.frame
+        mFrame.origin.x = imageView.frame.origin.x + ((imageView.frame.size.width-mFrame.size.width)/2)
+        headline.frame = mFrame
+        
+        source.sizeToFit()
+        self.move(label1: source, below: headline)
+        pubDate.sizeToFit()
+        self.move(label1: pubDate, below: source)
+    }
+    private func move(label1: UILabel, below label2: UILabel, separation: CGFloat = 0.0) {
+        var mFrame = label1.frame
+        mFrame.origin.y = label2.frame.origin.y + label2.frame.size.height + separation
+        label1.frame = mFrame
     }
     
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SafariServices
 
 class FAQPage: UIViewController {
     
@@ -288,5 +289,113 @@ We are not part of a regulated industry.
     
     @objc func handleDismiss() {
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+// --------------
+class ContactPage: UIViewController, UITextViewDelegate {
+    
+    let dismiss = UIButton(title: "Back", titleColor: .label, font: UIFont(name: "OpenSans-Bold", size: 17)!)
+    let pagetitle = UILabel(text: "Contact", font: UIFont(name: "PTSerif-Bold", size: 40), textColor: accentOrange, textAlignment: .left, numberOfLines: 1)
+    
+    let buttonArea = UIButton(type: .custom)
+    
+    let textView = UITextView()
+    let text = """
+This Improve the News app is published by the non-profit Improve the News Foundation, which is lead by MIT professor Max Tegmark.
+Contact: improvethenews@gmail.com
+
+If you have feature requests, bug reports or any other feedback on this app, we recommend that you instead send it to us using our feedback form, which makes it easier for us to respond to it.
+"""
+    let bold = ["What is this?", "How is this funded?", "How does it work?", "Won’t this contribute to filter bubbles?", "What is your privacy policy?", "How can I contact you with feedback?"] as [NSString]
+    
+    let paths = ["mailto:improvethenews@gmail.com",
+                "https://docs.google.com/forms/d/e/1FAIpQLSfoGi4VkL99kV4nESvK71k4NgzcVuIo4o-JDrlmBqArLR_IYA/viewform"]
+                
+    let linked = ["improvethenews@gmail.com",
+                            "feedback form"]
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        overrideUserInterfaceStyle = .dark
+        view.backgroundColor = .black
+        configureView()
+    }
+    
+    func configureView() {
+        
+        view.addSubview(pagetitle)
+        pagetitle.translatesAutoresizingMaskIntoConstraints = false
+        //pagetitle.backgroundColor = .cyan
+        NSLayoutConstraint.activate([
+            pagetitle.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 5),
+            pagetitle.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
+            pagetitle.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -70)
+        ])
+        pagetitle.adjustsFontSizeToFitWidth = true
+        
+        dismiss.titleLabel?.textColor = accentOrange
+        view.addSubview(dismiss)
+        dismiss.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+        dismiss.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dismiss.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 7),
+            dismiss.leadingAnchor.constraint(equalTo: pagetitle.trailingAnchor),
+            dismiss.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -5)
+        ])
+        
+        textView.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: [])
+        textView.textColor = articleHeadLineColor
+        textView.backgroundColor = .black
+        textView.isEditable = false
+        //textView.isSelectable = false
+        view.addSubview(textView)
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            textView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
+            textView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -15),
+            textView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            textView.topAnchor.constraint(equalTo: self.pagetitle.bottomAnchor, constant: 5),
+        ])
+        textView.delegate = self
+        
+        /*
+        buttonArea.backgroundColor = .clear
+        view.addSubview(buttonArea)
+        buttonArea.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            buttonArea.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
+            buttonArea.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -15),
+            buttonArea.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            buttonArea.topAnchor.constraint(equalTo: self.pagetitle.bottomAnchor, constant: 5),
+        ])
+        */
+    }
+    
+    @objc func handleDismiss() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - UITextViewDelegate
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        
+        if(URL.absoluteString == paths[1]) {
+            self.callContactForm()
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    private func callContactForm() {
+        let url = URL(string: paths[1])!
+        let config = SFSafariViewController.Configuration()
+        config.entersReaderIfAvailable = true
+
+        let vc = SFSafariViewController(url: url, configuration: config)
+        vc.preferredBarTintColor = .black
+        vc.preferredControlTintColor = accentOrange
+        present(vc, animated: true, completion: nil)
     }
 }

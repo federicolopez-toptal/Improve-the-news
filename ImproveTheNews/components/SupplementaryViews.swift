@@ -114,20 +114,21 @@ class SubtopicHeader: UICollectionReusableView {
         //label.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            label.heightAnchor.constraint(equalToConstant: 40),
+            label.heightAnchor.constraint(equalToConstant: 36),
             label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -80)
         ])
+        //label.backgroundColor = UIColor.green.withAlphaComponent(0.5)
         
         addSubview(topicSlidersButton)
         topicSlidersButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             //topicSlidersButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
-            topicSlidersButton.topAnchor.constraint(equalTo: hierarchy.bottomAnchor, constant: 0),
+            topicSlidersButton.topAnchor.constraint(equalTo: label.topAnchor, constant: 10),
             topicSlidersButton.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 10),
             topicSlidersButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
         ])
-        //topicSlidersButton.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+        //topicSlidersButton.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
         topicSlidersButton.addTarget(self, action: #selector(showTopicSliders(_:)), for: .touchUpInside)
         
         
@@ -161,7 +162,7 @@ class SubtopicHeader: UICollectionReusableView {
         ])
         //prioritySlider.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         
-        //prioritySlider.isUserInteractionEnabled = false
+        prioritySlider.isUserInteractionEnabled = false
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
@@ -290,7 +291,7 @@ class seeMoreFooter: UICollectionReusableView {
         label.backgroundColor = .clear
             var mFrame = label.frame
             mFrame.origin.x = (UIScreen.main.bounds.width/2) - mFrame.size.width
-            mFrame.origin.y = 20 + 4
+            mFrame.origin.y = 20 + 4 - 10
             label.frame = mFrame
         addSubview(label)
         
@@ -298,7 +299,7 @@ class seeMoreFooter: UICollectionReusableView {
         button.backgroundColor = .clear
             mFrame = button.frame
             mFrame.origin.x = (UIScreen.main.bounds.width/2)
-            mFrame.origin.y = 13 + 4
+            mFrame.origin.y = 13 + 4 - 10
             button.frame = mFrame
         addSubview(button)
         
@@ -340,6 +341,7 @@ class seeMoreFooter: UICollectionReusableView {
 
         addTopBorder()
         self.backgroundColor = bgBlue
+        //self.backgroundColor = UIColor.green.withAlphaComponent(0.5)
     }
     
     func addTopBorder() {
@@ -465,7 +467,9 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         addSubview(scrollView)
 
         addTopBorder()
+        
         self.backgroundColor = bgBlue
+        //self.backgroundColor = UIColor.green.withAlphaComponent(0.5)
     }
     
     @objc func scrollViewButtonTapped(_ sender: UIButton!) {

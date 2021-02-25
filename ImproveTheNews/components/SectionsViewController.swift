@@ -35,7 +35,7 @@ class SectionViewCell: UITableViewCell {
 
 class SectionsViewController: UIViewController {
     
-    let support = ["FAQ", "How the sliders work", "Feedback", "Privacy Policy"]
+    let support = ["FAQ", "How the sliders work", "Feedback", "Privacy Policy", "Contact"]
     let feedbackForm = "https://docs.google.com/forms/d/e/1FAIpQLSfoGi4VkL99kV4nESvK71k4NgzcVuIo4o-JDrlmBqArLR_IYA/viewform"
         
     let tableView = UITableView()
@@ -125,6 +125,9 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
             case 3:
                 let privacy = PrivacyPolicy()
                 present(privacy, animated: true, completion: nil)
+            case 4:
+                let contact = ContactPage()
+                present(contact, animated: true, completion: nil)
             default:
                 fatalError()
         }

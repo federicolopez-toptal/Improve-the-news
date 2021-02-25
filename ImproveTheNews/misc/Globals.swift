@@ -22,6 +22,7 @@ var biasSliderTitles = UIColor(rgb: 0x131B33)
 var hArray = [String]()
     
 func prettifyText(fullString: NSString, boldPartsOfString: Array<NSString>, font: UIFont!, boldFont: UIFont!, paths: [String], linkedSubstrings: [String], accented: [String]) -> NSAttributedString {
+
     let nonBoldFontAttribute: [NSAttributedString.Key : Any] = [NSAttributedString.Key.font:font!, NSAttributedString.Key.foregroundColor: UIColor.label]
     let boldFontAttribute = [NSAttributedString.Key.font:boldFont!]
     let accentedAttribute:  [NSAttributedString.Key : Any] = [NSAttributedString.Key.foregroundColor: accentOrange, NSAttributedString.Key.strokeWidth: -5]

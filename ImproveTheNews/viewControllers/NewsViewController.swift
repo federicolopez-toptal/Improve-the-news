@@ -121,7 +121,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     cell.markupView.isHidden = false
                 }
                 
-                //cell.backgroundColor = .red
+                //cell.backgroundColor = UIColor.red.withAlphaComponent(0.5)
                 return cell
             }
                 
@@ -218,6 +218,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     cell.markupView.isHidden = false
                 }
                 
+                cell.adjust()
                 return cell
             }
             
@@ -273,6 +274,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 
             }*/
             
+            // more link + about ITN
             return CGSize(width: view.frame.width, height: 260)
         }
         else {
@@ -293,11 +295,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     }
                 } else {
                     // SEE MORE + horizontal menu
-                    return CGSize(width: 0, height: 80 + 55)
+                    return CGSize(width: 0, height: 80 + 55 - 20)
                 }
             } else {
                 // standard SEE MORE
-                return CGSize(width: 0, height: 80)
+                return CGSize(width: 0, height: 60) // 80
             }
         
         }
@@ -312,6 +314,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         // headlines
         if (indexPath.section == 0) {
+            // 4 items for the main Topic
             let cellsPerRow = 2
             let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
 
@@ -324,12 +327,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             //let w: CGFloat = (UIScreen.main.bounds.width)/2
             return CGSize(width: size, height: 240)
         }
-        // section highlights
         else if indexPath.row == 0 || indexPath.row == 1 {
-            return .init(width: view.frame.width, height: 200)
-        }
-        // the rest
-        else {
+            // big articles with img at left/right
+            return .init(width: view.frame.width, height: 160) //200
+        } else {
+            // 2 items at the bottom of the OTHER topics
             let cellsPerRow = 2
             let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
 
@@ -339,7 +341,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 
             let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(cellsPerRow))
 
-            return CGSize(width: size, height: 250)
+            return CGSize(width: size, height: 220) //250
         }
         
     }
@@ -347,14 +349,16 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
-        
+        /*
         if(section==0) { return 0 }
         else { return 10 }
+        */
+        
+        return 0
     }
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        
         /*
         if(section==0){ return 0 }
         else { return 10 } */
@@ -362,16 +366,13 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         return 0
     }
     
-    
-    
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
-        //return .init(top: 0, left: 0, bottom: 0, right: 0)
-        
+        /*
         var top: CGFloat = 20
         if(section==0) { top = 0 }
-        return .init(top: top, left: 0, bottom: 0, right: 0)
+        */
+        
+        return .init(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     
@@ -577,7 +578,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 */
                 
                 sectionHeader.backgroundColor = bgBlue
-                //sectionHeader.backgroundColor  = UIColor.green.withAlphaComponent(0.25) //!!!
+                //sectionHeader.backgroundColor  = UIColor.yellow.withAlphaComponent(0.25) //!!!
                 return sectionHeader
                 
             
@@ -909,35 +910,21 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
         */
         
-        //self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-        
-        
-        
-        /*
-        let val_y: CGFloat = CGFloat((800) * index)
-        self.collectionView.setContentOffset(CGPoint(x: 0, y: val_y), animated: true)
-        */
-        
-        /*
-        let cell = self.collectionView.cellForItem(at: indexPath)
-        self.collectionView.
-        
-        cell?.alpha = 0.25
-        */
-        //self.getItemHeight(section: 0)
-        
-        
-        
         var offsetY: CGFloat = 0
+        let firstItemHeight: CGFloat = 736-20-20-20
+        let otherItemsHeight: CGFloat = 861-20-20-30-100
+        let slidersHeight: CGFloat = 29
         
         if(index>0) {
-            offsetY += (736-20-20)
+            offsetY += firstItemHeight
+
+            let i = CGFloat(index-1)
 
             if(self.topic=="news") { // No sliders in header
-                offsetY += CGFloat(861 * (index-1))
+                offsetY += otherItemsHeight * i
             } else {
                 offsetY += 49
-                offsetY += CGFloat((861+29) * (index-1))
+                offsetY += (otherItemsHeight+slidersHeight) * i
             }
             offsetY += -52 // margin
             
