@@ -1334,14 +1334,17 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         biasSliders.addShowMore()
         biasSliders.backgroundColor = accentOrange
         
-        shadeView.backgroundColor = UIColor(white: 0, alpha: 0.3)
+        shadeView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        //UIColor(white: 0, alpha: 0.75) // 0.3
         shadeView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
-        shadeView.isUserInteractionEnabled = false
+        shadeView.isUserInteractionEnabled = true
         
         view.addSubview(shadeView)
         view.addSubview(biasSliders)
         
-        shadeView.frame = view.frame
+        var mFrame = view.frame
+        mFrame.origin.y = 0
+        shadeView.frame = mFrame
         shadeView.alpha = 0
         
         self.biasSliders.status = "SL01"
@@ -1433,7 +1436,6 @@ extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
     func showTopicSliders() {
         
         topicSliders.backgroundColor = accentOrange
-        
         view.addSubview(topicSliders)
         
         topicTopAnchorHidden?.isActive = false

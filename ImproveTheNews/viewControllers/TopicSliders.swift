@@ -248,6 +248,20 @@ extension TopicSliderPopup {
         colorSideBars()
         //colorSideBars()
         
+        let swipeView = UIView()
+        swipeView.backgroundColor = .clear
+        self.addSubview(swipeView)
+        swipeView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            swipeView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            swipeView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -60),
+            swipeView.topAnchor.constraint(equalTo: self.topAnchor),
+            swipeView.heightAnchor.constraint(equalToConstant: 65)
+        ])
+        
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(self.handleDismiss))
+        swipe.direction = .down
+        swipeView.addGestureRecognizer(swipe)
     }
     
     func createTitle(name: String) -> UILabel {
