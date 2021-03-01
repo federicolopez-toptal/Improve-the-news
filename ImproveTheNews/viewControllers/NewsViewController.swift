@@ -249,13 +249,17 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         if let header = self.collectionView(self.collectionView,
                         viewForSupplementaryElementOfKind: kind,
                         at: iPath) as? SubtopicHeader {
-                        
-            if(header.hierarchy.text == "") {
+            
+            if(header.hierarchy.text == "  ") {
                 h -= 20
             }
             
             if(header.prioritySlider.isHidden) {
                 h -= 29
+            }
+            
+            if(section>0) {
+                h -= 20
             }
         }
         
@@ -299,7 +303,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 }
             } else {
                 // standard SEE MORE
-                return CGSize(width: 0, height: 60) // 80
+                return CGSize(width: 0, height: 70) // 80
             }
         
         }
@@ -372,7 +376,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         if(section==0) { top = 0 }
         */
         
-        return .init(top: 0, left: 0, bottom: 0, right: 0)
+        return .init(top: 8, left: 0, bottom: 0, right: 0)
     }
     
     
@@ -463,8 +467,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 
                 if indexPath.section == 0 {
                     sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 40)
+                    //sectionHeader.label.heightAnchor.constraint(equalToConstant: 36).isActive = true
                 } else {
                     sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 30)
+                    //sectionHeader.label.heightAnchor.constraint(equalToConstant: 20).isActive = true
                 }
                                 
                 // no super sliders on main page
@@ -526,7 +532,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 
                 var breadcrumbText = ""
                 if(indexPath.section==0 && self.hierarchy == "Headlines>") {
-                    breadcrumbText = ""
+                    breadcrumbText = "  "
                     sectionHeader.hierarchy.text = breadcrumbText
                 } else {
                     breadcrumbText = self.hierarchy + newsParser.getTopic(index: indexPath.section)
@@ -541,6 +547,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     }
                     sectionHeader.hierarchy.text = breadcrumbText
                 }
+
                 
                 
                 
@@ -710,6 +717,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             }
             limit += 18
         }
+        limit -= 58
         
         if(limit<110) {
             self.moreHeadLines.hide()
@@ -878,7 +886,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         /*
         //testing height(s)
-        let redView = UIView(frame: CGRect(x: 20, y: 736, width: 100, height: 20))
+        let redView = UIView(frame: CGRect(x: 20, y: 666 + 681, width: 100, height: 20))
         redView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         self.collectionView.addSubview(redView)
         */
@@ -911,8 +919,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         */
         
         var offsetY: CGFloat = 0
-        let firstItemHeight: CGFloat = 736-20-20-20
-        let otherItemsHeight: CGFloat = 861-20-20-30-100
+        let firstItemHeight: CGFloat = 666 + 8 //736-20-20-20
+        let otherItemsHeight: CGFloat = 681 + 8 //861-20-20-30-100-20
         let slidersHeight: CGFloat = 29
         
         if(index>0) {

@@ -118,7 +118,6 @@ class SubtopicHeader: UICollectionReusableView {
             label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -80)
         ])
-        //label.backgroundColor = UIColor.green.withAlphaComponent(0.5)
         
         addSubview(topicSlidersButton)
         topicSlidersButton.translatesAutoresizingMaskIntoConstraints = false
@@ -140,7 +139,7 @@ class SubtopicHeader: UICollectionReusableView {
             topicPriority.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             topicPriority.widthAnchor.constraint(equalToConstant: 250)
         ])
-        //topicPriority.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
+        //topicPriority.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
         
         
         //addSubview(prioritySlider)
@@ -162,7 +161,8 @@ class SubtopicHeader: UICollectionReusableView {
         ])
         //prioritySlider.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         
-        prioritySlider.isUserInteractionEnabled = false
+        prioritySlider.isUserInteractionEnabled = true
+        //label.backgroundColor = UIColor.green.withAlphaComponent(0.5)
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
@@ -178,6 +178,9 @@ class SubtopicHeader: UICollectionReusableView {
     @objc func tappedOnLabel(_ gesture: UITapGestureRecognizer) {
         
         guard let text = self.hierarchy.text else { return }
+        if(text=="  ") {
+            return
+        }
         
         let privacyPolicyRange = (text as NSString).range(of: "Headlines")
         
@@ -393,7 +396,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         label.backgroundColor = .clear
             var mFrame = label.frame
             mFrame.origin.x = (UIScreen.main.bounds.width/2) - mFrame.size.width
-            mFrame.origin.y = 20
+            mFrame.origin.y = 20 + 5 + 35
             label.frame = mFrame
         addSubview(label)
         
@@ -401,7 +404,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         button.backgroundColor = .clear
             mFrame = button.frame
             mFrame.origin.x = (UIScreen.main.bounds.width/2)
-            mFrame.origin.y = 13
+            mFrame.origin.y = 13 + 5 + 35
             button.frame = mFrame
         addSubview(button)
         
@@ -420,7 +423,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
           
         //scrollView
         
-        scrollView.frame = CGRect(x: 0, y: 62, width: bounds.width, height: 36)
+        scrollView.frame = CGRect(x: 0, y: 5, width: bounds.width, height: 36)
         scrollView.flashScrollIndicators()
         scrollView.delegate = self
         scrollView.backgroundColor = articleSourceColor //.clear
@@ -466,7 +469,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         scrollView.showsHorizontalScrollIndicator = false
         addSubview(scrollView)
 
-        addTopBorder()
+        //addTopBorder()
         
         self.backgroundColor = bgBlue
         //self.backgroundColor = UIColor.green.withAlphaComponent(0.5)
