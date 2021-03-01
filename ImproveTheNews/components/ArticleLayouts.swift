@@ -76,12 +76,13 @@ class HeadlineCell: UICollectionViewCell {
         addSubview(source)
         source.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            source.widthAnchor.constraint(equalToConstant: 130),
             source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
-            source.heightAnchor.constraint(equalToConstant: 20)
+            source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 6),
+            source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
+            //source.widthAnchor.constraint(equalToConstant: 130),
+            //source.heightAnchor.constraint(equalToConstant: 20)
         ])
-        source.adjustsFontSizeToFitWidth = true
+        //source.adjustsFontSizeToFitWidth = true
         //source.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
         addSubview(pubDate)
         
@@ -161,8 +162,8 @@ class ArticleCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             source.widthAnchor.constraint(equalToConstant: 120),
-            source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
-            source.heightAnchor.constraint(equalToConstant: 20)
+            source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+            //source.heightAnchor.constraint(equalToConstant: 20)
         ])
         
         addSubview(pubDate)
@@ -265,8 +266,8 @@ class ArticleCellAlt: UICollectionViewCell {
         NSLayoutConstraint.activate([
             source.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10),
             source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40),
-            source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
-            source.heightAnchor.constraint(equalToConstant: 20)
+            source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+            //source.heightAnchor.constraint(equalToConstant: 20)
         ])
         
         addSubview(pubDate)

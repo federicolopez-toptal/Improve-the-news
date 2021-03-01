@@ -283,12 +283,12 @@ class seeMoreFooter: UICollectionReusableView {
     var delegate: TopicSelectorDelegate?
     
     var label = UILabel()
-    var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 23)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
+    var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 18)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
     
     public func configure() {
         
         label.text = "More "
-        label.font = UIFont(name: "PTSerif-Bold", size: 23)
+        label.font = UIFont(name: "PTSerif-Bold", size: 18)
         label.textColor = articleSourceColor
         label.sizeToFit()
         label.backgroundColor = .clear
@@ -386,11 +386,11 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
     
     var label = UILabel()
     var scrollView = UIScrollView()
-    var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 23)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
+    var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 18)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
     
     public func configure() {
         label.text = "More "
-        label.font = UIFont(name: "PTSerif-Bold", size: 23)
+        label.font = UIFont(name: "PTSerif-Bold", size: 18)
         label.textColor = articleSourceColor
         label.sizeToFit()
         label.backgroundColor = .clear

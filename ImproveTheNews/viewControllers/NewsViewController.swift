@@ -115,7 +115,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //                        cell.imageView.image = rescaled
                     }
                 }
-                cell.source.text = newsParser.getSource(index: index)
+                
+                cell.source.lineBreakMode = .byWordWrapping
+                cell.source.text = newsParser.getSource(index: index) + " - " + newsParser.getDate(index: index)
+                cell.source.numberOfLines = 2
+                //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+                cell.pubDate.text = " "
                 
                 if newsParser.getMarkups(index: index).count > 0 {
                     cell.markupView.isHidden = false
@@ -148,7 +153,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //                            cell.imageView.image = rescaled
                         }
                     }
-                    cell.source.text = newsParser.getSource(index: indexPath.row+start)
+                    
+                    let i = indexPath.row+start
+                    cell.source.lineBreakMode = .byWordWrapping
+                    cell.source.text = newsParser.getSource(index: i) + " - " + newsParser.getDate(index: i)
+                    cell.source.numberOfLines = 2
+                    //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+                    cell.pubDate.text = " "
+                    //cell.source.text = newsParser.getSource(index: indexPath.row+start)
                     
                     if newsParser.getMarkups(index: index).count > 0 {
                         cell.markupView.isHidden = false
@@ -180,7 +192,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                             //cell.imageView.image = rescaled
                         }
                     }
-                    cell.source.text = newsParser.getSource(index: indexPath.row+start)
+                    
+                    let i = indexPath.row+start
+                    cell.source.lineBreakMode = .byWordWrapping
+                    cell.source.text = newsParser.getSource(index: i) + " - " + newsParser.getDate(index: i)
+                    cell.source.numberOfLines = 2
+                    //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+                    cell.pubDate.text = " "
+                    //cell.source.text = newsParser.getSource(index: i)
                     
                     if newsParser.getMarkups(index: index).count > 0 {
                         cell.markupView.isHidden = false
@@ -212,7 +231,18 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //                        cell.imageView.image = rescaled
                     }
                 }
-                cell.source.text = newsParser.getSource(index: indexPath.row+start)
+                
+                let i = indexPath.row+start
+                cell.source.lineBreakMode = .byWordWrapping
+                cell.source.text = newsParser.getSource(index: i) + " - " + newsParser.getDate(index: i)
+                cell.source.numberOfLines = 2
+                //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+                cell.pubDate.text = " "
+                
+                
+                
+                //cell.source.text = newsParser.getSource(index: indexPath.row+start)
+                
                 
                 if newsParser.getMarkups(index: index).count > 0 {
                     cell.markupView.isHidden = false
@@ -1000,7 +1030,7 @@ extension NewsViewController {
             
             let link = self.buildApiCall()
             
-            print("GATO", "should load " + link)
+            print("should load " + link)
             self.newsParser.getJSONContents(jsonName: link)
             
         }
@@ -1323,6 +1353,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         posY += mFrame.size.height
         
         let margin: CGFloat = 6
+        /*
         let status = self.biasSliders.status
         if(status == "SL00") {
             posY -= (mFrame.size.height * 1.75)
@@ -1331,6 +1362,9 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         } else if(status == "SL02") {
             posY -= self.biasSliders.state02_height - margin
         }
+        */
+        posY -= self.biasSliders.state01_height - margin
+        
         
         mFrame.origin.y = posY
         self.biasButton.frame = mFrame
@@ -1342,10 +1376,13 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         biasSliders.addShowMore()
         biasSliders.backgroundColor = accentOrange
         
-        shadeView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        shadeView.backgroundColor = UIColor.black.withAlphaComponent(0)
         //UIColor(white: 0, alpha: 0.75) // 0.3
+        /*
         shadeView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
         shadeView.isUserInteractionEnabled = true
+        */
+        shadeView.isUserInteractionEnabled = false
         
         view.addSubview(shadeView)
         view.addSubview(biasSliders)
