@@ -1447,7 +1447,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         }
     }
     
-    func biasSliderDidChange() {
+    func biasSliderDidChange(sliderId: Int) {
         
         //biasSliders.activityView.startAnimating()
         biasSliders.showLoading(true)
@@ -1457,7 +1457,9 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
             self.reload()
 
             DELAY(2.0) {
-                self.biasSliders.showLoading(false)
+                if(sliderId == self.biasSliders.latestBiasSliderUsed) {
+                    self.biasSliders.showLoading(false)
+                }
             }
         }
         

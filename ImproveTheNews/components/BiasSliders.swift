@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol BiasSliderDelegate {
-    func biasSliderDidChange()
+    func biasSliderDidChange(sliderId: Int)
 }
 
 protocol ShadeDelegate {
@@ -21,7 +21,8 @@ protocol ShadeDelegate {
 class SliderPopup: UIView {
     
     let state01_height: CGFloat = 230
-    let state02_height: CGFloat = 480
+    let state02_height: CGFloat = 480 //480
+    var latestBiasSliderUsed: Int = -1
     
     
     var sliderValues: SliderValues!
@@ -171,7 +172,6 @@ extension SliderPopup {
             }
     
             slider.setValue(v, animated: false)
-            
             miniview.addSubview(name)
             miniview.addSubview(slider)
             miniview.addSubview(minLabel)
@@ -314,6 +314,8 @@ extension SliderPopup: UIGestureRecognizerDelegate {
         self.moveLoadingOnTopOfView(view)
     
         print("bias slider value did change")
+        self.latestBiasSliderUsed = sender.tag
+        
         switch sender.tag {
             case 50:
                 self.sliderValues.setLR(LR: Int(sender.value))
@@ -348,7 +350,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
             default:
                 print("unidentified slider value changed")
         }
-        sliderDelegate?.biasSliderDidChange()
+        sliderDelegate?.biasSliderDidChange(sliderId: sender.tag)
     }
     
     
