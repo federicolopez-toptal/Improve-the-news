@@ -328,7 +328,7 @@ class ArticleCellHalf: UICollectionViewCell {
         imageView.frame = CGRect(x: 10, y: 5, width: self.frame.width-20, height: self.frame.height / 3 + 10)
         headline.frame = CGRect(x: 10, y: imageView.frame.maxY+3, width: imageView.frame.width-5, height: 90)
         headline.numberOfLines = 5
-        headline.textAlignment = .center
+        headline.textAlignment = .left
         //headline.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         headline.adjustsFontSizeToFitWidth = true
         headline.minimumScaleFactor = 0.5

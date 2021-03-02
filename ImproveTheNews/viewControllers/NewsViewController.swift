@@ -1032,7 +1032,6 @@ extension NewsViewController {
             
             print("should load " + link)
             self.newsParser.getJSONContents(jsonName: link)
-            
         }
                 
     }
@@ -1453,13 +1452,26 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         //biasSliders.activityView.startAnimating()
         biasSliders.showLoading(true)
         
+        DispatchQueue.main.async {
+            self.loadArticles()
+            self.reload()
+
+            DELAY(2.0) {
+                self.biasSliders.showLoading(false)
+            }
+        }
+        
+        
+        /*
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             self.loadArticles()
             self.reload()
-            sleep(2)
+            //sleep(2)
+            
             //self.biasSliders.activityView.stopAnimating()
             self.biasSliders.showLoading(false)
         }
+        */
     }
 }
 

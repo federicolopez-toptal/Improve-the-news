@@ -16,3 +16,10 @@ class Utils {
     var didTapOnMoreLink = false
     
 }
+
+
+func DELAY(_ time: TimeInterval, callback: @escaping () ->() ) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: {
+        callback()
+    })
+}

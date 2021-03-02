@@ -65,7 +65,7 @@ class seeMoreFooterLast: UICollectionReusableView {
         
         about.textAlignment = .left
         about.text = str
-        about.font = UIFont(name: "OpenSans-Regular", size: 12)
+        about.font = UIFont(name: "OpenSans-Regular", size: 11)
         about.textColor = UIColor(rgb: 0x737D96)
         about.numberOfLines = 18
         about.adjustsFontSizeToFitWidth = true
@@ -76,13 +76,14 @@ class seeMoreFooterLast: UICollectionReusableView {
         NSLayoutConstraint.activate([
             about.topAnchor.constraint(equalTo: titleImage.bottomAnchor, constant: 15),
             about.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
-            about.heightAnchor.constraint(equalToConstant: 44),
+            //about.heightAnchor.constraint(equalToConstant: 44),
             about.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width-30)
         ])
         about.backgroundColor = .clear
         
         copyright.textAlignment = .left
-        copyright.text = "© 2021 Improve The News Foundation\nAll Rights Reserved"
+        //copyright.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+        copyright.text = "© 2021 Improve The News Foundation - All Rights Reserved"
         copyright.font = UIFont.systemFont(ofSize: 11)
         copyright.textColor = UIColor(rgb: 0x737D96)
         copyright.numberOfLines = 2
@@ -92,9 +93,9 @@ class seeMoreFooterLast: UICollectionReusableView {
         view.addSubview(copyright)
         copyright.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            copyright.topAnchor.constraint(equalTo: about.bottomAnchor, constant: 5),
+            copyright.topAnchor.constraint(equalTo: about.bottomAnchor, constant: 8),
             copyright.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
-            copyright.heightAnchor.constraint(equalToConstant: 30),
+            //copyright.heightAnchor.constraint(equalToConstant: 30),
             copyright.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width-30)
         ])
         copyright.backgroundColor = .clear
@@ -106,7 +107,7 @@ class seeMoreFooterLast: UICollectionReusableView {
         shareIcon.backgroundColor = accentOrange
         shareIcon.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            shareIcon.topAnchor.constraint(equalTo: copyright.bottomAnchor, constant: 0),
+            shareIcon.topAnchor.constraint(equalTo: copyright.bottomAnchor, constant: 15),
             shareIcon.heightAnchor.constraint(equalToConstant: 55),
             shareIcon.widthAnchor.constraint(equalToConstant: 55),
             shareIcon.centerXAnchor.constraint(equalTo: self.centerXAnchor),
