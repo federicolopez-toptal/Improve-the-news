@@ -144,7 +144,7 @@ class SubtopicHeader: UICollectionReusableView {
         
         //addSubview(prioritySlider)
         stackView.addArrangedSubview(prioritySlider)
-        prioritySlider.isContinuous = true
+        prioritySlider.isContinuous = false
         prioritySlider.tintColor = .orange
         prioritySlider.minimumValue = 0
         //prioritySlider.maximumValue = 1
@@ -269,9 +269,8 @@ class SubtopicHeader: UICollectionReusableView {
             self.ssDelegate?.updateSuperSliderStr(topic: subtopic, popularity: Float(rounded))
         }
         
-        print("GATO", x, val, rounded, round)
-        
-        //self.ssDelegate?.superSliderDidChange()
+        //if(self.prioritySlider.isFocused)
+        self.ssDelegate?.superSliderDidChange()
     }
     
     @objc func showTopicSliders(_ sender: UIButton!) {

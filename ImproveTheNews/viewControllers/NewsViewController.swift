@@ -11,10 +11,7 @@ import LBTATools
 import SDWebImage
 
 class NewsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, MoreHeadlinesViewDelegate {
-    
-    
-    
-    
+
     let group = DispatchGroup()
     
     // key UI elements
@@ -49,6 +46,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     private var moreHeadLinesInCollectionPosY: CGFloat = 0
     var firstTime = true
+    var superSliderLatestUpdate = Date()
     
     // bias sliders button + view
     var biasButton: UIButton = {
@@ -72,7 +70,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var topicBottomAnchor: NSLayoutConstraint?
     
     // super sliders
-    var superSliderStr = "_"
+    var superSliderStr = ""
     
     // -----------
     var param_A = 4
@@ -493,7 +491,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 } else {
                     globalPopularity = newsParser.getGlobalPopularities()[indexPath.section]
                 }
-                sectionHeader.updateSuperSlider(num: globalPopularity)
+                //sectionHeader.updateSuperSlider(num: globalPopularity)
                 
                 if indexPath.section == 0 {
                     sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 40)
@@ -812,8 +810,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         if(self.firstTime){
             //activityIndicator.startAnimating()
             self.loadingView.isHidden = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                
+            
+            //DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            DispatchQueue.main.async {
                 self.loadArticles()
                 self.reload()
                 self.updateTopicSliders()
@@ -821,12 +820,21 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     self.configureBiasSliders()
                 }
                 
+                DELAY(2.0) {
+                    self.loadingView.isHidden = true
+                    self.firstTime = false
+                    self.stopRefresher()
+                }
+                
+                
+                /*
                 sleep(2)
                 self.loadingView.isHidden = true
                 self.firstTime = false
                 //self.activityIndicator.stopAnimating()
 
                 self.stopRefresher()
+                */
             }
         }
     }
@@ -1053,10 +1061,10 @@ extension NewsViewController {
         let nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
         
         var link: String
-        if self.superSliderStr == "_" {
+        if (self.superSliderStr.isEmpty) {
             link = firsthalf + nexthalf
         } else {
-            link = firsthalf + nexthalf + self.superSliderStr
+            link = firsthalf + nexthalf + "_" + self.superSliderStr
         }
         
         link += "&uid=3"
@@ -1536,21 +1544,55 @@ extension NewsViewController: SuperSliderDelegate {
     
     func updateSuperSliderStr(topic: String, popularity: Float) {
     
-            let key = Globals.slidercodes[topic]!
-        superSliderStr += key + String(format: "%02d", Int(popularity))
+        let key = Globals.slidercodes[topic]!
+        let value = String(format: "%02d", Int(popularity))
         
-        print("super slider str: \(superSliderStr)")
+        if (superSliderStr.contains(key)) {
+            var start = 0
+            var txt = ""
+            
+            while(start<superSliderStr.count) {
+                let endForKey = start + 1
+                let thisKey = superSliderStr[start...endForKey]
+                let thisValue = superSliderStr[start+2...endForKey+2]
+                
+                txt += thisKey
+                if(thisKey == key) {
+                    txt += value
+                } else {
+                    txt += thisValue
+                }
+                start += 4
+            }
+            superSliderStr = txt
+        } else {
+            superSliderStr += key + String(format: "%02d", Int(popularity))
+        }
+        
+        print("GATO", superSliderStr)
     }
     
     func superSliderDidChange() {
         
-        activityIndicator.startAnimating()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            self.loadArticles()
-            self.reload()
-            sleep(2)
-            self.activityIndicator.stopAnimating()
+        let diff = Date() - self.superSliderLatestUpdate
+        if(diff > 2) {
+            self.superSliderLatestUpdate = Date()
+            
+            activityIndicator.startAnimating()
+            //DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            DispatchQueue.main.async {
+                self.loadArticles()
+                self.reload()
+                
+                DELAY(2) {
+                    self.activityIndicator.stopAnimating()
+                }
+            }
         }
+        
+        /*
+        
+        */
     }
 }
 
