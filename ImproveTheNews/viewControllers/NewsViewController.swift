@@ -1109,6 +1109,7 @@ extension NewsViewController {
     func updateTopicSliders() {
         print("how many times am i called")
         // for topic sliders
+        
         sliderValues.setSubtopics(subtopics: newsParser.getAllTopics())
         sliderValues.setPopularities(popularities: newsParser.getPopularities())
         
@@ -1243,7 +1244,6 @@ extension NewsViewController {
     }
     
     func setUpRefresh() {
-        
         // set up refresher at top
         self.refresher = UIRefreshControl()
         self.collectionView!.alwaysBounceVertical = true
@@ -1575,7 +1575,7 @@ extension NewsViewController: SuperSliderDelegate {
             superSliderStr += key + String(format: "%02d", Int(popularity))
         }
         
-        print("GATO", superSliderStr)
+        //print("GATO", superSliderStr)
     }
     
     func superSliderDidChange() {

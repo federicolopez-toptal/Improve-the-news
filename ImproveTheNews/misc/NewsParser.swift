@@ -52,6 +52,74 @@ class News {
     private var globalPopularities: [Float]
     private var hierarchy: String
     
+    private func reArrangeAllData() {
+        // desired order
+        let orderedTopics = ["headlines", "world", "crime & justice", "science & technology", "education",
+            "health", "environment/energy", "military", "politics", "money", "culture", "media",
+            "entertainment", "sports"]
+
+        var count = 0
+        while(count < orderedTopics.count) {
+            let topic = orderedTopics[count]
+            let index = self.search(topic, in: self.sectionTitles)
+            if(index != -1) {
+                self.data.swapAt(count, index)
+                self.sectionCounts.swapAt(count, index)
+                self.sectionTitles.swapAt(count, index)
+                self.popularities.swapAt(count, index)
+                self.chosenPopularities.swapAt(count, index)
+                self.globalPopularities.swapAt(count, index)
+            }
+            count += 1
+        }
+        count = 0
+        while(count < self.sectionTitles.count) {
+            let topic = self.sectionTitles[count]
+            let index = self.search(topic, in: orderedTopics)
+            if(index == -1) {
+                self.data.rearrange(from: count, to: self.sectionTitles.count-1)
+                self.sectionCounts.rearrange(from: count, to: self.sectionTitles.count-1)
+                self.sectionTitles.rearrange(from: count, to: self.sectionTitles.count-1)
+                self.popularities.rearrange(from: count, to: self.sectionTitles.count-1)
+                self.chosenPopularities.rearrange(from: count, to: self.sectionTitles.count-1)
+                self.globalPopularities.rearrange(from: count, to: self.sectionTitles.count-1)
+            }
+            count += 1
+        }
+    }
+    
+    // ------------------------------------------------------------------------------------
+    private func search(_ number: Int, in array: [Int]) -> Int {
+        var result = -1
+        for (index, n) in array.enumerated() {
+            if(number == n) {
+                result = index
+                break
+            }
+        }
+        return result
+    }
+    
+    // ------------------------------------------------------------------------------------
+    private func search(_ topic: String, in array: [String]) -> Int {
+        var result = -1
+        
+        for (index, currentTopic) in array.enumerated() {
+            if(topic.lowercased() == currentTopic.lowercased()) {
+                result = index
+                break
+            }
+        }
+        return result
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     init() {
         
         topicCount = 0
@@ -261,6 +329,9 @@ class News {
                     }
                 }
             }
+            
+            self.reArrangeAllData()
+            
             DispatchQueue.main.async{
                 self.newsDelegate!.didFinishLoadData(finished: true)
             }
@@ -437,5 +508,12 @@ class News {
         } else {
             return []
         }
+    }
+}
+
+
+extension Array {
+    mutating func rearrange(from: Int, to: Int) {
+        insert(remove(at: from), at: to)
     }
 }
