@@ -144,13 +144,16 @@ class SubtopicHeader: UICollectionReusableView {
         
         //addSubview(prioritySlider)
         stackView.addArrangedSubview(prioritySlider)
-        prioritySlider.isContinuous = false
+        prioritySlider.isContinuous = true
         prioritySlider.tintColor = .orange
         prioritySlider.minimumValue = 0
         //prioritySlider.maximumValue = 1
         prioritySlider.setValue(0.5, animated: false)
         prioritySlider.isUserInteractionEnabled = true
+        
         prioritySlider.addTarget(self, action: #selector(self.valueDidChange(_:)), for: .valueChanged)
+        prioritySlider.addTarget(self, action: #selector(self.sliderOnRelease(_:)), for: .touchUpInside)
+        prioritySlider.addTarget(self, action: #selector(self.sliderOnRelease(_:)), for: .touchUpOutside)
         
         prioritySlider.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -252,6 +255,11 @@ class SubtopicHeader: UICollectionReusableView {
         }
     }
     
+    @objc func sliderOnRelease(_ sender: UISlider) {
+        self.ssDelegate?.superSliderDidChange()
+    }
+    
+    
     @objc func valueDidChange(_ sender: UISlider!) {
         
         let x = Double(sender.value)
@@ -269,8 +277,7 @@ class SubtopicHeader: UICollectionReusableView {
             self.ssDelegate?.updateSuperSliderStr(topic: subtopic, popularity: Float(rounded))
         }
         
-        //if(self.prioritySlider.isFocused)
-        self.ssDelegate?.superSliderDidChange()
+        //self.ssDelegate?.superSliderDidChange()
     }
     
     @objc func showTopicSliders(_ sender: UIButton!) {

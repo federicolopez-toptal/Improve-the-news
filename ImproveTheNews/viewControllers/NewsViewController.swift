@@ -491,7 +491,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 } else {
                     globalPopularity = newsParser.getGlobalPopularities()[indexPath.section]
                 }
-                //sectionHeader.updateSuperSlider(num: globalPopularity)
+                sectionHeader.updateSuperSlider(num: globalPopularity)
                 
                 if indexPath.section == 0 {
                     sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 40)
@@ -1238,6 +1238,7 @@ extension NewsViewController {
     }
 
     @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
+        //fatalError()
         navigationController?.pushViewController(SectionsViewController(), animated: true)
     }
     
@@ -1360,8 +1361,9 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         posY += mFrame.size.height
         
         let margin: CGFloat = 6
-        /*
         let status = self.biasSliders.status
+        
+        /*
         if(status == "SL00") {
             posY -= (mFrame.size.height * 1.75)
         } else if(status == "SL01") {
@@ -1370,8 +1372,12 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
             posY -= self.biasSliders.state02_height - margin
         }
         */
-        posY -= self.biasSliders.state01_height - margin
         
+        if(status == "SL02") {
+            posY -= self.biasSliders.state02_height - margin
+        } else {
+            posY -= self.biasSliders.state01_height - margin
+        }
         
         mFrame.origin.y = posY
         self.biasButton.frame = mFrame
@@ -1573,7 +1579,7 @@ extension NewsViewController: SuperSliderDelegate {
     }
     
     func superSliderDidChange() {
-        
+        /*
         let diff = Date() - self.superSliderLatestUpdate
         if(diff > 2) {
             self.superSliderLatestUpdate = Date()
@@ -1589,10 +1595,18 @@ extension NewsViewController: SuperSliderDelegate {
                 }
             }
         }
-        
-        /*
-        
         */
+        
+        self.loadingView.isHidden = false
+        DispatchQueue.main.async {
+            self.loadArticles()
+            self.reload()
+            
+            DELAY(2) {
+                self.loadingView.isHidden = true
+            }
+        }
+        
     }
 }
 
