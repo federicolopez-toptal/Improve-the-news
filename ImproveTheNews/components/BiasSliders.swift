@@ -222,6 +222,17 @@ extension SliderPopup {
         }
     }
     
+    func reloadSliderValues() {
+        for (i, key) in keys.enumerated() {
+            let value = UserDefaults.getValue(key: key)
+            let tag = i + 50
+            
+            if let slider = stackView.viewWithTag(tag) as? UISlider {
+                slider.value = value
+            }
+        }
+    }
+    
     func setUpActivityIndicator() {
         self.activityView = UIActivityIndicatorView(style: .medium)
         activityView.frame = CGRect(x: (UIScreen.main.bounds.width/2), y: 30, width: 20, height: 20)

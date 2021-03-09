@@ -72,6 +72,13 @@ class SectionsViewController: UIViewController {
         overrideUserInterfaceStyle = .dark
         tableView.register(SectionViewCell.self, forCellReuseIdentifier: SectionViewCell.cellId)
     }
+    
+    /*
+    override func viewDidAppear(_ animated: Bool) {
+        let iPath = IndexPath(row: 1, section: 0)
+        self.tableView(tableView, didSelectRowAt: iPath)
+    }
+    */
 
 }
 

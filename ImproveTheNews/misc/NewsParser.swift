@@ -330,7 +330,7 @@ class News {
                 }
             }
             
-            self.reArrangeAllData()
+            //self.reArrangeAllData()
             
             DispatchQueue.main.async{
                 self.newsDelegate!.didFinishLoadData(finished: true)

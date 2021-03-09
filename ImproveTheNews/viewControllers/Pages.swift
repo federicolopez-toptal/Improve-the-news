@@ -97,10 +97,40 @@ This is work in progress, and as you can easily tell, there’s lots of room for
     }
 }
 
-class SliderDoc: UIViewController {
+
+class SliderDoc2: UIViewController {
     
     let dismiss = UIButton(title: "Back", titleColor: .label, font: UIFont(name: "OpenSans-Bold", size: 17)!)
-    let pagetitle = UILabel(text: "How the sliders work", font: UIFont(name: "PTSerif-Bold", size: 40), textColor: accentOrange, textAlignment: .left, numberOfLines: 1)
+    
+    let pagetitle = UILabel(text: "How the sliders work",
+            font: UIFont(name: "PTSerif-Bold", size: 40),
+            textColor: accentOrange, textAlignment: .left,
+            numberOfLines: 1)
+    
+    // text 1
+    let textView1 = UITextView()
+    let text1 = """
+
+    The sliders lets you choose your news diet the way you aim to choose your food: deliberately rather than impulsively (see this video demo).
+    
+    1. Topic sliders: What topic mix do you want?
+
+    Each page shows a topic (say “Crime & Justice”) and subtopics (say “Crime”, “Civil Liberties”, etc.) with a slider for each. The green background shows what fraction of the total news flow out there is about each subtopic, and you can use the sliders to adjust whether you’d like more or less than that. This affects the ordering of the subtopics and also the news mix at the top and elsewhere on the site. Click the update button to see things change.
+    
+    2. Bias sliders: What spin do you want?
+
+    Two sliders let you choose the bias of your news sources. The left-right slider uses a classification of media outlets based on political leaning, mainly from here. The pro-establishment slider classifies media outlets based on how close they are to power (see, e.g., Wikipedia’s lists of left, libertarian & right alternative media & this classification): does the news source normally accept or challenge claims by powerful entities such as the government and large corporations? Rather than leaving them alone, you’ll probably enjoy spicing things up by occasionally sliding them to see what those you disagree with cover various topics.
+    """
+    let paths1 = ["https://www.youtube.com/watch?v=PRLF17Pb6vo","https://www.allsides.com/media-bias/media-bias-ratings"]
+    let linked1 = ["see this video demo"," here"]
+    let accented1 = ["left-right slider", "pro-establishment slider"]
+    
+    
+    
+    
+    
+    
+    
     let resetButton = UIButton(title: "Reset sliders to default", titleColor: accentOrange)
     
     let textView = UITextView()
@@ -138,7 +168,7 @@ The shelf-life slider ranges from fast-expiring topics such as celebrity gossip 
     }
     
     func configureView() {
-        
+        // How the sliders work (orange TITLE)
         view.addSubview(pagetitle)
         pagetitle.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -148,6 +178,67 @@ The shelf-life slider ranges from fast-expiring topics such as celebrity gossip 
         ])
         pagetitle.adjustsFontSizeToFitWidth = true
         
+        // BACK button
+        dismiss.titleLabel?.textColor = accentOrange
+        view.addSubview(dismiss)
+        dismiss.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+        dismiss.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dismiss.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 7),
+            dismiss.leadingAnchor.constraint(equalTo: pagetitle.trailingAnchor),
+            dismiss.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -5)
+        ])
+        
+        textView1.attributedText = prettifyText(fullString: text1 as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths1, linkedSubstrings: linked1, accented: accented1)
+        textView1.textColor = articleHeadLineColor
+        textView1.backgroundColor = .black
+        textView1.isEditable = false
+        view.addSubview(textView1)
+        textView1.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            textView1.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
+            textView1.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -15),
+            textView1.topAnchor.constraint(equalTo: self.pagetitle.bottomAnchor, constant: 5),
+        ])
+        
+        // Sliders: Political Stance
+        let sliders1 = sliderView(title: "Political Stance", leftLabel: "LEFT", rightLabel: "RIGHT")
+        view.addSubview(sliders1)
+        NSLayoutConstraint.activate([
+            sliders1.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
+            sliders1.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
+            sliders1.topAnchor.constraint(equalTo: self.textView1.bottomAnchor, constant: 5),
+        ])
+        
+        resetButton.layer.borderColor = accentOrange.cgColor
+        resetButton.layer.borderWidth = 3
+        resetButton.layer.cornerRadius = 10
+        resetButton.titleLabel?.font = UIFont(name: "OpenSans-Bold", size: 20)
+        resetButton.addTarget(self, action: #selector(reset), for: .touchUpInside)
+        view.addSubview(resetButton)
+        resetButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            resetButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            resetButton.topAnchor.constraint(equalTo: sliders1.bottomAnchor, constant: 10),
+            resetButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            resetButton.widthAnchor.constraint(equalToConstant: 300)
+        ])
+    }
+    
+    /*
+    func configureView2() {
+        
+        // How the sliders work
+        view.addSubview(pagetitle)
+        pagetitle.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pagetitle.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 5),
+            pagetitle.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
+            pagetitle.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -70)
+        ])
+        pagetitle.adjustsFontSizeToFitWidth = true
+        
+        // BACK button
         dismiss.titleLabel?.textColor = accentOrange
         view.addSubview(dismiss)
         dismiss.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
@@ -170,6 +261,8 @@ The shelf-life slider ranges from fast-expiring topics such as celebrity gossip 
             textView.topAnchor.constraint(equalTo: self.pagetitle.bottomAnchor, constant: 5),
         ])
         
+        
+        
         resetButton.layer.borderColor = accentOrange.cgColor
         resetButton.layer.borderWidth = 3
         resetButton.layer.cornerRadius = 10
@@ -184,6 +277,7 @@ The shelf-life slider ranges from fast-expiring topics such as celebrity gossip 
             resetButton.widthAnchor.constraint(equalToConstant: 300)
         ])
     }
+    */
     
     @objc func handleDismiss() {
         self.dismiss(animated: true, completion: nil)
@@ -192,7 +286,23 @@ The shelf-life slider ranges from fast-expiring topics such as celebrity gossip 
     @objc func reset() {
         resetToDefaults()
     }
+    
+    func sliderView(title: String, leftLabel: String, rightLabel: String) -> UIView {
+        let view = UIView(frame: .zero)
+        let screenSize = UIScreen.main.bounds
+        
+        view.backgroundColor = .red
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            view.heightAnchor.constraint(equalToConstant: 70),
+            view.widthAnchor.constraint(equalToConstant: screenSize.size.width)
+        ])
+        
+        return view
+    }
 }
+
+
 
 class PrivacyPolicy: UIViewController {
     

@@ -1,0 +1,9 @@
+The sliders lets you choose your news diet the way you aim to choose your food: deliberately rather than impulsively (see this video demo).
+    
+1. Topic sliders: What topic mix do you want?
+
+Each page shows a topic (say “Crime & Justice”) and subtopics (say “Crime”, “Civil Liberties”, etc.) with a slider for each. The green background shows what fraction of the total news flow out there is about each subtopic, and you can use the sliders to adjust whether you’d like more or less than that. This affects the ordering of the subtopics and also the news mix at the top and elsewhere on the site. Click the update button to see things change.
+    
+2. Bias sliders: What spin do you want?
+
+Two sliders let you choose the bias of your news sources. The left-right slider uses a classification of media outlets based on political leaning, mainly from here. The pro-establishment slider classifies media outlets based on how close they are to power (see, e.g., Wikipedia’s lists of left, libertarian & right alternative media & this classification): does the news source normally accept or challenge claims by powerful entities such as the government and large corporations? Rather than leaving them alone, you’ll probably enjoy spicing things up by occasionally sliding them to see what those you disagree with cover various topics.

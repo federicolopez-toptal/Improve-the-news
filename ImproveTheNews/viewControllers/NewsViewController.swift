@@ -80,6 +80,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     // -----------
     
     
+    override func viewDidAppear(_ animated: Bool) {
+        //self.sectionButtonItemClicked(nil)
+        self.biasSliders.reloadSliderValues()
+    }
+    
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         var start = 0
@@ -1405,6 +1411,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         shadeView.frame = mFrame
         shadeView.alpha = 0
         
+        self.biasSliders.reloadSliderValues()
         self.biasSliders.status = "SL01"
         self.biasSliders.separatorView.isHidden = false
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {

@@ -228,8 +228,12 @@ extension TopicSliderPopup {
                 if UserDefaults.exists(key: topickey!) {
                     v = UserDefaults.getValue(key: topickey!)
                 } else {
-                    v = self.popularities[i]
-                    UserDefaults.setSliderValue(value: self.popularities[i], slider: topickey!)
+                    if(i<self.popularities.count) {
+                        v = self.popularities[i]
+                        UserDefaults.setSliderValue(value: self.popularities[i], slider: topickey!)
+                    } else {
+                        v = 0
+                    }
                 }
                 slider.setValue(v, animated: false)
             }
@@ -383,8 +387,12 @@ extension TopicSliderPopup {
                 if UserDefaults.exists(key: topickey!) {
                     v = UserDefaults.getValue(key: topickey!)
                 } else {
-                    v = self.popularities[i]
-                    UserDefaults.setSliderValue(value: self.popularities[i], slider: topickey!)
+                    if(i<self.popularities.count) {
+                        v = self.popularities[i]
+                        UserDefaults.setSliderValue(value: self.popularities[i], slider: topickey!)
+                    } else {
+                        v = 0
+                    }
                 }
                 let dataEntry = PieChartDataEntry(value: Double(v), label: subtopics[i])
                 dataEntries.append(dataEntry)
