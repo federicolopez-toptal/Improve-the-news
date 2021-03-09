@@ -169,7 +169,6 @@ class SubtopicHeader: UICollectionReusableView {
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
-            print("GATO", "click en titulo naranja")
             if label.titleLabel!.text! == "Headlines" {
                 self.delegate!.pushNewTopic(newTopic: "news")
             } else {
@@ -187,7 +186,6 @@ class SubtopicHeader: UICollectionReusableView {
         
         let privacyPolicyRange = (text as NSString).range(of: "Headlines")
         
-        print("GATO", "Tap on breadcrumb")
         if gesture.didTapAttributedTextInLabel(label: self.hierarchy, inRange: privacyPolicyRange) {
             print("User tapped on Headlines")
             goToTopic(topic: "news")
@@ -261,7 +259,6 @@ class SubtopicHeader: UICollectionReusableView {
     
     
     @objc func valueDidChange(_ sender: UISlider!) {
-        
         let x = Double(sender.value)
         let val = 100 * pmin * exp(x * log(pmax / pmin))
         let rounded = Double(round(10000 * val) / 10000)
@@ -270,13 +267,18 @@ class SubtopicHeader: UICollectionReusableView {
         let round = formatter.string(from: NSNumber(value: rounded))
         topicPriority.text = "represents \(round!)% of your total news"
         
+        var valueForApi = x * 100
+        if(valueForApi < 0){ valueForApi = 0 }
+        if(valueForApi > 99){ valueForApi = 99 }
+        
         let subtopic = label.currentTitle!
         if subtopic == "Headlines" {
-            self.ssDelegate?.updateSuperSliderStr(topic: "News", popularity: Float(rounded))
+            self.ssDelegate?.updateSuperSliderStr(topic: "News", popularity: Float(valueForApi))
         } else {
-            self.ssDelegate?.updateSuperSliderStr(topic: subtopic, popularity: Float(rounded))
+            self.ssDelegate?.updateSuperSliderStr(topic: subtopic, popularity: Float(valueForApi))
         }
         
+        // hago esto en otro evento
         //self.ssDelegate?.superSliderDidChange()
     }
     

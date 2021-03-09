@@ -206,9 +206,19 @@ class News {
             //print("data: \(String(decoding: jsonData, as: UTF8.self))")
             for (index1,subtopic):(String, JSON) in decodedData {
                 
-                if decodedData[1][0][0].stringValue == "INFO" {
-                    return
+                /*
+                print(decodedData)
+                print(decodedData[1][0][0])
+                */
+                
+                //if decodedData[1][0][0].stringValue == "INFO" {
+                if subtopic[0][0].stringValue == "INFO" {
+                    //print("GATO", "salto loop")
+                    continue
                 }
+                /*
+                print("GATO", index1, subtopic[0][0].stringValue)
+                */
                 
                 // topic string
                 if Int(index1) == 0 {

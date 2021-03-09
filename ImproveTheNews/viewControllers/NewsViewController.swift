@@ -1044,7 +1044,7 @@ extension NewsViewController {
             
             let link = self.buildApiCall()
             
-            print("should load " + link)
+            print("GATO", "should load " + link)
             self.newsParser.getJSONContents(jsonName: link)
         }
                 
@@ -1582,7 +1582,7 @@ extension NewsViewController: SuperSliderDelegate {
             superSliderStr += key + String(format: "%02d", Int(popularity))
         }
         
-        //print("GATO", superSliderStr)
+        print("GATO", superSliderStr)
     }
     
     func superSliderDidChange() {
