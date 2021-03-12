@@ -28,6 +28,7 @@ struct NewsData {
     let markups: [Markups]
 }
 
+
 class News {
     
     private var source_logos = [
@@ -211,11 +212,15 @@ class News {
                 print(decodedData[1][0][0])
                 */
                 
+                
+                
                 //if decodedData[1][0][0].stringValue == "INFO" {
                 if subtopic[0][0].stringValue == "INFO" {
-                    //print("GATO", "salto loop")
+                    BannerInfo.shared = BannerInfo(json: subtopic[0])
                     continue
                 }
+                
+                
                 /*
                 print("GATO", index1, subtopic[0][0].stringValue)
                 */

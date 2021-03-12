@@ -333,7 +333,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     }
                 } else {
                     // SEE MORE + horizontal menu
-                    return CGSize(width: 0, height: 80 + 55 - 20)
+                    var h: CGFloat = 80 + 55 - 20
+                    if let bannerInfo = BannerInfo.shared {
+                        let count = self.navigationController!.viewControllers.count
+                        if(bannerInfo.active && count==1) {
+                            h += BannerView.getHeightForBannerCode(bannerInfo.adCode)
+                        }
+                    }
+                    return CGSize(width: 0, height: h)
                 }
             } else {
                 // standard SEE MORE
@@ -489,6 +496,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 sectionHeader.topicSlidersButton.isHidden = false
                 sectionHeader.prioritySlider.isHidden = false
                 
+                
                 var globalPopularity: Float = 0
                 if(newsParser.getGlobalPopularities().count==0) {
                     globalPopularity = 0
@@ -498,6 +506,22 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     globalPopularity = newsParser.getGlobalPopularities()[indexPath.section]
                 }
                 sectionHeader.updateSuperSlider(num: globalPopularity)
+                
+                
+                /*
+                var popularity: Float = 0
+                if(newsParser.getPopularities().count==0) {
+                    popularity = 0
+                } else if(indexPath.section<0 || indexPath.section>=self.newsParser.getPopularities().count) {
+                    popularity = 0
+                } else {
+                    popularity = newsParser.getPopularities()[indexPath.section]
+                }
+                sectionHeader.updateSuperSlider(num: popularity)
+                */
+                
+                //print("GATO", section, popularity)
+                
                 
                 if indexPath.section == 0 {
                     sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 40)
@@ -666,6 +690,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                         // aMore
                         seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                         seeMore.configure()
+                        
+                        let count = self.navigationController!.viewControllers.count
+                        if(count==1){
+                            seeMore.buildBanner()
+                        }
                         
                         self.seeMoreFooterSection = seeMore
                         self.moreHeadLinesInCollectionPosY = seeMore.frame.origin.y
@@ -934,6 +963,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         redView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         self.collectionView.addSubview(redView)
         */
+        
     }
     
     func scrollFromHeadLines(toSection: Int) {
@@ -963,7 +993,15 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         */
         
         var offsetY: CGFloat = 0
-        let firstItemHeight: CGFloat = 666 + 8 //736-20-20-20
+        var firstItemHeight: CGFloat = 666 + 8
+        if let info = BannerInfo.shared {
+            let count = self.navigationController!.viewControllers.count
+            if(count==1 && info.active) {
+                firstItemHeight += BannerView.getHeightForBannerCode(info.adCode)
+            }
+        }
+        
+        //736-20-20-20
         let otherItemsHeight: CGFloat = 681 + 8 //861-20-20-30-100-20
         let slidersHeight: CGFloat = 29
         
@@ -1064,7 +1102,10 @@ extension NewsViewController {
         let firsthalf = self.homelink + self.topic +
             ".A\(self.param_A)" + ".B\(self.param_B)" +
             ".S\(self.param_S)"
-        let nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
+        var nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
+        if let info = BannerInfo.shared {
+            nexthalf += info.apiParam
+        }
         
         var link: String
         if (self.superSliderStr.isEmpty) {
@@ -1127,6 +1168,10 @@ extension NewsViewController {
 extension NewsViewController: NewsDelegate {
     
     func didFinishLoadData(finished: Bool) {
+        
+        if BannerInfo.shared != nil {
+            BannerInfo.shared?.delegate = self
+        }
         
         guard finished else {
             // Handle the unfinished state
@@ -1582,7 +1627,7 @@ extension NewsViewController: SuperSliderDelegate {
             superSliderStr += key + String(format: "%02d", Int(popularity))
         }
         
-        print("GATO", superSliderStr)
+        //print("GATO", superSliderStr)
     }
     
     func superSliderDidChange() {
@@ -1607,7 +1652,7 @@ extension NewsViewController: SuperSliderDelegate {
         self.loadingView.isHidden = false
         DispatchQueue.main.async {
             self.loadArticles()
-            self.reload()
+            // self.reload()
             
             DELAY(2) {
                 self.loadingView.isHidden = true
@@ -1667,7 +1712,7 @@ struct MainPreview: PreviewProvider {
 */
 
 
-extension NewsViewController {
+extension NewsViewController: BannerInfoDelegate {
 
 /*
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -1675,5 +1720,9 @@ extension NewsViewController {
         return 0
     }
     */
+    
+    func BannerInfoOnClose() {
+        self.reload()
+    }
 
 }

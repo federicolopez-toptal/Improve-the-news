@@ -65,7 +65,6 @@ func createTopicPrefs() -> String {
     var request = ""
     
     for (_, code) in Globals.slidercodes {
-        
         if UserDefaults.exists(key: code) {
             
             var value = UserDefaults.getValue(key: code)
@@ -197,6 +196,15 @@ extension UserDefaults {
     
     static func getValue(key: String) -> Float {
         return UserDefaults.standard.float(forKey: key)
+    }
+    
+    // BOOL
+    static func setBoolValue(_ value: Bool, forKey key: String) {
+        UserDefaults.standard.set(value, forKey: key)
+        UserDefaults.standard.synchronize()
+    }
+    static func getBoolValue(key: String) -> Bool {
+        return UserDefaults.standard.bool(forKey: key)
     }
 
 }

@@ -228,13 +228,20 @@ class SubtopicHeader: UICollectionReusableView {
     }
     
     func updateSuperSlider(num: Float) {
+        //print("GATO", num)
+        var percentage = Int(num * 100)
+        //print("GATO", percentage)
+        //print("GATO -----------------")
+    
+        /*
         print("popularity: \(num)")
         // calculate slider value
         let x = log10(Double(num) / pmin) / log10(pmax / pmin)
         print("calculated: \(x)")
         
         // update slider
-        prioritySlider.setValue(Float(x), animated: false)
+        //prioritySlider.setValue(Float(x), animated: false)
+        prioritySlider.setValue(num, animated: false)
         
         // update label
         formatter.numberStyle = .decimal
@@ -242,6 +249,14 @@ class SubtopicHeader: UICollectionReusableView {
         formatter.minimumSignificantDigits = 2
         let rounded = formatter.string(from: num * 100 as NSNumber)!
         topicPriority.text = "represents \(rounded)% of your total news"
+        */
+        
+        //print("GATO", prioritySlider.value, num, rounded)
+        
+        //if(percentage>99){ percentage = 99 }
+        
+        prioritySlider.setValue(num, animated: false)
+        topicPriority.text = "represents \(percentage)% of your total news"
     }
     
     @objc func goToTopic(topic: String) {
@@ -259,6 +274,29 @@ class SubtopicHeader: UICollectionReusableView {
     
     
     @objc func valueDidChange(_ sender: UISlider!) {
+        let newValue = sender.value
+        var percentage = newValue * 100
+        //if(percentage>99){ percentage = 99 }
+        
+        formatter.maximumSignificantDigits = 3
+        formatter.minimumSignificantDigits = 2
+        let round = formatter.string(from: NSNumber(value: Int(percentage)))
+        topicPriority.text = "represents \(round!)% of your total news"
+        
+        let subtopic = label.currentTitle!
+        var valueForApi = percentage
+        if(valueForApi < 0){ valueForApi = 0 }
+        if(valueForApi > 99){ valueForApi = 99 }
+        
+        if subtopic == "Headlines" {
+            self.ssDelegate?.updateSuperSliderStr(topic: "News", popularity: Float(valueForApi))
+        } else {
+            self.ssDelegate?.updateSuperSliderStr(topic: subtopic, popularity: Float(valueForApi))
+        }
+        
+        
+        
+    /*
         let x = Double(sender.value)
         let val = 100 * pmin * exp(x * log(pmax / pmin))
         let rounded = Double(round(10000 * val) / 10000)
@@ -278,8 +316,15 @@ class SubtopicHeader: UICollectionReusableView {
             self.ssDelegate?.updateSuperSliderStr(topic: subtopic, popularity: Float(valueForApi))
         }
         
+        print("GATO", sender.value)
+        print("GATO", val, round!)
+        print("GATO", valueForApi)
+        print("GATO ----------------")
+        
         // hago esto en otro evento
         //self.ssDelegate?.superSliderDidChange()
+        
+        */
     }
     
     @objc func showTopicSliders(_ sender: UIButton!) {
@@ -377,7 +422,7 @@ class seeMoreFooter: UICollectionReusableView {
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
-        print("GATO", "click en MORE al fondo")
+        
         let buttontext = button.titleLabel!.text!
         let topic = buttontext.replacingOccurrences(of: "MORE ", with: "")
         
@@ -388,7 +433,7 @@ class seeMoreFooter: UICollectionReusableView {
     }
 }
 
-class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
+class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate, BannerViewDelegate {
     
     static let footerId = "FooterIdSection0"
     
@@ -397,7 +442,9 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
     
     var label = UILabel()
     var scrollView = UIScrollView()
-    var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 18)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
+    var button = UIButton(title: "topic", titleColor: accentOrange,
+                        font: UIFont(name: "PTSerif-Bold", size: 18)!, backgroundColor: .darkGray,
+                        target: self, action: #selector(goToTopic(_:)))
     
     public func configure() {
         label.text = "More "
@@ -486,6 +533,36 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
         //self.backgroundColor = UIColor.green.withAlphaComponent(0.5)
     }
     
+    func buildBanner() {
+        let bannerTag = 789
+        if(viewWithTag(bannerTag) == nil) {
+            if BannerInfo.shared != nil {
+                let view = BannerView(posY: 115)
+                view.tag = bannerTag
+                view.delegate = self
+                addSubview(view)
+            }
+        }
+        
+        if let banner = viewWithTag(bannerTag) {
+            banner.isHidden = !BannerInfo.shared!.active
+        }
+    }
+    
+    func showBanner(_ visible: Bool) {
+        let bannerTag = 789
+        if let banner = viewWithTag(bannerTag) {
+            banner.isHidden = !visible
+        }
+    }
+    
+    // BannerViewDelegate
+    func tapOnClose(adCode: String, dontShow: Bool) {
+    }
+
+    func tapOnLink(adCode: String) {
+    }
+    
     @objc func scrollViewButtonTapped(_ sender: UIButton!) {
         print("scrollViewButtonTapped")
         self.delegate?.goToScrollView(atSection: sender.tag)
@@ -511,7 +588,6 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate {
     
     @objc func goToTopic(_ sender: UIButton!) {
         Utils.shared.didTapOnMoreLink = true
-        print("GATO", "Click titulo naranja (0)")
         let buttontext = button.titleLabel!.text!
         let topic = buttontext.replacingOccurrences(of: "MORE ", with: "")
         let newTopic = Globals.topicmapping[String(topic)]!
