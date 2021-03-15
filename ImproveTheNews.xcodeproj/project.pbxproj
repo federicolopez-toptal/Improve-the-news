@@ -49,6 +49,7 @@
 		BD28140225F6BDCD00A91E38 /* text3.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD28140125F6BDCD00A91E38 /* text3.txt */; };
 		BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD34F5E825FA8EA200C6CFEE /* BannerView.swift */; };
 		BD4A4FD725E5438200AB37DA /* prefsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD4A4FD625E5438200AB37DA /* prefsButton.png */; };
+		BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */; };
 		BD98C9F525D58021005106D2 /* ITN_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BD98C9F425D58021005106D2 /* ITN_logo.png */; };
 		BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */; };
 		BDBC97F525E3F1F3004FA5E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */; };
@@ -130,6 +131,7 @@
 		BD28140125F6BDCD00A91E38 /* text3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = text3.txt; sourceTree = "<group>"; };
 		BD34F5E825FA8EA200C6CFEE /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		BD4A4FD625E5438200AB37DA /* prefsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prefsButton.png; sourceTree = "<group>"; };
+		BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueFromLeft.swift; sourceTree = "<group>"; };
 		BD98C9F425D58021005106D2 /* ITN_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ITN_logo.png; sourceTree = "<group>"; };
 		BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 				A81B3B232481E67200A52A97 /* ImproveTheNews.xcdatamodeld */,
 				BDD540D425EEDCB500AF4F91 /* StringExtension.swift */,
 				BDD540DA25EEE09600AF4F91 /* DateExtension.swift */,
+				BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -661,6 +664,7 @@
 				A8FBAAA724B017610011225B /* SliderValues.swift in Sources */,
 				BDD540DB25EEE09600AF4F91 /* DateExtension.swift in Sources */,
 				A8E94A1724F096B000936E07 /* ArticleLayouts.swift in Sources */,
+				BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */,
 				A81B3B532481E9A200A52A97 /* NewsViewController.swift in Sources */,
 				A8C5B9D424B67A0E0077E306 /* Globals.swift in Sources */,
 				BDEAF85625E55D2400588944 /* Utils.swift in Sources */,

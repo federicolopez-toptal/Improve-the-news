@@ -1291,7 +1291,8 @@ extension NewsViewController {
 
     @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
         //fatalError()
-        navigationController?.pushViewController(SectionsViewController(), animated: true)
+        //navigationController?.pushViewController(SectionsViewController(), animated: true)
+        navigationController?.customPushViewController(SectionsViewController())
     }
     
     func setUpRefresh() {

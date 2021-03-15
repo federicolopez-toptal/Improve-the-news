@@ -71,6 +71,11 @@ class SectionsViewController: UIViewController {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
         tableView.register(SectionViewCell.self, forCellReuseIdentifier: SectionViewCell.cellId)
+        
+        let img = UIImage(systemName: "chevron.right")
+        let customBackButton = UIBarButtonItem(image: img, style: .plain,
+            target: self, action: #selector(customBackButtonTap(sender:)))
+        self.navigationItem.rightBarButtonItem  = customBackButton
     }
     
     /*
@@ -79,6 +84,14 @@ class SectionsViewController: UIViewController {
         self.tableView(tableView, didSelectRowAt: iPath)
     }
     */
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationItem.hidesBackButton = true
+    }
+    
+    @objc func customBackButtonTap(sender: UIBarButtonItem) {
+        self.navigationController?.customPopViewController()
+    }
 
 }
 
