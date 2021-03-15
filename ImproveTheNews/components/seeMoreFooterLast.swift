@@ -16,7 +16,7 @@ class seeMoreFooterLast: UICollectionReusableView {
     var delegate: TopicSelectorDelegate?
     
     var label = UILabel()
-    var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 23)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
+    var button = UIButton(title: "topic", titleColor: accentOrange, font: UIFont(name: "PTSerif-Bold", size: 18)!, backgroundColor: .darkGray, target: self, action: #selector(goToTopic(_:)))
     
     // ------------------------------------------
     // ITN Footer
@@ -124,7 +124,7 @@ class seeMoreFooterLast: UICollectionReusableView {
     public func configure() {
         
         label.text = "More "
-        label.font = UIFont(name: "PTSerif-Bold", size: 23)
+        label.font = UIFont(name: "PTSerif-Bold", size: 18)
         label.textColor = articleSourceColor
         label.sizeToFit()
         label.backgroundColor = .clear
@@ -138,7 +138,7 @@ class seeMoreFooterLast: UICollectionReusableView {
         button.backgroundColor = .clear
             mFrame = button.frame
             mFrame.origin.x = (UIScreen.main.bounds.width/2)
-            mFrame.origin.y = 13 + 4
+            mFrame.origin.y = 13 + 5
             button.frame = mFrame
         addSubview(button)
         
