@@ -43,16 +43,39 @@ class BannerInfo {
         imgUrl = json[7].stringValue
         url = json[8].stringValue
         
-        apiParam = self.adCode + "01" // banner was shown
+        active = true
+        apiParam = ""
         
-        let key = "banner_" + adCode
+        let key = self.localKey()
         if(UserDefaults.standard.object(forKey: key) == nil) {
-            UserDefaults.setBoolValue(true, forKey: key)
-            active = true
+            setApiParamValue("01") // banner was shown
         } else {
-            active = UserDefaults.getBoolValue(key: key)
+            apiParam = UserDefaults.standard.string(forKey: key)!
         }
+        
+        /*
+        let key = "banner_" + adCode
+        if(UserDefaults.standard.object(forKey: key) != nil) {
+            active = true
+            UserDefaults.setBoolValue(true, forKey: key)
+        } else {
+            //active = UserDefaults.getBoolValue(key: key)
+            active = true
+        }
+        */
+        
+        print("GATO", apiParam)
     }
+    
+    func setApiParamValue(_ value: String) {
+        apiParam = adCode + value
+        UserDefaults.standard.set(apiParam, forKey: localKey())
+        UserDefaults.standard.synchronize()
+    }
+    private func localKey() -> String {
+        return "banner_apiParam_" + adCode
+    }
+    
     
     func log() {
         print(header)
@@ -108,6 +131,7 @@ class BannerView: UIView {
             self.populateYouTubeBanner()
         }
         
+        /*
         let key = "banner_" + info.adCode
         if(UserDefaults.standard.object(forKey: key) == nil) {
             UserDefaults.setBoolValue(true, forKey: key)
@@ -118,6 +142,16 @@ class BannerView: UIView {
         
         print(BannerInfo.shared!.active)
         print("")
+        */
+    }
+    
+    // --------------------------
+    func bannerIsValid(id: String) -> Bool {
+        var result = false
+        if(BannerView.bannerHeights[id] != nil) {
+            result = true
+        }
+        return result
     }
     
     // --------------------------
@@ -198,15 +232,15 @@ class BannerView: UIView {
     @objc func tapOnImage(sender: UIButton) {
         if let url = URL(string: BannerInfo.shared!.url) {
             UIApplication.shared.open(url)
-            BannerInfo.shared!.apiParam = BannerInfo.shared!.adCode + "04"
+            BannerInfo.shared!.setApiParamValue("04") // User performs action (click)
         }    
     }
     @objc func closeView(sender: UIButton) {
         if(self.onOff.isOn) {
-            BannerInfo.shared!.apiParam = BannerInfo.shared!.adCode + "03"
+            BannerInfo.shared!.setApiParamValue("03") // Close + Don't show again
             UserDefaults.setBoolValue(false, forKey: "banner_" + BannerInfo.shared!.adCode)
         } else {
-            BannerInfo.shared!.apiParam = BannerInfo.shared!.adCode + "02"
+            BannerInfo.shared!.setApiParamValue("02") // Only close
         }
         BannerInfo.shared!.active = false
         BannerInfo.shared?.delegate?.BannerInfoOnClose()

@@ -204,15 +204,13 @@ class News {
 
         do {
             let decodedData = try JSON(data: jsonData)
-            //print("data: \(String(decoding: jsonData, as: UTF8.self))")
+            //BannerInfo.shared = nil
             for (index1,subtopic):(String, JSON) in decodedData {
                 
                 /*
                 print(decodedData)
                 print(decodedData[1][0][0])
                 */
-                
-                
                 
                 //if decodedData[1][0][0].stringValue == "INFO" {
                 if subtopic[0][0].stringValue == "INFO" {

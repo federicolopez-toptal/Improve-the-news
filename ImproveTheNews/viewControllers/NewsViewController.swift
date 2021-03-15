@@ -692,7 +692,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                         seeMore.configure()
                         
                         let count = self.navigationController!.viewControllers.count
-                        if(count==1){
+                        if(count==1 && BannerInfo.shared != nil){
                             seeMore.buildBanner()
                         }
                         
@@ -1103,9 +1103,19 @@ extension NewsViewController {
             ".A\(self.param_A)" + ".B\(self.param_B)" +
             ".S\(self.param_S)"
         var nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
+        
+        for bannerID in BannerView.bannerHeights.keys {
+            let key = "banner_apiParam_" + bannerID
+            if let value = UserDefaults.standard.string(forKey: key) {
+                nexthalf += value
+            }
+        }
+        
+        /*
         if let info = BannerInfo.shared {
             nexthalf += info.apiParam
         }
+        */
         
         var link: String
         if (self.superSliderStr.isEmpty) {

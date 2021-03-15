@@ -34,7 +34,7 @@ class SliderDoc: UIViewController {
     
     let bold = ["1. Topic sliders: What topic mix do you want?",  "2. Bias sliders: What spin do you want?", "3. Style sliders: What writing style do you want?", "4. Shelf-life slider: Do you want evergreen or fresh?", ] as [NSString]
     let paths = ["https://www.youtube.com/watch?v=PRLF17Pb6vo","https://www.allsides.com/media-bias/media-bias-ratings", "https://swprs.org/media-navigator/"]
-    let linked = ["see this video demo"," here", "this"]
+    let linked = ["see this video demo"," here", "this classification"]
     let accented = ["left-right slider", "pro-establishment slider", "nuance slider", "depth slider", "shelf-life slider", "recent slider"]
     // ------------------
     
