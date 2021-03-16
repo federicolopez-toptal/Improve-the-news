@@ -73,39 +73,40 @@ class TopicSliderPopup: UIView {
                 header.heightAnchor.constraint(equalToConstant: 40)
             ])
             
-            let title = createTitle(name: "Your \(sliderValues.getSubtopics()[0]) feed:")
-            title.adjustsFontSizeToFitWidth = true
-            
-            header.addSubview(title)
-            title.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                title.leadingAnchor.constraint(equalTo: header.leadingAnchor),
-                title.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -50),
-                title.topAnchor.constraint(equalTo: header.topAnchor),
-                title.bottomAnchor.constraint(equalTo: header.bottomAnchor)
-            ])
-            
-            
-            header.addSubview(dismiss)
-            dismiss.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                dismiss.leadingAnchor.constraint(equalTo: title.trailingAnchor),
-                dismiss.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -10),
-                dismiss.topAnchor.constraint(equalTo: sliderStack.topAnchor, constant: 10)
-            ])
-            
-            let total = popularities.reduce(0, +)
-            let factor: Float
-            if total < 99 {
-                factor = 100 / total
+            if(sliderValues.getSubtopics()[0] != nil) {
+                let title = createTitle(name: "Your \(sliderValues.getSubtopics()[0]) feed:")
+                title.adjustsFontSizeToFitWidth = true
                 
-                popularities = popularities.map { $0 * factor }
+                header.addSubview(title)
+                title.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    title.leadingAnchor.constraint(equalTo: header.leadingAnchor),
+                    title.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -50),
+                    title.topAnchor.constraint(equalTo: header.topAnchor),
+                    title.bottomAnchor.constraint(equalTo: header.bottomAnchor)
+                ])
+                
+                
+                header.addSubview(dismiss)
+                dismiss.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    dismiss.leadingAnchor.constraint(equalTo: title.trailingAnchor),
+                    dismiss.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -10),
+                    dismiss.topAnchor.constraint(equalTo: sliderStack.topAnchor, constant: 10)
+                ])
+                
+                let total = popularities.reduce(0, +)
+                let factor: Float
+                if total < 99 {
+                    factor = 100 / total
+                    
+                    popularities = popularities.map { $0 * factor }
+                }
+                
+                // make the pie chart
+                createChart()
+                colorSideBars()
             }
-            
-            // make the pie chart
-            createChart()
-            colorSideBars()
-            
         }
 
     }
@@ -443,6 +444,8 @@ extension TopicSliderPopup {
     
     // automatically readjusts sliders to compensate
     func setSliders() {
+        if(popularities.count==0) { return }
+    
         for i in 0..<popularities.count {
             let tag = i + 100
             if let view = self.viewWithTag(tag) {
@@ -453,9 +456,10 @@ extension TopicSliderPopup {
                     let label = parent?.subviews[1]
                     
                     if let name = label as? UILabel {
-                        let key = Globals.slidercodes[name.text!]
-                        UserDefaults.setSliderValue(value: popularities[i], slider: key!)
-                        print("Successfully set \(self.subtopics[i]) \(key!) to \(UserDefaults.getValue(key: key!)) ")
+                        if let key = Globals.slidercodes[name.text!] {
+                            UserDefaults.setSliderValue(value: popularities[i], slider: key)
+                            print("Successfully set \(self.subtopics[i]) \(key) to \(UserDefaults.getValue(key: key)) ")
+                        }
                     }
                 }
             }
