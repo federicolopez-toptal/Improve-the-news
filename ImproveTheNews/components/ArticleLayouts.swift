@@ -28,12 +28,14 @@ class HeadlineCell: UICollectionViewCell {
     
     static let cellId = "HeadlineCell"
       
+    var miniSlidersView: MiniSlidersView?
     let imageView = UIImageView(backgroundColor: .clear)
     var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 11), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
     let pubDate = UILabel()
     let logoView = UIImageView()
     let markupView = UIImageView()
+    let flag = UIView()
       
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -57,6 +59,14 @@ class HeadlineCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
         
+        if(APP_CFG_SHOW_MINI_SLIDERS) {
+            if(miniSlidersView == nil) {
+                miniSlidersView = MiniSlidersView(some: "")
+                miniSlidersView?.insertInto(view: imageView)
+            }
+            miniSlidersView?.setValues(val1: 3, val2: 1)
+        }
+        
         addSubview(headline)
         headline.translatesAutoresizingMaskIntoConstraints = false
         headline.numberOfLines = 5
@@ -73,17 +83,38 @@ class HeadlineCell: UICollectionViewCell {
         ])
         
         
+        if(APP_CFG_SHOW_FLAGS) {
+            addSubview(flag)
+            flag.layer.cornerRadius = 9
+        
+            flag.translatesAutoresizingMaskIntoConstraints = false
+            flag.backgroundColor = .red
+            NSLayoutConstraint.activate([
+                flag.widthAnchor.constraint(equalToConstant: 18),
+                flag.heightAnchor.constraint(equalToConstant: 18),
+                flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
+                flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+            ])
+        }
+        
         addSubview(source)
         source.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
-            source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 6),
-            source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
-            //source.widthAnchor.constraint(equalToConstant: 130),
-            //source.heightAnchor.constraint(equalToConstant: 20)
-        ])
-        //source.adjustsFontSizeToFitWidth = true
-        //source.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
+        
+        if(APP_CFG_SHOW_FLAGS) {
+            NSLayoutConstraint.activate([
+                source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
+                source.leadingAnchor.constraint(equalTo: flag.trailingAnchor, constant: 6),
+                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
+                source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
+            ])
+        }
+        
+        
         addSubview(pubDate)
         
         pubDate.translatesAutoresizingMaskIntoConstraints = false
@@ -125,6 +156,7 @@ class ArticleCell: UICollectionViewCell {
     
     static let cellId = "ArticleCell"
     
+    var miniSlidersView: MiniSlidersView?
     let imageView = UIImageView(backgroundColor: .clear)
     var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 13), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
@@ -188,6 +220,15 @@ class ArticleCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
         
+        if(APP_CFG_SHOW_MINI_SLIDERS) {
+            if(miniSlidersView == nil) {
+                miniSlidersView = MiniSlidersView(some: "")
+                miniSlidersView?.insertInto(view: imageView)
+            }
+            miniSlidersView?.setValues(val1: 3, val2: 1)
+        }
+        
+        
         markupView.image = UIImage(systemName: "exclamationmark.triangle")
         markupView.translatesAutoresizingMaskIntoConstraints = false
         markupView.tintColor = accentOrange
@@ -217,6 +258,7 @@ class ArticleCellAlt: UICollectionViewCell {
     
     static let cellId = "ArticleCellAlt"
     
+    var miniSlidersView: MiniSlidersView?
     let imageView = UIImageView(backgroundColor: .clear)
     var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 13), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
@@ -259,9 +301,16 @@ class ArticleCellAlt: UICollectionViewCell {
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
         
+        if(APP_CFG_SHOW_MINI_SLIDERS) {
+            if(miniSlidersView == nil) {
+                miniSlidersView = MiniSlidersView(some: "")
+                miniSlidersView?.insertInto(view: imageView)
+            }
+            miniSlidersView?.setValues(val1: 3, val2: 1)
+        }
+        
         addSubview(source)
         source.adjustsFontSizeToFitWidth = true
-        
         source.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             source.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10),
@@ -308,6 +357,7 @@ class ArticleCellAlt: UICollectionViewCell {
 class ArticleCellHalf: UICollectionViewCell {
     static let cellId = "ArticleCell2"
     
+    var miniSlidersView: MiniSlidersView?
     let imageView = UIImageView(backgroundColor: .clear)
     var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 11), numberOfLines: 3)
     let source = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 12))
@@ -353,6 +403,14 @@ class ArticleCellHalf: UICollectionViewCell {
         
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
+        if(APP_CFG_SHOW_MINI_SLIDERS) {
+            if(miniSlidersView == nil) {
+                miniSlidersView = MiniSlidersView(some: "")
+                miniSlidersView?.insertInto(view: imageView)
+            }
+            miniSlidersView?.setValues(val1: 3, val2: 1)
+        }
+
 
         markupView.image = UIImage(systemName: "exclamationmark.triangle")
         markupView.translatesAutoresizingMaskIntoConstraints = false

@@ -48,7 +48,9 @@
 		BD2813FD25F6BC1B00A91E38 /* text2.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD2813FC25F6BC1B00A91E38 /* text2.txt */; };
 		BD28140225F6BDCD00A91E38 /* text3.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD28140125F6BDCD00A91E38 /* text3.txt */; };
 		BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD34F5E825FA8EA200C6CFEE /* BannerView.swift */; };
+		BD4652A3260E68EC00FFFB11 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */; };
 		BD4A4FD725E5438200AB37DA /* prefsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD4A4FD625E5438200AB37DA /* prefsButton.png */; };
+		BD4D53E5260A546F00635C48 /* MiniSlidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */; };
 		BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */; };
 		BD98C9F525D58021005106D2 /* ITN_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BD98C9F425D58021005106D2 /* ITN_logo.png */; };
 		BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */; };
@@ -130,7 +132,9 @@
 		BD2813FC25F6BC1B00A91E38 /* text2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = text2.txt; sourceTree = "<group>"; };
 		BD28140125F6BDCD00A91E38 /* text3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = text3.txt; sourceTree = "<group>"; };
 		BD34F5E825FA8EA200C6CFEE /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
+		BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		BD4A4FD625E5438200AB37DA /* prefsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prefsButton.png; sourceTree = "<group>"; };
+		BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSlidersView.swift; sourceTree = "<group>"; };
 		BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueFromLeft.swift; sourceTree = "<group>"; };
 		BD98C9F425D58021005106D2 /* ITN_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ITN_logo.png; sourceTree = "<group>"; };
 		BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
@@ -333,6 +337,7 @@
 				BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */,
 				BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */,
 				BD34F5E825FA8EA200C6CFEE /* BannerView.swift */,
+				BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -348,6 +353,7 @@
 				BDD540D425EEDCB500AF4F91 /* StringExtension.swift */,
 				BDD540DA25EEE09600AF4F91 /* DateExtension.swift */,
 				BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */,
+				BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -661,8 +667,10 @@
 				A8CA063424EB3B0A00B91778 /* BiasSliders.swift in Sources */,
 				A8A7935C2482F98C009A55FE /* TabBarController.swift in Sources */,
 				BD2813EE25F6A7D000A91E38 /* SliderDocNewVersion.swift in Sources */,
+				BD4652A3260E68EC00FFFB11 /* UIColorExtension.swift in Sources */,
 				A8FBAAA724B017610011225B /* SliderValues.swift in Sources */,
 				BDD540DB25EEE09600AF4F91 /* DateExtension.swift in Sources */,
+				BD4D53E5260A546F00635C48 /* MiniSlidersView.swift in Sources */,
 				A8E94A1724F096B000936E07 /* ArticleLayouts.swift in Sources */,
 				BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */,
 				A81B3B532481E9A200A52A97 /* NewsViewController.swift in Sources */,
@@ -828,7 +836,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0.3.2;
+				CURRENT_PROJECT_VERSION = 0.5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -855,7 +863,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0.3.2;
+				CURRENT_PROJECT_VERSION = 0.5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
