@@ -71,13 +71,19 @@ class MiniSlidersView: UIView {
         var posX: CGFloat
         var mFrame: CGRect
         
-        val = Int.random(in: 1...5)
+        val = val1 //Int.random(in: 1...5)
+        if(val<1){ val = 1 }
+        else if(val>5){ val = 5 }
+        
         mFrame = thumb1.frame
         mFrame.origin.y = -3
         mFrame.origin.x = ((line1.frame.size.width-(thumbDim/2))/5) * CGFloat((val-1))
         thumb1.frame = mFrame
         
-        val = Int.random(in: 1...5)
+        val = val2 //Int.random(in: 1...5)
+        if(val<1){ val = 1 }
+        else if(val>5){ val = 5 }
+        
         mFrame = thumb2.frame
         mFrame.origin.y = -3
         mFrame.origin.x = ((line2.frame.size.width-(thumbDim/2))/5) * CGFloat((val-1))

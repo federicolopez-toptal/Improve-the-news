@@ -25,6 +25,8 @@ struct Markups {
 
 struct NewsData {
     let source, subtopic, date, title, URL, imgURL, ampStatus, ampURL: String
+    let LR, PE: Int
+    let countryID: String
     let markups: [Markups]
 }
 
@@ -332,7 +334,21 @@ class News {
                                     m.append(one)
                                 }
                                 
-                                let news = NewsData(source: article[0].stringValue, subtopic: articles[1].stringValue, date: article[1].stringValue, title: article[2].stringValue, URL: article[3].stringValue, imgURL: article[4].stringValue, ampStatus: article[5].stringValue, ampURL:article[6].stringValue, markups: m)
+                                let news = NewsData(
+                                    source: article[0].stringValue,
+                                    subtopic: articles[1].stringValue,
+                                    date: article[1].stringValue,
+                                    title: article[2].stringValue,
+                                    URL: article[3].stringValue,
+                                    imgURL: article[4].stringValue,
+                                    ampStatus: article[5].stringValue,
+                                    ampURL: article[6].stringValue,
+                                    LR: article[8].intValue,
+                                    PE: article[9].intValue,
+                                    countryID: article[10].stringValue,
+                                    markups: m
+                                )
+                                
                                 self.data.append(news)
                                 count += 1
                             }
@@ -522,6 +538,31 @@ class News {
             return []
         }
     }
+    
+    func getLR(index: Int) -> Int {
+        if(validateDataIndex(index)){
+            return self.data[index].LR
+        } else {
+            return 1
+        }
+    }
+    
+    func getPE(index: Int) -> Int {
+        if(validateDataIndex(index)){
+            return self.data[index].PE
+        } else {
+            return 1
+        }
+    }
+    
+    func getCountryID(index: Int) -> String {
+        if(validateDataIndex(index)){
+            return self.data[index].countryID
+        } else {
+            return ""
+        }
+    }
+    
 }
 
 

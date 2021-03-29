@@ -131,6 +131,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 }
                 
                 //cell.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
+                                                val2: newsParser.getPE(index: index))
+                
                 return cell
             }
                 
@@ -170,6 +173,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                         cell.markupView.isHidden = false
                     }
                     
+                    cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
+                                                val2: newsParser.getPE(index: index))
                     return cell
                     
                 }
@@ -209,6 +214,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                         cell.markupView.isHidden = false
                     }
                     
+                    cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
+                                                val2: newsParser.getPE(index: index))
                     return cell
                 }
                
@@ -252,7 +259,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     cell.markupView.isHidden = false
                 }
                 
+                cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
+                                                val2: newsParser.getPE(index: index))
                 cell.adjust()
+                
                 return cell
             }
             
