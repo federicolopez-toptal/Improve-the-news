@@ -946,6 +946,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         topicSliders.sliderDelegate = self
         
         //observer to detect app entering foreground
+        NotificationCenter.default.addObserver(self, selector: #selector(loadArticles), name: NSNotification.Name(rawValue: "reloadArticles"), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNews), name: UIApplication.willEnterForegroundNotification, object: nil)
        
         self.collectionView.register(SubtopicHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SubtopicHeader.headerId)
@@ -1091,7 +1093,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 extension NewsViewController {
      
     // sends server request
-    func loadArticles() {
+    @objc func loadArticles() {
         sliderValues.setTopic(topic: self.topic)
         
         DispatchQueue.global().async {
@@ -1191,7 +1193,6 @@ extension NewsViewController {
     
     // MARK: Update topic sliders only when topic changes
     func updateTopicSliders() {
-        print("how many times am i called")
         // for topic sliders
         
         sliderValues.setSubtopics(subtopics: newsParser.getAllTopics())
@@ -1598,6 +1599,13 @@ extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
     
     func showTopicSliders() {
         
+        topicSliders.mustSort = true
+        //updateTopicSliders()
+        
+        // SHOWS TOPIC SLIDERS
+        topicSliders.loadVariables()
+        topicSliders.buildViews()
+        
         topicSliders.backgroundColor = accentOrange
         view.addSubview(topicSliders)
         
@@ -1605,11 +1613,12 @@ extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
         topicTopAnchorVisible?.isActive = true
         topicBottomAnchor?.isActive = true
         
+        
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            
             self.view.layoutIfNeeded()
             
         }, completion: nil)
+        
         
     }
     

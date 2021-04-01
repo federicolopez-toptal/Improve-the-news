@@ -27,7 +27,6 @@ class SliderValues: NSObject {
     private var topicString: String
     
     private override init() {
-        
         if UserDefaults.exists(key: "LeRi") {
             LR = Int(UserDefaults.getValue(key: "LeRi"))
         } else {
@@ -71,6 +70,57 @@ class SliderValues: NSObject {
         popularities = []
         topics = [:]
         topicString = ""
+    }
+    
+    func refresh() {
+        if UserDefaults.exists(key: "LeRi") {
+            LR = Int(UserDefaults.getValue(key: "LeRi"))
+        } else {
+            LR = 50
+        }
+        
+        if UserDefaults.exists(key: "proest") {
+            PE = Int(UserDefaults.getValue(key: "proest"))
+        } else {
+            PE = 50
+        }
+        
+        if UserDefaults.exists(key: "nuance") {
+            NU = Int(UserDefaults.getValue(key: "nuance"))
+        } else {
+            NU = 70
+        }
+        
+        if UserDefaults.exists(key: "depth") {
+            DE = Int(UserDefaults.getValue(key: "depth"))
+        } else {
+            DE = 70
+        }
+        
+        if UserDefaults.exists(key: "shelflife") {
+            SL = Int(UserDefaults.getValue(key: "shelflife"))
+        } else {
+            SL = 70
+        }
+        
+        if UserDefaults.exists(key: "recency") {
+            RE = Int(UserDefaults.getValue(key: "recency"))
+        } else {
+            RE = 70
+        }
+        
+        topic = "news"
+        currentArticle = ""
+        numOfSections = 1
+        currentSubtopics = []
+        popularities = []
+        topics = [:]
+        topicString = ""
+        
+        NotificationCenter.default.post(
+            name: NSNotification.Name(rawValue: "reloadArticles"),
+            object: nil
+        )
     }
     
     func setLR(LR: Int) {

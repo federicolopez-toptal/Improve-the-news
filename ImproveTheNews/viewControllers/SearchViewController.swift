@@ -31,6 +31,11 @@ class SearchViewController: UIViewController {
         setupNavBar()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.view.setNeedsLayout()
+        navigationController?.view.layoutIfNeeded()
+    }
 }
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {

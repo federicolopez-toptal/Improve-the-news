@@ -70,7 +70,7 @@ class HeadlineCell: UICollectionViewCell {
         addSubview(headline)
         headline.translatesAutoresizingMaskIntoConstraints = false
         headline.numberOfLines = 5
-        headline.textAlignment = .center
+        headline.textAlignment = .left // .center
         //headline.backgroundColor = .red
         headline.adjustsFontSizeToFitWidth = true
         headline.minimumScaleFactor = 0.5

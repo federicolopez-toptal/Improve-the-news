@@ -19,13 +19,14 @@ class FAQPage: UIViewController {
     let text = """
 What is this?
 
-This is a news aggregator site developed by a group of researchers at MIT and elsewhere to give you control of your news consumption, as explained in this video.
+This is a news aggregator developed by a group of researchers at MIT and elsewhere to give you control of your news consumption, as explained in this video.
 
 Just as it’s healthier to choose what you eat deliberately than impulsively, it’s more empowering to chose your news diet deliberately on this site than to randomly read what marketers and machine-learning algorithms elsewhere predict that you’ll impulsively click on. You can make these deliberate choices about topic, bias, style, etc. by adjusting sliders described under "How the sliders work".
 
 How is this funded?
 
-We have an ongoing research project lead by Prof. Max Tegmark on how machine learning can be used to classify news. Since this news aggregator is fully automated, running it as an ad-free public service costs us nothing except our cloud computing bill, which at our current (April 1515) traffic levels comes to less than $10/month.
+We have an ongoing research project led by Prof. Max Tegmark on machine learning for news classification.  Huge thanks to Mindy Long for creating this app that shares the results, to Kirti Shilwant and Federico López for further developing it, and to Tim Woolley for awesome design help.
+Since the news aggregation and classification is fully automated, running it as an ad-free public service costs us nothing except our cloud computing bill, which at our current (April 2015) traffic levels comes to less than $10/month.
 
 How does it work?
 

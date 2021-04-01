@@ -92,17 +92,23 @@ func createTopicPrefs() -> String {
 
 func resetToDefaults() {
     
-    for (_, code) in Globals.slidercodes {
+    for (_, code) in Globals.slidercodes {        
+        // UserDefaults.standard.removeObject(forKey: code)
+        UserDefaults.standard.setValue(nil, forKey: code)
         UserDefaults.standard.removeObject(forKey: code)
+        UserDefaults.standard.synchronize()
     }
-    
+    UserDefaults.standard.synchronize()
+
     UserDefaults.setSliderValue(value: 50, slider: "LeRi")
     UserDefaults.setSliderValue(value: 50, slider: "proest")
     UserDefaults.setSliderValue(value: 70, slider: "nuance")
     UserDefaults.setSliderValue(value: 70, slider: "depth")
     UserDefaults.setSliderValue(value: 70, slider: "shelflife")
     UserDefaults.setSliderValue(value: 70, slider: "recency")
-    
+
+    SliderValues.sharedInstance.refresh()
+    print("GATO5", "reset all")
 }
 
 // MARK: For pie chart custom colors
@@ -196,6 +202,7 @@ extension UserDefaults {
     
     static func setSliderValue(value: Float, slider: String) {
         UserDefaults.standard.set(value, forKey: slider)
+        UserDefaults.standard.synchronize()
     }
     
     static func getValue(key: String) -> Float {

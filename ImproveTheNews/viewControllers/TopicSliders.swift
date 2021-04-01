@@ -17,6 +17,7 @@ protocol dismissTopicSlidersDelegate {
 class TopicSliderPopup: UIView {
     
     var sliderValues: SliderValues!
+    var mustSort = true
     
     var sliderStack: UIStackView = {
         let v = UIStackView()
@@ -34,8 +35,10 @@ class TopicSliderPopup: UIView {
     var dismissDelegate: dismissTopicSlidersDelegate?
     
     var defaults = [Float]()
+    
     var subtopics: [String] = []
     var popularities: [Float] = []
+    
     var topicString = ""
     
     // pie chart stuff
@@ -50,7 +53,16 @@ class TopicSliderPopup: UIView {
     // universal button
     let dismiss = UIButton(image: UIImage(systemName: "xmark.circle.fill")!, tintColor: .white, target: self, action: #selector(handleDismiss))
     
+    func msg(_ text: String) {
+        print("GATO3", text)
+    }
+    func msg(_ text: String, _ array: [Any]) {
+        print("GATO3", text, array)
+    }
+    
+    
     func loadVariables() {
+        msg("LOAD VARS")
         
         sliderValues = SliderValues.sharedInstance
         //self.usedColors.removeAll()
@@ -117,6 +129,7 @@ extension TopicSliderPopup {
     
     func buildViews() {
         
+        msg("BUILD VIEWS")
         sliderValues = SliderValues.sharedInstance
         
         self.layer.cornerRadius = 20
@@ -267,6 +280,8 @@ extension TopicSliderPopup {
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(self.handleDismiss))
         swipe.direction = .down
         swipeView.addGestureRecognizer(swipe)
+        
+        self.layoutIfNeeded()
     }
     
     func createTitle(name: String) -> UILabel {
@@ -299,6 +314,7 @@ extension TopicSliderPopup {
         
         let sliderPopularities = sliderValues.getPopularities()
         if abs(sliderPopularities.count - self.popularities.count) > 1 || (self.subtopics.count == self.popularities.count && self.subtopics.count == 0) {
+        
             self.subtopics.removeAll()
             self.subtopics = sliderValues.getSubtopics()
             self.popularities = sliderPopularities.map { $0 * 100 }
@@ -309,6 +325,30 @@ extension TopicSliderPopup {
             }
         }
         
+        if(mustSort) {
+        /*
+            // sort by popularities
+            var dict = [String: Float]()
+            for (i, topic) in self.subtopics.enumerated() {
+                dict[topic] = self.popularities[i]
+            }
+            let sortedElements = dict.sorted {
+                return $0.value > $1.value
+            }
+            
+            self.subtopics.removeAll()
+            self.popularities.removeAll()
+            for e in sortedElements {
+                let sTopic = e.key
+                let pop = e.value
+                
+                self.subtopics.append(sTopic)
+                self.popularities.append(pop)
+            }
+            print("GATO5", "sorted!")
+            */
+        }
+
     }
     
 }
@@ -320,6 +360,8 @@ extension TopicSliderPopup {
     }
     
     @objc func topicSliderValueDidChange(_ sender:UISlider!){
+        mustSort = false
+        
         let index = sender.tag - 100
         let newValue: Float
         
@@ -344,7 +386,7 @@ extension TopicSliderPopup {
     
     // the pie chart
     func createChart() {
-        setChart()
+        setChart() // set data
         pieChart.backgroundColor = accentOrange
         pieChart.holeColor = accentOrange
         pieChart.legend.enabled = true
@@ -398,10 +440,31 @@ extension TopicSliderPopup {
                 let dataEntry = PieChartDataEntry(value: Double(v), label: subtopics[i])
                 dataEntries.append(dataEntry)
             }
-
-            
-
         }
+        
+        /*
+        for de in dataEntries {
+            print( "GATO5", (de as! PieChartDataEntry).label )
+        }
+        */
+        
+        
+        
+        
+        /*
+        dataEntries.sort {
+            $0.y < $1.y
+ //           ($0 as! PieChartDataEntry).value < ($1 as! PieChartDataEntry).value
+        }
+        */
+        
+        
+        
+        /*
+        for de in dataEntries {
+            print( "GATO5", (de as! PieChartDataEntry).label )
+        }
+        */
         
         // Set ChartDataSet
         let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
