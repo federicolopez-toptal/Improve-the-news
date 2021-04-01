@@ -57,6 +57,8 @@ class WebViewController: UIViewController, WKUIDelegate {
         super.init(nibName: nil, bundle: nil)
 
         contestedclaims = annotations
+        print("GATO2", contestedclaims.count)
+        
         pageURL = url
         
         sliderValues = SliderValues.sharedInstance
@@ -207,6 +209,7 @@ extension WebViewController {
         
         view.addSubview(markupButton)
         markupButton.frame = CGRect(x: view.frame.maxX-60, y: view.frame.height - 150, width: 50, height: 50)
+        //markupButton.frame = CGRect(x: 60, y: 60, width: 50, height: 50)
         markupButton.layer.cornerRadius = 0.5 * markupButton.bounds.size.width
     }
     

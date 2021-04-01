@@ -86,6 +86,17 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     
+    private func setFlag(imageView: UIImageView, ID: String) {
+        let img = UIImage(named: "\(ID.uppercased())64.png")
+        
+        imageView.backgroundColor = bgBlue
+        if(img != nil) {
+            imageView.image = img
+        } else {
+            imageView.image = UIImage(named: "noFlag.png")
+        }
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         var start = 0
@@ -133,6 +144,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 //cell.backgroundColor = UIColor.red.withAlphaComponent(0.5)
                 cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
                                                 val2: newsParser.getPE(index: index))
+                self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                 
                 return cell
             }
@@ -175,6 +187,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     
                     cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
                                                 val2: newsParser.getPE(index: index))
+                    self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                     return cell
                     
                 }
@@ -216,6 +229,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     
                     cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
                                                 val2: newsParser.getPE(index: index))
+                    self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                     return cell
                 }
                
@@ -261,6 +275,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 
                 cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
                                                 val2: newsParser.getPE(index: index))
+                self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                 cell.adjust()
                 
                 return cell
@@ -479,7 +494,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
         
         let title = newsParser.getTitle(index: index)
+        
         let markups = newsParser.getMarkups(index: index)
+        //let markups = [ Markups(type: "T", description: "abc", link: "http://www.google.com") ]
        
         let vc = WebViewController(url: link, title: title, annotations: markups)
         navigationController?.pushViewController(vc, animated: true)

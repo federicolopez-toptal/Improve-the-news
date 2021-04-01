@@ -35,7 +35,7 @@ class HeadlineCell: UICollectionViewCell {
     let pubDate = UILabel()
     let logoView = UIImageView()
     let markupView = UIImageView()
-    let flag = UIView()
+    let flag = UIImageView()
       
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -85,15 +85,15 @@ class HeadlineCell: UICollectionViewCell {
         
         if(APP_CFG_SHOW_FLAGS) {
             addSubview(flag)
-            flag.layer.cornerRadius = 9
+            flag.layer.cornerRadius = 10
+            flag.backgroundColor = bgBlue
         
             flag.translatesAutoresizingMaskIntoConstraints = false
-            flag.backgroundColor = .red
             NSLayoutConstraint.activate([
                 flag.widthAnchor.constraint(equalToConstant: 18),
                 flag.heightAnchor.constraint(equalToConstant: 18),
-                flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-                flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+                flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+                flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 5)
             ])
         }
         
@@ -163,6 +163,7 @@ class ArticleCell: UICollectionViewCell {
     let pubDate = UILabel()
     let logoView = UIImageView()
     let markupView = UIImageView()
+    let flag = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -187,19 +188,39 @@ class ArticleCell: UICollectionViewCell {
             //headline.heightAnchor.constraint(equalToConstant: 90)
         ])
         
+        if(APP_CFG_SHOW_FLAGS) {
+            addSubview(flag)
+            flag.layer.cornerRadius = 10
+            flag.backgroundColor = bgBlue
+        
+            flag.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                flag.widthAnchor.constraint(equalToConstant: 18),
+                flag.heightAnchor.constraint(equalToConstant: 18),
+                flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+                flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 5)
+            ])
+        }
+        
         addSubview(source)
         source.adjustsFontSizeToFitWidth = true
-        
         source.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            source.widthAnchor.constraint(equalToConstant: 120),
-            source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
-            //source.heightAnchor.constraint(equalToConstant: 20)
-        ])
+        
+        if(APP_CFG_SHOW_FLAGS) {
+            NSLayoutConstraint.activate([
+                source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10 + 21),
+                source.widthAnchor.constraint(equalToConstant: 120),
+                source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+                source.widthAnchor.constraint(equalToConstant: 120),
+                source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+            ])
+        }
         
         addSubview(pubDate)
-        
         pubDate.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             pubDate.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
@@ -265,6 +286,7 @@ class ArticleCellAlt: UICollectionViewCell {
     let pubDate = UILabel()
     let logoView = UIImageView()
     let markupView = UIImageView()
+    let flag = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -290,7 +312,6 @@ class ArticleCellAlt: UICollectionViewCell {
         ])
         
         addSubview(imageView)
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
@@ -300,6 +321,23 @@ class ArticleCellAlt: UICollectionViewCell {
         ])
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
+        
+        if(APP_CFG_SHOW_FLAGS) {
+            addSubview(flag)
+            flag.layer.cornerRadius = 10
+            flag.backgroundColor = bgBlue
+        
+            flag.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                flag.widthAnchor.constraint(equalToConstant: 18),
+                flag.heightAnchor.constraint(equalToConstant: 18),
+                flag.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 8),
+                flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+            ])
+        }
+        
+        
+        
         
         if(APP_CFG_SHOW_MINI_SLIDERS) {
             if(miniSlidersView == nil) {
@@ -312,12 +350,20 @@ class ArticleCellAlt: UICollectionViewCell {
         addSubview(source)
         source.adjustsFontSizeToFitWidth = true
         source.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            source.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10),
-            source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40),
-            source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
-            //source.heightAnchor.constraint(equalToConstant: 20)
-        ])
+        
+        if(APP_CFG_SHOW_FLAGS) {
+            NSLayoutConstraint.activate([
+                source.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10+21),
+                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40),
+                source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                source.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10),
+                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40),
+                source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+            ])
+        }
         
         addSubview(pubDate)
         
@@ -364,6 +410,7 @@ class ArticleCellHalf: UICollectionViewCell {
     let pubDate = UILabel()
     let logoView = UIImageView()
     let markupView = UIImageView()
+    let flag = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -437,6 +484,35 @@ class ArticleCellHalf: UICollectionViewCell {
         self.move(label1: source, below: headline)
         pubDate.sizeToFit()
         self.move(label1: pubDate, below: source)
+        
+        if(APP_CFG_SHOW_FLAGS) {
+            addSubview(flag)
+            flag.layer.cornerRadius = 10
+            flag.backgroundColor = bgBlue
+        
+            flag.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                flag.widthAnchor.constraint(equalToConstant: 18),
+                flag.heightAnchor.constraint(equalToConstant: 18),
+                flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+                flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 5)
+            ])
+        }
+        
+        source.translatesAutoresizingMaskIntoConstraints = false
+        if(APP_CFG_SHOW_FLAGS) {
+            NSLayoutConstraint.activate([
+                source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
+                source.leadingAnchor.constraint(equalTo: flag.trailingAnchor, constant: 6),
+                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
+                source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
+            ])
+        }
     }
     private func move(label1: UILabel, below label2: UILabel, separation: CGFloat = 0.0) {
         var mFrame = label1.frame
