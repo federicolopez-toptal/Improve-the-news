@@ -52,6 +52,7 @@
 		BD4A4FD725E5438200AB37DA /* prefsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD4A4FD625E5438200AB37DA /* prefsButton.png */; };
 		BD4D53E5260A546F00635C48 /* MiniSlidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */; };
 		BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */; };
+		BD962478261B425F009EC21D /* PieChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD962477261B425F009EC21D /* PieChartViewController.swift */; };
 		BD98C9F525D58021005106D2 /* ITN_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BD98C9F425D58021005106D2 /* ITN_logo.png */; };
 		BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */; };
 		BDBC97F525E3F1F3004FA5E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */; };
@@ -332,6 +333,7 @@
 		BD4A4FD625E5438200AB37DA /* prefsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prefsButton.png; sourceTree = "<group>"; };
 		BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSlidersView.swift; sourceTree = "<group>"; };
 		BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueFromLeft.swift; sourceTree = "<group>"; };
+		BD962477261B425F009EC21D /* PieChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartViewController.swift; sourceTree = "<group>"; };
 		BD98C9F425D58021005106D2 /* ITN_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ITN_logo.png; sourceTree = "<group>"; };
 		BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -713,6 +715,7 @@
 				BD2813F325F6B5D500A91E38 /* SliderDocFiles */,
 				A82A270124F6A1420028272B /* TopicSliders.swift */,
 				A81B3B522481E9A200A52A97 /* NewsViewController.swift */,
+				BD962477261B425F009EC21D /* PieChartViewController.swift */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -1462,6 +1465,7 @@
 				BD4652A3260E68EC00FFFB11 /* UIColorExtension.swift in Sources */,
 				A8FBAAA724B017610011225B /* SliderValues.swift in Sources */,
 				BDD540DB25EEE09600AF4F91 /* DateExtension.swift in Sources */,
+				BD962478261B425F009EC21D /* PieChartViewController.swift in Sources */,
 				BD4D53E5260A546F00635C48 /* MiniSlidersView.swift in Sources */,
 				A8E94A1724F096B000936E07 /* ArticleLayouts.swift in Sources */,
 				BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */,

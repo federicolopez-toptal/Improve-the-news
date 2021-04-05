@@ -108,7 +108,8 @@ class SliderValues: NSObject {
         } else {
             RE = 70
         }
-        
+
+        /*
         topic = "news"
         currentArticle = ""
         numOfSections = 1
@@ -116,6 +117,7 @@ class SliderValues: NSObject {
         popularities = []
         topics = [:]
         topicString = ""
+        */
         
         NotificationCenter.default.post(
             name: NSNotification.Name(rawValue: "reloadArticles"),

@@ -10,29 +10,45 @@ import UIKit
 import LBTATools
 import SDWebImage
 
-class NewsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, MoreHeadlinesViewDelegate {
 
-    let group = DispatchGroup()
-    
-    // key UI elements
-    let searchBar = UISearchBar()
-    let newsParser = News()
-    var sliderValues: SliderValues!
-    var headers = [String]()
+class NewsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout,
+    NewsDelegate {
+
+    let newsParser = News()                 // parser
+
+    // components
+    let searchBar = UISearchBar()           // searchBar
+    var refresher: UIRefreshControl!        // pull to refresh
+    let biasSliders = SliderPopup()         // Preferences (orange) panel
     
     // to populate CollectionView
     //changed home link from "http://www.improvethenews.org/itnserver.php/?topic=" to this one
     //let homelink = "http://ec2-user@ec2-3-16-51-0.us-east-2.compute.amazonaws.com/appserver.php/?topic="
-    
     let homelink = "https://www.improvethenews.org/appserver.php/?topic="
     
-    var topic = ""
+    var topic = ""                          // current topic, set at the beginning
+    
+    // --------------------------------------------------------
+    // horizontal menu
+    private var moreHeadLines = MoreHeadlinesView()
+    private var seeMoreFooterSection: seeMoreFooterSection0?
+    private var moreHeadLinesInCollectionPosY: CGFloat = 0
+    
+    // --------------------------------------------------------
+    
+    
+    
+    
+    
+    var sliderValues: SliderValues!
+    var headers = [String]()
+    
     var artfreq = ".A4"
     var untouchables = ".B4.S0"
     var sliderPrefs = ""
     var hierarchy = ""
     var mainTopic = "Headlines"
-    var refresher: UIRefreshControl!
+    
     
     let loadingView = UIView()
     var activityIndicator = UIActivityIndicatorView()
@@ -41,10 +57,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     let screenWidth = UIScreen.main.bounds.width
     var navBarFrame = CGRect.zero
     // ---
-    private var moreHeadLines = MoreHeadlinesView()
-    private var seeMoreFooterSection: seeMoreFooterSection0?
     
-    private var moreHeadLinesInCollectionPosY: CGFloat = 0
+    
+    
     var firstTime = true
     var superSliderLatestUpdate = Date()
     
@@ -60,14 +75,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         button.clipsToBounds = true
         return button
     }()
-    let biasSliders = SliderPopup()
+    
     let shadeView = UIView()
     
-    // topic sliders
-    let topicSliders = TopicSliderPopup()
-    var topicTopAnchorHidden: NSLayoutConstraint?
-    var topicTopAnchorVisible: NSLayoutConstraint?
-    var topicBottomAnchor: NSLayoutConstraint?
+    
     
     // super sliders
     var superSliderStr = ""
@@ -80,11 +91,365 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     // -----------
     
     
+    // DELETE LATER (!!!)
+    var topicSliders = TopicSliderPopup()   // pie chart screen
+    var topicTopAnchorHidden: NSLayoutConstraint?
+    var topicTopAnchorVisible: NSLayoutConstraint?
+    var topicBottomAnchor: NSLayoutConstraint?
+    
+    
+    
+    
+    
+
+
+
+    // MARK: - Initialization
+    init(topic: String) {
+        let layout = UICollectionViewFlowLayout.init()
+        super.init(collectionViewLayout: layout)
+        self.topic = topic
+    }
+    
+    required init?(coder: NSCoder) {    // by default
+        fatalError()
+    }
+    
+    override func viewDidLoad() {
+        overrideUserInterfaceStyle = .dark
+                
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+        
+        newsParser.newsDelegate = self
+        sliderValues = SliderValues.sharedInstance //!!!
+        biasSliders.sliderDelegate = self
+        biasSliders.shadeDelegate = self
+        
+        topicSliders.dismissDelegate = self //!!!
+        topicSliders.sliderDelegate = self  //!!!
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshNews), name: UIApplication.willEnterForegroundNotification, object: nil)
+       
+        // collectionView, register cells
+        self.collectionView.register(SubtopicHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SubtopicHeader.headerId)
+        self.collectionView.register(FAQFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FAQFooter.footerId)
+        self.collectionView.register(seeMoreFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooter.footerId)
+        self.collectionView.register(seeMoreFooterSection0.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooterSection0.footerId)
+        self.collectionView.register(seeMoreFooterLast.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooterLast.footerId)
+        self.collectionView.register(ArticleCell.self, forCellWithReuseIdentifier: ArticleCell.cellId)
+        self.collectionView.backgroundColor = .systemBackground
+        self.collectionView.register(ArticleCellHalf.self, forCellWithReuseIdentifier: ArticleCellHalf.cellId)
+        self.collectionView.register(HeadlineCell.self, forCellWithReuseIdentifier: HeadlineCell.cellId)
+        self.collectionView.register(ArticleCellAlt.self, forCellWithReuseIdentifier: ArticleCellAlt.cellId)
+        
+        
+        // intialize some anchors !!!
+        topicTopAnchorHidden = topicSliders.topAnchor.constraint(equalTo: self.view.bottomAnchor)
+        topicTopAnchorVisible = topicSliders.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
+        topicBottomAnchor = topicSliders.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        
+        setUpNavBar()
+        configureBiasButton()
+        configureTopicButton() //!!!
+        setUpRefresh()
+        setUpActivityIndicator()
+        
+        self.moreHeadLines.initialize(width: self.screenWidth)
+        self.view.addSubview(self.moreHeadLines)
+        self.moreHeadLines.delegate = self
+        self.moreHeadLines.hide()
+        
+        self.view.backgroundColor = bgBlue
+        self.collectionView.backgroundColor = bgBlue
+        
+        /*
+        //testing height(s)
+        let redView = UIView(frame: CGRect(x: 20, y: 666 + 681, width: 100, height: 20))
+        redView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+        self.collectionView.addSubview(redView)
+        */
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.tintColor = accentOrange
+        collectionView.delaysContentTouches = false
+        
+        for view in collectionView.subviews {
+          if view is UIScrollView {
+              (view as? UIScrollView)!.delaysContentTouches = false
+              break
+          }
+        }
+        
+        self.loadData()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
-        //self.sectionButtonItemClicked(nil)
         self.biasSliders.reloadSliderValues()
     }
     
+
+    // MARK: - Data loading
+    func loadData() {
+        if(self.firstTime){
+            //activityIndicator.startAnimating()
+            self.loadingView.isHidden = false
+            
+            //DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            DispatchQueue.main.async {
+                self.loadArticles()
+                self.reload()
+                self.updateTopicSliders()
+                if Globals.isSliderOn {
+                    self.configureBiasSliders()
+                }
+                
+                DELAY(2.0) {
+                    self.loadingView.isHidden = true
+                    self.firstTime = false
+                    self.stopRefresher()
+                }
+
+            }
+        }
+    }
+    
+    func loadArticles() {
+        sliderValues.setTopic(topic: self.topic)
+        
+        DispatchQueue.global().async {
+            let link = self.buildApiCall()
+            
+            print("GATO", "should load " + link)
+            self.newsParser.getJSONContents(jsonName: link)
+        }
+    }
+    
+    private func buildApiCall_b() -> String {
+        let link = "topic=\(self.topic)" +
+            ".A\(self.param_A)" + ".B\(self.param_B)" +
+            ".S\(self.param_S)"
+            
+        return link
+    }
+    
+    private func buildApiCall() -> String {
+
+        let firsthalf = self.homelink + self.topic +
+            ".A\(self.param_A)" + ".B\(self.param_B)" +
+            ".S\(self.param_S)"
+        var nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
+        
+        for bannerID in BannerView.bannerHeights.keys {
+            let key = "banner_apiParam_" + bannerID
+            if let value = UserDefaults.standard.string(forKey: key) {
+                nexthalf += value
+            }
+        }
+        
+        var link: String
+        if (self.superSliderStr.isEmpty) {
+            link = firsthalf + nexthalf
+        } else {
+            link = firsthalf + nexthalf + "_" + self.superSliderStr
+        }
+        
+        link += "&uid=3"
+        if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
+            link += deviceId
+        }
+            
+        return link
+    }
+    
+    func reload() {
+        print("reload?")
+        self.collectionView.reloadData()
+        
+        self.hierarchy = ""
+        self.hierarchy = newsParser.getHierarchy()
+    }
+    
+    // For NewsDelegate protocol
+    func didFinishLoadData(finished: Bool) {
+        
+        if BannerInfo.shared != nil {
+            BannerInfo.shared?.delegate = self
+        }
+        
+        guard finished else {
+            print("Could not load data")
+            return
+        }
+        
+        self.resetTopicSliders()
+        
+        updateTopicSliders()
+        reload()
+
+        self.moreHeadLines.setTopics(self.newsParser.getAllTopics())
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.collectionView.contentOffset.y = 0
+        })
+    }
+    
+    func resendRequest() {
+        loadArticles()
+    }
+    
+    
+    // MARK: - UI
+    func setUpActivityIndicator() {
+        let dim: CGFloat = 65
+        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
+        self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        self.loadingView.isHidden = true
+        self.loadingView.layer.cornerRadius = 15
+    
+        let loading = UIActivityIndicatorView(style: .medium)
+        self.loadingView.addSubview(loading)
+        loading.center = CGPoint(x: dim/2, y: dim/2)
+        loading.startAnimating()
+    
+        /*
+        self.activityIndicator = UIActivityIndicatorView(style: .medium)
+        
+        self.activityIndicator.frame = CGRect(x: (UIScreen.main.bounds.width-20)/2,
+                                            y: (UIScreen.main.bounds.height-20)/2,
+                                            width: 20, height: 20)
+        
+        self.view.addSubview(activityIndicator)
+        */
+        
+        self.view.addSubview(self.loadingView)
+    }
+    
+    private func setUpNavBar() {
+
+        searchBar.sizeToFit()
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.searchTextField.textColor = .black
+        searchBar.tintColor = .black
+
+        let logo = UIImage(named: "N64")
+        let titleView = UIImageView(image: logo)
+        titleView.contentMode = .scaleAspectFit
+        navigationItem.titleView = titleView
+
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.barTintColor = bgBlue
+        navigationController?.navigationBar.backgroundColor = bgBlue
+        navigationController?.navigationBar.barTintColor = bgBlue
+        navigationController?.navigationBar.barTintColor = bgBlue
+        navigationController?.navigationBar.isTranslucent = false
+        
+        navigationController?.navigationBar.barStyle = .black
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: UIColor.white]
+
+        let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.sectionButtonItemClicked(_:)))
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchItemClicked(_:)))
+        navigationItem.leftBarButtonItem = sectionsButton
+        navigationItem.leftItemsSupplementBackButton = true
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+
+        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 195, height: 30))
+        let img = UIImage(named: "ITN_logo.png")?.withRenderingMode(.alwaysOriginal)
+        let homeButton = UIButton(image: img!)
+        homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
+        homeButton.addTarget(self, action: #selector(homeButtonTapped),
+                            for: .touchUpInside)
+        //homeButton.isUserInteractionEnabled = false
+        
+        /*
+        let label = UILabel.init(frame: CGRect(x: 35, y: 5, width: 180, height: 20))
+        label.text = "IMPROVE THE NEWS"
+        label.font = UIFont(name: "OpenSans-Bold", size: 17)
+        label.textColor = .white
+        label.textAlignment = .left
+        //label.center.y = view.center.y
+        */
+        
+        view.addSubview(homeButton)
+        //view.addSubview(label)
+        view.center = navigationItem.titleView!.center
+        self.navigationItem.titleView = view
+    }
+    
+    func setUpRefresh() {
+        // set up pull ro refresh at top
+        self.refresher = UIRefreshControl()
+        self.collectionView!.alwaysBounceVertical = true
+        self.refresher.tintColor = .lightGray
+        self.refresher.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        self.collectionView!.addSubview(refresher)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if let nav = self.navigationController {
+            self.navBarFrame = nav.navigationBar.frame
+            var posY = self.navBarFrame.origin.y + self.navBarFrame.size.height
+            if(!nav.navigationBar.isTranslucent) {
+                posY = 0
+            }
+            self.moreHeadLines.moveTo(y: posY)
+        }
+    }
+    
+    // MARK: - UI events/actions
+    @objc func refresh(_ sender: UIRefreshControl!) {
+        self.refresher.beginRefreshing()
+        self.firstTime = true
+        self.loadData()
+    }
+    
+    @objc func homeButtonTapped() {
+        if let firstVC = navigationController?.viewControllers.first as? NewsViewController {
+            if(firstVC == self) {
+                // I'm in the first screen
+                if(self.topic == "news") {
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.collectionView.contentOffset.y = 0
+                    })
+                } else {
+                    self.firstTime = true
+                    self.topic = "news"
+                    self.loadData()
+                }
+            } else {
+                let newsVC = navigationController!.viewControllers[0] as! NewsViewController
+                
+                if(newsVC.topic == "news") {
+                    newsVC.collectionView.contentOffset.y = 0
+                } else {
+                    newsVC.firstTime = true
+                    newsVC.topic = "news"
+                }
+                navigationController!.popToRootViewController(animated: true)
+        }
+    }}
+    
+    @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
+        let searchvc = SearchViewController()
+        navigationController?.pushViewController(searchvc, animated: true)
+    }
+
+    @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
+        navigationController?.customPushViewController(SectionsViewController())
+    }
+    
+    // MARK: - misc
+    @objc func refreshNews(){
+        self.viewWillAppear(false)
+    }
+    
+    func stopRefresher() {
+        self.refresher.endRefreshing()
+    }
     
     private func setFlag(imageView: UIImageView, ID: String) {
         let img = UIImage(named: "\(ID.uppercased())64.png")
@@ -97,6 +462,393 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
     }
     
+    func updateTopicSliders() { //!!!
+        sliderValues.setSubtopics(subtopics: newsParser.getAllTopics())
+        sliderValues.setPopularities(popularities: newsParser.getPopularities())
+        
+        topicSliders.loadVariables()
+        topicSliders.buildViews()
+    }
+
+    
+}
+
+extension NewsViewController: TopicSelectorDelegate {
+    
+    // MARK: - TopicSelectorDelegate Delegate
+    func pushNewTopic(newTopic: String) {
+    
+        let mainTopic = newsParser.getTopic(index: 0)
+        let mainTopic_B = Globals.topicmapping[mainTopic]!
+        let subTopicsCount = newsParser.getNumOfSections()
+        
+        let vc = NewsViewController(topic: newTopic)
+        
+        vc.param_S = 4 // sumar 4? o 4 fijo?
+        if newTopic == mainTopic_B {
+            if(subTopicsCount==1) {
+                vc.param_A = 40
+            }
+        } else {
+            
+        }
+        
+        if(Utils.shared.didTapOnMoreLink && newTopic=="news") {
+            vc.param_A = 10
+        }
+        Utils.shared.didTapOnMoreLink = false
+
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func changeTopic(newTopic: String) {
+        self.topic = newTopic
+        sliderValues.clearSubtopics()
+        sliderValues.setTopic(topic: newTopic)
+        print("topic should be changed to \(self.topic)")
+        self.loadArticles()
+        self.reload()
+    }
+    
+    func goToScrollView(atSection: Int) {
+        self.scrollTheNewsTo(atSection)
+    }
+    
+    func horizontalScroll(to: CGFloat) {
+        var mOffset = self.moreHeadLines.scrollView.contentOffset
+        mOffset.x = to
+        self.moreHeadLines.scrollView.setContentOffset(mOffset, animated: false)
+    }
+}
+
+
+extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
+    
+    // MARK: Bias sliders
+    func configureBiasButton() {
+        let factor: CGFloat = 0.9
+        let size = CGSize(width: 78 * factor, height: 82 *  factor)
+        let screenSize = UIScreen.main.bounds
+        
+        view.addSubview(biasButton)
+        let posX = screenSize.width - size.width - 5
+        
+        var posY = screenSize.height - size.height
+        if let nav = navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                posY -= 88
+            }
+        }
+        posY += size.height - self.biasSliders.state01_height + 15
+        
+        biasButton.frame = CGRect(x: posX, y: posY,
+                                width: size.width, height: size.height)
+        //biasButton.layer.cornerRadius = size * 0.5
+        let y = view.frame.height - self.biasSliders.state01_height
+        biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550) //470
+        
+        biasSliders.buildViews()
+        self.biasSliders.status = "SL00"
+        self.updateBiasButtonPosition()
+    }
+    
+    func updateBiasButtonPosition() {
+        var mFrame = self.biasButton.frame
+        let screenSize = UIScreen.main.bounds
+        
+        var posY = screenSize.height - mFrame.size.height
+        if let nav = navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                posY -= 88
+            }
+        }
+        posY += mFrame.size.height
+        
+        let margin: CGFloat = 6
+        let status = self.biasSliders.status
+        
+        /*
+        if(status == "SL00") {
+            posY -= (mFrame.size.height * 1.75)
+        } else if(status == "SL01") {
+            posY -= self.biasSliders.state01_height - margin
+        } else if(status == "SL02") {
+            posY -= self.biasSliders.state02_height - margin
+        }
+        */
+        
+        if(status == "SL02") {
+            posY -= self.biasSliders.state02_height - margin
+        } else {
+            posY -= self.biasSliders.state01_height - margin
+        }
+        
+        mFrame.origin.y = posY
+        self.biasButton.frame = mFrame
+    }
+    
+    func configureBiasSliders() {
+        
+        let y = view.frame.height - self.biasSliders.state01_height
+        biasSliders.addShowMore()
+        biasSliders.backgroundColor = accentOrange
+        
+        shadeView.backgroundColor = UIColor.black.withAlphaComponent(0)
+        //UIColor(white: 0, alpha: 0.75) // 0.3
+        /*
+        shadeView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
+        shadeView.isUserInteractionEnabled = true
+        */
+        shadeView.isUserInteractionEnabled = false
+        
+        view.addSubview(shadeView)
+        view.addSubview(biasSliders)
+        
+        var mFrame = view.frame
+        mFrame.origin.y = 0
+        shadeView.frame = mFrame
+        shadeView.alpha = 0
+        
+        self.biasSliders.reloadSliderValues()
+        self.biasSliders.status = "SL01"
+        self.biasSliders.separatorView.isHidden = false
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.shadeView.alpha = 1
+                
+                var mFrame = self.biasSliders.frame
+                mFrame.origin.y = y
+                self.biasSliders.frame = mFrame
+                
+                self.updateBiasButtonPosition()
+                
+                /*
+                self.biasSliders.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.biasSliders.frame.height)
+                */
+                
+            }, completion: nil)
+        
+        self.biasButton.superview?.bringSubviewToFront(self.biasButton)
+    }
+    
+    // For ShadeDelegate protocol
+    func dismissShade() {
+        if Globals.isSliderOn {
+            Globals.isSliderOn = false
+        }
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.shadeView.alpha = 0
+            self.updateBiasButtonPosition()
+        }, completion: nil)
+    }
+    func panelFullyOpened() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.updateBiasButtonPosition()
+        })
+    }
+    
+    /*
+    @objc func handleDismiss() {
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.shadeView.alpha = 0
+            
+        }, completion: nil)
+        biasSliders.handleDismiss()
+    }
+    */
+    
+    
+    @objc func showBiasSliders(_ sender:UIButton!) {
+        if !Globals.isSliderOn {
+            Globals.isSliderOn = true
+        }
+        
+        if(self.biasSliders.status == "SL00") {
+            configureBiasSliders()
+        } else {
+            self.biasSliders.handleDismiss()
+        }
+    }
+    
+    // For BiasSliderDelegate protocol
+    func biasSliderDidChange(sliderId: Int) {
+        
+        //biasSliders.activityView.startAnimating()
+        biasSliders.showLoading(true)
+        
+        DispatchQueue.main.async {
+            self.loadArticles()
+            self.reload()
+
+            DELAY(2.0) {
+                if(sliderId == self.biasSliders.latestBiasSliderUsed) {
+                    self.biasSliders.showLoading(false)
+                }
+            }
+        }
+    }
+}
+
+// MARK: Topic sliders
+extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
+    
+    func configureTopicButton() {   //!!!
+        view.addSubview(topicSliders)
+        topicSliders.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topicTopAnchorHidden!,
+            topicSliders.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topicSliders.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        topicSliders.buildViews()
+    }
+    
+    
+    func showTopicSliders() {
+        
+        topicSliders.mustSort = true
+        //updateTopicSliders()
+        
+        // SHOWS TOPIC SLIDERS
+        topicSliders.loadVariables()
+        topicSliders.buildViews()
+        
+        topicSliders.backgroundColor = accentOrange
+        view.addSubview(topicSliders)
+        
+        topicTopAnchorHidden?.isActive = false
+        topicTopAnchorVisible?.isActive = true
+        topicBottomAnchor?.isActive = true
+        
+        
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.layoutIfNeeded()
+            
+        }, completion: nil)
+        
+        
+    }
+    
+    func handleDismissTopicSliders() {
+    
+        topicTopAnchorVisible?.isActive = false
+        topicBottomAnchor?.isActive = false
+        topicTopAnchorHidden?.isActive = true
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+        
+        //self.collectionView?.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+        self.collectionView.scrollRectToVisible(CGRect.zero, animated: false)
+    }
+    
+    func topicSliderDidChange() {
+        loadArticles()
+        reload()
+    }
+    
+    func resetTopicSliders() {
+        /*
+        topicSliders = TopicSliderPopup()
+        
+        topicSliders.dismissDelegate = self
+        topicSliders.sliderDelegate = self
+        
+        topicTopAnchorHidden = topicSliders.topAnchor.constraint(equalTo: self.view.bottomAnchor)
+        topicTopAnchorVisible = topicSliders.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
+        topicBottomAnchor = topicSliders.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        
+        configureTopicButton()
+        */
+    }
+    
+}
+
+// MARK: Super slider
+extension NewsViewController: SuperSliderDelegate {
+    
+    func updateSuperSliderStr(topic: String, popularity: Float) {
+    
+        let key = Globals.slidercodes[topic]!
+        let value = String(format: "%02d", Int(popularity))
+        
+        if (superSliderStr.contains(key)) {
+            var start = 0
+            var txt = ""
+            
+            while(start<superSliderStr.count) {
+                let endForKey = start + 1
+                let thisKey = superSliderStr[start...endForKey]
+                let thisValue = superSliderStr[start+2...endForKey+2]
+                
+                txt += thisKey
+                if(thisKey == key) {
+                    txt += value
+                } else {
+                    txt += thisValue
+                }
+                start += 4
+            }
+            superSliderStr = txt
+        } else {
+            superSliderStr += key + String(format: "%02d", Int(popularity))
+        }
+        
+        //print("GATO", superSliderStr)
+    }
+    
+    func superSliderDidChange() {
+        /*
+        let diff = Date() - self.superSliderLatestUpdate
+        if(diff > 2) {
+            self.superSliderLatestUpdate = Date()
+            
+            activityIndicator.startAnimating()
+            //DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            DispatchQueue.main.async {
+                self.loadArticles()
+                self.reload()
+                
+                DELAY(2) {
+                    self.activityIndicator.stopAnimating()
+                }
+            }
+        }
+        */
+        
+        self.loadingView.isHidden = false
+        DispatchQueue.main.async {
+            self.loadArticles()
+            // self.reload()
+            
+            DELAY(2) {
+                self.loadingView.isHidden = true
+            }
+        }
+        
+    }
+}
+
+extension NewsViewController: shareDelegate {
+    
+    func openSharing(items: [String]) {
+        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        present(ac, animated: true)
+    }
+
+}
+
+extension NewsViewController: BannerInfoDelegate {
+
+    func BannerInfoOnClose() {
+        self.reload()
+    }
+    
+}
+
+extension NewsViewController {
+
+    // MARK: - Collection view (data source + layout)
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         var start = 0
@@ -569,7 +1321,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 }
                 
                 /*
-                // breadcrumbs                
+                // breadcrumbs
                 if indexPath.section == 0 {
                     sectionHeader.hierarchy.text = ""
                 } else {
@@ -752,268 +1504,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 fatalError()
         }
     }
-    
-    //for loading articles when collection view scrolled to the top
-    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if (scrollView.contentOffset.y < 0) {
-            //loadArticles()
-        }
-    }
-    
-    override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        /*
-        let safeAreaTop: CGFloat = 88
-        let offset = scrollView.contentOffset.y + safeAreaTop
-        
-        let alpha: CGFloat = 1 - ((scrollView.contentOffset.y + safeAreaTop) / safeAreaTop)
-        
-        navigationController?.navigationBar.alpha = alpha
-        navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0,-offset))
-        
-        self.view.bringSubviewToFront(self.moreHeadLines)
-        print(self.moreHeadLines)
-        */
-    }
-    
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        guard let tableView = scrollView as? UICollectionView else {return}
-        let visibleHeadersInSection = tableView.indexPathsForVisibleItems
-        
-        let indexHeaderForSection = NSIndexPath(row: 0, section: 0) // Get the indexPath of your header for your selected cell
-//        let header = collectionView.viewForSupplementaryElementOfKind(indexHeaderForSection)
-//
-        //let view = self.collectionView.supplementaryView(forElementKind: UICollectionElementKindSectionFooter, at: <#T##IndexPath#>)
 
-        //let visibleHeadersInSection = tableView.indexPathsForVisibleItems.map{ tableView.headerView(forSection: $0.section) }
+}
 
+extension NewsViewController: MoreHeadlinesViewDelegate {
     
-        if scrollView.contentOffset.y < 0 {
-            return
-        }
-
-        let offsetBetweenItems = 50
-
-//        let indexForTopCard = Int(scrollView.contentOffset.y / offsetBetweenItems)
-//        let card = cards[indexForTopCard] as? Card
-
-//        card?.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: card?.frame.size.width ?? 0.0, height: card?.frame.size.height ?? 0.0)
-
-        
-        var limit = self.moreHeadLinesInCollectionPosY-self.navBarFrame.size.height
-        if let nav = navigationController {
-            if(!nav.navigationBar.isTranslucent) {
-                limit += (self.navBarFrame.origin.y + self.navBarFrame.size.height)
-            }
-            limit += 18
-        }
-        limit -= 58
-        
-        if(limit<110) {
-            self.moreHeadLines.hide()
-        } else {
-            if(scrollView.contentOffset.y >= limit) {
-                if let view = self.seeMoreFooterSection {
-                    var mOffset = view.scrollView.contentOffset
-                    /*if(mOffset.x < 0){ mOffset.x = 0 }
-                    else if(mOffset.x > scrollView.contentSize.width){
-                        mOffset.x = scrollView.contentSize.width
-                    }*/
-                    self.moreHeadLines.scrollView.contentOffset = mOffset
-                }
-                
-                self.moreHeadLines.show()
-            } else {
-                if let view = self.seeMoreFooterSection {
-                    var mOffset = self.moreHeadLines.scrollView.contentOffset
-                    /*if(mOffset.x < 0){ mOffset.x = 0 }
-                    else if(mOffset.x > scrollView.contentSize.width){
-                        mOffset.x = scrollView.contentSize.width
-                    }*/
-                    view.scrollView.contentOffset = mOffset
-                }
-            
-                self.moreHeadLines.hide()
-            }
-        }
-        
-        
-        self.view.bringSubviewToFront(self.moreHeadLines)
-
-    }
-    
-    init(topic: String) {
-        let layout = UICollectionViewFlowLayout.init()
-        super.init(collectionViewLayout: layout)
-        
-        self.topic = topic
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        navigationController?.navigationBar.tintColor = accentOrange // item colors
-        collectionView.delaysContentTouches = false
-        
-        for view in collectionView.subviews {
-          if view is UIScrollView {
-              (view as? UIScrollView)!.delaysContentTouches = false
-              break
-          }
-        }
-        
-        self.loadData()
-    }
-    
-    func loadData() {
-        if(self.firstTime){
-            //activityIndicator.startAnimating()
-            self.loadingView.isHidden = false
-            
-            //DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            DispatchQueue.main.async {
-                self.loadArticles()
-                self.reload()
-                self.updateTopicSliders()
-                if Globals.isSliderOn {
-                    self.configureBiasSliders()
-                }
-                
-                DELAY(2.0) {
-                    self.loadingView.isHidden = true
-                    self.firstTime = false
-                    self.stopRefresher()
-                }
-                
-                
-                /*
-                sleep(2)
-                self.loadingView.isHidden = true
-                self.firstTime = false
-                //self.activityIndicator.stopAnimating()
-
-                self.stopRefresher()
-                */
-            }
-        }
-    }
-    
-    
-    
-    
-    
-    func setUpActivityIndicator() {
-        let dim: CGFloat = 65
-        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
-                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
-                                        width: dim, height: dim)
-        self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
-        self.loadingView.isHidden = true
-        self.loadingView.layer.cornerRadius = 15
-    
-        let loading = UIActivityIndicatorView(style: .medium)
-        self.loadingView.addSubview(loading)
-        loading.center = CGPoint(x: dim/2, y: dim/2)
-        loading.startAnimating()
-    
-        /*
-        self.activityIndicator = UIActivityIndicatorView(style: .medium)
-        
-        self.activityIndicator.frame = CGRect(x: (UIScreen.main.bounds.width-20)/2,
-                                            y: (UIScreen.main.bounds.height-20)/2,
-                                            width: 20, height: 20)
-        
-        self.view.addSubview(activityIndicator)
-        */
-        
-        self.view.addSubview(self.loadingView)
-    }
-
-    override func viewDidLoad() {
-        overrideUserInterfaceStyle = .dark
-                
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        
-        newsParser.newsDelegate = self
-        sliderValues = SliderValues.sharedInstance
-        biasSliders.sliderDelegate = self
-        biasSliders.shadeDelegate = self
-        topicSliders.dismissDelegate = self
-        topicSliders.sliderDelegate = self
-        
-        //observer to detect app entering foreground
-        NotificationCenter.default.addObserver(self, selector: #selector(loadArticles), name: NSNotification.Name(rawValue: "reloadArticles"), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshNews), name: UIApplication.willEnterForegroundNotification, object: nil)
-       
-        self.collectionView.register(SubtopicHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SubtopicHeader.headerId)
-        self.collectionView.register(FAQFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FAQFooter.footerId)
-        self.collectionView.register(seeMoreFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooter.footerId)
-        self.collectionView.register(seeMoreFooterSection0.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooterSection0.footerId)
-        self.collectionView.register(seeMoreFooterLast.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooterLast.footerId)
-        self.collectionView.register(ArticleCell.self, forCellWithReuseIdentifier: ArticleCell.cellId)
-        self.collectionView.backgroundColor = .systemBackground
-        self.collectionView.register(ArticleCellHalf.self, forCellWithReuseIdentifier: ArticleCellHalf.cellId)
-        self.collectionView.register(HeadlineCell.self, forCellWithReuseIdentifier: HeadlineCell.cellId)
-        self.collectionView.register(ArticleCellAlt.self, forCellWithReuseIdentifier: ArticleCellAlt.cellId)
-        
-        
-        // intialize some anchors
-        topicTopAnchorHidden = topicSliders.topAnchor.constraint(equalTo: self.view.bottomAnchor)
-        topicTopAnchorVisible = topicSliders.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
-        topicBottomAnchor = topicSliders.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-        
-        setUpNavBar()
-        setUp()
-        configureBiasButton()
-        configureTopicButton()
-        setUpRefresh()
-        setUpActivityIndicator()
-        
-        
-        
-        
-        self.moreHeadLines.initialize(width: self.screenWidth)
-        self.view.addSubview(self.moreHeadLines)
-        self.moreHeadLines.delegate = self
-        self.moreHeadLines.hide()
-        
-        self.view.backgroundColor = bgBlue
-        self.collectionView.backgroundColor = bgBlue
-        
-        
-        /*
-        //testing height(s)
-        let redView = UIView(frame: CGRect(x: 20, y: 666 + 681, width: 100, height: 20))
-        redView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
-        self.collectionView.addSubview(redView)
-        */
-        
-    }
-    
-    func scrollFromHeadLines(toSection: Int) {
-        self.scrollTheNewsTo(toSection)
-    }
-    
-    @objc func refreshNews(){
-        self.viewWillAppear(false)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        if let nav = self.navigationController {
-            self.navBarFrame = nav.navigationBar.frame
-            var posY = self.navBarFrame.origin.y + self.navBarFrame.size.height
-            if(!nav.navigationBar.isTranslucent) {
-                posY = 0
-            }
-            self.moreHeadLines.moveTo(y: posY)
-        }
-    }
-    
+    // MARK: - Horizontal menu
     func scrollTheNewsTo(_ index: Int) {
         //let indexPath = IndexPath(item: 0, section: 0)
         /*if let cell = self.collectionView.cellForItem(at: indexPath) {
@@ -1046,680 +1542,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 offsetY += (otherItemsHeight+slidersHeight) * i
             }
             offsetY += -52 // margin
-            
-            /*
-            print("GATO3", index)
-            for i in 0...index-1 {
-                let h = self.getItemHeight(section: i)
-                print("GATO3", i, h)
-            
-                offsetY += h
-            }
-            */
-            
-        
-            /*
-            offsetY = firstItemHeight.height
-            offsetY += CGFloat(890 * (index-1))
-            offsetY += -45 // margin
-            */
         }
-        
-        
-        /*
-        for i in 0...index {
-            if(i==0){ offsetY += 800 }
-            else { offsetY += 890 }
-        }
-        */
         
         self.collectionView.setContentOffset(CGPoint(x: 0, y: offsetY), animated: true)
     }
-    
-    func getItemHeight(section: Int) -> CGFloat {
-        let headerHeight = self.collectionView(self.collectionView, layout: self.collectionViewLayout, referenceSizeForHeaderInSection: section).height
-        
-        let iPath = IndexPath(row: 0, section: section)
-        let itemHeight = self.collectionView(self.collectionView, layout: self.collectionViewLayout, sizeForItemAt: iPath).height
-        
-        let footerHeight = self.collectionView(self.collectionView, layout: self.collectionViewLayout, referenceSizeForFooterInSection: section).height
-        
-        let result = headerHeight + (itemHeight*2) + footerHeight
-        return result
-    }
-}
 
-// page refreshing
-extension NewsViewController {
-     
-    // sends server request
-    @objc func loadArticles() {
-        sliderValues.setTopic(topic: self.topic)
-        
-        DispatchQueue.global().async {
-            
-            /*
-            let firsthalf = self.homelink + self.topic + self.artfreq + self.untouchables
-            let nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs()
-            let link: String
-            if self.superSliderStr == "_" {
-                link = firsthalf + nexthalf
-            } else {
-                link = firsthalf + nexthalf + self.superSliderStr
-            }
-            */
-            
-            let link = self.buildApiCall()
-            
-            print("GATO", "should load " + link)
-            self.newsParser.getJSONContents(jsonName: link)
-        }
-                
-    }
-    
-    
-    private func buildApiCall_b() -> String {
-        let link = "topic=\(self.topic)" +
-            ".A\(self.param_A)" + ".B\(self.param_B)" +
-            ".S\(self.param_S)"
-            
-        return link
-    }
-    
-    private func buildApiCall() -> String {
-
-        let firsthalf = self.homelink + self.topic +
-            ".A\(self.param_A)" + ".B\(self.param_B)" +
-            ".S\(self.param_S)"
-        var nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
-        
-        for bannerID in BannerView.bannerHeights.keys {
-            let key = "banner_apiParam_" + bannerID
-            if let value = UserDefaults.standard.string(forKey: key) {
-                nexthalf += value
-            }
-        }
-        
-        /*
-        if let info = BannerInfo.shared {
-            nexthalf += info.apiParam
-        }
-        */
-        
-        var link: String
-        if (self.superSliderStr.isEmpty) {
-            link = firsthalf + nexthalf
-        } else {
-            link = firsthalf + nexthalf + "_" + self.superSliderStr
-        }
-        
-        link += "&uid=3"
-        if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
-            link += deviceId
-        }
-            
-        return link
-    }
-    
-    // updates UI w/ server response
-    func reload() {
-        print("reload?")
-        self.collectionView.reloadData()
-        
-        self.hierarchy = ""
-        self.hierarchy = newsParser.getHierarchy()
-    }
-    
-    @objc func refresh(_ sender: UIRefreshControl!) {
-        
-        self.refresher.beginRefreshing()
-        self.firstTime = true
-        self.loadData()
-        
-        /*
-        print("refresh?")
-        self.collectionView.reloadData()
-        
-        self.hierarchy = ""
-        self.hierarchy = newsParser.getHierarchy()
-        */
-        
-        //stopRefresher()
-    }
-    
-    func stopRefresher() {
-        self.refresher.endRefreshing()
-    }
-    
-    // MARK: Update topic sliders only when topic changes
-    func updateTopicSliders() {
-        // for topic sliders
-        
-        sliderValues.setSubtopics(subtopics: newsParser.getAllTopics())
-        sliderValues.setPopularities(popularities: newsParser.getPopularities())
-        
-        topicSliders.loadVariables()
-        topicSliders.buildViews()
-    }
-}
-
-extension NewsViewController: NewsDelegate {
-    
-    func didFinishLoadData(finished: Bool) {
-        
-        if BannerInfo.shared != nil {
-            BannerInfo.shared?.delegate = self
-        }
-        
-        guard finished else {
-            // Handle the unfinished state
-            print("Could not load data")
-            return
-        }
-        
-        updateTopicSliders()
-        reload()
-
-        self.moreHeadLines.setTopics(self.newsParser.getAllTopics())
-        
-        UIView.animate(withDuration: 0.5, animations: {
-            self.collectionView.contentOffset.y = 0
-        })
-        
-        
-        //self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-    }
-    
-    func resendRequest() {
-        loadArticles()
-    }
-
-}
-
-extension NewsViewController {
-
-    fileprivate func setUpNavBar() {
-
-        searchBar.sizeToFit()
-        searchBar.searchTextField.backgroundColor = .white
-        searchBar.searchTextField.textColor = .black
-        searchBar.tintColor = .black
-
-        let logo = UIImage(named: "N64")
-        let titleView = UIImageView(image: logo)
-        titleView.contentMode = .scaleAspectFit
-        navigationItem.titleView = titleView
-
-//        navigationItem.title = "Improve the News"
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.barTintColor = bgBlue
-        //.black// bar color when scrolling down
-        navigationController?.navigationBar.backgroundColor = bgBlue
-        navigationController?.navigationBar.barTintColor = bgBlue
-        navigationController?.navigationBar.barTintColor = bgBlue
-        navigationController?.navigationBar.isTranslucent = false
-        
-        navigationController?.navigationBar.barStyle = .black
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: UIColor.white]
-
-        let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.sectionButtonItemClicked(_:)))
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchItemClicked(_:)))
-        navigationItem.leftBarButtonItem = sectionsButton
-        navigationItem.leftItemsSupplementBackButton = true
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-
-    }
-    
-    func setUp() {
-        
-        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 195, height: 30))
-        let img = UIImage(named: "ITN_logo.png")?.withRenderingMode(.alwaysOriginal)
-        let homeButton = UIButton(image: img!)
-        homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
-        homeButton.addTarget(self, action: #selector(homeButtonTapped),
-                            for: .touchUpInside)
-        //homeButton.isUserInteractionEnabled = false
-        
-        /*
-        let label = UILabel.init(frame: CGRect(x: 35, y: 5, width: 180, height: 20))
-        label.text = "IMPROVE THE NEWS"
-        label.font = UIFont(name: "OpenSans-Bold", size: 17)
-        label.textColor = .white
-        label.textAlignment = .left
-        //label.center.y = view.center.y
-        */
-        
-        view.addSubview(homeButton)
-        //view.addSubview(label)
-        view.center = navigationItem.titleView!.center
-        self.navigationItem.titleView = view
-    }
-    
-    @objc func homeButtonTapped() {
-        if let firstVC = navigationController?.viewControllers.first as? NewsViewController {
-            if(firstVC == self) {
-                // I'm in the first screen
-                if(self.topic == "news") {
-                    UIView.animate(withDuration: 0.5, animations: {
-                        self.collectionView.contentOffset.y = 0
-                    })
-                } else {
-                    self.firstTime = true
-                    self.topic = "news"
-                    self.loadData()
-                }
-            } else {
-                let newsVC = navigationController!.viewControllers[0] as! NewsViewController
-                
-                if(newsVC.topic == "news") {
-                    newsVC.collectionView.contentOffset.y = 0
-                } else {
-                    newsVC.firstTime = true
-                    newsVC.topic = "news"
-                }
-                navigationController!.popToRootViewController(animated: true)
-        }
-    }}
-    
-    @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
-        let searchvc = SearchViewController()
-        navigationController?.pushViewController(searchvc, animated: true)
-    }
-
-    @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
-        //fatalError()
-        //navigationController?.pushViewController(SectionsViewController(), animated: true)
-        navigationController?.customPushViewController(SectionsViewController())
-    }
-    
-    func setUpRefresh() {
-        // set up refresher at top
-        self.refresher = UIRefreshControl()
-        self.collectionView!.alwaysBounceVertical = true
-        self.refresher.tintColor = .lightGray
-        self.refresher.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        self.collectionView!.addSubview(refresher)
-    }
-
-}
-
-extension NewsViewController: TopicSelectorDelegate {
-    
-    func pushNewTopic(newTopic: String) {
-    
-        let mainTopic = newsParser.getTopic(index: 0)
-        let mainTopic_B = Globals.topicmapping[mainTopic]!
-        let subTopicsCount = newsParser.getNumOfSections()
-        
-        let vc = NewsViewController(topic: newTopic)
-        
-        vc.param_S = 4 // sumar 4? o 4 fijo?
-        if newTopic == mainTopic_B {
-            if(subTopicsCount==1) {
-                vc.param_A = 40
-            }
-        } else {
-            
-        }
-        
-        if(Utils.shared.didTapOnMoreLink && newTopic=="news") {
-            vc.param_A = 10
-        }
-        Utils.shared.didTapOnMoreLink = false
-        
-        
-        /*
-        // Getting more article on same topic
-        if newTopic == mainTopic_B {
-            if self.artfreq == ".A4" {
-                vc.artfreq = ".A20"
-                vc.untouchables = ".B4.S4"
-            } else if self.artfreq == ".A20" {
-                vc.artfreq = ".A50"
-                vc.untouchables = ".B4.S24"
-            }
-        } else {
-            // Getting more articles on sub topic
-            vc.artfreq = ".A20"
-            vc.untouchables = ".B4.S4"
-        }
-        */
-        
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func changeTopic(newTopic: String) {
-        self.topic = newTopic
-        sliderValues.clearSubtopics()
-        sliderValues.setTopic(topic: newTopic)
-        print("topic should be changed to \(self.topic)")
-        self.loadArticles()
-        self.reload()
-    }
-    
-    func goToScrollView(atSection: Int) {
-        self.scrollTheNewsTo(atSection)
-    }
-}
-
-// MARK: Bias sliders
-extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
-    
-    func configureBiasButton() {
-        let factor: CGFloat = 0.9
-        let size = CGSize(width: 78 * factor, height: 82 *  factor)
-        let screenSize = UIScreen.main.bounds
-        
-        view.addSubview(biasButton)
-        let posX = screenSize.width - size.width - 5
-        
-        var posY = screenSize.height - size.height
-        if let nav = navigationController {
-            if(!nav.navigationBar.isTranslucent) {
-                posY -= 88
-            }
-        }
-        posY += size.height - self.biasSliders.state01_height + 15
-        
-        biasButton.frame = CGRect(x: posX, y: posY,
-                                width: size.width, height: size.height)
-        //biasButton.layer.cornerRadius = size * 0.5
-        let y = view.frame.height - self.biasSliders.state01_height
-        biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550) //470
-        
-        /*
-        biasButton.layer.borderWidth = 2
-        biasButton.layer.borderColor = UIColor.black.withAlphaComponent(0.15).cgColor
-        */
-        
-        biasSliders.buildViews()
-        self.biasSliders.status = "SL00"
-        self.updateBiasButtonPosition()
-    }
-    
-    func updateBiasButtonPosition() {
-        var mFrame = self.biasButton.frame
-        let screenSize = UIScreen.main.bounds
-        
-        var posY = screenSize.height - mFrame.size.height
-        if let nav = navigationController {
-            if(!nav.navigationBar.isTranslucent) {
-                posY -= 88
-            }
-        }
-        posY += mFrame.size.height
-        
-        let margin: CGFloat = 6
-        let status = self.biasSliders.status
-        
-        /*
-        if(status == "SL00") {
-            posY -= (mFrame.size.height * 1.75)
-        } else if(status == "SL01") {
-            posY -= self.biasSliders.state01_height - margin
-        } else if(status == "SL02") {
-            posY -= self.biasSliders.state02_height - margin
-        }
-        */
-        
-        if(status == "SL02") {
-            posY -= self.biasSliders.state02_height - margin
-        } else {
-            posY -= self.biasSliders.state01_height - margin
-        }
-        
-        mFrame.origin.y = posY
-        self.biasButton.frame = mFrame
-    }
-    
-    func configureBiasSliders() {
-        
-        let y = view.frame.height - self.biasSliders.state01_height
-        biasSliders.addShowMore()
-        biasSliders.backgroundColor = accentOrange
-        
-        shadeView.backgroundColor = UIColor.black.withAlphaComponent(0)
-        //UIColor(white: 0, alpha: 0.75) // 0.3
-        /*
-        shadeView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
-        shadeView.isUserInteractionEnabled = true
-        */
-        shadeView.isUserInteractionEnabled = false
-        
-        view.addSubview(shadeView)
-        view.addSubview(biasSliders)
-        
-        var mFrame = view.frame
-        mFrame.origin.y = 0
-        shadeView.frame = mFrame
-        shadeView.alpha = 0
-        
-        self.biasSliders.reloadSliderValues()
-        self.biasSliders.status = "SL01"
-        self.biasSliders.separatorView.isHidden = false
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.shadeView.alpha = 1
-                
-                var mFrame = self.biasSliders.frame
-                mFrame.origin.y = y
-                self.biasSliders.frame = mFrame
-                
-                self.updateBiasButtonPosition()
-                
-                /*
-                self.biasSliders.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.biasSliders.frame.height)
-                */
-                
-            }, completion: nil)
-        
-        self.biasButton.superview?.bringSubviewToFront(self.biasButton)
-    }
-    
-    func dismissShade() {
-        if Globals.isSliderOn {
-            Globals.isSliderOn = false
-        }
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.shadeView.alpha = 0
-            self.updateBiasButtonPosition()
-        }, completion: nil)
-    }
-    func panelFullyOpened() {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.updateBiasButtonPosition()
-        })
-    }
-    
-    @objc func handleDismiss() {
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.shadeView.alpha = 0
-            
-        }, completion: nil)
-        biasSliders.handleDismiss()
-    }
-    
-    
-    @objc func showBiasSliders(_ sender:UIButton!) {
-        if !Globals.isSliderOn {
-            Globals.isSliderOn = true
-        }
-        
-        if(self.biasSliders.status == "SL00") {
-            configureBiasSliders()
-        } else {
-            self.biasSliders.handleDismiss()
-        }
-    }
-    
-    func biasSliderDidChange(sliderId: Int) {
-        
-        //biasSliders.activityView.startAnimating()
-        biasSliders.showLoading(true)
-        
-        DispatchQueue.main.async {
-            self.loadArticles()
-            self.reload()
-
-            DELAY(2.0) {
-                if(sliderId == self.biasSliders.latestBiasSliderUsed) {
-                    self.biasSliders.showLoading(false)
-                }
-            }
-        }
-        
-        
-        /*
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            self.loadArticles()
-            self.reload()
-            //sleep(2)
-            
-            //self.biasSliders.activityView.stopAnimating()
-            self.biasSliders.showLoading(false)
-        }
-        */
-    }
-}
-
-// MARK: Topic sliders
-extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
-    
-    func configureTopicButton() {
-        view.addSubview(topicSliders)
-        topicSliders.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            topicTopAnchorHidden!,
-            topicSliders.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            topicSliders.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-        
-        topicSliders.buildViews()
-    }
-    
-    func showTopicSliders() {
-        
-        topicSliders.mustSort = true
-        //updateTopicSliders()
-        
-        // SHOWS TOPIC SLIDERS
-        topicSliders.loadVariables()
-        topicSliders.buildViews()
-        
-        topicSliders.backgroundColor = accentOrange
-        view.addSubview(topicSliders)
-        
-        topicTopAnchorHidden?.isActive = false
-        topicTopAnchorVisible?.isActive = true
-        topicBottomAnchor?.isActive = true
-        
-        
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.layoutIfNeeded()
-            
-        }, completion: nil)
-        
-        
-    }
-    
-    func handleDismissTopicSliders() {
-    
-        topicTopAnchorVisible?.isActive = false
-        topicBottomAnchor?.isActive = false
-        topicTopAnchorHidden?.isActive = true
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            
-            self.view.layoutIfNeeded()
-            
-        }, completion: nil)
-        
-        collectionView?.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-        
-    }
-    
-    func topicSliderDidChange() {
-        loadArticles()
-        reload()
-    }
-    
-}
-
-// MARK: Super slider
-extension NewsViewController: SuperSliderDelegate {
-    
-    func updateSuperSliderStr(topic: String, popularity: Float) {
-    
-        let key = Globals.slidercodes[topic]!
-        let value = String(format: "%02d", Int(popularity))
-        
-        if (superSliderStr.contains(key)) {
-            var start = 0
-            var txt = ""
-            
-            while(start<superSliderStr.count) {
-                let endForKey = start + 1
-                let thisKey = superSliderStr[start...endForKey]
-                let thisValue = superSliderStr[start+2...endForKey+2]
-                
-                txt += thisKey
-                if(thisKey == key) {
-                    txt += value
-                } else {
-                    txt += thisValue
-                }
-                start += 4
-            }
-            superSliderStr = txt
-        } else {
-            superSliderStr += key + String(format: "%02d", Int(popularity))
-        }
-        
-        //print("GATO", superSliderStr)
-    }
-    
-    func superSliderDidChange() {
-        /*
-        let diff = Date() - self.superSliderLatestUpdate
-        if(diff > 2) {
-            self.superSliderLatestUpdate = Date()
-            
-            activityIndicator.startAnimating()
-            //DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            DispatchQueue.main.async {
-                self.loadArticles()
-                self.reload()
-                
-                DELAY(2) {
-                    self.activityIndicator.stopAnimating()
-                }
-            }
-        }
-        */
-        
-        self.loadingView.isHidden = false
-        DispatchQueue.main.async {
-            self.loadArticles()
-            // self.reload()
-            
-            DELAY(2) {
-                self.loadingView.isHidden = true
-            }
-        }
-        
-    }
-}
-
-extension NewsViewController: shareDelegate {
-    
-    func openSharing(items: [String]) {
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        present(ac, animated: true)
-    }
-    
-    func horizontalScroll(to: CGFloat) {
-        var mOffset = self.moreHeadLines.scrollView.contentOffset
-        mOffset.x = to
-        self.moreHeadLines.scrollView.setContentOffset(mOffset, animated: false)
+    // For MoreHeadlinesViewDelegate protocol
+    func scrollFromHeadLines(toSection: Int) {
+        self.scrollTheNewsTo(toSection)
     }
     
     func horizontalScrollFromHeadLines(to: CGFloat) {
@@ -1732,44 +1562,68 @@ extension NewsViewController: shareDelegate {
         }
     }
     
-}
-
-
-
-
-/*
-import SwiftUI
-struct MainPreview: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-
-    struct ContainerView: UIViewControllerRepresentable {
-
-        func makeUIViewController(context: UIViewControllerRepresentableContext<MainPreview.ContainerView>) -> UIViewController {
-            return UINavigationController(rootViewController: NewsViewController(topic: "news"))
+    /*
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if (scrollView.contentOffset.y < 0) {
+            //loadArticles()
         }
-
-        func updateUIViewController(_ uiViewController: MainPreview.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<MainPreview.ContainerView>) {
-
-        }
-
     }
-}
-*/
-
-
-extension NewsViewController: BannerInfoDelegate {
-
-/*
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    
+    override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         
-        return 0
+        let safeAreaTop: CGFloat = 88
+        let offset = scrollView.contentOffset.y + safeAreaTop
+        
+        let alpha: CGFloat = 1 - ((scrollView.contentOffset.y + safeAreaTop) / safeAreaTop)
+        
+        navigationController?.navigationBar.alpha = alpha
+        navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0,-offset))
+        
+        self.view.bringSubviewToFront(self.moreHeadLines)
+        print(self.moreHeadLines)
+        
     }
     */
     
-    func BannerInfoOnClose() {
-        self.reload()
-    }
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        guard let tableView = scrollView as? UICollectionView else {return}
+        let visibleHeadersInSection = tableView.indexPathsForVisibleItems
+        let indexHeaderForSection = NSIndexPath(row: 0, section: 0)
+    
+        if scrollView.contentOffset.y < 0 { return }
+        let offsetBetweenItems = 50
 
+        
+        var limit = self.moreHeadLinesInCollectionPosY-self.navBarFrame.size.height
+        if let nav = navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                limit += (self.navBarFrame.origin.y + self.navBarFrame.size.height)
+            }
+            limit += 18
+        }
+        limit -= 58
+        
+        if(limit<110) {
+            self.moreHeadLines.hide()
+        } else {
+            if(scrollView.contentOffset.y >= limit) {
+                if let view = self.seeMoreFooterSection {
+                    var mOffset = view.scrollView.contentOffset
+                    self.moreHeadLines.scrollView.contentOffset = mOffset
+                }
+                
+                self.moreHeadLines.show()
+            } else {
+                if let view = self.seeMoreFooterSection {
+                    var mOffset = self.moreHeadLines.scrollView.contentOffset
+                    view.scrollView.contentOffset = mOffset
+                }
+            
+                self.moreHeadLines.hide()
+            }
+        }
+        
+        self.view.bringSubviewToFront(self.moreHeadLines)
+    }
 }

@@ -71,7 +71,8 @@ class TopicSliderPopup: UIView {
         reload()
             
         // cleaning current view
-        sliderStack.removeAllArrangedSubviews()
+        //sliderStack.removeAllArrangedSubviews()
+        sliderStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         // repopulating view
         if subtopics.count > 0 {
@@ -137,6 +138,7 @@ extension TopicSliderPopup {
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOffset = CGSize(width: 2, height: 10)
         
+        scrollView.subviews.forEach({ $0.removeFromSuperview() })
         addSubview(scrollView)
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -161,6 +163,7 @@ extension TopicSliderPopup {
             sliderStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
         
+        //sliderStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         // title + "x" out button
         let controls = UIView()
         sliderStack.addArrangedSubview(controls)
@@ -325,6 +328,10 @@ extension TopicSliderPopup {
             }
         }
         
+        
+        
+        
+        //print("GATO6", mustSort)
         if(mustSort) {
         /*
             // sort by popularities
@@ -332,9 +339,11 @@ extension TopicSliderPopup {
             for (i, topic) in self.subtopics.enumerated() {
                 dict[topic] = self.popularities[i]
             }
+            print("GATO6", dict)
             let sortedElements = dict.sorted {
                 return $0.value > $1.value
             }
+            print("GATO6", dict)
             
             self.subtopics.removeAll()
             self.popularities.removeAll()
@@ -345,9 +354,14 @@ extension TopicSliderPopup {
                 self.subtopics.append(sTopic)
                 self.popularities.append(pop)
             }
-            print("GATO5", "sorted!")
             */
         }
+        //print("GATO6", self.subtopics)
+        //print("GATO6", self.popularities)
+        //print("GATO6", "--------------")
+        
+        
+        
 
     }
     
