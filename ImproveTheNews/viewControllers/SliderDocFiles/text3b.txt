@@ -1,0 +1,3 @@
+3. Shelf-life slider: Do you want evergreen or fresh?
+
+The shelf-life slider ranges from fast-expiring topics such as celebrity gossip and “so-and-so tweeted the following” to evergreen pieces (high-impact/novel analysis) that are likely to remain relevant for a long time to come. The recent slider lets you choose whether to focus on golden oldies or the very latest news. Note that your news gets ranked by combining the match to all the sliders, so we can give you the very latest news only at the cost of paying slightly less attention to the other sliders.

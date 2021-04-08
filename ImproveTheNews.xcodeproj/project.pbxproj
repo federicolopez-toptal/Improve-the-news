@@ -43,6 +43,9 @@
 		BD0FEDA925D170500079A32B /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */; };
 		BD0FEDD125D17AF60079A32B /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDCF25D17AF60079A32B /* OpenSans-SemiBold.ttf */; };
 		BD0FEDD225D17AF60079A32B /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */; };
+		BD252539261CCF2A0090D04A /* text1b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD252536261CCF2A0090D04A /* text1b.txt */; };
+		BD25253A261CCF2A0090D04A /* text3b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD252537261CCF2A0090D04A /* text3b.txt */; };
+		BD25253B261CCF2A0090D04A /* text2b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD252538261CCF2A0090D04A /* text2b.txt */; };
 		BD2813EE25F6A7D000A91E38 /* SliderDocNewVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2813ED25F6A7D000A91E38 /* SliderDocNewVersion.swift */; };
 		BD2813F525F6B5EC00A91E38 /* text1.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD2813F425F6B5EC00A91E38 /* text1.txt */; };
 		BD2813FD25F6BC1B00A91E38 /* text2.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD2813FC25F6BC1B00A91E38 /* text2.txt */; };
@@ -324,6 +327,9 @@
 		BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		BD0FEDCF25D17AF60079A32B /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		BD252536261CCF2A0090D04A /* text1b.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text1b.txt; sourceTree = "<group>"; };
+		BD252537261CCF2A0090D04A /* text3b.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text3b.txt; sourceTree = "<group>"; };
+		BD252538261CCF2A0090D04A /* text2b.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text2b.txt; sourceTree = "<group>"; };
 		BD2813ED25F6A7D000A91E38 /* SliderDocNewVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderDocNewVersion.swift; sourceTree = "<group>"; };
 		BD2813F425F6B5EC00A91E38 /* text1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = text1.txt; sourceTree = "<group>"; };
 		BD2813FC25F6BC1B00A91E38 /* text2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = text2.txt; sourceTree = "<group>"; };
@@ -714,8 +720,8 @@
 				BD2813ED25F6A7D000A91E38 /* SliderDocNewVersion.swift */,
 				BD2813F325F6B5D500A91E38 /* SliderDocFiles */,
 				A82A270124F6A1420028272B /* TopicSliders.swift */,
-				A81B3B522481E9A200A52A97 /* NewsViewController.swift */,
 				BD962477261B425F009EC21D /* PieChartViewController.swift */,
+				A81B3B522481E9A200A52A97 /* NewsViewController.swift */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -760,6 +766,9 @@
 				BD2813F425F6B5EC00A91E38 /* text1.txt */,
 				BD2813FC25F6BC1B00A91E38 /* text2.txt */,
 				BD28140125F6BDCD00A91E38 /* text3.txt */,
+				BD252536261CCF2A0090D04A /* text1b.txt */,
+				BD252538261CCF2A0090D04A /* text2b.txt */,
+				BD252537261CCF2A0090D04A /* text3b.txt */,
 			);
 			path = SliderDocFiles;
 			sourceTree = "<group>";
@@ -1179,6 +1188,7 @@
 				BDDA452F2612301100C9C3AF /* PRT64.png in Resources */,
 				BDDA45452612301100C9C3AF /* ZMB64.png in Resources */,
 				BDDA45732612301100C9C3AF /* MSR64.png in Resources */,
+				BD25253B261CCF2A0090D04A /* text2b.txt in Resources */,
 				BDDA45332612301100C9C3AF /* ISL64.png in Resources */,
 				BDDA453D2612301100C9C3AF /* BGR64.png in Resources */,
 				BDDA44EC2612301100C9C3AF /* ITA64.png in Resources */,
@@ -1191,6 +1201,7 @@
 				BDDA458E2612301100C9C3AF /* TCD64.png in Resources */,
 				BDDA453C2612301100C9C3AF /* BRB64.png in Resources */,
 				BDDA451E2612301100C9C3AF /* COL64.png in Resources */,
+				BD25253A261CCF2A0090D04A /* text3b.txt in Resources */,
 				BDDA458D2612301100C9C3AF /* SMR64.png in Resources */,
 				BDDA452D2612301100C9C3AF /* SVK64.png in Resources */,
 				BDDA45242612301100C9C3AF /* KIR64.png in Resources */,
@@ -1253,6 +1264,7 @@
 				BDDA45062612301100C9C3AF /* CYM64.png in Resources */,
 				BDDA455D2612301100C9C3AF /* SAU64.png in Resources */,
 				BDDA455F2612301100C9C3AF /* HRV64.png in Resources */,
+				BD252539261CCF2A0090D04A /* text1b.txt in Resources */,
 				BDDA457E2612301100C9C3AF /* UGA64.png in Resources */,
 				BD4A4FD725E5438200AB37DA /* prefsButton.png in Resources */,
 				BDDA45222612301100C9C3AF /* LCA64.png in Resources */,

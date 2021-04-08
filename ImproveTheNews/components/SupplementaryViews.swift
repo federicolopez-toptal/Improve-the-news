@@ -119,6 +119,8 @@ class SubtopicHeader: UICollectionReusableView {
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -80)
         ])
         
+    if(APP_CFG_SHOW_PIE_CHART) {
+        // -------
         addSubview(topicSlidersButton)
         topicSlidersButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -129,7 +131,8 @@ class SubtopicHeader: UICollectionReusableView {
         ])
         //topicSlidersButton.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
         topicSlidersButton.addTarget(self, action: #selector(showTopicSliders(_:)), for: .touchUpInside)
-        
+        // -------
+    }
         
         //addSubview(topicPriority)
         stackView.addArrangedSubview(topicPriority)
@@ -141,7 +144,7 @@ class SubtopicHeader: UICollectionReusableView {
         ])
         //topicPriority.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
         
-        
+        if(APP_CFG_SHOW_SUPER_SLIDERS) {
         //addSubview(prioritySlider)
         stackView.addArrangedSubview(prioritySlider)
         prioritySlider.isContinuous = true
@@ -166,6 +169,7 @@ class SubtopicHeader: UICollectionReusableView {
         
         prioritySlider.isUserInteractionEnabled = true
         //label.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+        }
     }
     
     @objc func goToTopic(_ sender: UIButton!) {

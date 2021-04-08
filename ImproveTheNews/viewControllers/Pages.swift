@@ -122,6 +122,7 @@ class SliderDoc2: UIViewController {
 
     Two sliders let you choose the bias of your news sources. The left-right slider uses a classification of media outlets based on political leaning, mainly from here. The pro-establishment slider classifies media outlets based on how close they are to power (see, e.g., Wikipedia’s lists of left, libertarian & right alternative media & this classification): does the news source normally accept or challenge claims by powerful entities such as the government and large corporations? Rather than leaving them alone, you’ll probably enjoy spicing things up by occasionally sliding them to see what those you disagree with cover various topics.
     """
+    
     let paths1 = ["https://www.youtube.com/watch?v=PRLF17Pb6vo","https://www.allsides.com/media-bias/media-bias-ratings"]
     let linked1 = ["see this video demo"," here"]
     let accented1 = ["left-right slider", "pro-establishment slider"]

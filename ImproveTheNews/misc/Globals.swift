@@ -24,6 +24,10 @@ var hArray = [String]()
 let APP_CFG_SHOW_MINI_SLIDERS = true
 let APP_CFG_SHOW_FLAGS = true
 
+// false/false for v1.0
+let APP_CFG_SHOW_PIE_CHART = false
+let APP_CFG_SHOW_SUPER_SLIDERS = false
+
     
 func prettifyText(fullString: NSString, boldPartsOfString: Array<NSString>, font: UIFont!, boldFont: UIFont!, paths: [String], linkedSubstrings: [String], accented: [String]) -> NSAttributedString {
 
@@ -67,38 +71,42 @@ func topicStrToDict(str: String) {
 func createTopicPrefs() -> String {
     
     var request = ""
+    var count = 0
     
     for (_, code) in Globals.slidercodes {
-        if UserDefaults.exists(key: code) {
-            
+
+        if UserDefaults.standard.object(forKey: code) != nil {
             var value = UserDefaults.getValue(key: code)
-            value.round()
+            if(value > 0.0) {
+                value.round()
             
-            var valueStr = Int(value)
-            if valueStr == 100 {
-                valueStr = 99
+                var valueStr = Int(value)
+                if valueStr == 100 {
+                    valueStr = 99
+                }
+                let reformattedVal = String(format: "%02d", valueStr)
+                
+                request += code + reformattedVal
+                count += 1
             }
-            let reformattedVal = String(format: "%02d", valueStr)
-            
-            request += code + reformattedVal
-            
         }
-        
     }
     
+    print("GATO4", count, request)
     return request
     
 }
 
+let NOTIFICATION_FORCE_RELOAD_NEWS = Notification.Name("forceReloadNews")
+
 func resetToDefaults() {
     
-    for (_, code) in Globals.slidercodes {        
-        // UserDefaults.standard.removeObject(forKey: code)
-        UserDefaults.standard.setValue(nil, forKey: code)
-        UserDefaults.standard.removeObject(forKey: code)
+    for (_, code) in Globals.slidercodes {
+        let num: Float = -1
+        UserDefaults.standard.setValue(num, forKey: code)
         UserDefaults.standard.synchronize()
+        UserDefaults.standard.removeObject(forKey: code)
     }
-    UserDefaults.standard.synchronize()
 
     UserDefaults.setSliderValue(value: 50, slider: "LeRi")
     UserDefaults.setSliderValue(value: 50, slider: "proest")
@@ -107,8 +115,7 @@ func resetToDefaults() {
     UserDefaults.setSliderValue(value: 70, slider: "shelflife")
     UserDefaults.setSliderValue(value: 70, slider: "recency")
 
-    SliderValues.sharedInstance.refresh()
-    print("GATO5", "reset all")
+    NotificationCenter.default.post(name: NOTIFICATION_FORCE_RELOAD_NEWS, object: nil)
 }
 
 // MARK: For pie chart custom colors

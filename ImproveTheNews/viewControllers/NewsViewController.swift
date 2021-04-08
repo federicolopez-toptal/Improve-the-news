@@ -20,13 +20,17 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     let searchBar = UISearchBar()           // searchBar
     var refresher: UIRefreshControl!        // pull to refresh
     let biasSliders = SliderPopup()         // Preferences (orange) panel
+    let loadingView = UIView()              // loading with activityIndicator inside
     
     // to populate CollectionView
     //changed home link from "http://www.improvethenews.org/itnserver.php/?topic=" to this one
     //let homelink = "http://ec2-user@ec2-3-16-51-0.us-east-2.compute.amazonaws.com/appserver.php/?topic="
     let homelink = "https://www.improvethenews.org/appserver.php/?topic="
     
+    var mainTopic = "Headlines"
     var topic = ""                          // current topic, set at the beginning
+    var hierarchy = ""                      // hierarchy (path)
+    var superSliderStr = ""                 // para armar el request
     
     // --------------------------------------------------------
     // horizontal menu
@@ -35,40 +39,19 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     private var moreHeadLinesInCollectionPosY: CGFloat = 0
     
     // --------------------------------------------------------
+    //var superSliderLatestUpdate = Date()
+    var param_A = 4
+    var param_B = 4
+    var param_S = 0
     
-    
-    
-    
-    
-    var sliderValues: SliderValues!
-    var headers = [String]()
-    
-    var artfreq = ".A4"
-    var untouchables = ".B4.S0"
-    var sliderPrefs = ""
-    var hierarchy = ""
-    var mainTopic = "Headlines"
-    
-    
-    let loadingView = UIView()
-    var activityIndicator = UIActivityIndicatorView()
-    
-    // ---
-    let screenWidth = UIScreen.main.bounds.width
-    var navBarFrame = CGRect.zero
-    // ---
-    
-    
-    
+        let screenWidth = UIScreen.main.bounds.width
+        var navBarFrame = CGRect.zero
+    // -----------
     var firstTime = true
-    var superSliderLatestUpdate = Date()
+    let pieChartVC = PieChartViewController()
     
-    // bias sliders button + view
+    let shadeView = UIView()
     var biasButton: UIButton = {
-        /*let button = UIButton(image: UIImage(named: "sliders")!)
-        button.backgroundColor = accentOrange
-        button.tintColor = .white
-        */
         let button = UIButton(type: .custom)
         button.setBackgroundImage(UIImage(named: "prefsButton.png"), for: .normal)
         button.addTarget(self, action: #selector(showBiasSliders(_:)), for: .touchUpInside)
@@ -76,19 +59,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         return button
     }()
     
-    let shadeView = UIView()
     
     
-    
-    // super sliders
-    var superSliderStr = ""
-    
-    // -----------
-    var param_A = 4
-    var param_B = 4
-    var param_S = 0
-    
-    // -----------
     
     
     // DELETE LATER (!!!)
@@ -96,7 +68,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var topicTopAnchorHidden: NSLayoutConstraint?
     var topicTopAnchorVisible: NSLayoutConstraint?
     var topicBottomAnchor: NSLayoutConstraint?
-    
+    var sliderValues: SliderValues!
     
     
     
@@ -129,7 +101,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         topicSliders.dismissDelegate = self //!!!
         topicSliders.sliderDelegate = self  //!!!
         
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshNews), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshNews),
+            name: UIApplication.willEnterForegroundNotification, object: nil)
+       
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadAll),
+            name: NOTIFICATION_FORCE_RELOAD_NEWS,
+            object: nil)
        
         // collectionView, register cells
         self.collectionView.register(SubtopicHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SubtopicHeader.headerId)
@@ -162,6 +139,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         self.view.backgroundColor = bgBlue
         self.collectionView.backgroundColor = bgBlue
+        
+        pieChartVC.delegate = self
         
         /*
         //testing height(s)
@@ -443,8 +422,13 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     // MARK: - misc
-    @objc func refreshNews(){
+    @objc func refreshNews() {
         self.viewWillAppear(false)
+    }
+    
+    @objc func reloadAll() {
+        self.firstTime = true
+        self.loadData()
     }
     
     func stopRefresher() {
@@ -463,11 +447,13 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func updateTopicSliders() { //!!!
+        /*
         sliderValues.setSubtopics(subtopics: newsParser.getAllTopics())
         sliderValues.setPopularities(popularities: newsParser.getPopularities())
         
         topicSliders.loadVariables()
         topicSliders.buildViews()
+        */
     }
 
     
@@ -688,22 +674,37 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
     }
 }
 
+// MARK: Pie chart
+extension NewsViewController: PieChartViewControllerDelegate {
+    
+    func showPieChart() {
+        //self.pieChartVC.modalPresentationStyle = .fullScreen
+        if(!self.pieChartVC.isBeingPresented) {
+            self.pieChartVC.set(topics: newsParser.getAllTopics(),
+                        popularities: newsParser.getPopularities())
+        
+            self.present(self.pieChartVC, animated: true) {
+            }
+        }
+    }
+    
+    // For protocol PieChartViewControllerDelegate
+    func someValueDidChange() {
+        self.firstTime = true
+        self.loadData()
+    }
+}
+
+
 // MARK: Topic sliders
 extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
     
-    func configureTopicButton() {   //!!!
-        view.addSubview(topicSliders)
-        topicSliders.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            topicTopAnchorHidden!,
-            topicSliders.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            topicSliders.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-        topicSliders.buildViews()
+    func showTopicSliders() {
+        // Tap on a pie chart button
+        self.showPieChart()
     }
     
-    
-    func showTopicSliders() {
+    func showTopicSliders2() {
         
         topicSliders.mustSort = true
         //updateTopicSliders()
@@ -724,8 +725,6 @@ extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
             self.view.layoutIfNeeded()
             
         }, completion: nil)
-        
-        
     }
     
     func handleDismissTopicSliders() {
@@ -760,6 +759,17 @@ extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
         
         configureTopicButton()
         */
+    }
+    
+    func configureTopicButton() {   //!!!
+        view.addSubview(topicSliders)
+        topicSliders.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topicTopAnchorHidden!,
+            topicSliders.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topicSliders.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        topicSliders.buildViews()
     }
     
 }
@@ -1069,6 +1079,7 @@ extension NewsViewController {
                 h -= 29
             }
             
+            
             if(section>0) {
                 h -= 20
             }
@@ -1093,13 +1104,6 @@ extension NewsViewController {
             return CGSize(width: view.frame.width, height: 260)
         }
         else {
-            /*
-            if self.artfreq == ".A50" && section == 0 {
-                return .zero
-            }
-            else
-            */
-            
             if section == 0 {
                 let subTopicsCount = newsParser.getNumOfSections()
                 if(subTopicsCount==1) {
@@ -1240,7 +1244,8 @@ extension NewsViewController {
         
         var link = ""
         if newsParser.getAMPStatus(index: index) == true {
-            link = newsParser.getAMPURL(index: index)
+            //link = newsParser.getAMPURL(index: index)
+            link = newsParser.getURL(index: index)
         } else {
             link = newsParser.getURL(index: index)
         }
@@ -1422,6 +1427,8 @@ extension NewsViewController {
                 */
                 
                 sectionHeader.backgroundColor = bgBlue
+                
+                
                 //sectionHeader.backgroundColor  = UIColor.yellow.withAlphaComponent(0.25) //!!!
                 return sectionHeader
                 
@@ -1627,3 +1634,17 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
         self.view.bringSubviewToFront(self.moreHeadLines)
     }
 }
+
+
+/*
+var headers = [String]()
+
+
+    var artfreq = ".A4"
+    var untouchables = ".B4.S0"
+    var sliderPrefs = ""
+    
+    
+    var activityIndicator = UIActivityIndicatorView()
+
+ */

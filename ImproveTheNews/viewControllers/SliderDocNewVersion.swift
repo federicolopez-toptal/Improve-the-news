@@ -32,7 +32,9 @@ class SliderDoc: UIViewController {
     let textView2 = UITextView()
     let textView3 = UITextView()
     
-    let bold = ["1. Topic sliders: What topic mix do you want?",  "2. Bias sliders: What spin do you want?", "3. Style sliders: What writing style do you want?", "4. Shelf-life slider: Do you want evergreen or fresh?", ] as [NSString]
+    let bold = ["1. Topic sliders: What topic mix do you want?",  "2. Bias sliders: What spin do you want?", "3. Style sliders: What writing style do you want?", "4. Shelf-life slider: Do you want evergreen or fresh?", "1. Bias sliders: What spin do you want?",
+    "2. Style sliders: What writing style do you want?",
+    "3. Shelf-life slider: Do you want evergreen or fresh?"] as [NSString]
     let paths = ["https://www.youtube.com/watch?v=PRLF17Pb6vo","https://www.allsides.com/media-bias/media-bias-ratings", "https://swprs.org/media-navigator/"]
     let linked = ["see this video demo"," here", "this classification"]
     let accented = ["left-right slider", "pro-establishment slider", "nuance slider", "depth slider", "shelf-life slider", "recent slider"]
@@ -134,8 +136,12 @@ class SliderDoc: UIViewController {
         var text = ""
         var posY: CGFloat = 5
         
+        var filename: String = ""
+        
     // 1
-        text = self.readTextFile("text1")
+        filename = "text1"
+        if(!APP_CFG_SHOW_SUPER_SLIDERS){ filename += "b" }
+        text = self.readTextFile(filename)
         textView1.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: accented)
         textView1.textColor = articleHeadLineColor
         textView1.backgroundColor = .black
@@ -163,7 +169,9 @@ class SliderDoc: UIViewController {
         posY += sliderViewHeight
         
     // 2
-        text = self.readTextFile("text2")
+        filename = "text2"
+        if(!APP_CFG_SHOW_SUPER_SLIDERS){ filename += "b" }
+        text = self.readTextFile(filename)
         textView2.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: accented)
         textView2.textColor = articleHeadLineColor
         textView2.backgroundColor = .black
@@ -192,7 +200,9 @@ class SliderDoc: UIViewController {
         
         
     // 3
-        text = self.readTextFile("text3")
+        filename = "text3"
+        if(!APP_CFG_SHOW_SUPER_SLIDERS){ filename += "b" }
+        text = self.readTextFile(filename)
         textView3.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: accented)
         textView3.textColor = articleHeadLineColor
         textView3.backgroundColor = .black
@@ -274,8 +284,10 @@ class SliderDoc: UIViewController {
     }
     
     @objc func reset() {
-        resetToDefaults()
-        refreshSliders()
+        resetToDefaults()   // global
+        refreshSliders()    // in this screen
+        
+        
     }
     
     private func readTextFile(_ filename: String) -> String {
