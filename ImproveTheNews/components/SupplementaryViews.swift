@@ -261,6 +261,7 @@ class SubtopicHeader: UICollectionReusableView {
         
         prioritySlider.setValue(num, animated: false)
         topicPriority.text = "represents \(percentage)% of your total news"
+        topicPriority.alpha = 0.0
     }
     
     @objc func goToTopic(topic: String) {
@@ -286,6 +287,7 @@ class SubtopicHeader: UICollectionReusableView {
         formatter.minimumSignificantDigits = 2
         let round = formatter.string(from: NSNumber(value: Int(percentage)))
         topicPriority.text = "represents \(round!)% of your total news"
+        topicPriority.alpha = 0.0
         
         let subtopic = label.currentTitle!
         var valueForApi = percentage

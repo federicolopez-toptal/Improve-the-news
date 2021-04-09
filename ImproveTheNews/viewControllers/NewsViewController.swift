@@ -101,6 +101,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         topicSliders.dismissDelegate = self //!!!
         topicSliders.sliderDelegate = self  //!!!
         
+        NotificationCenter.default.addObserver(self, selector: #selector(showSlidersInfo),
+            name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNews),
             name: UIApplication.willEnterForegroundNotification, object: nil)
        
@@ -422,6 +425,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     // MARK: - misc
+    @objc func showSlidersInfo() {
+        let sliders = SliderDoc()
+        self.present(sliders, animated: true, completion: nil)
+    }
+    
     @objc func refreshNews() {
         self.viewWillAppear(false)
     }
@@ -905,7 +913,11 @@ extension NewsViewController {
                 
                 //cell.backgroundColor = UIColor.red.withAlphaComponent(0.5)
                 cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
-                                                val2: newsParser.getPE(index: index))
+                                                val2: newsParser.getPE(index: index),
+                                                source: newsParser.getSource(index: index),
+                                                countryID: newsParser.getCountryID(index: index))
+                 
+                cell.miniSlidersView?.viewController = self
                 self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                 
                 return cell
@@ -948,7 +960,11 @@ extension NewsViewController {
                     }
                     
                     cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
-                                                val2: newsParser.getPE(index: index))
+                                                val2: newsParser.getPE(index: index),
+                                                source: newsParser.getSource(index: index),
+                                                countryID: newsParser.getCountryID(index: index))
+                                                
+                    cell.miniSlidersView?.viewController = self
                     self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                     return cell
                     
@@ -990,7 +1006,11 @@ extension NewsViewController {
                     }
                     
                     cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
-                                                val2: newsParser.getPE(index: index))
+                                                val2: newsParser.getPE(index: index),
+                                                source: newsParser.getSource(index: index),
+                                                countryID: newsParser.getCountryID(index: index))
+                                        
+                    cell.miniSlidersView?.viewController = self
                     self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                     return cell
                 }
@@ -1036,7 +1056,11 @@ extension NewsViewController {
                 }
                 
                 cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
-                                                val2: newsParser.getPE(index: index))
+                                                val2: newsParser.getPE(index: index),
+                                                source: newsParser.getSource(index: index),
+                                                countryID: newsParser.getCountryID(index: index))
+                         
+                cell.miniSlidersView?.viewController = self
                 self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                 cell.adjust()
                 

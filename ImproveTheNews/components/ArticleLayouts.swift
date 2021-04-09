@@ -45,6 +45,13 @@ class HeadlineCell: UICollectionViewCell {
         fatalError()
     }
       
+      
+    /*
+    @objc func buttonTap(sender: UIButton) {
+        print("GATO", "12312312312")
+    }
+    */
+      
     func setupViews() {
         
         addSubview(imageView)
@@ -63,6 +70,15 @@ class HeadlineCell: UICollectionViewCell {
             if(miniSlidersView == nil) {
                 miniSlidersView = MiniSlidersView(some: "")
                 miniSlidersView?.insertInto(view: imageView)
+                
+                /*
+                let button = UIButton(type: .system)
+                button.backgroundColor = .green
+                button.frame = miniSlidersView!.frame
+                button.addTarget(self, action: #selector(buttonTap(sender:)),
+                    for: .touchUpInside)
+                self.addSubview(button)
+                */
             }
             miniSlidersView?.setValues(val1: 3, val2: 1)
         }

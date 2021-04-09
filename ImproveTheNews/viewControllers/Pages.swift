@@ -26,7 +26,7 @@ Just as it’s healthier to choose what you eat deliberately than impulsively, i
 How is this funded?
 
 We have an ongoing research project led by Prof. Max Tegmark on machine learning for news classification.  Huge thanks to Mindy Long for creating this app that shares the results, to Kirti Shilwant and Federico López for further developing it, and to Tim Woolley for awesome design help.
-Since the news aggregation and classification is fully automated, running it as an ad-free public service costs us nothing except our cloud computing bill, which at our current (April 2015) traffic levels comes to less than $10/month.
+Since the news aggregation and classification is fully automated, running it as an ad-free public service costs us nothing except our cloud computing bill, which at our current (April 2020) traffic levels comes to less than $10/month.
 
 How does it work?
 

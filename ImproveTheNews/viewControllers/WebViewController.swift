@@ -13,6 +13,7 @@ import WebKit
 class WebViewController: UIViewController, WKUIDelegate {
     
     var pageURL = ""
+    var markupsLinks = [String]()
     
     var isMarkUpShowing = true
     
@@ -275,7 +276,8 @@ extension WebViewController {
         
         //print("# of markups: \(self.contestedclaims.count)")
         var first = true
-        for cc in self.contestedclaims {
+        self.markupsLinks = [String]()
+        for (i, cc) in self.contestedclaims.enumerated() {
 
             let markup = UIView(backgroundColor: accentOrange)
             stackView.addArrangedSubview(markup)
@@ -304,6 +306,51 @@ extension WebViewController {
                 ])
             }
             
+            let markupTitle = UILabel(text: cc.type, font: UIFont(name: "OpenSans-Bold", size: 15), textColor: .black, textAlignment: .left, numberOfLines: 2)
+            let str = NSMutableAttributedString(string: cc.description + " | Source", attributes: sourceLinkAttributes)
+            let foundRange = str.mutableString.range(of: "Source")
+            str.addAttribute(NSAttributedString.Key.link, value: cc.link, range: foundRange)
+            let markupText = ResponsiveTextView(backgroundColor: accentOrange)
+            markupText.attributedText = str
+            markupText.textContainerInset.left = -4
+            markupText.isEditable = false
+            markupText.dataDetectorTypes = .all
+            
+            markup.addSubview(markupTitle)
+            markupTitle.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                markupTitle.leadingAnchor.constraint(equalTo: markup.leadingAnchor, constant: 15),
+                markupTitle.trailingAnchor.constraint(equalTo: markup.trailingAnchor, constant: -40),
+                markupTitle.topAnchor.constraint(equalTo: markup.topAnchor, constant: 10),
+                markupTitle.heightAnchor.constraint(equalToConstant: 20)
+            ])
+            
+            markup.addSubview(markupText)
+            markupText.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                markupText.leadingAnchor.constraint(equalTo: markup.leadingAnchor, constant: 15),
+                markupText.trailingAnchor.constraint(equalTo: markup.trailingAnchor, constant: -15),
+                markupText.topAnchor.constraint(equalTo: markupTitle.bottomAnchor, constant: 5),
+                markupText.bottomAnchor.constraint(equalTo: markup.bottomAnchor, constant: -10),
+            ])
+            
+            
+            let buttonArea = UIButton(type: .system)
+            buttonArea.backgroundColor = .green
+            markup.addSubview(buttonArea)
+            buttonArea.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                buttonArea.leadingAnchor.constraint(equalTo: markup.leadingAnchor),
+                buttonArea.trailingAnchor.constraint(equalTo: markup.trailingAnchor),
+                buttonArea.topAnchor.constraint(equalTo: markup.topAnchor),
+                buttonArea.bottomAnchor.constraint(equalTo: markup.bottomAnchor)
+            ])
+            buttonArea.tag = 100 + i
+            self.markupsLinks.append(cc.link)
+            buttonArea.addTarget(self, action: #selector(buttonAreaTap(sender:)), for: .touchUpInside)
+            buttonArea.backgroundColor = .clear
+            buttonArea.superview?.sendSubviewToBack(buttonArea)
+            
             // add cancel button
             if first {
                 let dismissButton = UIButton(backgroundColor: accentOrange)
@@ -321,40 +368,19 @@ extension WebViewController {
                 ])
             }
             
-            let markupTitle = UILabel(text: cc.type, font: UIFont(name: "OpenSans-Bold", size: 15), textColor: .black, textAlignment: .left, numberOfLines: 2)
-            let str = NSMutableAttributedString(string: cc.description + " | Source link", attributes: sourceLinkAttributes)
-            let foundRange = str.mutableString.range(of: "Source link")
-            str.addAttribute(NSAttributedString.Key.link, value: cc.link, range: foundRange)
-            let markupText = ResponsiveTextView(backgroundColor: accentOrange)
-            markupText.attributedText = str
-            markupText.textContainerInset.left = -4
-            markupText.isEditable = false
-            markupText.dataDetectorTypes = .all
             
-            markup.addSubview(markupTitle)
-            markupTitle.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([
-                markupTitle.leadingAnchor.constraint(equalTo: markup.leadingAnchor, constant: 15),
-                markupTitle.trailingAnchor.constraint(equalTo: markup.trailingAnchor, constant: -40),
-                markupTitle.topAnchor.constraint(equalTo: markup.topAnchor, constant: 10),
-                markupTitle.heightAnchor.constraint(equalToConstant: 20)
-            ])
-            
-            
-            markup.addSubview(markupText)
-            markupText.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([
-                markupText.leadingAnchor.constraint(equalTo: markup.leadingAnchor, constant: 15),
-                markupText.trailingAnchor.constraint(equalTo: markup.trailingAnchor, constant: -15),
-                markupText.topAnchor.constraint(equalTo: markupTitle.bottomAnchor, constant: 5),
-                markupText.bottomAnchor.constraint(equalTo: markup.bottomAnchor, constant: -10),
-            ])
             
             first = false
         }
     
+    }
+    
+    @objc func buttonAreaTap(sender: UIButton) {
+        let index = sender.tag - 100
+        let link = self.markupsLinks[index]
+        let url = URL(string: link)
+        
+        UIApplication.shared.open(url!)
     }
     
 }
