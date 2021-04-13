@@ -50,6 +50,7 @@ class News {
     private var data: [NewsData]
     private var sectionCounts: [Int]
     private var sectionTitles: [String]
+    private var subTopicsCount: [Int]
     private var popularities: [Float]
     private var chosenPopularities: [Float]
     private var globalPopularities: [Float]
@@ -133,6 +134,7 @@ class News {
         hierarchy = ""
         chosenPopularities = []
         globalPopularities = []
+        subTopicsCount = []
         
     }
     
@@ -257,6 +259,10 @@ class News {
                             
                             if Int(index1) == 1 {
                                 let subtopic = articles[2].stringValue
+                                
+                                let num = articles[3].intValue
+                                self.subTopicsCount.append(num)
+                                
                                 self.sectionTitles.append(subtopic)
                                 self.popularities.append(articles[5].float!) // baseline popularities
                                 self.chosenPopularities.append(articles[6].float!) // chosen popularities
@@ -275,6 +281,10 @@ class News {
                                 //condition for the Ad section
                                 //if topic != "INFO" {
                                     let subtopic = articles[2].stringValue
+                                    
+                                    let num = articles[3].intValue
+                                    self.subTopicsCount.append(num)
+                                    
                                     self.sectionTitles.append(subtopic)
                                     if articles[5].float != nil {
                                         self.popularities.append(articles[5].float!)
@@ -560,6 +570,28 @@ class News {
             return self.data[index].countryID
         } else {
             return ""
+        }
+    }
+    
+    private func getSubTopicsCount(index: Int) -> Int {
+        if(validateDataIndex(index)){
+            return self.subTopicsCount[index]
+        } else {
+            return -1
+        }
+    }
+    func getSubTopicCountFor(topic: String) -> Int {
+        var index = -1
+        for (i, txt) in self.sectionTitles.enumerated() {
+            if(txt == topic) {
+                index = i
+                break
+            }
+        }
+        if(index == -1) {
+            return -1
+        } else {
+            return self.getSubTopicsCount(index: index)
         }
     }
     

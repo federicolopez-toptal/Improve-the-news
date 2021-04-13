@@ -472,13 +472,33 @@ extension NewsViewController: TopicSelectorDelegate {
     // MARK: - TopicSelectorDelegate Delegate
     func pushNewTopic(newTopic: String) {
     
+        var topicName = ""
+        for (key, value) in Globals.topicmapping {
+            if(value == newTopic) {
+                topicName = key
+            }
+        }
+        var count = -1
+        if(!topicName.isEmpty) {
+            count = newsParser.getSubTopicCountFor(topic: topicName)
+        }
+    
+        /*
         let mainTopic = newsParser.getTopic(index: 0)
         let mainTopic_B = Globals.topicmapping[mainTopic]!
         let subTopicsCount = newsParser.getNumOfSections()
+        */
         
         let vc = NewsViewController(topic: newTopic)
         
+        vc.param_A = 4
         vc.param_S = 4 // sumar 4? o 4 fijo?
+        if(count == 0) {
+            vc.param_A = 40
+        }
+        
+        
+        /*
         if newTopic == mainTopic_B {
             if(subTopicsCount==1) {
                 vc.param_A = 40
@@ -486,6 +506,7 @@ extension NewsViewController: TopicSelectorDelegate {
         } else {
             
         }
+        */
         
         if(Utils.shared.didTapOnMoreLink && newTopic=="news") {
             vc.param_A = 10
@@ -1104,6 +1125,9 @@ extension NewsViewController {
             }
             
             
+            // % label tmp removed !!!
+            h -= 20
+            
             if(section>0) {
                 h -= 20
             }
@@ -1549,7 +1573,7 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
         */
         
         var offsetY: CGFloat = 0
-        var firstItemHeight: CGFloat = 666 + 8
+        var firstItemHeight: CGFloat = 666 + 8 - 20
         if let info = BannerInfo.shared {
             let count = self.navigationController!.viewControllers.count
             if(count==1 && info.active) {
@@ -1558,7 +1582,7 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
         }
         
         //736-20-20-20
-        let otherItemsHeight: CGFloat = 681 + 8 //861-20-20-30-100-20
+        let otherItemsHeight: CGFloat = 681 + 8 - 20 //861-20-20-30-100-20
         let slidersHeight: CGFloat = 29
         
         if(index>0) {
