@@ -92,7 +92,6 @@ func createTopicPrefs() -> String {
         }
     }
     
-    print("GATO4", count, request)
     return request
     
 }

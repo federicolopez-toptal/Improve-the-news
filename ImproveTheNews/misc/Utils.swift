@@ -12,8 +12,14 @@ class Utils {
     
     static var shared = Utils()
 
+
+
+
     // Some util flags across the app
     var didTapOnMoreLink = false
+    
+    // IDs for NewsViewController instances
+    var newsViewController_ID = 0
     
 }
 

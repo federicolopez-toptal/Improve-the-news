@@ -224,7 +224,6 @@ class PieChartViewController: UIViewController {
         let topic = self.topics[index]
         let key = Globals.slidercodes[topic]!
         
-        print("GATO4 changed", key, newValue)
         self.setValueForKey(key, value: newValue)
         
         self.delegate?.someValueDidChange()

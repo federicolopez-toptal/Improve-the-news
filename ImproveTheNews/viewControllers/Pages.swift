@@ -21,7 +21,7 @@ What is this?
 
 This is a news aggregator developed by a group of researchers at MIT and elsewhere to give you control of your news consumption, as explained in this video.
 
-Just as it’s healthier to choose what you eat deliberately than impulsively, it’s more empowering to chose your news diet deliberately on this site than to randomly read what marketers and machine-learning algorithms elsewhere predict that you’ll impulsively click on. You can make these deliberate choices about topic, bias, style, etc. by adjusting sliders described under "How the sliders work".
+Just as it’s healthier to choose what you eat deliberately rather than impulsively, it’s more empowering to choose your news diet deliberately on this site than to randomly read what marketers and machine-learning algorithms elsewhere predict that you’ll impulsively click on. You can make these deliberate choices about topic, bias, style, etc. by adjusting sliders described under "How the sliders work".
 
 How is this funded?
 

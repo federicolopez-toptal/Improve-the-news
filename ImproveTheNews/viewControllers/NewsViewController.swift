@@ -14,6 +14,9 @@ import SDWebImage
 class NewsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout,
     NewsDelegate {
 
+    var uniqueID = -1
+    let NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES = Notification.Name("reloadNewsInOtherInstances")
+
     let newsParser = News()                 // parser
 
     // components
@@ -88,6 +91,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     override func viewDidLoad() {
+    
+        Utils.shared.newsViewController_ID += 1
+        self.uniqueID = Utils.shared.newsViewController_ID
+    
         overrideUserInterfaceStyle = .dark
                 
         self.collectionView.delegate = self
@@ -103,6 +110,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         NotificationCenter.default.addObserver(self, selector: #selector(showSlidersInfo),
             name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(reloadOtherInstances(notification:)),
+            name: NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNews),
             name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -239,7 +249,16 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         link += "&uid=3"
         if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
-            link += deviceId
+            var fixedID = deviceId.uppercased()
+            fixedID = fixedID.replacingOccurrences(of: "-", with: "")
+            fixedID = fixedID.replacingOccurrences(of: "A", with: "0")
+            fixedID = fixedID.replacingOccurrences(of: "B", with: "1")
+            fixedID = fixedID.replacingOccurrences(of: "C", with: "2")
+            fixedID = fixedID.replacingOccurrences(of: "D", with: "3")
+            fixedID = fixedID.replacingOccurrences(of: "E", with: "4")
+            fixedID = fixedID.replacingOccurrences(of: "F", with: "5")
+            
+            link += fixedID //deviceId
         }
             
         return link
@@ -428,6 +447,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     @objc func showSlidersInfo() {
         let sliders = SliderDoc()
         self.present(sliders, animated: true, completion: nil)
+    }
+    @objc func reloadOtherInstances(notification: NSNotification) {
+        if let fromID = notification.userInfo?["id"] as? Int {
+            if(fromID != self.uniqueID) {
+                self.firstTime = true
+                //self.reload()
+            }
+        }
     }
     
     @objc func refreshNews() {
@@ -686,6 +713,11 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
     
     // For BiasSliderDelegate protocol
     func biasSliderDidChange(sliderId: Int) {
+    
+        let dict = ["id": self.uniqueID]
+        NotificationCenter.default.post(name: NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES,
+                                        object: nil,
+                                        userInfo: dict)
         
         //biasSliders.activityView.startAnimating()
         biasSliders.showLoading(true)
