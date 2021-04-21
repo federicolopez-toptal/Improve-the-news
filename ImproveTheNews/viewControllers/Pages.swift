@@ -313,7 +313,7 @@ class PrivacyPolicy: UIViewController {
     
     let textView = UITextView()
     let text = """
-WHAT PERSONAL DATA WE COLLECT AND WHY WE COLLECT IT
+What personal data we collect and why we collect it
 This site is provided as a free public service with no commercial aspirations whatsoever, so we will never share personal data about you with anybody unless legally forced to. The hosting provider for the website (currently AWS) may store IP addresses for security reasons and to maintain the integrity of the hosting platform. These are deleted when they are no longer needed.
 
 Cookies
@@ -325,16 +325,16 @@ To prevent server overload,  track site growth and research usage patterns, we k
 Embedded and linked content from other websites
 All articles you may read as a result of visiting our site are hosted on external news sites, so from a privacy perspective, reading them is equivalent to visiting those sites directly. These news sites may collect data about you, use cookies, embed additional third-party tracking, and monitor your interaction with that embedded content, including tracing your interaction with embedded content if you have an account and are logged in to that website.
 
-WHO WE SHARE YOUR DATA WITH
+Who we share your data with
 We will not share your data unless legally forced to.
 
-HOW LONG WE RETAIN YOUR DATA
+How long we retain your data
 If you fill out the feedback form, your feedback and its metadata are retained indefinitely, so we can keep track of any suggestions you may have and hopefully implement them. We also do not delete the above-mentioned analytics data, to keep open the possibility of future research.
 
-WHAT RIGHTS YOU HAVE OVER YOUR DATA
+What rights you have over your data
 If you have used this site, you can use our feedback form to request to receive an exported file of all data we hold about you. You can also request that we erase any personal data we hold about you. If you any privacy-specific concerns, please fill out our feedback form.
 
-ADDITIONAL INFORMATION
+Additional information
 How we protect your data
 Any data you’ve provided us is stored on a secure server.
 
@@ -350,7 +350,7 @@ We do not use user data for automated decision making or profiling.
 Industry regulatory disclosure requirements
 We are not part of a regulated industry.
 """
-    let bold = ["WHAT PERSONAL DATA WE COLLECT AND WHY WE COLLECT IT","Embedded and linked content from other websites", "Cookies", "Analytics", "WHO WE SHARE YOUR DATA WITH", "HOW LONG WE RETAIN YOUR DATA", "WHAT RIGHTS YOU HAVE OVER YOUR DATA", "Data breach procedures we have in place", "ADDITIONAL INFORMATION", "Third parties we receive data from", "Automated decision making and/or profiling we do with user data", "Industry regulatory disclosure requirements"] as [NSString]
+    let bold = ["What personal data we collect and why we collect it","Embedded and linked content from other websites", "Cookies", "Analytics", "Who we share your data with", "How long we retain your data", "What rights you have over your data", "Data breach procedures we have in place", "Additional information", "Third parties we receive data from", "Automated decision making and/or profiling we do with user data", "Industry regulatory disclosure requirements"] as [NSString]
     let paths = ["https://www.allsides.com/media-bias/media-bias-ratings"]
     let linked = ["here"]
     

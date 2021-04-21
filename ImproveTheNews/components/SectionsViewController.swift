@@ -76,7 +76,29 @@ class SectionsViewController: UIViewController {
         let customBackButton = UIBarButtonItem(image: img, style: .plain,
             target: self, action: #selector(customBackButtonTap(sender:)))
         self.navigationItem.rightBarButtonItem  = customBackButton
+        
+        self.addVersionNumber()
     }
+    
+    private func addVersionNumber() {
+        
+        let val_y = UIScreen.main.bounds.height - 25 - 88 - 20
+        let val_w = UIScreen.main.bounds.width - 30
+        let vLabel = UILabel(text: "version 1.0",
+                        font: UIFont(name: "Poppins-SemiBold", size: 13),
+                        textColor: accentOrange,
+                        textAlignment: .center,
+                        numberOfLines: 1)
+        vLabel.backgroundColor = .clear
+        vLabel.frame = CGRect(x: 15, y: val_y, width: val_w, height: 25)
+        vLabel.alpha = 0.75
+        
+        vLabel.text = "version " + Bundle.main.releaseVersionNumber! + " (build " +
+                    Bundle.main.buildVersionNumber! + ")"
+        
+        self.view.addSubview(vLabel)
+    }
+    
     
     /*
     override func viewDidAppear(_ animated: Bool) {
@@ -178,5 +200,17 @@ struct SectionsPreview: PreviewProvider {
             
         }
         
+    }
+}
+
+
+
+
+extension Bundle {
+    var releaseVersionNumber: String? {
+        return infoDictionary?["CFBundleShortVersionString"] as? String
+    }
+    var buildVersionNumber: String? {
+        return infoDictionary?["CFBundleVersion"] as? String
     }
 }

@@ -43,6 +43,7 @@
 		BD0FEDA925D170500079A32B /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */; };
 		BD0FEDD125D17AF60079A32B /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDCF25D17AF60079A32B /* OpenSans-SemiBold.ttf */; };
 		BD0FEDD225D17AF60079A32B /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */; };
+		BD1B39CE262F270000CDC9F0 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1B39CD262F270000CDC9F0 /* UIDeviceExtension.swift */; };
 		BD252539261CCF2A0090D04A /* text1b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD252536261CCF2A0090D04A /* text1b.txt */; };
 		BD25253A261CCF2A0090D04A /* text3b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD252537261CCF2A0090D04A /* text3b.txt */; };
 		BD25253B261CCF2A0090D04A /* text2b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD252538261CCF2A0090D04A /* text2b.txt */; };
@@ -327,6 +328,7 @@
 		BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		BD0FEDCF25D17AF60079A32B /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		BD0FEDD025D17AF60079A32B /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		BD1B39CD262F270000CDC9F0 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		BD252536261CCF2A0090D04A /* text1b.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text1b.txt; sourceTree = "<group>"; };
 		BD252537261CCF2A0090D04A /* text3b.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text3b.txt; sourceTree = "<group>"; };
 		BD252538261CCF2A0090D04A /* text2b.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text2b.txt; sourceTree = "<group>"; };
@@ -756,6 +758,7 @@
 				BDD540DA25EEE09600AF4F91 /* DateExtension.swift */,
 				BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */,
 				BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */,
+				BD1B39CD262F270000CDC9F0 /* UIDeviceExtension.swift */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -1474,6 +1477,7 @@
 				A8CA063424EB3B0A00B91778 /* BiasSliders.swift in Sources */,
 				A8A7935C2482F98C009A55FE /* TabBarController.swift in Sources */,
 				BD2813EE25F6A7D000A91E38 /* SliderDocNewVersion.swift in Sources */,
+				BD1B39CE262F270000CDC9F0 /* UIDeviceExtension.swift in Sources */,
 				BD4652A3260E68EC00FFFB11 /* UIColorExtension.swift in Sources */,
 				A8FBAAA724B017610011225B /* SliderValues.swift in Sources */,
 				BDD540DB25EEE09600AF4F91 /* DateExtension.swift in Sources */,
@@ -1644,7 +1648,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0.6;
+				CURRENT_PROJECT_VERSION = 0.4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -1655,7 +1659,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ITNFoundation.ITNaggregator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1671,7 +1675,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0.6;
+				CURRENT_PROJECT_VERSION = 0.4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -1682,7 +1686,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ITNFoundation.ITNaggregator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -77,7 +77,6 @@ class WebViewController: UIViewController, WKUIDelegate {
         hidesBottomBarWhenPushed = true
         
         loadMarkups()
-    
     }
     
     required init?(coder: NSCoder) {
@@ -89,8 +88,8 @@ class WebViewController: UIViewController, WKUIDelegate {
         let webview = WKWebView(frame: .zero, configuration: webConfiguration)
         webview.uiDelegate = self
         webview.translatesAutoresizingMaskIntoConstraints = false
-        
-//        view.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+
+//        view.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress),options: .new, context: nil)
 
         return webview
     }()
@@ -100,15 +99,17 @@ class WebViewController: UIViewController, WKUIDelegate {
         return progress
     }()
     
+    var webViewTopConstraint: NSLayoutConstraint?
     func setupUI() {
         self.view.backgroundColor = .white
         
         //self.view.addSubview(progressView)
         self.view.addSubview(webView)
         
+        self.webViewTopConstraint = webView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
+             
         NSLayoutConstraint.activate([
-            webView.topAnchor
-                .constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.webViewTopConstraint!,
             webView.leftAnchor
                 .constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
             webView.bottomAnchor
@@ -223,6 +224,9 @@ extension WebViewController {
         markupTopAnchorVisible?.isActive = false
         markupTopAnchorHidden?.isActive = true
         
+        self.webViewTopConstraint!.constant = 0
+        self.webView.layoutIfNeeded()
+        
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
 
             self.view.layoutIfNeeded()
@@ -276,6 +280,7 @@ extension WebViewController {
         
         //print("# of markups: \(self.contestedclaims.count)")
         var first = true
+        var heightSum: CGFloat = 0.0
         self.markupsLinks = [String]()
         for (i, cc) in self.contestedclaims.enumerated() {
 
@@ -288,6 +293,7 @@ extension WebViewController {
                 markup.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
                 markup.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             ])
+            heightSum += 100
             
             // add top border
             if !first {
@@ -373,6 +379,17 @@ extension WebViewController {
             first = false
         }
     
+        // ---------------------------
+        /*
+        webView
+        
+        
+                .constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor,
+                constant: heightSum)
+            */
+            
+        self.webViewTopConstraint!.constant = heightSum
+        self.webView.layoutIfNeeded()
     }
     
     @objc func buttonAreaTap(sender: UIButton) {

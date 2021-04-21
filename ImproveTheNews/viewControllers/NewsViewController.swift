@@ -9,6 +9,7 @@
 import UIKit
 import LBTATools
 import SDWebImage
+import SafariServices
 
 
 class NewsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout,
@@ -200,6 +201,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 DELAY(2.0) {
                     self.loadingView.isHidden = true
                     self.firstTime = false
+                    self.collectionView.reloadData()
                     self.stopRefresher()
                 }
 
@@ -232,6 +234,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             ".A\(self.param_A)" + ".B\(self.param_B)" +
             ".S\(self.param_S)"
         var nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
+        print("GATO6 >>> ", createTopicPrefs() )
         
         for bannerID in BannerView.bannerHeights.keys {
             let key = "banner_apiParam_" + bannerID
@@ -260,13 +263,24 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             
             link += fixedID //deviceId
         }
+        
+        // appVersion
+        link += "&appversion=I" + Bundle.main.releaseVersionNumber!
+        link += "&devicetype=" + UIDevice.current.modelName.replacingOccurrences(of: " ",
+                                    with: "_")
             
         return link
     }
     
     func reload() {
-        print("reload?")
+        // reload?
+        print("GATO7 - reload")
         self.collectionView.reloadData()
+        if(self.collectionView.numberOfSections>0) {
+            print("GATO7 - reload section 0")
+            self.collectionView.reloadSections([0])
+            self.collectionView.setNeedsDisplay()
+        }
         
         self.hierarchy = ""
         self.hierarchy = newsParser.getHierarchy()
@@ -742,7 +756,8 @@ extension NewsViewController: PieChartViewControllerDelegate {
         //self.pieChartVC.modalPresentationStyle = .fullScreen
         if(!self.pieChartVC.isBeingPresented) {
             self.pieChartVC.set(topics: newsParser.getAllTopics(),
-                        popularities: newsParser.getPopularities())
+                        popularities: newsParser.getGlobalPopularities())
+                        //popularities: newsParser.getPopularities())
         
             self.present(self.pieChartVC, animated: true) {
             }
@@ -912,7 +927,29 @@ extension NewsViewController: shareDelegate {
 extension NewsViewController: BannerInfoDelegate {
 
     func BannerInfoOnClose() {
-        self.reload()
+        //self.reload()
+        
+        //self.firstTime = true
+        //self.loadData()
+        
+        DispatchQueue.main.async {
+            self.loadArticles()
+            self.reload()
+            self.updateTopicSliders()
+            if Globals.isSliderOn {
+                self.configureBiasSliders()
+            }
+            
+            DELAY(0.5) {
+                self.loadingView.isHidden = true
+                self.firstTime = false
+                self.collectionView.reloadData()
+                self.stopRefresher()
+                
+                self.collectionView.setNeedsDisplay()
+                self.collectionView.setNeedsLayout()
+            }
+        }
     }
     
 }
@@ -1196,8 +1233,8 @@ extension NewsViewController {
                     // SEE MORE + horizontal menu
                     var h: CGFloat = 80 + 55 - 20
                     if let bannerInfo = BannerInfo.shared {
-                        let count = self.navigationController!.viewControllers.count
-                        if(bannerInfo.active && count==1) {
+                        //let count = self.navigationController!.viewControllers.count
+                        if(bannerInfo.active && self.uniqueID==1) {
                             h += BannerView.getHeightForBannerCode(bannerInfo.adCode)
                         }
                     }
@@ -1335,8 +1372,23 @@ extension NewsViewController {
         let markups = newsParser.getMarkups(index: index)
         //let markups = [ Markups(type: "T", description: "abc", link: "http://www.google.com") ]
        
+        
+        
         let vc = WebViewController(url: link, title: title, annotations: markups)
         navigationController?.pushViewController(vc, animated: true)
+        
+        /*
+        let config = SFSafariViewController.Configuration()
+        config.entersReaderIfAvailable = true
+        config.barCollapsingEnabled = false
+        
+        let url = URL(string: link)!
+        let safariVC = SFSafariViewController(url: url, configuration: config)
+        safariVC.modalPresentationStyle = .fullScreen
+        self.present(safariVC, animated: true, completion: nil)
+        */
+        
+        //navigationController?.pushViewController(safariVC, animated: true)
         
     }
     
@@ -1557,8 +1609,9 @@ extension NewsViewController {
                         seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                         seeMore.configure()
                         
-                        let count = self.navigationController!.viewControllers.count
-                        if(count==1 && BannerInfo.shared != nil){
+                        
+                        //let count = self.navigationController!.viewControllers.count
+                        if(self.uniqueID==1 && BannerInfo.shared != nil){
                             seeMore.buildBanner()
                         }
                         
@@ -1607,8 +1660,8 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
         var offsetY: CGFloat = 0
         var firstItemHeight: CGFloat = 666 + 8 - 20
         if let info = BannerInfo.shared {
-            let count = self.navigationController!.viewControllers.count
-            if(count==1 && info.active) {
+            //let count = self.navigationController!.viewControllers.count
+            if(self.uniqueID==1 && info.active) {
                 firstItemHeight += BannerView.getHeightForBannerCode(info.adCode)
             }
         }

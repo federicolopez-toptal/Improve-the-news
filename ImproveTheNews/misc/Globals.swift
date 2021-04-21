@@ -71,6 +71,19 @@ func topicStrToDict(str: String) {
 func createTopicPrefs() -> String {
     
     var request = ""
+    
+    for (_, code) in Globals.slidercodes {
+        if let value = UserDefaults.standard.object(forKey: code) as? Float {
+            var v = value.rounded()
+            if(v > 99){ v = 99 }
+            if(v >= 0){
+                request += code + String(format: "%02d", Int(v))
+            }
+        }
+    }
+    
+    /*
+    var request = ""
     var count = 0
     
     for (_, code) in Globals.slidercodes {
@@ -91,6 +104,7 @@ func createTopicPrefs() -> String {
             }
         }
     }
+    */
     
     return request
     

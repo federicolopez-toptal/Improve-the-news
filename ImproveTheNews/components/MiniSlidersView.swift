@@ -111,7 +111,7 @@ class MiniSlidersView: UIView {
             self.textOnTap = self.textOnTap.replacingOccurrences(of: "<SOURCE>", with: cleanSource)
         }
         self.textOnTap += self.NATIONALITY_forID(countryID)
-        self.textOnTap += " has a " + LR_text(val) + " and "
+        self.textOnTap += "has a " + LR_text(val) + " and "
         
         mFrame = thumb1.frame
         mFrame.origin.y = -3

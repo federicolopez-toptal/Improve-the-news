@@ -18,6 +18,8 @@ protocol PieChartViewControllerDelegate {
 
 class PieChartViewController: UIViewController {
 
+    let SHOW_VALUE_LABEL = false
+
     var delegate: PieChartViewControllerDelegate?
 
     private var topicForTitle = ""
@@ -150,6 +152,7 @@ class PieChartViewController: UIViewController {
     mainVStack.addArrangedSubview(title2Label)
         
     // Each item (topic) listed
+        var total: Float = 0
         let colors = Array(self.allcolors[..<self.topics.count])
         for (i, topic) in self.topics.enumerated() {
             
@@ -185,6 +188,22 @@ class PieChartViewController: UIViewController {
                 name.widthAnchor.constraint(equalToConstant: 150)
             ])
             
+            let valueLabel = UILabel(text: "00", font: UIFont(name: "Poppins-SemiBold", size: 12), textColor: UIColor.white.withAlphaComponent(0.5), textAlignment: .right, numberOfLines: 2)
+            valueLabel.adjustsFontSizeToFitWidth = true
+            topicView.addSubview(valueLabel)
+            valueLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                valueLabel.leadingAnchor.constraint(equalTo: colorBar.trailingAnchor, constant: 5),
+                valueLabel.topAnchor.constraint(equalTo: topicView.topAnchor),
+                valueLabel.bottomAnchor.constraint(equalTo: topicView.bottomAnchor),
+                valueLabel.widthAnchor.constraint(equalToConstant: 150)
+            ])
+            valueLabel.tag = i + 200
+            valueLabel.text = self.formatValue(self.popularities[i])
+            valueLabel.alpha = 0
+            
+            total += self.popularities[i]
+            
             let slider = UISlider(backgroundColor: accentOrange)
             slider.minimumValue = 0
             slider.maximumValue = 99
@@ -194,6 +213,7 @@ class PieChartViewController: UIViewController {
             slider.tag = i + 100
             
             slider.isContinuous = false
+            //slider.setValue(self.popularities[i], animated: false)
             slider.setValue(self.popularities[i], animated: false)
             
             topicView.addSubview(slider)
@@ -204,27 +224,51 @@ class PieChartViewController: UIViewController {
                 slider.trailingAnchor.constraint(equalTo: topicView.trailingAnchor, constant: -10)
             ])
         }
+        print("GATO6 total:", total)
+        print("GATO6 -----------------")
     }
 
     // MARK: - Some event/action(s)
-    @objc func sliderValueDidChange(_ sender:UISlider!){
-        let index = sender.tag - 100
-        let newValue: Float
+    @objc func sliderValueDidChange(_ sender: UISlider!){
+    
+        let i = sender.tag - 100
+    
+        // update label value
+        let valueLabel = sender.superview?.viewWithTag(i + 200) as! UILabel
+        valueLabel.text = self.formatValue(sender.value)
         
-        if sender.value > 1 {
-            newValue = sender.value
-        } else {
-            newValue = 1
+        let prevValue = self.popularities[i]
+        let newValue = sender.value
+        let diff = newValue - prevValue
+        let change = (diff / Float(self.popularities.count-1)) * -1
+        
+        self.popularities[i] = sender.value
+        for (j, p) in self.popularities.enumerated() {
+            if(j != i) {
+                var newValue = self.popularities[j] + change
+                if(newValue < 0.0) {
+                    newValue = 0
+                }
+                self.popularities[j] = newValue
+            }
+            
+            let value = self.popularities[j]
+            
+            if let slider = self.view.viewWithTag(j + 100) as? UISlider {
+                slider.value = value
+            }
+            if let label = self.view.viewWithTag(j + 200) as? UILabel {
+                label.text = self.formatValue(value)
+            }
         }
-        
-        self.popularities[index] = newValue
         self.setChartData()
         
-        // write this locally
-        let topic = self.topics[index]
-        let key = Globals.slidercodes[topic]!
         
-        self.setValueForKey(key, value: newValue)
+        for (i, t) in self.topics.enumerated() {
+            if let key = Globals.slidercodes[t] {
+                self.setValueForKey(key, value: self.popularities[i])
+            }
+        }
         
         self.delegate?.someValueDidChange()
     }
@@ -234,18 +278,46 @@ class PieChartViewController: UIViewController {
         }
     }
     
+    // MARK: - misc
+    private func formatValue(_ value: Float) -> String {
+        return String(format: "%.2f", value)
+    }
+    private func printPopularities() {
+        let index = 6
+        for (i, p) in self.popularities.enumerated() {
+            print("GATO\(index) \(i): \(p)")
+        }
+        print("GATO\(index) -------------------")
+    }
+    
     // MARK: - Data
     func set(topics: [String], popularities: [Float]) {
         self.topicForTitle = topics.first!
         
         self.topics = topics
         self.topics.removeFirst()
-        self.popularities = popularities.map { $0 * 100 }
+        
+        self.popularities = popularities
         self.popularities.removeFirst()
+        
+        var total: Float = 0
+        for p in self.popularities {
+            total += p
+        }
+
+        var tmp: Float = 0
+        for (i, p) in self.popularities.enumerated() {
+            let val = (p * 100)/total
+            self.popularities[i] = val
+            
+            tmp += val
+        }
+        
+        sortData()
         build_UI()
     }
     
-    func setChartData() {
+    private func setChartData() {
         var dataEntries: [ChartDataEntry] = []
         
         for (i, topic) in self.topics.enumerated() {
@@ -264,6 +336,27 @@ class PieChartViewController: UIViewController {
         let formatter = DefaultValueFormatter(formatter: format)
         pieChartData.setValueFormatter(formatter)
         pieChart.data = pieChartData
+    }
+    
+    private func sortData() {
+        // Sort by popularities
+        var dict = [String: Float]()
+        for (i, topic) in self.topics.enumerated() {
+            dict[topic] = self.popularities[i]
+        }
+        let sortedElements = dict.sorted {
+            return $0.value > $1.value
+        }
+        
+        self.topics.removeAll()
+        self.popularities.removeAll()
+        for e in sortedElements {
+            let top = e.key
+            let pop = e.value
+            
+            self.topics.append(top)
+            self.popularities.append(pop)
+        }
     }
     
     // MARK: - UserDefaults

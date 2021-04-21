@@ -237,13 +237,21 @@ class BannerView: UIView {
     }
     @objc func closeView(sender: UIButton) {
         if(self.onOff.isOn) {
-            BannerInfo.shared!.setApiParamValue("03") // Close + Don't show again
-            UserDefaults.setBoolValue(false, forKey: "banner_" + BannerInfo.shared!.adCode)
+            if let info = BannerInfo.shared {
+                info.setApiParamValue("03") // Close + Don't show again
+                UserDefaults.setBoolValue(false, forKey: "banner_" + BannerInfo.shared!.adCode)
+                info.active = false
+            }
         } else {
-            BannerInfo.shared!.setApiParamValue("02") // Only close
+            if let info = BannerInfo.shared {
+                info.setApiParamValue("02") // Only close
+                info.active = false
+            }
         }
-        BannerInfo.shared!.active = false
-        BannerInfo.shared?.delegate?.BannerInfoOnClose()
+        
+        if let del = BannerInfo.shared?.delegate {
+            del.BannerInfoOnClose()
+        }
     }
     
     // --------------------------
