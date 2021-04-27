@@ -35,14 +35,21 @@ class SectionViewCell: UITableViewCell {
 
 class SectionsViewController: UIViewController {
     
-    let support = ["FAQ", "How the sliders work", "Feedback", "Privacy Policy", "Contact"]
+    var support = [String]()
     let feedbackForm = "https://docs.google.com/forms/d/e/1FAIpQLSfoGi4VkL99kV4nESvK71k4NgzcVuIo4o-JDrlmBqArLR_IYA/viewform"
         
     let tableView = UITableView()
     var safeArea: UILayoutGuide!
     
+    private let layoutNames = ["Dense & intense", "Big & beautiful", "Text only"]
+    
     override func loadView() {
         super.loadView()
+        
+        self.support = ["FAQ", "How the sliders work", "Feedback", "Privacy Policy", "Contact"]
+        if(APP_CFG_SHOW_LAYOUTS) {
+            self.support.append("Change Layout")
+        }
         
         navigationItem.largeTitleDisplayMode = .never
         safeArea = view.layoutMarginsGuide
@@ -170,10 +177,45 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
             case 4:
                 let contact = ContactPage()
                 present(contact, animated: true, completion: nil)
+            case 5:
+                self.selectLayout()
             default:
                 fatalError()
         }
             
+    }
+    
+    
+    
+    
+    private func selectLayout() {
+        let actionSheet = UIAlertController(title: "",
+                                            message: "Select a layout to visualize the news",
+                                            preferredStyle: .actionSheet)
+         
+        let layout_1 = UIAlertAction(title: layoutNames[0], style: .default) { (action) in
+            self.selectLayout(0)
+        }
+        let layout_2 = UIAlertAction(title: layoutNames[1], style: .default) { (action) in
+            self.selectLayout(1)
+        }
+        let layout_3 = UIAlertAction(title: layoutNames[2], style: .default) { (action) in
+            self.selectLayout(2)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .destructive) { (action) in
+        }
+        
+        actionSheet.addAction(layout_1)
+        actionSheet.addAction(layout_2)
+        actionSheet.addAction(layout_3)
+        actionSheet.addAction(cancel)
+        
+        
+        self.present(actionSheet, animated: true) {
+        }
+    }
+    private func selectLayout(_ index: Int) {
+    
     }
     
     func deselect() {

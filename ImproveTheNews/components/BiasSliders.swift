@@ -35,7 +35,7 @@ class SliderPopup: UIView {
             "Political stance","Establishment stance","Writing style","Depth","Shelf-life","Recency"
     ]
     let descriptions = [["LEFT", "RIGHT"], ["CRITICAL", "PRO"], ["PROVOCATIVE", "NUANCED"], ["BREEZY", "DETAILED"],
-                        ["BRIEF", "LONG"], ["EVERGREEN", "LATEST"]]
+                        ["SHORT", "LONG"], ["EVERGREEN", "LATEST"]]
     let keys = ["LeRi", "proest", "nuance", "depth", "shelflife", "recency"]
     
     lazy var showMore: UIButton = {

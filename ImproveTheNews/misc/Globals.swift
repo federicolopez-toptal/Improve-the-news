@@ -24,7 +24,12 @@ var hArray = [String]()
 let APP_CFG_SHOW_MINI_SLIDERS = true
 let APP_CFG_SHOW_FLAGS = true
 
-// false/false for v1.0
+
+
+
+let APP_CFG_SHOW_LAYOUTS = false
+
+// false/false for v1
 let APP_CFG_SHOW_PIE_CHART = false
 let APP_CFG_SHOW_SUPER_SLIDERS = false
 

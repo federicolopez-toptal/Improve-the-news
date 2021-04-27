@@ -9,15 +9,21 @@
 import Foundation
 import UIKit
 import Cosmos
+import SwiftyJSON
+
+protocol RatingsLauncherDelegate {
+    func RatingOnError()
+}
+
+
 
 class RatingsLauncher: UIView {
     
     var sliderValues: SliderValues!
+    var delegate: RatingsLauncherDelegate?
+    
     static var ratings = 1
         
-    // VERY IMPORTANT
-    let requesturl = "http://ec2-3-21-45-12.us-east-2.compute.amazonaws.com/recordfb_app.php"
-    
     lazy var cosmos: CosmosView = {
         let stars = CosmosView()
         stars.settings.starMargin = 5
@@ -114,6 +120,96 @@ extension RatingsLauncher {
     
     func submitRatings(rating: Int, seconds: Double) {
         
+        let domain = "https://www.improvethenews.org"
+        //let domain = "http://ec2-3-134-77-115.us-east-2.compute.amazonaws.com"
+        var link = domain + "/srating.php"
+        
+        // uid
+        if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
+            link += "?uid=3"
+            
+            var fixedID = deviceId.uppercased()
+            fixedID = fixedID.replacingOccurrences(of: "-", with: "")
+            fixedID = fixedID.replacingOccurrences(of: "A", with: "0")
+            fixedID = fixedID.replacingOccurrences(of: "B", with: "1")
+            fixedID = fixedID.replacingOccurrences(of: "C", with: "2")
+            fixedID = fixedID.replacingOccurrences(of: "D", with: "3")
+            fixedID = fixedID.replacingOccurrences(of: "E", with: "4")
+            fixedID = fixedID.replacingOccurrences(of: "F", with: "5")
+            link += fixedID
+        }
+        
+        // url
+        var articleURL = self.sliderValues.getCurrentArticle()
+        articleURL = articleURL.replacingOccurrences(of: "//", with: "")
+        
+        link += "&url=" + articleURL.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        
+        // rating
+        link += "&rating=" + String(rating)
+        
+        // pwd
+        link += "&pwd=31415926535"
+        
+        // call api for ratings
+        let url = URL(string: link)!
+        //var jsonData: Data?
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if(error != nil || data == nil) {
+                self.delegate?.RatingOnError()
+                return
+            }
+            
+            do {
+                let responseJSON = try JSON(data: data!)
+                for (key, value) in responseJSON {
+                    if(key == "status" && value.intValue == 200) {
+                        print("Rating sent successfully")
+                    }
+                }
+                
+            } catch let jsonError {
+                self.delegate?.RatingOnError()
+            }
+        }
+        task.resume()
+        
+        /*
+        let task = URLSession.shared.dataTask(with: url!) { data, response, error in
+            
+            if error != nil || data == nil {
+                print("Client error!")
+                return
+            }
+            
+            do {
+                let decodedData = try JSON(data: data)
+            }
+            
+            
+                
+            /*
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                    print("Server error!")
+                    self.newsDelegate!.resendRequest()
+                return
+            }
+            
+            do {
+                jsonData = data!
+                self.parse(jsonData: jsonData!)
+            }
+            */
+        }
+        task.resume()
+        */
+        
+        
+        
+        
+        /*
         // prepare post parameters
         let requesturl = "http://ec2-3-21-45-12.us-east-2.compute.amazonaws.com/recordfb_app.php"
         if !UserDefaults.exists(key: "uuid") {
@@ -134,5 +230,6 @@ extension RatingsLauncher {
                 print("Success!")
             }
         }.resume()
+        */
     }
 }

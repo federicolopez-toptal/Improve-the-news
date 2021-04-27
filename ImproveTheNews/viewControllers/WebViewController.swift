@@ -113,11 +113,11 @@ class WebViewController: UIViewController, WKUIDelegate {
             webView.leftAnchor
                 .constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
             webView.bottomAnchor
-                .constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+                .constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -40),
             webView.rightAnchor
                 .constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor)
         ])
-        
         self.view.addSubview(markupView)
         
         NSLayoutConstraint.activate([
@@ -169,6 +169,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         navigationItem.setRightBarButton(shareBarButton, animated: true)
         navigationItem.setLeftBarButton(backBarButton, animated: true)
         
+        ratingsMenu.delegate = self
         setupUI()
     }
     
@@ -453,4 +454,36 @@ class ResponsiveTextView: UITextView {
         // otherwise return nil so the tap goes on to the next receiver
         return nil
     }
+}
+
+extension WebViewController: RatingsLauncherDelegate {
+    
+    func RatingOnError() {
+    
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Warning",
+                                message: "An error ocurred while sending your rating. Please, try again later",
+                                preferredStyle: .alert)
+                      
+            let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+            alert.addAction(okAction)
+            
+            self.present(alert, animated: true, completion: nil)
+        }
+     
+/*
+        let detailsAction = UIAlertAction(title: "Details", style: .default) { (action) in
+            NotificationCenter.default.post(name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+        }
+        
+        
+        alert.addAction(detailsAction)
+        alert.addAction(okAction)
+        alert.preferredAction = okAction
+*/
+
+        
+        
+    }
+    
 }

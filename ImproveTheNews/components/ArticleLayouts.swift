@@ -150,11 +150,13 @@ class HeadlineCell: UICollectionViewCell {
         addSubview(markupView)
         
         NSLayoutConstraint.activate([
-            markupView.leadingAnchor.constraint(equalTo: pubDate.trailingAnchor, constant: 10),
+            //markupView.leadingAnchor.constraint(equalTo: pubDate.trailingAnchor, constant: 10),
+            markupView.leadingAnchor.constraint(equalTo: self.trailingAnchor, constant: -32),
             markupView.widthAnchor.constraint(equalToConstant: 25),
-            markupView.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 3),
+            markupView.topAnchor.constraint(equalTo: source.bottomAnchor, constant: 3),
             markupView.heightAnchor.constraint(equalToConstant: 25)
         ])
+        //markupView.backgroundColor = .yellow
         
         headline.textColor = articleHeadLineColor
         source.textColor = articleSourceColor

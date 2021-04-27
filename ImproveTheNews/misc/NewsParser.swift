@@ -208,6 +208,7 @@ class News {
 
         do {
             let decodedData = try JSON(data: jsonData)
+            
             //BannerInfo.shared = nil
             for (index1,subtopic):(String, JSON) in decodedData {
                 

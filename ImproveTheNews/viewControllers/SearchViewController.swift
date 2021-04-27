@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
 
 class SearchViewController: UIViewController {
     
@@ -17,6 +18,10 @@ class SearchViewController: UIViewController {
     
     let topicsTable = UITableView()
     var filteredData = [String]()
+    let loadingView = UIView()
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,12 +34,30 @@ class SearchViewController: UIViewController {
         setupTableView()
         
         setupNavBar()
+        setUpActivityIndicator()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.view.setNeedsLayout()
         navigationController?.view.layoutIfNeeded()
+    }
+    
+    func setUpActivityIndicator() {
+        let dim: CGFloat = 65
+        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
+        self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        self.loadingView.isHidden = true
+        self.loadingView.layer.cornerRadius = 15
+    
+        let loading = UIActivityIndicatorView(style: .medium)
+        self.loadingView.addSubview(loading)
+        loading.center = CGPoint(x: dim/2, y: dim/2)
+        loading.startAnimating()
+
+        self.view.addSubview(self.loadingView)
     }
 }
 
@@ -55,15 +78,13 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            let topicname = filteredData[indexPath.row]
-            let topiccode = Globals.topicmapping[topicname]
-            sliderValues.setTopic(topic: topiccode!)
             
-            let newsVC = navigationController!.viewControllers[0] as! NewsViewController
-            newsVC.firstTime = true
-            newsVC.topic = topiccode!
-            //newsVC.collectionView?.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-            navigationController!.popToRootViewController(animated: true)
+            self.loadingView.isHidden = false
+            self.loadingView.setNeedsDisplay()
+            
+            let topicname = filteredData[indexPath.row]
+            self.userTapsOnTopic(topicname)
+
         }
         
         func setupTableView() {
@@ -138,4 +159,63 @@ struct SearchPreview: PreviewProvider {
         }
         
     }
+}
+
+extension SearchViewController {
+    
+    private func userTapsOnTopic(_ topicName: String) {
+    
+        guard let topicCode = Globals.topicmapping[topicName],
+            let nav = self.navigationController else {
+            
+            return
+        }
+        
+        var link = ""
+        sliderValues.setTopic(topic: topicCode)
+        for vc in nav.viewControllers {
+            if(vc is NewsViewController) {
+                link = (vc as! NewsViewController).buildApiCall(topicForCall: topicCode,
+                                                                zeroItems: true)
+                break
+            }
+        }
+        
+        let url = URL(string: link)!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if(error != nil || data == nil) {
+                return
+            }
+            
+            do {
+                let responseJSON = try JSON(data: data!)
+                let topicNode = responseJSON[1][0]
+                
+                let count = topicNode[3].intValue
+                print("GATO6", count)
+                
+                DispatchQueue.main.async {
+                
+                    for vc in nav.viewControllers {
+                        if(vc is NewsViewController) {
+                            let targetVC = vc as! NewsViewController
+                        
+                            targetVC.firstTime = true
+                            targetVC.param_A = 4
+                            if(count==0){ targetVC.param_A = 40 }
+                            targetVC.topic = topicCode
+                            
+                            nav.popToRootViewController(animated: true)
+                        }
+                    }
+                }
+                
+                
+            } catch _ {
+            return
+        }
+        }
+        task.resume()
+    }
+    
 }

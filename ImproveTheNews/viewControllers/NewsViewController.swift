@@ -228,13 +228,22 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         return link
     }
     
-    private func buildApiCall() -> String {
+    func buildApiCall(topicForCall: String? = nil, zeroItems: Bool = false) -> String {
 
-        let firsthalf = self.homelink + self.topic +
-            ".A\(self.param_A)" + ".B\(self.param_B)" +
-            ".S\(self.param_S)"
+        var firsthalf = self.homelink
+        if(topicForCall != nil) {
+            firsthalf += topicForCall!
+        } else {
+            firsthalf += self.topic
+        }
+        if(zeroItems) {
+            firsthalf += ".A0.B0.S0"
+        } else {
+            firsthalf += ".A\(self.param_A)" +
+                        ".B\(self.param_B)" +
+                        ".S\(self.param_S)"
+        }
         var nexthalf = self.sliderValues.getBiasPrefs() + createTopicPrefs() + self.biasSliders.status
-        print("GATO6 >>> ", createTopicPrefs() )
         
         for bannerID in BannerView.bannerHeights.keys {
             let key = "banner_apiParam_" + bannerID
@@ -268,7 +277,13 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         link += "&appversion=I" + Bundle.main.releaseVersionNumber!
         link += "&devicetype=" + UIDevice.current.modelName.replacingOccurrences(of: " ",
                                     with: "_")
-            
+        
+        /*
+        link += "&v=I" + Bundle.main.releaseVersionNumber!
+        link += "&dev=" + UIDevice.current.modelName.replacingOccurrences(of: " ",
+                                    with: "_")
+        */
+        
         return link
     }
     
@@ -1000,6 +1015,7 @@ extension NewsViewController {
                 if newsParser.getMarkups(index: index).count > 0 {
                     cell.markupView.isHidden = false
                 }
+                
                 
                 //cell.backgroundColor = UIColor.red.withAlphaComponent(0.5)
                 cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
