@@ -100,6 +100,8 @@ class WebViewController: UIViewController, WKUIDelegate {
     }()
     
     var webViewTopConstraint: NSLayoutConstraint?
+    var webViewBottomConstraint: NSLayoutConstraint?
+    
     func setupUI() {
         self.view.backgroundColor = .white
         
@@ -107,14 +109,13 @@ class WebViewController: UIViewController, WKUIDelegate {
         self.view.addSubview(webView)
         
         self.webViewTopConstraint = webView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
+        self.webViewBottomConstraint = webView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
              
         NSLayoutConstraint.activate([
             self.webViewTopConstraint!,
             webView.leftAnchor
                 .constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
-            webView.bottomAnchor
-                .constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,
-                constant: -40),
+            self.webViewBottomConstraint!,
             webView.rightAnchor
                 .constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor)
         ])
@@ -147,6 +148,17 @@ class WebViewController: UIViewController, WKUIDelegate {
                 
         view.addSubview(ratingsMenu)
         //ratingsMenu.isHidden = true
+    }
+    
+    func hideRatingView() {
+        var mFrame = ratingsMenu.frame
+        mFrame.origin.y += mFrame.size.height + 10
+        
+        UIView.animate(withDuration: 0.5) {
+            self.ratingsMenu.frame = mFrame
+        } completion: { (success) in
+            print("Done!")
+        }
     }
   
     
@@ -457,6 +469,13 @@ class ResponsiveTextView: UITextView {
 }
 
 extension WebViewController: RatingsLauncherDelegate {
+    
+    func RatingCompleted() {
+        self.webViewBottomConstraint?.constant = 0
+        self.webView.layoutIfNeeded()
+        
+        self.hideRatingView()
+    }
     
     func RatingOnError() {
     

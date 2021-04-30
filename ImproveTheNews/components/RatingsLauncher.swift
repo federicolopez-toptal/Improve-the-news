@@ -13,6 +13,7 @@ import SwiftyJSON
 
 protocol RatingsLauncherDelegate {
     func RatingOnError()
+    func RatingCompleted()
 }
 
 
@@ -50,38 +51,60 @@ class RatingsLauncher: UIView {
         return button
     }()
     
+    var close: UIButton = {
+        let btn = UIButton(type: .custom)
+        let img = UIImage(systemName: "xmark.circle")
+        btn.setBackgroundImage(img, for: .normal)
+        btn.tintColor = accentOrange
+        btn.addTarget(self, action: #selector(closePressed(_:)), for: .touchUpInside)
+        return btn
+    }()
+    
+    
+    
+    
     func buildView() {
         
         backgroundColor = .black
         
         // configuring ratings view
-        let name = UILabel(text: "Rate article", font: .boldSystemFont(ofSize: 16), textColor: accentOrange, textAlignment: .left, numberOfLines: 1)
+        let name = UILabel(text: "Rate\narticle", font: .boldSystemFont(ofSize: 16), textColor: accentOrange, textAlignment: .left, numberOfLines: 2)
         addSubview(name)
         
         name.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             name.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            name.widthAnchor.constraint(equalToConstant: 90),
-            name.topAnchor.constraint(equalTo: self.topAnchor, constant: 14)
+            name.widthAnchor.constraint(equalToConstant: 50),
+            name.topAnchor.constraint(equalTo: self.topAnchor, constant: 5)
         ])
         
         addSubview(cosmos)
-        
         cosmos.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             cosmos.leadingAnchor.constraint(equalTo: name.trailingAnchor, constant: 5),
             cosmos.widthAnchor.constraint(equalToConstant: 130),
             cosmos.topAnchor.constraint(equalTo: self.topAnchor, constant: 14)
         ])
+        //cosmos.backgroundColor = .red
         
         submit.isUserInteractionEnabled = true
         addSubview(submit)
         submit.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            submit.leadingAnchor.constraint(equalTo: cosmos.trailingAnchor, constant: 10),
-            submit.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
+            submit.leadingAnchor.constraint(equalTo: cosmos.trailingAnchor, constant: 7),
+            submit.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -43),
             submit.topAnchor.constraint(equalTo: self.topAnchor, constant: 8)
         ])
+        
+        addSubview(close)
+        close.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            close.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
+            close.widthAnchor.constraint(equalToConstant: 32),
+            close.heightAnchor.constraint(equalToConstant: 32),
+            close.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
+        ])
+        
                 
         // handle touch events
         cosmos.didTouchCosmos = {
@@ -100,6 +123,10 @@ class RatingsLauncher: UIView {
 // touch events
 extension RatingsLauncher {
     
+    @objc func closePressed(_ sender: UIButton) {
+        self.delegate?.RatingCompleted()
+    }
+    
     @objc func submitPressed(_ sender:UIButton!) {
         
         sender.backgroundColor = .black
@@ -112,6 +139,7 @@ extension RatingsLauncher {
             UIView.animate(withDuration: 0.3) {
                 sender.backgroundColor = accentOrange
                 sender.setTitle("Submit", for: .normal)
+                self.delegate?.RatingCompleted()
             }
         }
         

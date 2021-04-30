@@ -215,7 +215,68 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     private func selectLayout(_ index: Int) {
+        if(index != 0 && index != 2) {
+            let msg = "The \"" + self.layoutNames[index] + "\" layout is not available yet"
+            self.showAlert(msg)
+        } else {
+            Utils.shared.currentLayout = index
+            
+            var changeCurrentVC = false
+            var topicToLoad = "news"
+            var param_A = 4
+            
+            if let nav = self.navigationController {
+                let currentVC = nav.viewControllers[0]
+                
+                // get topic value
+                if(currentVC is NewsViewController) {
+                    let vc = currentVC as! NewsViewController
+                    topicToLoad = vc.topic
+                    param_A = vc.param_A
+                } else if(currentVC is NewsTextViewController) {
+                    let vc = currentVC as! NewsTextViewController
+                    topicToLoad = vc.topic
+                    param_A = vc.param_A
+                }
+                
+                // Check if I need to reload something
+                if(index==0) {
+                    // Dense & intense
+                    if(!(currentVC is NewsViewController)) { changeCurrentVC = true }
+                } else if(index==2) {
+                    // Text only
+                    if(!(currentVC is NewsTextViewController)) { changeCurrentVC = true }
+                }
+            }
+            
+            if(changeCurrentVC) {
+                Utils.shared.newsViewController_ID = 0
+                var vc: UIViewController?
+                
+                if(index==0) {
+                    vc = NewsViewController(topic: topicToLoad)
+                    (vc as! NewsViewController).param_A = param_A
+                } else if(index==2) {
+                    vc = NewsTextViewController(topic: topicToLoad)
+                    (vc as! NewsTextViewController).param_A = param_A
+                }
+                
+                if(vc != nil) {
+                    self.navigationController?.viewControllers = [vc!, self]
+                }
+            }
+            self.navigationController?.customPopViewController()
+            
+        }
+    }
     
+    private func showAlert(_ text: String) {
+        let alert = UIAlertController(title: "Warning", message: text, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+
+        alert.addAction(okAction)
+        self.present(alert, animated: true) {
+        }
     }
     
     func deselect() {

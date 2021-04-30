@@ -18,10 +18,7 @@ class SearchViewController: UIViewController {
     
     let topicsTable = UITableView()
     var filteredData = [String]()
-    let loadingView = UIView()
-    
-    
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,30 +31,12 @@ class SearchViewController: UIViewController {
         setupTableView()
         
         setupNavBar()
-        setUpActivityIndicator()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.view.setNeedsLayout()
         navigationController?.view.layoutIfNeeded()
-    }
-    
-    func setUpActivityIndicator() {
-        let dim: CGFloat = 65
-        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
-                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
-                                        width: dim, height: dim)
-        self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
-        self.loadingView.isHidden = true
-        self.loadingView.layer.cornerRadius = 15
-    
-        let loading = UIActivityIndicatorView(style: .medium)
-        self.loadingView.addSubview(loading)
-        loading.center = CGPoint(x: dim/2, y: dim/2)
-        loading.startAnimating()
-
-        self.view.addSubview(self.loadingView)
     }
 }
 
@@ -78,12 +57,35 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            
-            self.loadingView.isHidden = false
-            self.loadingView.setNeedsDisplay()
-            
+    
+        /*
             let topicname = filteredData[indexPath.row]
             self.userTapsOnTopic(topicname)
+        */
+
+
+            let topicName = filteredData[indexPath.row]
+            guard let topicCode = Globals.topicmapping[topicName],
+                    let nav = self.navigationController
+            else {
+                return
+            }
+            
+            for vc in nav.viewControllers {
+                if(vc is NewsViewController) {
+                    let _vc = vc as! NewsViewController
+                    _vc.topicCodeFromSearch = topicCode
+                } else if(vc is NewsTextViewController) {
+                    let _vc = vc as! NewsTextViewController
+                    _vc.topicCodeFromSearch = topicCode
+                }
+                
+                if(nav.viewControllers.count > 2) {
+                    nav.viewControllers = [nav.viewControllers.first!, self]
+                }
+                
+                nav.popToRootViewController(animated: true)
+            }
 
         }
         
@@ -163,6 +165,9 @@ struct SearchPreview: PreviewProvider {
 
 extension SearchViewController {
     
+    
+    
+    
     private func userTapsOnTopic(_ topicName: String) {
     
         guard let topicCode = Globals.topicmapping[topicName],
@@ -217,5 +222,8 @@ extension SearchViewController {
         }
         task.resume()
     }
+    
+    
+    
     
 }

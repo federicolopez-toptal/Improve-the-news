@@ -26,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
         // let contentView = ContentView().environment(\.managedObjectContext, context)
         
-        let newsAggregator = NewsViewController(topic: "news")
+        let newsAggregator = INITIAL_VC()
         let navController = UINavigationController(rootViewController: newsAggregator)
         UINavigationBar.appearance().backgroundColor = .black
         UINavigationBar.appearance().tintColor = .white

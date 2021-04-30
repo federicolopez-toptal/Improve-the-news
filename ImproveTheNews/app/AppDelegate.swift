@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
-        let newsAggregator = NewsViewController(topic: "news")
+        let newsAggregator = INITIAL_VC()
         let navController = UINavigationController(rootViewController: newsAggregator)
         UINavigationBar.appearance().backgroundColor = .black
         UINavigationBar.appearance().tintColor = .white

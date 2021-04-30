@@ -188,15 +188,17 @@ class SubtopicHeader: UICollectionReusableView {
             return
         }
         
-        let privacyPolicyRange = (text as NSString).range(of: "Headlines")
+        let firstTopic = text.components(separatedBy: ">").first!
+        let _range = (text as NSString).range(of: firstTopic)
+        //let _range = (text as NSString).range(of: "Headlines")
         
-        if gesture.didTapAttributedTextInLabel(label: self.hierarchy, inRange: privacyPolicyRange) {
-            print("User tapped on Headlines")
-            goToTopic(topic: "news")
+        if gesture.didTapAttributedTextInLabel(label: self.hierarchy, inRange: _range) {
+            print("User tapped on first topic")
+            goToTopic(topic: firstTopic)
         } else {
             print("User tapped on text")
             
-            let index = text.index(text.startIndex, offsetBy: 10)
+            let index = text.index(text.startIndex, offsetBy: firstTopic.count+1)
             let remainingText = text[index...]
             let topicsArray = remainingText.components(separatedBy: ">")
             
@@ -268,12 +270,16 @@ class SubtopicHeader: UICollectionReusableView {
     }
     
     @objc func goToTopic(topic: String) {
-        // llamado desde el breadcrumb!
+        /*
         if topic == "news" {
             //add mapping code
             //let newTopic = Globals.topicmapping[withTop]
             self.delegate!.pushNewTopic(newTopic: "news")
         }
+        */
+        
+        let topicCode = Globals.topicmapping[topic]!
+        self.delegate?.pushNewTopic(newTopic: topicCode)
     }
     
     @objc func sliderOnRelease(_ sender: UISlider) {

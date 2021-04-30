@@ -10,7 +10,7 @@ import UIKit
 import LBTATools
 import SDWebImage
 import SafariServices
-
+import SwiftyJSON
 
 class NewsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout,
     NewsDelegate {
@@ -35,6 +35,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var topic = ""                          // current topic, set at the beginning
     var hierarchy = ""                      // hierarchy (path)
     var superSliderStr = ""                 // para armar el request
+    var topicCodeFromSearch = ""
     
     // --------------------------------------------------------
     // horizontal menu
@@ -180,6 +181,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidAppear(_ animated: Bool) {
         self.biasSliders.reloadSliderValues()
+        
+        if(!self.firstTime && !self.topicCodeFromSearch.isEmpty) {
+            self.loadTopicFromSearch()
+        }
     }
     
 
@@ -187,7 +192,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     func loadData() {
         if(self.firstTime){
             //activityIndicator.startAnimating()
-            self.loadingView.isHidden = false
+            if(self.loadingView.isHidden) {
+                self.loadingView.isHidden = false
+            }
             
             //DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             DispatchQueue.main.async {
@@ -230,6 +237,45 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     func buildApiCall(topicForCall: String? = nil, zeroItems: Bool = false) -> String {
 
+        var T = ""
+        var ABS = [Int]()
+        
+        if(topicForCall != nil) {
+            T = topicForCall!
+        } else {
+            T = self.topic
+        }
+        
+        if(zeroItems) {
+            ABS = [0, 0, 0]
+        } else {
+            ABS = [self.param_A,
+                    self.param_B,
+                    self.param_S
+                    ]
+        }
+        
+        var banner: String?
+        for bannerID in BannerView.bannerHeights.keys {
+            let key = "banner_apiParam_" + bannerID
+            if let value = UserDefaults.standard.string(forKey: key) {
+                banner = value
+            }
+        }
+        
+        var superSlider: String?
+        if(!self.superSliderStr.isEmpty){
+            superSlider = self.superSliderStr
+        }
+        
+        let link = API_CALL(topicCode: T, abs: ABS,
+                            biasStatus: self.biasSliders.status,
+                            banners: banner, superSliders: superSlider)
+        return link
+    }
+
+    func buildApiCall_222(topicForCall: String? = nil, zeroItems: Bool = false) -> String {
+    
         var firsthalf = self.homelink
         if(topicForCall != nil) {
             firsthalf += topicForCall!
@@ -273,17 +319,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             link += fixedID //deviceId
         }
         
-        // appVersion
-        link += "&appversion=I" + Bundle.main.releaseVersionNumber!
-        link += "&devicetype=" + UIDevice.current.modelName.replacingOccurrences(of: " ",
-                                    with: "_")
-        
-        /*
         link += "&v=I" + Bundle.main.releaseVersionNumber!
         link += "&dev=" + UIDevice.current.modelName.replacingOccurrences(of: " ",
                                     with: "_")
-        */
-        
+
         return link
     }
     
@@ -1201,13 +1240,13 @@ extension NewsViewController {
                         viewForSupplementaryElementOfKind: kind,
                         at: iPath) as? SubtopicHeader {
             
-            if(header.hierarchy.text == "  ") {
+            if(header.hierarchy.text == "  " && self.uniqueID==1) {
                 h -= 20
             }
             
-            if(header.prioritySlider.isHidden) {
+            //if(header.prioritySlider.isHidden) {
                 h -= 29
-            }
+            //}
             
             
             // % label tmp removed !!!
@@ -1520,8 +1559,10 @@ extension NewsViewController {
                 }
                 */
                 
+                print(self.hierarchy)
+                
                 var breadcrumbText = ""
-                if(indexPath.section==0 && self.hierarchy == "Headlines>") {
+                if(indexPath.section==0 && (self.hierarchy == "Headlines>" || self.hierarchy == "") && self.uniqueID==1) {
                     breadcrumbText = "  "
                     sectionHeader.hierarchy.text = breadcrumbText
                 } else {
@@ -1575,6 +1616,7 @@ extension NewsViewController {
                 */
                 
                 sectionHeader.backgroundColor = bgBlue
+                //sectionHeader.backgroundColor = .green
                 
                 
                 //sectionHeader.backgroundColor  = UIColor.yellow.withAlphaComponent(0.25) //!!!
@@ -1769,7 +1811,9 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
                     self.moreHeadLines.scrollView.contentOffset = mOffset
                 }
                 
-                self.moreHeadLines.show()
+                if(self.param_A != 40){
+                    self.moreHeadLines.show()
+                }
             } else {
                 if let view = self.seeMoreFooterSection {
                     var mOffset = self.moreHeadLines.scrollView.contentOffset
@@ -1781,6 +1825,45 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
         }
         
         self.view.bringSubviewToFront(self.moreHeadLines)
+    }
+}
+
+extension NewsViewController {
+    // Topic from search
+    private func loadTopicFromSearch() {
+    
+        self.loadingView.isHidden = false // show
+        var link = self.buildApiCall(topicForCall: self.topicCodeFromSearch, zeroItems: true)
+        let url = URL(string: link)!
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if(error != nil || data == nil) {
+                self.loadingView.isHidden = true // hide
+                return
+            }
+            
+            do {
+                let responseJSON = try JSON(data: data!)
+                let topicNode = responseJSON[1][0]
+                let count = topicNode[3].intValue
+
+                DispatchQueue.main.async {
+                
+                    self.firstTime = true
+                    self.param_A = 4
+                    if(count==0){ self.param_A = 40 }
+                    self.topic = self.topicCodeFromSearch
+                            
+                    self.loadData()
+                }
+                
+                
+            } catch _ {
+                self.loadingView.isHidden = true // hide
+                return
+            }
+        }
+        task.resume()
     }
 }
 

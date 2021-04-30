@@ -93,11 +93,10 @@ class MiniSlidersView: UIView {
         var posX: CGFloat
         var mFrame: CGRect
         
-        val = val1 //Int.random(in: 1...5)
+        val = val1
         if(val<1){ val = 1 }
         else if(val>5){ val = 5 }
         
-        //self.textOnTap = "<SOURCE> has a " + LR_text(val) + " and "
         self.textOnTap = "<SOURCE>"
         if(!source.isEmpty) {
             var lastIndex = source.count-1
@@ -118,7 +117,8 @@ class MiniSlidersView: UIView {
         mFrame.origin.x = ((line1.frame.size.width-(thumbDim/2))/5) * CGFloat((val-1))
         thumb1.frame = mFrame
         
-        val = val2 //Int.random(in: 1...5)
+        //val = Int.random(in: 1...5)  // <-- For testing purposes
+        val = val2
         if(val<1){ val = 1 }
         else if(val>5){ val = 5 }
         
