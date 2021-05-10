@@ -107,6 +107,7 @@ class SubtopicHeader: UICollectionReusableView {
             hierarchy.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             hierarchy.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
+        //self.hierarchy.backgroundColor = .red
         
     // main orange Title
         //addSubview(label)
@@ -194,7 +195,7 @@ class SubtopicHeader: UICollectionReusableView {
         
         if gesture.didTapAttributedTextInLabel(label: self.hierarchy, inRange: _range) {
             print("User tapped on first topic")
-            goToTopic(topic: firstTopic)
+            goToTopic(topic: firstTopic) ///BUG
         } else {
             print("User tapped on text")
             
@@ -205,6 +206,8 @@ class SubtopicHeader: UICollectionReusableView {
             var found = false
             for t in topicsArray {
                 let topicRange = (text as NSString).range(of: t)
+                
+                ///BUG
                 if gesture.didTapAttributedTextInLabel(label: self.hierarchy, inRange: topicRange) {
                     found = true
                     self.delegate!.pushNewTopic(newTopic: Globals.topicmapping[t]!)
@@ -212,6 +215,7 @@ class SubtopicHeader: UICollectionReusableView {
                 }
             }
             
+            /// BUG
             if(!found) {
                 let t = topicsArray[0]
                 self.delegate!.pushNewTopic(newTopic: Globals.topicmapping[t]!)

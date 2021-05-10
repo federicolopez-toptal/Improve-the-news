@@ -11,6 +11,7 @@ import UIKit
 
 protocol FooterCellTextOnlyDelegate {
     func pushNewTopic(_ topic: String, sender: FooterCellTextOnly)
+    func shareTapped(sender: FooterCellTextOnly)
 }
 
 
@@ -18,6 +19,7 @@ class FooterCellTextOnly: UITableViewHeaderFooterView {
 
     var delegate: FooterCellTextOnlyDelegate?
     @IBOutlet weak var centeredContainerView: UIView!
+    @IBOutlet weak var shareIcon: UIButton!
     
     private var currentTopic: String = ""
     
@@ -33,6 +35,10 @@ class FooterCellTextOnly: UITableViewHeaderFooterView {
         topicLabel.textColor = accentOrange
         
         self.centeredContainerView.backgroundColor = .clear
+        self.shareIcon.layer.cornerRadius = 0.5 * 55
+        self.shareIcon.addTarget(self,
+            action: #selector(shareIconTap(sender:)),
+            for: .touchUpInside)
     }
     
     func setTopic(_ topic: String) {
@@ -53,6 +59,10 @@ class FooterCellTextOnly: UITableViewHeaderFooterView {
         if(!topicCode.isEmpty) {
             self.delegate?.pushNewTopic(topicCode, sender: self)
         }
+    }
+    
+    @objc func shareIconTap(sender: UIButton) {
+        self.delegate?.shareTapped(sender: self)
     }
     
 }

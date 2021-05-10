@@ -56,38 +56,46 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
         
-        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        func tableView(_ tableView: UITableView, didSelectRowAt
+            indexPath: IndexPath) {
     
-        /*
-            let topicname = filteredData[indexPath.row]
-            self.userTapsOnTopic(topicname)
-        */
-
-
             let topicName = filteredData[indexPath.row]
-            guard let topicCode = Globals.topicmapping[topicName],
-                    let nav = self.navigationController
-            else {
+            guard let topicCode = Globals.topicmapping[topicName] else {
                 return
             }
             
-            for vc in nav.viewControllers {
-                if(vc is NewsViewController) {
-                    let _vc = vc as! NewsViewController
-                    _vc.topicCodeFromSearch = topicCode
-                } else if(vc is NewsTextViewController) {
-                    let _vc = vc as! NewsTextViewController
-                    _vc.topicCodeFromSearch = topicCode
-                }
-                
-                if(nav.viewControllers.count > 2) {
-                    nav.viewControllers = [nav.viewControllers.first!, self]
-                }
-                
-                nav.popToRootViewController(animated: true)
+            if(Utils.shared.currentLayout==0) {
+                //"Dense & Intense"
+                let vc = NewsViewController(topic: topicCode)
+                vc.firstTime = false
+                vc.topicCodeFromSearch = topicCode
+                self.insertNewVCInNavigationStack(vc)
+            } else if(Utils.shared.currentLayout==2) {
+                //"Text only"
+                let vc = NewsTextViewController(topic: topicCode)
+                vc.firstTime = false
+                vc.topicCodeFromSearch = topicCode
+                self.insertNewVCInNavigationStack(vc)
             }
-
+            
+            self.navigationController?.popViewController(animated: true)
         }
+        
+        func insertNewVCInNavigationStack(_ vc: UIViewController) {
+            if let nav = self.navigationController {
+                var VCs = [UIViewController]()
+                for vc in nav.viewControllers {
+                    if(vc != self) {
+                        VCs.append(vc)
+                    }
+                }
+                VCs.append(vc)
+                VCs.append(self)
+                
+                nav.viewControllers = VCs
+            }
+        }
+        
         
         func setupTableView() {
             view.addSubview(topicsTable)

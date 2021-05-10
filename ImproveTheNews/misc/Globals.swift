@@ -27,7 +27,7 @@ let APP_CFG_SHOW_FLAGS = true
 
 
 
-let APP_CFG_SHOW_LAYOUTS = false
+let APP_CFG_SHOW_LAYOUTS = true
 
 // false/false for v1
 let APP_CFG_SHOW_PIE_CHART = false

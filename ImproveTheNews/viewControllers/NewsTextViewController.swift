@@ -25,22 +25,22 @@ class NewsTextViewController: UIViewController {
     var param_S = 0
 
     let searchBar = UISearchBar()           // searchBar
-    let tableView = UITableView(frame: CGRect.zero, style: .insetGrouped)
+    let tableView = UITableView(frame: CGRect.zero, style: .grouped)
     var refresher: UIRefreshControl!        // pull to refresh
     let biasSliders = SliderPopup()         // Preferences (orange) panel
     let loadingView = UIView()              // loading with activityIndicator inside
 
 
-
+    let shadeView = UIView()
     var biasButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setBackgroundImage(UIImage(named: "prefsButton.png"), for: .normal)
-        //button.addTarget(self, action: #selector(showBiasSliders(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(showBiasSliders(_:)), for: .touchUpInside)
         button.clipsToBounds = true
         return button
     }()
 
-
+    let NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES =             Notification.Name("reloadNewsInOtherInstances")
 
 
 
@@ -61,12 +61,15 @@ class NewsTextViewController: UIViewController {
         self.uniqueID = Utils.shared.newsViewController_ID
     
         self.newsParser.newsDelegate = self
+        self.biasSliders.sliderDelegate = self
+        self.biasSliders.shadeDelegate = self
     
         self.view.backgroundColor = bgBlue
         self.setUpNavBar()
         self.setUpRefresh()
         self.setupTableView()
         self.setUpLoadingView()
+        self.setUpBiasButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -148,6 +151,7 @@ class NewsTextViewController: UIViewController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
+        self.tableView.indicatorStyle = .white
     }
     
     func setUpRefresh() {
@@ -191,6 +195,92 @@ class NewsTextViewController: UIViewController {
         }
     }
     
+    private func setUpBiasButton() {
+        let factor: CGFloat = 0.9
+        let size = CGSize(width: 78 * factor, height: 82 *  factor)
+        let screenSize = UIScreen.main.bounds
+        
+        self.view.addSubview(self.biasButton)
+        let posX = screenSize.width - size.width - 5
+        
+        var posY = screenSize.height - size.height
+        if let nav = self.navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                posY -= 88
+            }
+        }
+        posY += size.height - self.biasSliders.state01_height + 15
+        
+        biasButton.frame = CGRect(x: posX, y: posY,
+                                width: size.width, height: size.height)
+        //biasButton.layer.cornerRadius = size * 0.5
+        let y = view.frame.height - self.biasSliders.state01_height
+        biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550)
+        
+        biasSliders.buildViews()
+        self.biasSliders.status = "SL00"
+        self.updateBiasButtonPosition()
+    }
+    
+    func updateBiasButtonPosition() {
+        var mFrame = self.biasButton.frame
+        let screenSize = UIScreen.main.bounds
+        
+        var posY = screenSize.height - mFrame.size.height
+        if let nav = navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                posY -= 88
+            }
+        }
+        posY += mFrame.size.height
+        
+        let margin: CGFloat = 6
+        let status = self.biasSliders.status
+        
+        if(status == "SL02") {
+            posY -= self.biasSliders.state02_height - margin
+        } else {
+            posY -= self.biasSliders.state01_height - margin
+        }
+        
+        mFrame.origin.y = posY
+        self.biasButton.frame = mFrame
+    }
+    
+    func configureBiasSliders() {
+        
+        let y = view.frame.height - self.biasSliders.state01_height
+        biasSliders.addShowMore()
+        biasSliders.backgroundColor = accentOrange
+        
+        shadeView.backgroundColor = UIColor.black.withAlphaComponent(0)
+        shadeView.isUserInteractionEnabled = false
+        
+        view.addSubview(shadeView)
+        view.addSubview(biasSliders)
+        
+        var mFrame = view.frame
+        mFrame.origin.y = 0
+        shadeView.frame = mFrame
+        shadeView.alpha = 0
+        
+        self.biasSliders.reloadSliderValues()
+        self.biasSliders.status = "SL01"
+        self.biasSliders.separatorView.isHidden = false
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.shadeView.alpha = 1
+                
+                var mFrame = self.biasSliders.frame
+                mFrame.origin.y = y
+                self.biasSliders.frame = mFrame
+                
+                self.updateBiasButtonPosition()
+                
+            }, completion: nil)
+        
+        self.biasButton.superview?.bringSubviewToFront(self.biasButton)
+    }
+    
     // MARK: - Some action(s)
     @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
         navigationController?.customPushViewController(SectionsViewController())
@@ -210,6 +300,18 @@ class NewsTextViewController: UIViewController {
     @objc func homeButtonTapped() {
         let offset = CGPoint(x: 0, y: 0)
         self.tableView.setContentOffset(offset, animated: true)
+    }
+    
+    @objc func showBiasSliders(_ sender:UIButton!) {
+        if !Globals.isSliderOn {
+            Globals.isSliderOn = true
+        }
+        
+        if(self.biasSliders.status == "SL00") {
+            configureBiasSliders()
+        } else {
+            self.biasSliders.handleDismiss()
+        }
     }
     
     
@@ -407,6 +509,12 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     func pushNewTopic(_ topic: String, sender: HeaderCellTextOnly) {
         self.pushNewTopic(topic)
     }
+    
+    // Tap on share
+    func shareTapped(sender: FooterCellTextOnly) {
+        let ac = UIActivityViewController(activityItems: ["http://www.improvethenews.org/"], applicationActivities: nil)
+        self.present(ac, animated: true)
+    }
 
     // Cells
     func tableView(_ tableView: UITableView,
@@ -449,6 +557,11 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView,
         heightForFooterInSection section: Int) -> CGFloat {
         
+        let count = self.numberOfSections(in: self.tableView)
+        if(section==count-1){
+            return 290
+        }
+        
         return 70
     }
     
@@ -489,4 +602,50 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         let vc = WebViewController(url: link, title: title, annotations: markups)
         navigationController?.pushViewController(vc, animated: true)
     }
+}
+
+extension NewsTextViewController: BiasSliderDelegate, ShadeDelegate {
+
+    // BiasSliderDelegate
+    func biasSliderDidChange(sliderId: Int) {
+    
+        let dict = ["id": self.uniqueID]
+        NotificationCenter.default.post(name: NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES,
+                                        object: nil,
+                                        userInfo: dict)
+        
+        biasSliders.showLoading(true)
+        
+        DispatchQueue.main.async {
+            /*
+            self.loadArticles()
+            self.reload()
+            */
+            self.firstTime = true
+            self.loadData()
+
+            DELAY(2.0) {
+                if(sliderId == self.biasSliders.latestBiasSliderUsed) {
+                    self.biasSliders.showLoading(false)
+                }
+            }
+        }
+    }
+    
+    // ShadeDelegate
+    func dismissShade() {
+        if Globals.isSliderOn {
+            Globals.isSliderOn = false
+        }
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.shadeView.alpha = 0
+            self.updateBiasButtonPosition()
+        }, completion: nil)
+    }
+    func panelFullyOpened() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.updateBiasButtonPosition()
+        })
+    }
+
 }

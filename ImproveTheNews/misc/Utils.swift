@@ -35,8 +35,14 @@ func DELAY(_ time: TimeInterval, callback: @escaping () ->() ) {
 }
 
 func INITIAL_VC() -> UIViewController {
-    return NewsViewController(topic: "news")
-    //return NewsTextViewController(topic: "news")
+    let layout = 0
+    
+    Utils.shared.currentLayout = layout
+    if(layout == 0) {
+        return NewsViewController(topic: "news")
+    } else if(layout == 2) {
+        return NewsTextViewController(topic: "news")
+    }
 }
 
 func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
