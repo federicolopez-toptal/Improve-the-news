@@ -34,6 +34,16 @@ let APP_CFG_SHOW_PIE_CHART = false
 let APP_CFG_SHOW_SUPER_SLIDERS = false
 
     
+    
+enum layoutType: String {
+    case denseIntense = "Dense & intense"
+    case bigBeautiful = "Big & beautiful"
+    case textOnly = "Text only"
+}
+    
+    
+    
+    
 func prettifyText(fullString: NSString, boldPartsOfString: Array<NSString>, font: UIFont!, boldFont: UIFont!, paths: [String], linkedSubstrings: [String], accented: [String]) -> NSAttributedString {
 
     let nonBoldFontAttribute: [NSAttributedString.Key : Any] = [NSAttributedString.Key.font:font!, NSAttributedString.Key.foregroundColor: UIColor.label]

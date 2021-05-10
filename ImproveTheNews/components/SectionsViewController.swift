@@ -41,7 +41,9 @@ class SectionsViewController: UIViewController {
     let tableView = UITableView()
     var safeArea: UILayoutGuide!
     
-    private let layoutNames = ["Dense & intense", "Big & beautiful", "Text only"]
+    private let appLayouts = [layoutType.denseIntense,
+                                layoutType.textOnly]
+    // layoutType.bigBeautiful,
     
     override func loadView() {
         super.loadView()
@@ -192,34 +194,26 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
         let actionSheet = UIAlertController(title: "",
                                             message: "Select a layout to visualize the news",
                                             preferredStyle: .actionSheet)
-         
-        let layout_1 = UIAlertAction(title: layoutNames[0], style: .default) { (action) in
-            self.selectLayout(0)
+        
+        for layout in appLayouts {
+            let action = UIAlertAction(title: layout.rawValue,
+                                            style: .default) { (action) in
+                self.selectLayout(layout)
+            }
+            
+            actionSheet.addAction(action)
         }
-        let layout_2 = UIAlertAction(title: layoutNames[1], style: .default) { (action) in
-            self.selectLayout(1)
-        }
-        let layout_3 = UIAlertAction(title: layoutNames[2], style: .default) { (action) in
-            self.selectLayout(2)
-        }
+        
         let cancel = UIAlertAction(title: "Cancel", style: .destructive) { (action) in
         }
-        
-        actionSheet.addAction(layout_1)
-        actionSheet.addAction(layout_2)
-        actionSheet.addAction(layout_3)
         actionSheet.addAction(cancel)
-        
         
         self.present(actionSheet, animated: true) {
         }
     }
-    private func selectLayout(_ index: Int) {
-        if(index != 0 && index != 2) {
-            let msg = "The \"" + self.layoutNames[index] + "\" layout is not available yet"
-            self.showAlert(msg)
-        } else {
-            Utils.shared.currentLayout = index
+    
+    private func selectLayout(_ layout: layoutType) {
+            Utils.shared.currentLayout = layout
             
             var changeCurrentVC = false
             var topicToLoad = "news"
@@ -239,13 +233,14 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                     param_A = vc.param_A
                 }
                 
-                // Check if I need to reload something
-                if(index==0) {
-                    // Dense & intense
-                    if(!(currentVC is NewsViewController)) { changeCurrentVC = true }
-                } else if(index==2) {
-                    // Text only
-                    if(!(currentVC is NewsTextViewController)) { changeCurrentVC = true }
+                if(layout == .denseIntense) {
+                    if(!(currentVC is NewsViewController)) {
+                        changeCurrentVC = true
+                    }
+                } else if(layout == .textOnly) {
+                    if(!(currentVC is NewsTextViewController)) {
+                        changeCurrentVC = true
+                    }
                 }
             }
             
@@ -253,10 +248,13 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 Utils.shared.newsViewController_ID = 0
                 var vc: UIViewController?
                 
-                if(index==0) {
+                if(layout == .denseIntense) {
+                }
+                
+                if(layout == .denseIntense) {
                     vc = NewsViewController(topic: topicToLoad)
                     (vc as! NewsViewController).param_A = param_A
-                } else if(index==2) {
+                } else if(layout == .textOnly) {
                     vc = NewsTextViewController(topic: topicToLoad)
                     (vc as! NewsTextViewController).param_A = param_A
                 }
@@ -266,8 +264,6 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 }
             }
             self.navigationController?.customPopViewController()
-            
-        }
     }
     
     private func showAlert(_ text: String) {

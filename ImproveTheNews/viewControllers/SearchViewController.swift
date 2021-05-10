@@ -64,13 +64,13 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                 return
             }
             
-            if(Utils.shared.currentLayout==0) {
+            if(Utils.shared.currentLayout == .denseIntense) {
                 //"Dense & Intense"
                 let vc = NewsViewController(topic: topicCode)
                 vc.firstTime = false
                 vc.topicCodeFromSearch = topicCode
                 self.insertNewVCInNavigationStack(vc)
-            } else if(Utils.shared.currentLayout==2) {
+            } else if(Utils.shared.currentLayout == .textOnly) {
                 //"Text only"
                 let vc = NewsTextViewController(topic: topicCode)
                 vc.firstTime = false

@@ -23,7 +23,7 @@ class Utils {
     var newsViewController_ID = 0
     
     // Current layout
-    var currentLayout = 0 // "Dense & Intense" by default
+    var currentLayout = layoutType.denseIntense
     
 }
 
@@ -35,13 +35,16 @@ func DELAY(_ time: TimeInterval, callback: @escaping () ->() ) {
 }
 
 func INITIAL_VC() -> UIViewController {
-    let layout = 0
+    let topic = "news"
+    let layout: layoutType = .denseIntense
     
     Utils.shared.currentLayout = layout
-    if(layout == 0) {
-        return NewsViewController(topic: "news")
-    } else if(layout == 2) {
-        return NewsTextViewController(topic: "news")
+    if(layout == .denseIntense) {
+        return NewsViewController(topic: topic)
+    } else if(layout == .textOnly) {
+        return NewsTextViewController(topic: topic)
+    } else {
+        return UIViewController()
     }
 }
 
