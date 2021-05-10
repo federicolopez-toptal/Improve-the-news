@@ -133,6 +133,13 @@ func resetToDefaults() {
     UserDefaults.setSliderValue(value: 70, slider: "shelflife")
     UserDefaults.setSliderValue(value: 70, slider: "recency")
 
+    SliderValues.sharedInstance.setLR(LR: 50)
+    SliderValues.sharedInstance.setPE(PE: 50)
+    SliderValues.sharedInstance.setNU(NU: 70)
+    SliderValues.sharedInstance.setDE(DE: 70)
+    SliderValues.sharedInstance.setSL(SL: 70)
+    SliderValues.sharedInstance.setRE(RE: 70)
+
     NotificationCenter.default.post(name: NOTIFICATION_FORCE_RELOAD_NEWS, object: nil)
 }
 
