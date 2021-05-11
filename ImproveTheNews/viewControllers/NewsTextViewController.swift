@@ -30,6 +30,7 @@ class NewsTextViewController: UIViewController {
     let biasSliders = SliderPopup()         // Preferences (orange) panel
     let loadingView = UIView()              // loading with activityIndicator inside
 
+    let horizontalMenu = HorizontalMenuView()
 
     let shadeView = UIView()
     var biasButton: UIButton = {
@@ -69,6 +70,7 @@ class NewsTextViewController: UIViewController {
         self.setUpRefresh()
         self.setupTableView()
         self.setUpLoadingView()
+        self.setUpHorizontalMenu()
         self.setUpBiasButton()
     }
     
@@ -85,6 +87,16 @@ class NewsTextViewController: UIViewController {
     }
     
     // MARK: - UI
+    private func setUpHorizontalMenu() {
+        self.view.addSubview(self.horizontalMenu)
+        
+        let margin: CGFloat = 5
+        self.horizontalMenu.offset_y = 70 + (100 * 4) + margin
+        self.horizontalMenu.moveTo(y: 0)
+        self.horizontalMenu.isHidden = true
+        self.horizontalMenu.customDelegate = self
+    }
+    
     private func setUpNavBar() {
 
         searchBar.sizeToFit()
@@ -147,6 +159,10 @@ class NewsTextViewController: UIViewController {
         let footerNib = UINib(nibName: "FooterCellTextOnly", bundle: nil)
         self.tableView.register(footerNib,
             forHeaderFooterViewReuseIdentifier: "FooterCellTextOnly")
+            
+        let footerItem0Nib = UINib(nibName: "FooterCellTextOnlyItem0", bundle: nil)
+        self.tableView.register(footerItem0Nib,
+            forHeaderFooterViewReuseIdentifier: "FooterCellTextOnlyItem0")
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -300,6 +316,7 @@ class NewsTextViewController: UIViewController {
     @objc func homeButtonTapped() {
         let offset = CGPoint(x: 0, y: 0)
         self.tableView.setContentOffset(offset, animated: true)
+        self.horizontalMenu.backToZero()
     }
     
     @objc func showBiasSliders(_ sender:UIButton!) {
@@ -325,6 +342,9 @@ class NewsTextViewController: UIViewController {
             DispatchQueue.main.async {
                 self.loadArticles()
                 
+                if BannerInfo.shared != nil {
+                    BannerInfo.shared?.delegate = self
+                }
                 DELAY(2.5) {
                     if(!self.loadingView.isHidden) {
                         self.loadingView.isHidden = true
@@ -402,7 +422,6 @@ class NewsTextViewController: UIViewController {
                 let count = topicNode[3].intValue
 
                 DispatchQueue.main.async {
-                
                     self.firstTime = true
                     self.param_A = 4
                     if(count==0){ self.param_A = 40 }
@@ -461,14 +480,18 @@ extension NewsTextViewController: NewsDelegate {
         self.firstTime = false
         self.tableView.reloadData()
         self.stopRefresher()
+        
+        self.horizontalMenu.setTopics(self.newsParser.getAllTopics())
+        self.horizontalMenu.isHidden = false
     }
     
 }
 
 
-
+// MARK: - All tableView related
 extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
-    HeaderCellTextOnlyDelegate, FooterCellTextOnlyDelegate {
+    HeaderCellTextOnlyDelegate, FooterCellTextOnlyDelegate,
+    FooterCellTextOnlyItem0Delegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.newsParser.getNumOfSections()
@@ -558,30 +581,47 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         heightForFooterInSection section: Int) -> CGFloat {
         
         let count = self.numberOfSections(in: self.tableView)
-        if(section==count-1){
-            return 290
+        if(section==0){
+            return 115  // first footer, with horizontal menu
+        } else if(section==count-1){
+            return 290  // last footer, with ITN + share
         }
         
-        return 70
+        return 70 // default plain footer
     }
     
     func tableView(_ tableView: UITableView,
         viewForFooterInSection section: Int) -> UIView? {
         
         if(self.param_A == 40) {
+            // only 1 topic
             return nil
         }
         
-        let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellTextOnly" ) as! FooterCellTextOnly
-        
-        cell.delegate = self
-        cell.setTopic(self.newsParser.getTopic(index: section))
+        if(section==0) {
+            // first footer, with horizontal menu
+            let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellTextOnlyItem0" ) as! FooterCellTextOnlyItem0
+    
+            cell.delegate = self
+            cell.setTopic(self.newsParser.getTopic(index: section))
 
-        return cell
+            return cell
+        } else {
+            let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellTextOnly" ) as! FooterCellTextOnly
+    
+            cell.delegate = self
+            cell.setTopic(self.newsParser.getTopic(index: section))
+
+            return cell
+        }
     }
     
     // Tap on "More <topic>"
     func pushNewTopic(_ topic: String, sender: FooterCellTextOnly) {
+        self.pushNewTopic(topic)
+    }
+    
+    func pushNewTopic(_ topic: String, sender: FooterCellTextOnlyItem0) {
         self.pushNewTopic(topic)
     }
     
@@ -601,6 +641,10 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         
         let vc = WebViewController(url: link, title: title, annotations: markups)
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.horizontalMenu.moveTo(y: scrollView.contentOffset.y)
     }
 }
 
@@ -648,4 +692,42 @@ extension NewsTextViewController: BiasSliderDelegate, ShadeDelegate {
         })
     }
 
+}
+
+extension NewsTextViewController: HorizontalMenuViewDelegate {
+    func goToScrollView(atSection: Int) {
+    
+        var offset_y: CGFloat = 0
+        for i in 1...atSection {
+            if(i==1){
+                let h = self.horizontalMenu.frame.size.height
+                offset_y += 70 + (100*4) + 115 - h
+            } else {
+                offset_y += 70 + (100*4) + 70 //- 10
+            }
+        }
+        
+        self.tableView.setContentOffset(CGPoint(x: 0, y: offset_y), animated: true)
+    }
+}
+
+extension NewsTextViewController: BannerInfoDelegate {
+    
+    // Delegate
+    func BannerInfoOnClose() {
+        print("Banner was closed!")
+    }
+    
+    // All banner related
+    private func mustShowBanner() -> Bool {
+        var result = false
+        if let bannerInfo = BannerInfo.shared {
+            if(bannerInfo.active && self.uniqueID==1) {
+                result = true
+            }
+        }
+        
+        return result
+    }
+    
 }

@@ -34,11 +34,21 @@ func DELAY(_ time: TimeInterval, callback: @escaping () ->() ) {
     })
 }
 
+
+let LOCAL_KEY_LAYOUT = "userSelectedLayout"
+
 func INITIAL_VC() -> UIViewController {
-    let topic = "news"
-    let layout: layoutType = .denseIntense
     
-    Utils.shared.currentLayout = layout
+    let topic = "news"
+    let layout: layoutType?
+    
+    if let userSelection = UserDefaults.standard.string(forKey: LOCAL_KEY_LAYOUT) {
+        layout = layoutType(rawValue: userSelection)
+    } else {
+        layout = .denseIntense
+    }
+    
+    Utils.shared.currentLayout = layout!
     if(layout == .denseIntense) {
         return NewsViewController(topic: topic)
     } else if(layout == .textOnly) {
@@ -66,6 +76,14 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
     }
     link += biasStatus
     
+    if(Utils.shared.currentLayout == .denseIntense) {
+        link += "LA00"
+    } else if(Utils.shared.currentLayout == .textOnly) {
+        link += "LA10"
+    } else {
+        link += "LA20"
+    }
+    
     if let _B = banners {
         link += _B
     }
@@ -84,6 +102,12 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
         fixedID = fixedID.replacingOccurrences(of: "D", with: "3")
         fixedID = fixedID.replacingOccurrences(of: "E", with: "4")
         fixedID = fixedID.replacingOccurrences(of: "F", with: "5")
+        
+        // only 19 characters!
+        if(fixedID.count > 19) {
+            fixedID = String( fixedID[0...18] )
+        }
+        
         link += fixedID
     }
     

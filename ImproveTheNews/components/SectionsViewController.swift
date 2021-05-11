@@ -215,6 +215,9 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
     private func selectLayout(_ layout: layoutType) {
             Utils.shared.currentLayout = layout
             
+            UserDefaults.standard.set(layout.rawValue, forKey: LOCAL_KEY_LAYOUT)
+            UserDefaults.standard.synchronize()
+            
             var changeCurrentVC = false
             var topicToLoad = "news"
             var param_A = 4
