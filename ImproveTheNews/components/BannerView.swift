@@ -130,19 +130,13 @@ class BannerView: UIView {
         if(info.adCode == "yT") {
             self.populateYouTubeBanner()
         }
-        
-        /*
-        let key = "banner_" + info.adCode
-        if(UserDefaults.standard.object(forKey: key) == nil) {
-            UserDefaults.setBoolValue(true, forKey: key)
-            BannerInfo.shared!.active = true
-        } else {
-            BannerInfo.shared!.active = UserDefaults.getBoolValue(key: key)
-        }
-        
-        print(BannerInfo.shared!.active)
-        print("")
-        */
+    }
+    
+    // --------------------------
+    func place(y: CGFloat) {
+        var mFrame = self.frame
+        mFrame.origin.y = y
+        self.frame = mFrame
     }
     
     // --------------------------

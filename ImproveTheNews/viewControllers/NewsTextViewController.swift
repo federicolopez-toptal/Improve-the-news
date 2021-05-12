@@ -29,8 +29,8 @@ class NewsTextViewController: UIViewController {
     var refresher: UIRefreshControl!        // pull to refresh
     let biasSliders = SliderPopup()         // Preferences (orange) panel
     let loadingView = UIView()              // loading with activityIndicator inside
-
     let horizontalMenu = HorizontalMenuView()
+    var bannerView: BannerView?
 
     let shadeView = UIView()
     var biasButton: UIButton = {
@@ -341,10 +341,6 @@ class NewsTextViewController: UIViewController {
             
             DispatchQueue.main.async {
                 self.loadArticles()
-                
-                if BannerInfo.shared != nil {
-                    BannerInfo.shared?.delegate = self
-                }
                 DELAY(2.5) {
                     if(!self.loadingView.isHidden) {
                         self.loadingView.isHidden = true
@@ -481,8 +477,13 @@ extension NewsTextViewController: NewsDelegate {
         self.tableView.reloadData()
         self.stopRefresher()
         
+        if BannerInfo.shared != nil {
+            BannerInfo.shared?.delegate = self
+        }
         self.horizontalMenu.setTopics(self.newsParser.getAllTopics())
-        self.horizontalMenu.isHidden = false
+        if(self.param_A != 40){
+            self.horizontalMenu.isHidden = false
+        }
     }
     
 }
@@ -582,7 +583,12 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         
         let count = self.numberOfSections(in: self.tableView)
         if(section==0){
-            return 115  // first footer, with horizontal menu
+            var h: CGFloat = 115
+            if(self.mustShowBanner() && BannerInfo.shared != nil) {
+                let code = BannerInfo.shared!.adCode
+                h += BannerView.getHeightForBannerCode(code)
+            }
+            return h
         } else if(section==count-1){
             return 290  // last footer, with ITN + share
         }
@@ -605,6 +611,23 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
             cell.delegate = self
             cell.setTopic(self.newsParser.getTopic(index: section))
 
+            if(self.mustShowBanner() && BannerInfo.shared != nil) {
+                if(self.bannerView == nil) {
+                    let h = self.tableView(self.tableView,
+                        heightForFooterInSection: 0)
+                
+                    let code = BannerInfo.shared!.adCode
+                    let bannerHeight = BannerView.getHeightForBannerCode(code)
+    
+                    self.bannerView = BannerView(posY: h - bannerHeight)
+                }
+                cell.contentView.addSubview(self.bannerView!)
+            } else {
+                if(self.bannerView != nil) {
+                    self.bannerView!.removeFromSuperview()
+                }
+            }
+            
             return cell
         } else {
             let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellTextOnly" ) as! FooterCellTextOnly
@@ -702,8 +725,15 @@ extension NewsTextViewController: HorizontalMenuViewDelegate {
             if(i==1){
                 let h = self.horizontalMenu.frame.size.height
                 offset_y += 70 + (100*4) + 115 - h
+                
+                if(self.mustShowBanner() && self.bannerView?.superview != nil) {
+                    let code = BannerInfo.shared!.adCode
+                    offset_y += BannerView.getHeightForBannerCode(code)
+                }
+                
+                
             } else {
-                offset_y += 70 + (100*4) + 70 //- 10
+                offset_y += 70 + (100*4) + 70
             }
         }
         
@@ -715,7 +745,9 @@ extension NewsTextViewController: BannerInfoDelegate {
     
     // Delegate
     func BannerInfoOnClose() {
-        print("Banner was closed!")
+        BannerInfo.shared?.active = false
+        self.bannerView?.removeFromSuperview()
+        self.tableView.reloadData()
     }
     
     // All banner related
