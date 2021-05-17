@@ -76,6 +76,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                 vc.firstTime = false
                 vc.topicCodeFromSearch = topicCode
                 self.insertNewVCInNavigationStack(vc)
+            } else if(Utils.shared.currentLayout == .bigBeautiful) {
+                //"Big & Beautiful"
+                let vc = NewsBigViewController(topic: topicCode)
+                vc.firstTime = false
+                vc.topicCodeFromSearch = topicCode
+                self.insertNewVCInNavigationStack(vc)
             }
             
             self.navigationController?.popViewController(animated: true)

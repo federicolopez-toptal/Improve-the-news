@@ -1,23 +1,25 @@
 //
-//  FooterCellTextOnlyItem0.swift
+//  FooterCellBig.swift
 //  ImproveTheNews
 //
-//  Created by Federico Lopez on 11/05/2021.
+//  Created by Federico Lopez on 29/04/2021.
 //  Copyright © 2021 Mindy Long. All rights reserved.
 //
 
 import UIKit
 
 
-protocol FooterCellTextOnlyItem0Delegate {
-    func pushNewTopic(_ topic: String, sender: FooterCellTextOnlyItem0)
+protocol FooterCellBigDelegate {
+    func pushNewTopic(_ topic: String, sender: FooterCellBig)
+    func shareTapped(sender: FooterCellBig)
 }
 
 
-class FooterCellTextOnlyItem0: UITableViewHeaderFooterView {
+class FooterCellBig: UITableViewHeaderFooterView {
 
-    var delegate: FooterCellTextOnlyItem0Delegate?
+    var delegate: FooterCellBigDelegate?
     @IBOutlet weak var centeredContainerView: UIView!
+    @IBOutlet weak var shareIcon: UIButton!
     
     private var currentTopic: String = ""
     
@@ -33,6 +35,10 @@ class FooterCellTextOnlyItem0: UITableViewHeaderFooterView {
         topicLabel.textColor = accentOrange
         
         self.centeredContainerView.backgroundColor = .clear
+        self.shareIcon.layer.cornerRadius = 0.5 * 55
+        self.shareIcon.addTarget(self,
+            action: #selector(shareIconTap(sender:)),
+            for: .touchUpInside)
     }
     
     func setTopic(_ topic: String) {
@@ -54,6 +60,10 @@ class FooterCellTextOnlyItem0: UITableViewHeaderFooterView {
             Utils.shared.didTapOnMoreLink = true
             self.delegate?.pushNewTopic(topicCode, sender: self)
         }
+    }
+    
+    @objc func shareIconTap(sender: UIButton) {
+        self.delegate?.shareTapped(sender: self)
     }
     
 }

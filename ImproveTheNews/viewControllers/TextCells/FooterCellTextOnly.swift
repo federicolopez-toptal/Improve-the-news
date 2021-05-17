@@ -57,6 +57,7 @@ class FooterCellTextOnly: UITableViewHeaderFooterView {
         }
         
         if(!topicCode.isEmpty) {
+            Utils.shared.didTapOnMoreLink = true
             self.delegate?.pushNewTopic(topicCode, sender: self)
         }
     }

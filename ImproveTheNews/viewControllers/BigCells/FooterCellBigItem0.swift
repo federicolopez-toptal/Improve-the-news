@@ -1,5 +1,5 @@
 //
-//  FooterCellTextOnlyItem0.swift
+//  FooterCellBigItem0.swift
 //  ImproveTheNews
 //
 //  Created by Federico Lopez on 11/05/2021.
@@ -9,14 +9,14 @@
 import UIKit
 
 
-protocol FooterCellTextOnlyItem0Delegate {
-    func pushNewTopic(_ topic: String, sender: FooterCellTextOnlyItem0)
+protocol FooterCellBigItem0Delegate {
+    func pushNewTopic(_ topic: String, sender: FooterCellBigItem0)
 }
 
 
-class FooterCellTextOnlyItem0: UITableViewHeaderFooterView {
+class FooterCellBigItem0: UITableViewHeaderFooterView {
 
-    var delegate: FooterCellTextOnlyItem0Delegate?
+    var delegate: FooterCellBigItem0Delegate?
     @IBOutlet weak var centeredContainerView: UIView!
     
     private var currentTopic: String = ""

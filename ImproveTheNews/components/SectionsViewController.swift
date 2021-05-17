@@ -42,7 +42,8 @@ class SectionsViewController: UIViewController {
     var safeArea: UILayoutGuide!
     
     private let appLayouts = [layoutType.denseIntense,
-                                layoutType.textOnly]
+                                layoutType.textOnly,
+                                layoutType.bigBeautiful]
     // layoutType.bigBeautiful,
     
     override func loadView() {
@@ -234,6 +235,10 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                     let vc = currentVC as! NewsTextViewController
                     topicToLoad = vc.topic
                     param_A = vc.param_A
+                } else if(currentVC is NewsBigViewController) {
+                    let vc = currentVC as! NewsBigViewController
+                    topicToLoad = vc.topic
+                    param_A = vc.param_A
                 }
                 
                 if(layout == .denseIntense) {
@@ -244,6 +249,10 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                     if(!(currentVC is NewsTextViewController)) {
                         changeCurrentVC = true
                     }
+                } else if(layout == .bigBeautiful) {
+                    if(!(currentVC is NewsBigViewController)) {
+                        changeCurrentVC = true
+                    }
                 }
             }
             
@@ -252,14 +261,14 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 var vc: UIViewController?
                 
                 if(layout == .denseIntense) {
-                }
-                
-                if(layout == .denseIntense) {
                     vc = NewsViewController(topic: topicToLoad)
                     (vc as! NewsViewController).param_A = param_A
                 } else if(layout == .textOnly) {
                     vc = NewsTextViewController(topic: topicToLoad)
                     (vc as! NewsTextViewController).param_A = param_A
+                } else if(layout == .bigBeautiful) {
+                    vc = NewsBigViewController(topic: topicToLoad)
+                    (vc as! NewsBigViewController).param_A = param_A
                 }
                 
                 if(vc != nil) {

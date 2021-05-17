@@ -1,21 +1,21 @@
 //
-//  HeaderCellTextOnly.swift
+//  HeaderCellBig.swift
 //  ImproveTheNews
 //
-//  Created by Federico Lopez on 29/04/2021.
+//  Created by Federico Lopez on 12/05/2021.
 //  Copyright © 2021 Mindy Long. All rights reserved.
 //
 
 import UIKit
 
 
-protocol HeaderCellTextOnlyDelegate {
-    func pushNewTopic(_ topic: String, sender: HeaderCellTextOnly)
+protocol HeaderCellBigDelegate {
+    func pushNewTopic(_ topic: String, sender: HeaderCellBig)
 }
 
-class HeaderCellTextOnly: UITableViewHeaderFooterView {
+class HeaderCellBig: UITableViewHeaderFooterView {
 
-    var delegate: HeaderCellTextOnlyDelegate?
+    var delegate: HeaderCellBigDelegate?
 
     @IBOutlet weak var contentLabel: UILabel!
     @IBOutlet weak var hierarchyLabel: UILabel!

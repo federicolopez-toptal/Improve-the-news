@@ -1,8 +1,8 @@
 //
-//  NewsTextViewController.swift
+//  NewsBigViewController.swift
 //  ImproveTheNews
 //
-//  Created by Federico Lopez on 27/04/2021.
+//  Created by Federico Lopez on 12/05/2021.
 //  Copyright © 2021 Mindy Long. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import SwiftyJSON
 
-class NewsTextViewController: UIViewController {
+class NewsBigViewController: UIViewController {
 
     var firstTime = true
     var uniqueID = -1
@@ -58,6 +58,8 @@ class NewsTextViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        print("BIG!!!")
+        
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
     
@@ -91,7 +93,7 @@ class NewsTextViewController: UIViewController {
         self.view.addSubview(self.horizontalMenu)
         
         let margin: CGFloat = 0
-        self.horizontalMenu.offset_y = CGFloat(70 + (100 * self.param_A)) + margin
+        self.horizontalMenu.offset_y = CGFloat(80 + (360 * self.param_A)) + margin
         self.horizontalMenu.moveTo(y: 0)
         self.horizontalMenu.isHidden = true
         self.horizontalMenu.customDelegate = self
@@ -149,20 +151,20 @@ class NewsTextViewController: UIViewController {
         ])
         self.tableView.backgroundColor = bgBlue
         
-        let headerNib = UINib(nibName: "HeaderCellTextOnly", bundle: nil)
+        let headerNib = UINib(nibName: "HeaderCellBig", bundle: nil)
         self.tableView.register(headerNib,
-            forHeaderFooterViewReuseIdentifier: "HeaderCellTextOnly")
+            forHeaderFooterViewReuseIdentifier: "HeaderCellBig")
             
-        let cellNib = UINib(nibName: "CellTextOnly", bundle: nil)
-        self.tableView.register(cellNib, forCellReuseIdentifier: "CellTextOnly")
+        let cellNib = UINib(nibName: "CellBig", bundle: nil)
+        self.tableView.register(cellNib, forCellReuseIdentifier: "CellBig")
         
-        let footerNib = UINib(nibName: "FooterCellTextOnly", bundle: nil)
+        let footerNib = UINib(nibName: "FooterCellBig", bundle: nil)
         self.tableView.register(footerNib,
-            forHeaderFooterViewReuseIdentifier: "FooterCellTextOnly")
+            forHeaderFooterViewReuseIdentifier: "FooterCellBig")
             
-        let footerItem0Nib = UINib(nibName: "FooterCellTextOnlyItem0", bundle: nil)
+        let footerItem0Nib = UINib(nibName: "FooterCellBigItem0", bundle: nil)
         self.tableView.register(footerItem0Nib,
-            forHeaderFooterViewReuseIdentifier: "FooterCellTextOnlyItem0")
+            forHeaderFooterViewReuseIdentifier: "FooterCellBigItem0")
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -450,7 +452,7 @@ class NewsTextViewController: UIViewController {
             count = newsParser.getSubTopicCountFor(topic: topicName)
         }
     
-        let vc = NewsTextViewController(topic: topicCode)
+        let vc = NewsBigViewController(topic: topicCode)
         vc.param_A = 4
         vc.param_S = 4 // sumar 4? o 4 fijo?
         if(count == 0) {
@@ -469,7 +471,7 @@ class NewsTextViewController: UIViewController {
 
 
 
-extension NewsTextViewController: NewsDelegate {
+extension NewsBigViewController: NewsDelegate {
     
     func resendRequest() {
         self.loadArticles()
@@ -495,9 +497,9 @@ extension NewsTextViewController: NewsDelegate {
 
 
 // MARK: - All tableView related
-extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
-    HeaderCellTextOnlyDelegate, FooterCellTextOnlyDelegate,
-    FooterCellTextOnlyItem0Delegate {
+extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
+    HeaderCellBigDelegate, FooterCellBigDelegate,
+    FooterCellBigItem0Delegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.newsParser.getNumOfSections()
@@ -507,13 +509,13 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView,
         heightForHeaderInSection section: Int) -> CGFloat {
         
-        return 70
+        return 80
     }
     
     func tableView(_ tableView: UITableView,
         viewForHeaderInSection section: Int) -> UIView? {
         
-        let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderCellTextOnly" ) as! HeaderCellTextOnly
+        let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderCellBig" ) as! HeaderCellBig
 
         cell.delegate = self
         cell.contentLabel.text = self.newsParser.getTopic(index: section)
@@ -535,12 +537,12 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     // Tap on breadcrumbs
-    func pushNewTopic(_ topic: String, sender: HeaderCellTextOnly) {
+    func pushNewTopic(_ topic: String, sender: HeaderCellBig) {
         self.pushNewTopic(topic)
     }
     
     // Tap on share
-    func shareTapped(sender: FooterCellTextOnly) {
+    func shareTapped(sender: FooterCellBig) {
         let ac = UIActivityViewController(activityItems: ["http://www.improvethenews.org/"], applicationActivities: nil)
         self.present(ac, animated: true)
     }
@@ -549,7 +551,7 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return 100
+        return 360
     }
     
     func tableView(_ tableView: UITableView,
@@ -562,7 +564,7 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier:
-            "CellTextOnly") as! CellTextOnly
+            "CellBig") as! CellBig
             
         var start = 0
         for n in 0..<indexPath.section {
@@ -577,6 +579,12 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         cell.exclamationImageView.isHidden = true
         if newsParser.getMarkups(index: index).count > 0 {
             cell.exclamationImageView.isHidden = false
+        }
+        
+        let imageURL = newsParser.getIMG(index: index)
+        DispatchQueue.main.async {
+            cell.mainPic.contentMode = .scaleAspectFill
+            cell.mainPic.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
         }
         
         return cell
@@ -612,7 +620,7 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         if(section==0) {
             // first footer, with horizontal menu
             
-            let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellTextOnlyItem0" ) as! FooterCellTextOnlyItem0
+            let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellBigItem0" ) as! FooterCellBigItem0
             
             cell.delegate = self
             cell.setTopic(self.newsParser.getTopic(index: section))
@@ -636,7 +644,7 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
             
             return cell
         } else {
-            let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellTextOnly" ) as! FooterCellTextOnly
+            let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellBig" ) as! FooterCellBig
     
             cell.delegate = self
             cell.setTopic(self.newsParser.getTopic(index: section))
@@ -646,11 +654,11 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     // Tap on "More <topic>"
-    func pushNewTopic(_ topic: String, sender: FooterCellTextOnly) {
+    func pushNewTopic(_ topic: String, sender: FooterCellBig) {
         self.pushNewTopic(topic)
     }
     
-    func pushNewTopic(_ topic: String, sender: FooterCellTextOnlyItem0) {
+    func pushNewTopic(_ topic: String, sender: FooterCellBigItem0) {
         self.pushNewTopic(topic)
     }
     
@@ -677,7 +685,7 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     }
 }
 
-extension NewsTextViewController: BiasSliderDelegate, ShadeDelegate {
+extension NewsBigViewController: BiasSliderDelegate, ShadeDelegate {
 
     // BiasSliderDelegate
     func biasSliderDidChange(sliderId: Int) {
@@ -723,14 +731,14 @@ extension NewsTextViewController: BiasSliderDelegate, ShadeDelegate {
 
 }
 
-extension NewsTextViewController: HorizontalMenuViewDelegate {
+extension NewsBigViewController: HorizontalMenuViewDelegate {
     func goToScrollView(atSection: Int) {
     
         var offset_y: CGFloat = 0
         for i in 1...atSection {
             if(i==1){
                 let h = self.horizontalMenu.frame.size.height
-                offset_y += 70 + (100*4) + 115 - h
+                offset_y += 80 + (360*4) + 115 - h
                 
                 if(self.mustShowBanner() && self.bannerView?.superview != nil) {
                     let code = BannerInfo.shared!.adCode
@@ -739,7 +747,7 @@ extension NewsTextViewController: HorizontalMenuViewDelegate {
                 
                 
             } else {
-                offset_y += 70 + (100*4) + 70
+                offset_y += 80 + (360*4) + 70
             }
         }
         
@@ -747,7 +755,7 @@ extension NewsTextViewController: HorizontalMenuViewDelegate {
     }
 }
 
-extension NewsTextViewController: BannerInfoDelegate {
+extension NewsBigViewController: BannerInfoDelegate {
     
     // Delegate
     func BannerInfoOnClose() {

@@ -54,7 +54,7 @@ func INITIAL_VC() -> UIViewController {
     } else if(layout == .textOnly) {
         return NewsTextViewController(topic: topic)
     } else {
-        return UIViewController()
+        return NewsBigViewController(topic: topic)
     }
 }
 

@@ -38,6 +38,7 @@
 		B6AF8732254465C900227CCC /* PlayfairDisplay-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A82A26F924F6134A0028272B /* PlayfairDisplay-SemiBold.ttf */; };
 		B6B87DA225626E9F00707A5C /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B87DA125626E9F00707A5C /* CustomSlider.swift */; };
 		B6FBE1682569298500424BF8 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = B6FBE1672569298500424BF8 /* SDWebImage */; };
+		BD03C9B5264C5A1200F3BE1F /* NewsBigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD03C9B4264C5A1200F3BE1F /* NewsBigViewController.swift */; };
 		BD0FED9F25D170330079A32B /* PTSerif-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FED9E25D170330079A32B /* PTSerif-Bold.ttf */; };
 		BD0FEDA825D170500079A32B /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDA625D170500079A32B /* Poppins-SemiBold.ttf */; };
 		BD0FEDA925D170500079A32B /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */; };
@@ -52,9 +53,15 @@
 		BD2813FD25F6BC1B00A91E38 /* text2.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD2813FC25F6BC1B00A91E38 /* text2.txt */; };
 		BD28140225F6BDCD00A91E38 /* text3.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD28140125F6BDCD00A91E38 /* text3.txt */; };
 		BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD34F5E825FA8EA200C6CFEE /* BannerView.swift */; };
+		BD3F58D9264CA5CC00B99522 /* FooterCellBig.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD3F58D7264CA5CC00B99522 /* FooterCellBig.xib */; };
+		BD3F58DA264CA5CC00B99522 /* FooterCellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3F58D8264CA5CC00B99522 /* FooterCellBig.swift */; };
 		BD4652A3260E68EC00FFFB11 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */; };
+		BD47A397264C9BA5003D3F2F /* CellBig.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD47A395264C9BA5003D3F2F /* CellBig.xib */; };
+		BD47A398264C9BA5003D3F2F /* CellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD47A396264C9BA5003D3F2F /* CellBig.swift */; };
 		BD4A4FD725E5438200AB37DA /* prefsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD4A4FD625E5438200AB37DA /* prefsButton.png */; };
 		BD4D53E5260A546F00635C48 /* MiniSlidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */; };
+		BD88FD51264CA93C00F8BCCB /* FooterCellBigItem0.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD88FD4F264CA93C00F8BCCB /* FooterCellBigItem0.xib */; };
+		BD88FD52264CA93C00F8BCCB /* FooterCellBigItem0.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD88FD50264CA93C00F8BCCB /* FooterCellBigItem0.swift */; };
 		BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */; };
 		BD962478261B425F009EC21D /* PieChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD962477261B425F009EC21D /* PieChartViewController.swift */; };
 		BD98C9F525D58021005106D2 /* ITN_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BD98C9F425D58021005106D2 /* ITN_logo.png */; };
@@ -64,6 +71,8 @@
 		BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */; };
 		BDBC97F525E3F1F3004FA5E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */; };
 		BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */; };
+		BDC68ED4264C983C0072BDF9 /* HeaderCellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC68ED2264C983C0072BDF9 /* HeaderCellBig.swift */; };
+		BDC68ED5264C983C0072BDF9 /* HeaderCellBig.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDC68ED3264C983C0072BDF9 /* HeaderCellBig.xib */; };
 		BDD540D525EEDCB500AF4F91 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD540D425EEDCB500AF4F91 /* StringExtension.swift */; };
 		BDD540DB25EEE09600AF4F91 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD540DA25EEE09600AF4F91 /* DateExtension.swift */; };
 		BDD67D822638433200B7FD7C /* NewsTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD67D812638433200B7FD7C /* NewsTextViewController.swift */; };
@@ -333,6 +342,7 @@
 		B6B80D1E257191A4003FB295 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B6B87DA125626E9F00707A5C /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
 		BBD678EB6C9D4869AAD14A11 /* Pods-ImproveTheNews-ImproveTheNewsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNews-ImproveTheNewsUITests.debug.xcconfig"; path = "Target Support Files/Pods-ImproveTheNews-ImproveTheNewsUITests/Pods-ImproveTheNews-ImproveTheNewsUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		BD03C9B4264C5A1200F3BE1F /* NewsBigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsBigViewController.swift; sourceTree = "<group>"; };
 		BD0FED9E25D170330079A32B /* PTSerif-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PTSerif-Bold.ttf"; sourceTree = "<group>"; };
 		BD0FEDA625D170500079A32B /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
@@ -347,9 +357,15 @@
 		BD2813FC25F6BC1B00A91E38 /* text2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = text2.txt; sourceTree = "<group>"; };
 		BD28140125F6BDCD00A91E38 /* text3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = text3.txt; sourceTree = "<group>"; };
 		BD34F5E825FA8EA200C6CFEE /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
+		BD3F58D7264CA5CC00B99522 /* FooterCellBig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellBig.xib; sourceTree = "<group>"; };
+		BD3F58D8264CA5CC00B99522 /* FooterCellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellBig.swift; sourceTree = "<group>"; };
 		BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		BD47A395264C9BA5003D3F2F /* CellBig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellBig.xib; sourceTree = "<group>"; };
+		BD47A396264C9BA5003D3F2F /* CellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellBig.swift; sourceTree = "<group>"; };
 		BD4A4FD625E5438200AB37DA /* prefsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prefsButton.png; sourceTree = "<group>"; };
 		BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSlidersView.swift; sourceTree = "<group>"; };
+		BD88FD4F264CA93C00F8BCCB /* FooterCellBigItem0.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellBigItem0.xib; sourceTree = "<group>"; };
+		BD88FD50264CA93C00F8BCCB /* FooterCellBigItem0.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellBigItem0.swift; sourceTree = "<group>"; };
 		BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueFromLeft.swift; sourceTree = "<group>"; };
 		BD962477261B425F009EC21D /* PieChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartViewController.swift; sourceTree = "<group>"; };
 		BD98C9F425D58021005106D2 /* ITN_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ITN_logo.png; sourceTree = "<group>"; };
@@ -359,6 +375,8 @@
 		BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = seeMoreFooterLast.swift; sourceTree = "<group>"; };
+		BDC68ED2264C983C0072BDF9 /* HeaderCellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderCellBig.swift; sourceTree = "<group>"; };
+		BDC68ED3264C983C0072BDF9 /* HeaderCellBig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderCellBig.xib; sourceTree = "<group>"; };
 		BDD540D425EEDCB500AF4F91 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		BDD540DA25EEE09600AF4F91 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		BDD67D812638433200B7FD7C /* NewsTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTextViewController.swift; sourceTree = "<group>"; };
@@ -746,6 +764,8 @@
 				A81B3B522481E9A200A52A97 /* NewsViewController.swift */,
 				BDD67D812638433200B7FD7C /* NewsTextViewController.swift */,
 				BDD67D862638576300B7FD7C /* TextCells */,
+				BD03C9B4264C5A1200F3BE1F /* NewsBigViewController.swift */,
+				BDC68ED1264C980A0072BDF9 /* BigCells */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -797,6 +817,21 @@
 				BD252537261CCF2A0090D04A /* text3b.txt */,
 			);
 			path = SliderDocFiles;
+			sourceTree = "<group>";
+		};
+		BDC68ED1264C980A0072BDF9 /* BigCells */ = {
+			isa = PBXGroup;
+			children = (
+				BDC68ED2264C983C0072BDF9 /* HeaderCellBig.swift */,
+				BDC68ED3264C983C0072BDF9 /* HeaderCellBig.xib */,
+				BD47A396264C9BA5003D3F2F /* CellBig.swift */,
+				BD47A395264C9BA5003D3F2F /* CellBig.xib */,
+				BD3F58D8264CA5CC00B99522 /* FooterCellBig.swift */,
+				BD3F58D7264CA5CC00B99522 /* FooterCellBig.xib */,
+				BD88FD50264CA93C00F8BCCB /* FooterCellBigItem0.swift */,
+				BD88FD4F264CA93C00F8BCCB /* FooterCellBigItem0.xib */,
+			);
+			path = BigCells;
 			sourceTree = "<group>";
 		};
 		BDD67D862638576300B7FD7C /* TextCells */ = {
@@ -1144,6 +1179,7 @@
 				BDDA44FD2612301100C9C3AF /* AZE64.png in Resources */,
 				BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */,
 				BDDA45532612301100C9C3AF /* LAO64.png in Resources */,
+				BDC68ED5264C983C0072BDF9 /* HeaderCellBig.xib in Resources */,
 				BDDA45262612301100C9C3AF /* ARG64.png in Resources */,
 				BDDA44E72612301100C9C3AF /* CYP64.png in Resources */,
 				BDDA451B2612301100C9C3AF /* SLV64.png in Resources */,
@@ -1164,6 +1200,7 @@
 				BDDA453F2612301100C9C3AF /* ETH64.png in Resources */,
 				BDDA45932612301100C9C3AF /* SUR64.png in Resources */,
 				BDDA45A12612301100C9C3AF /* HTI64.png in Resources */,
+				BD47A397264C9BA5003D3F2F /* CellBig.xib in Resources */,
 				BDDA451F2612301100C9C3AF /* DMA64.png in Resources */,
 				BDDA45662612301100C9C3AF /* SGP64.png in Resources */,
 				BDDA450D2612301100C9C3AF /* VUT64.png in Resources */,
@@ -1210,6 +1247,7 @@
 				BDDA456E2612301100C9C3AF /* BLR64.png in Resources */,
 				BDDA45912612301100C9C3AF /* POL64.png in Resources */,
 				BDDA459E2612301100C9C3AF /* ESP64.png in Resources */,
+				BD3F58D9264CA5CC00B99522 /* FooterCellBig.xib in Resources */,
 				BDDA45952612301100C9C3AF /* ECU64.png in Resources */,
 				BDDA45182612301100C9C3AF /* DJI64.png in Resources */,
 				BDDA45412612301100C9C3AF /* TUR64.png in Resources */,
@@ -1217,6 +1255,7 @@
 				BDDA456F2612301100C9C3AF /* ABW64.png in Resources */,
 				BDDA44E12612301100C9C3AF /* TUN64.png in Resources */,
 				BDDA458A2612301100C9C3AF /* DZA64.png in Resources */,
+				BD88FD51264CA93C00F8BCCB /* FooterCellBigItem0.xib in Resources */,
 				BDDA44F52612301100C9C3AF /* UKR64.png in Resources */,
 				BDDA45272612301100C9C3AF /* NPL64.png in Resources */,
 				BDDA45422612301100C9C3AF /* NIC64.png in Resources */,
@@ -1510,22 +1549,27 @@
 				B6B87DA225626E9F00707A5C /* CustomSlider.swift in Sources */,
 				BDF37F65263AE026003D910D /* HeaderCellTextOnly.swift in Sources */,
 				A81B3B252481E67200A52A97 /* ImproveTheNews.xcdatamodeld in Sources */,
+				BD03C9B5264C5A1200F3BE1F /* NewsBigViewController.swift in Sources */,
 				A89B803624AFAB8B009BB0F8 /* WebViewController.swift in Sources */,
 				A87144EA24F43B3100A7E404 /* SearchViewController.swift in Sources */,
+				BD3F58DA264CA5CC00B99522 /* FooterCellBig.swift in Sources */,
 				A81B3B202481E67200A52A97 /* AppDelegate.swift in Sources */,
 				A82A270224F6A1420028272B /* TopicSliders.swift in Sources */,
+				BD47A398264C9BA5003D3F2F /* CellBig.swift in Sources */,
 				BDEFE59C25D1B95700175C3C /* MoreHeadlinesView.swift in Sources */,
 				A8B2F846249728F40069EF76 /* NewsParser.swift in Sources */,
 				BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */,
 				A8D61B3724F1656C00A0F8F5 /* Pages.swift in Sources */,
 				A8CA063424EB3B0A00B91778 /* BiasSliders.swift in Sources */,
 				BDF37F6C263AE2E5003D910D /* CellTextOnly.swift in Sources */,
+				BD88FD52264CA93C00F8BCCB /* FooterCellBigItem0.swift in Sources */,
 				A8A7935C2482F98C009A55FE /* TabBarController.swift in Sources */,
 				BD9D55D2264ACFDE00509722 /* HorizontalMenuView.swift in Sources */,
 				BD2813EE25F6A7D000A91E38 /* SliderDocNewVersion.swift in Sources */,
 				BD1B39CE262F270000CDC9F0 /* UIDeviceExtension.swift in Sources */,
 				BD4652A3260E68EC00FFFB11 /* UIColorExtension.swift in Sources */,
 				A8FBAAA724B017610011225B /* SliderValues.swift in Sources */,
+				BDC68ED4264C983C0072BDF9 /* HeaderCellBig.swift in Sources */,
 				BDD540DB25EEE09600AF4F91 /* DateExtension.swift in Sources */,
 				BD962478261B425F009EC21D /* PieChartViewController.swift in Sources */,
 				BDD67D822638433200B7FD7C /* NewsTextViewController.swift in Sources */,
@@ -1696,7 +1740,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 2.5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -1723,7 +1767,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 2.5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
