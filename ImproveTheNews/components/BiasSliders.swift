@@ -124,6 +124,8 @@ extension SliderPopup {
         controls.heightAnchor.constraint(equalToConstant: 40).isActive = true
         */
         
+        let margin: CGFloat = 20
+        
         // the actual sliders
         for i in 0..<labels.count {
             let miniview = UIView()
@@ -135,13 +137,17 @@ extension SliderPopup {
 
             
             let name = UILabel(text: labels[i], font: UIFont(name: "Poppins-SemiBold", size: 17), textColor: biasSliderTitles, textAlignment: .left, numberOfLines: 1)
-            name.frame = CGRect(x: 10, y: 0, width: stackView.frame.width, height: 30)
+            name.frame = CGRect(x: margin, y: 0, width: stackView.frame.width-(margin*2), height: 30)
+            //name.backgroundColor = .blue
             
             let minLabel = createLabel(name: descriptions[i][0])
             let maxLabel = createLabel(name: descriptions[i][1])
             
             let slider = UISlider(backgroundColor: .clear)
-            slider.frame = CGRect(x: 90, y: name.frame.maxY+3, width: stackView.frame.width - 180, height: 20)
+            slider.frame = CGRect(x:(UIScreen.main.bounds.width-(stackView.frame.width - 210))/2,
+                y: name.frame.maxY+3,
+                width: stackView.frame.width - 210,
+                height: 20)
             slider.minimumValue = 0
             slider.maximumValue = 99
             //slider.tintColor = .white
@@ -150,11 +156,14 @@ extension SliderPopup {
             slider.addTarget(self, action: #selector(self.biasSliderValueDidChange(_:)), for: .valueChanged)
             slider.tag = i + 50
             slider.isContinuous = false
-            minLabel.frame = CGRect(x: 10, y: name.frame.maxY+3, width: 75, height: 20)
-            maxLabel.frame = CGRect(x: slider.frame.maxX + 5, y: name.frame.maxY+3, width: 75, height: 20)
+            minLabel.frame = CGRect(x: margin, y: name.frame.maxY+3, width: 95, height: 20)
+            maxLabel.frame = CGRect(x: UIScreen.main.bounds.width - 95 - margin,
+                y: name.frame.maxY+3, width: 95, height: 20)
             
-            minLabel.textAlignment = .center
-            maxLabel.textAlignment = .center
+            minLabel.textAlignment = .left
+            //minLabel.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+            maxLabel.textAlignment = .right
+            //maxLabel.backgroundColor = UIColor.black.withAlphaComponent(0.25)
             
             var v = Float(0)
             let k = keys[i]

@@ -77,7 +77,7 @@ class NewsBigViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.tintColor = accentOrange
+        navigationController?.navigationBar.tintColor = .white
         self.tableView.delaysContentTouches = false
         self.loadData()
     }
@@ -459,7 +459,7 @@ class NewsBigViewController: UIViewController {
             vc.param_A = 40
         }
         
-        if(Utils.shared.didTapOnMoreLink && topicCode=="news") {
+        if(Utils.shared.didTapOnMoreLink) { //} && topicCode=="news") {
             vc.param_A = 10
         }
         Utils.shared.didTapOnMoreLink = false
@@ -586,6 +586,12 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
             cell.mainPic.contentMode = .scaleAspectFill
             cell.mainPic.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
         }
+        
+        cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
+                                            val2: newsParser.getPE(index: index),
+                                            source: newsParser.getSource(index: index),
+                                            countryID: newsParser.getCountryID(index: index))
+        cell.miniSlidersView?.viewController = self
         
         return cell
     }

@@ -26,28 +26,34 @@ class MiniSlidersView: UIView {
     var textOnTap = ""
     var viewController: UIViewController?
 
+    var factor: CGFloat = 1.0
+
     // MARK: - Initialization
-    init(some: String) {
-        super.init(frame: CGRect(x: 0, y: 0, width: dim, height: dim))
-        self.backgroundColor = bgBlue
+    init(some: String, factor: CGFloat = 1.0) {
+        self.factor = factor
         
-        line1.frame = CGRect(x: 3, y: 12, width: dim-12, height: 2)
-        line1.backgroundColor = UIColor.init(hex: 0x4F5F8B)
-        line1.layer.cornerRadius = 2
+        super.init(frame: CGRect(x: 0, y: 0, width: dim * factor, height: dim * factor))
+        self.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
+        
+        line1.frame = CGRect(x: 3 * factor, y: 12 * factor,
+            width: (dim-12)*factor, height: 2*factor)
+        line1.backgroundColor = DARKMODE() ? UIColor.init(hex: 0x4F5F8B) : accentOrange
+        line1.layer.cornerRadius = 2 * factor
         self.addSubview(line1)
         
-        line2.frame = CGRect(x: 3, y: 26, width: dim-12, height: 2)
+        line2.frame = CGRect(x: 3 * factor, y: 26 * factor,
+            width: (dim-12)*factor, height: 2 * factor)
         line2.backgroundColor = line1.backgroundColor
-        line2.layer.cornerRadius = 2
+        line2.layer.cornerRadius = 2 * factor
         self.addSubview(line2)
         
-        thumb1.frame = CGRect(x: 0, y: 0, width: thumbDim, height: thumbDim)
-        thumb1.layer.cornerRadius = 4
-        thumb1.backgroundColor = UIColor.init(hex: 0xDFE1D8)
+        thumb1.frame = CGRect(x: 0, y: 0, width: thumbDim * factor, height: thumbDim * factor)
+        thumb1.layer.cornerRadius = 4 * factor
+        thumb1.backgroundColor = DARKMODE() ? UIColor.init(hex: 0xDFE1D8) : accentOrange
         line1.addSubview(thumb1)
-        thumb2.frame = CGRect(x: 0, y: 0, width: thumbDim, height: thumbDim)
-        thumb2.layer.cornerRadius = 4
-        thumb2.backgroundColor = UIColor.init(hex: 0xDFE1D8)
+        thumb2.frame = CGRect(x: 0, y: 0, width: thumbDim * factor, height: thumbDim * factor)
+        thumb2.layer.cornerRadius = 4 * factor
+        thumb2.backgroundColor = thumb1.backgroundColor
         line2.addSubview(thumb2)
         
         self.setValues(val1: 1, val2: 1)
@@ -69,21 +75,21 @@ class MiniSlidersView: UIView {
         NSLayoutConstraint.activate([
             self.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             self.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
-            self.heightAnchor.constraint(equalToConstant: dim),
-            self.widthAnchor.constraint(equalToConstant: dim)
+            self.heightAnchor.constraint(equalToConstant: dim * factor),
+            self.widthAnchor.constraint(equalToConstant: dim * factor)
         ])
-        self.layer.cornerRadius = 15
+        self.layer.cornerRadius = 15 * factor
         self.layer.maskedCorners = [.layerMaxXMinYCorner]
         
         let button = UIButton(type: .system)
-        button.backgroundColor = .clear
+        button.backgroundColor = .clear //UIColor.red.withAlphaComponent(0.5)
         view.superview?.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
-            button.heightAnchor.constraint(equalToConstant: dim * 1.5),
-            button.widthAnchor.constraint(equalToConstant: dim * 1.5)
+            button.heightAnchor.constraint(equalToConstant: (dim * 1.5) * factor),
+            button.widthAnchor.constraint(equalToConstant: (dim * 1.5) * factor)
         ])
         button.addTarget(self, action: #selector(buttonAreaTap(sender:)), for: .touchUpInside)
     }
@@ -112,9 +118,10 @@ class MiniSlidersView: UIView {
         self.textOnTap += self.NATIONALITY_forID(countryID)
         self.textOnTap += "has a " + LR_text(val) + " and "
         
+        let tDim = thumbDim * factor
         mFrame = thumb1.frame
-        mFrame.origin.y = -3
-        mFrame.origin.x = ((line1.frame.size.width-(thumbDim/2))/5) * CGFloat((val-1))
+        mFrame.origin.y = -3 * self.factor
+        mFrame.origin.x = ((line1.frame.size.width-(tDim/2))/5) * CGFloat((val-1))
         thumb1.frame = mFrame
         
         //val = Int.random(in: 1...5)  // <-- For testing purposes
@@ -125,8 +132,8 @@ class MiniSlidersView: UIView {
         self.textOnTap += PE_text(val) + " stance"
         
         mFrame = thumb2.frame
-        mFrame.origin.y = -3
-        mFrame.origin.x = ((line2.frame.size.width-(thumbDim/2))/5) * CGFloat((val-1))
+        mFrame.origin.y = -3 * factor
+        mFrame.origin.x = ((line2.frame.size.width-(tDim/2))/5) * CGFloat((val-1))
         thumb2.frame = mFrame
     }
     

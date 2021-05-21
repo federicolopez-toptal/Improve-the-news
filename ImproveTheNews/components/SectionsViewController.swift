@@ -53,6 +53,11 @@ class SectionsViewController: UIViewController {
         if(APP_CFG_SHOW_LAYOUTS) {
             self.support.append("Change Layout")
         }
+        if(Utils.shared.displayMode == .dark) {
+            self.support.append("Bright mode")
+        } else {
+            self.support.append("Dark mode")
+        }
         
         navigationItem.largeTitleDisplayMode = .never
         safeArea = view.layoutMarginsGuide
@@ -182,6 +187,8 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 present(contact, animated: true, completion: nil)
             case 5:
                 self.selectLayout()
+            case 6:
+                self.changeDisplayMode()
             default:
                 fatalError()
         }
@@ -189,7 +196,37 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     
-    
+    private func changeDisplayMode() {
+        if(Utils.shared.displayMode == .dark) {
+            Utils.shared.displayMode = .bright
+        } else {
+            Utils.shared.displayMode = .dark
+        }
+        
+        let topic = self.getMainTopic()
+        
+        let news = NewsViewController(topic: topic) //!!!2 - check layout first
+        self.navigationController?.viewControllers = [news, self]
+        
+        //let aaa = self.navigationController?.navigationBar.barStyle = .default
+        //UIBarStyle
+        
+        self.navigationController?.customPopViewController()
+    }
+    private func getMainTopic() -> String {
+        var topic = "news"
+        
+        //!!!2 - check topic for each type of layout
+        
+        /*
+        let vc = self.navigationController?.viewControllers.first!
+        if(vc is NewsViewController){ topic = (vc as! NewsViewController).topic }
+        
+        print( self.navigationController?.viewControllers )
+        */
+        
+        return topic
+    }
     
     private func selectLayout() {
         let actionSheet = UIAlertController(title: "",

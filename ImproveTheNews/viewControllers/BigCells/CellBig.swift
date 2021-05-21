@@ -16,6 +16,8 @@ class CellBig: UITableViewCell {
     @IBOutlet weak var exclamationImageView: UIImageView!
     @IBOutlet weak var mainPic: UIImageView!
     
+    var miniSlidersView: MiniSlidersView?
+    
     // MARK: - Init
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -32,6 +34,14 @@ class CellBig: UITableViewCell {
         self.mainPic.backgroundColor = UIColor.black.withAlphaComponent(0.25)
         self.mainPic.layer.cornerRadius = 15
         self.mainPic.clipsToBounds = true
+        
+        if(APP_CFG_SHOW_MINI_SLIDERS) {
+            if(miniSlidersView == nil) {
+                miniSlidersView = MiniSlidersView(some: "", factor: 1.5)
+                miniSlidersView?.insertInto(view: mainPic)
+            }
+            miniSlidersView?.setValues(val1: 3, val2: 1)
+        }
     }
     
 }

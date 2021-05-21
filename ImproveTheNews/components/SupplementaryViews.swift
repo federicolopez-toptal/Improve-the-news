@@ -109,6 +109,8 @@ class SubtopicHeader: UICollectionReusableView {
         ])
         //self.hierarchy.backgroundColor = .red
         
+        self.hierarchy.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
+        
     // main orange Title
         //addSubview(label)
         stackView.addArrangedSubview(label)
@@ -367,7 +369,7 @@ class seeMoreFooter: UICollectionReusableView {
         
         label.text = "More "
         label.font = UIFont(name: "PTSerif-Bold", size: 18)
-        label.textColor = articleSourceColor
+        label.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         label.sizeToFit()
         label.backgroundColor = .clear
             var mFrame = label.frame
@@ -421,14 +423,14 @@ class seeMoreFooter: UICollectionReusableView {
         */
 
         addTopBorder()
-        self.backgroundColor = bgBlue
+        self.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
         //self.backgroundColor = UIColor.green.withAlphaComponent(0.5)
     }
     
     func addTopBorder() {
         let border = UIView(frame: CGRect(x: 10, y: 5,
                             width: self.frame.width - 20, height: 1))
-        border.backgroundColor = articleSourceColor
+        border.backgroundColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         addSubview(border)
     }
     
@@ -444,6 +446,7 @@ class seeMoreFooter: UICollectionReusableView {
     }
     
     @objc func goToTopic(_ sender: UIButton!) {
+        Utils.shared.didTapOnMoreLink = true
         
         let buttontext = button.titleLabel!.text!
         let topic = buttontext.replacingOccurrences(of: "MORE ", with: "")
@@ -471,7 +474,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate, Ban
     public func configure() {
         label.text = "More "
         label.font = UIFont(name: "PTSerif-Bold", size: 18)
-        label.textColor = articleSourceColor
+        label.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         label.sizeToFit()
         label.backgroundColor = .clear
             var mFrame = label.frame
@@ -506,7 +509,9 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate, Ban
         scrollView.frame = CGRect(x: 0, y: 5, width: bounds.width, height: 36)
         scrollView.flashScrollIndicators()
         scrollView.delegate = self
-        scrollView.backgroundColor = articleSourceColor //.clear
+        scrollView.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
+        
+         //articleSourceColor //.clear
         
         var x = 0
         //for i in 0..<Globals.searchTopics.count {
@@ -519,8 +524,8 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate, Ban
             }
         
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-            label.textColor = articleHeadLineColor
-            label.backgroundColor = articleSourceColor
+            label.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+            label.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
             label.font = UIFont(name: "Poppins-SemiBold", size: 12)
             label.textAlignment = .center
             label.text = topic.uppercased()
@@ -551,7 +556,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate, Ban
 
         //addTopBorder()
         
-        self.backgroundColor = bgBlue
+        self.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
         //self.backgroundColor = UIColor.green.withAlphaComponent(0.5)
     }
     
@@ -650,7 +655,7 @@ class FAQFooter: UICollectionReusableView {
     
     public func configure() {
         
-        backgroundColor = bgBlue
+        backgroundColor = bgBlue_LIGHT
         
         addSubview(view)
         view.translatesAutoresizingMaskIntoConstraints = false

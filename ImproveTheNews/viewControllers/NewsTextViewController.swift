@@ -75,7 +75,7 @@ class NewsTextViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.tintColor = accentOrange
+        navigationController?.navigationBar.tintColor = .white
         self.tableView.delaysContentTouches = false
         self.loadData()
     }
@@ -457,7 +457,7 @@ class NewsTextViewController: UIViewController {
             vc.param_A = 40
         }
         
-        if(Utils.shared.didTapOnMoreLink && topicCode=="news") {
+        if(Utils.shared.didTapOnMoreLink) { //} && topicCode=="news") {
             vc.param_A = 10
         }
         Utils.shared.didTapOnMoreLink = false

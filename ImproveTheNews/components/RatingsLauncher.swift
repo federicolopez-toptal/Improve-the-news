@@ -28,7 +28,7 @@ class RatingsLauncher: UIView {
     lazy var cosmos: CosmosView = {
         let stars = CosmosView()
         stars.settings.starMargin = 5
-        stars.settings.starSize = 20
+        stars.settings.starSize = 22
         stars.settings.fillMode = .half
         stars.settings.starMargin = 5
         stars.settings.minTouchRating = 0
@@ -81,13 +81,13 @@ class RatingsLauncher: UIView {
         addSubview(cosmos)
         cosmos.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            cosmos.leadingAnchor.constraint(equalTo: name.trailingAnchor, constant: 5),
-            cosmos.widthAnchor.constraint(equalToConstant: 130),
+            cosmos.leadingAnchor.constraint(equalTo: name.trailingAnchor, constant: 15),
+            cosmos.widthAnchor.constraint(equalToConstant: 140),
             cosmos.topAnchor.constraint(equalTo: self.topAnchor, constant: 14)
         ])
-        //cosmos.backgroundColor = .red
+        //cosmos.backgroundColor = UIColor.red.withAlphaComponent(0.25)
         
-        submit.isUserInteractionEnabled = true
+        submit.isUserInteractionEnabled = false
         addSubview(submit)
         submit.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -112,6 +112,7 @@ class RatingsLauncher: UIView {
         }
         cosmos.didFinishTouchingCosmos = { rating in
             RatingsLauncher.ratings = Int(rating)
+            self.submitPressed(self.submit)
         }
     
         sliderValues = SliderValues.sharedInstance

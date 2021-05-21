@@ -152,8 +152,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.moreHeadLines.delegate = self
         self.moreHeadLines.hide()
         
-        self.view.backgroundColor = bgBlue
-        self.collectionView.backgroundColor = bgBlue
+        self.view.backgroundColor = bgBlue_LIGHT
+        self.collectionView.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
         
         pieChartVC.delegate = self
         
@@ -165,10 +165,19 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         */
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.tintColor = accentOrange
-        collectionView.delaysContentTouches = false
+    /*
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        //return DARKMODE() ? .lightContent : .darkContent
         
+        return .darkContent
+    }
+    */
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.tintColor = DARKMODE() ? .white : .black
+        navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        
+        collectionView.delaysContentTouches = false
         for view in collectionView.subviews {
           if view is UIScrollView {
               (view as? UIScrollView)!.delaysContentTouches = false
@@ -376,10 +385,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                                         y: ((UIScreen.main.bounds.height-dim)/2) - 88,
                                         width: dim, height: dim)
         self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        if(!DARKMODE()){ self.loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.25) }
         self.loadingView.isHidden = true
         self.loadingView.layer.cornerRadius = 15
     
         let loading = UIActivityIndicatorView(style: .medium)
+        if(!DARKMODE()){ loading.color = .black }
         self.loadingView.addSubview(loading)
         loading.center = CGPoint(x: dim/2, y: dim/2)
         loading.startAnimating()
@@ -410,10 +421,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         navigationItem.titleView = titleView
 
         navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.barTintColor = bgBlue
-        navigationController?.navigationBar.backgroundColor = bgBlue
-        navigationController?.navigationBar.barTintColor = bgBlue
-        navigationController?.navigationBar.barTintColor = bgBlue
+        navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         navigationController?.navigationBar.isTranslucent = false
         
         navigationController?.navigationBar.barStyle = .black
@@ -426,8 +434,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
+        var logoFile = "ITN_logo.png"
+        if(!DARKMODE()){ logoFile = "ITN_logo_blackText.png" }
+
         let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 195, height: 30))
-        let img = UIImage(named: "ITN_logo.png")?.withRenderingMode(.alwaysOriginal)
+        let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
         let homeButton = UIButton(image: img!)
         homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
         homeButton.addTarget(self, action: #selector(homeButtonTapped),
@@ -541,7 +552,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     private func setFlag(imageView: UIImageView, ID: String) {
         let img = UIImage(named: "\(ID.uppercased())64.png")
         
-        imageView.backgroundColor = bgBlue
+        imageView.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
         if(img != nil) {
             imageView.image = img
         } else {
@@ -603,7 +614,7 @@ extension NewsViewController: TopicSelectorDelegate {
         }
         */
         
-        if(Utils.shared.didTapOnMoreLink && newTopic=="news") {
+        if(Utils.shared.didTapOnMoreLink){  // && newTopic=="news") {
             vc.param_A = 10
         }
         Utils.shared.didTapOnMoreLink = false
@@ -1065,6 +1076,15 @@ extension NewsViewController {
                 cell.miniSlidersView?.viewController = self
                 self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                 
+                /*
+                cell.headline.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                cell.flag.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+                cell.source.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                cell.contentView.backgroundColor = UIColor.orange.withAlphaComponent(0.5)
+                */
+                
+                //cell.contentView.backgroundColor = bgBlue_LIGHT
+                
                 return cell
             }
                 
@@ -1208,6 +1228,12 @@ extension NewsViewController {
                 cell.miniSlidersView?.viewController = self
                 self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                 cell.adjust()
+                
+                //cell.headline.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                //cell.flag.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+                
+                //cell.contentView.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
                 
                 return cell
             }
@@ -1615,7 +1641,7 @@ extension NewsViewController {
                     text += newsParser.getTopic(index: indexPath.section)
                 */
                 
-                sectionHeader.backgroundColor = bgBlue
+                sectionHeader.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
                 //sectionHeader.backgroundColor = .green
                 
                 
@@ -1657,6 +1683,7 @@ extension NewsViewController {
                         // oMore
                         seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                         seeMore.configure()
+                        
                         return seeMore
                     } else {
                         let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterSection0.footerId, for: indexPath) as! seeMoreFooterSection0

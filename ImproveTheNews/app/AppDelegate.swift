@@ -23,8 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let newsAggregator = INITIAL_VC()
         let navController = UINavigationController(rootViewController: newsAggregator)
-        UINavigationBar.appearance().backgroundColor = .black
-        UINavigationBar.appearance().tintColor = .white
         window?.rootViewController = navController
         
         // MARK: INCOMPLETE
@@ -103,4 +101,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
+
 

@@ -38,8 +38,10 @@ class seeMoreFooterLast: UICollectionReusableView {
     
     public func configure2() {
 
+        self.titleImage.image = UIImage(named: "ITN_logo_blackText.png")
+
         addSubview(view)
-        view.backgroundColor = bgBlue
+        view.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
         view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -60,13 +62,13 @@ class seeMoreFooterLast: UICollectionReusableView {
         ])
         
         let line = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
-        line.backgroundColor = articleSourceColor
+        line.backgroundColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         view.addSubview(line)
         
         about.textAlignment = .left
         about.text = str
         about.font = UIFont(name: "OpenSans-Regular", size: 11)
-        about.textColor = UIColor(rgb: 0x737D96)
+        about.textColor = DARKMODE() ? UIColor(rgb: 0x737D96) : textBlack
         about.numberOfLines = 18
         about.adjustsFontSizeToFitWidth = true
         about.sizeToFit()
@@ -85,7 +87,7 @@ class seeMoreFooterLast: UICollectionReusableView {
         //copyright.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
         copyright.text = "© 2021 Improve The News Foundation - All Rights Reserved"
         copyright.font = UIFont.systemFont(ofSize: 11)
-        copyright.textColor = UIColor(rgb: 0x737D96)
+        copyright.textColor = DARKMODE() ? UIColor(rgb: 0x737D96) : textBlack
         copyright.numberOfLines = 2
         copyright.adjustsFontSizeToFitWidth = true
         copyright.sizeToFit()
@@ -125,7 +127,7 @@ class seeMoreFooterLast: UICollectionReusableView {
         
         label.text = "More "
         label.font = UIFont(name: "PTSerif-Bold", size: 18)
-        label.textColor = articleSourceColor
+        label.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         label.sizeToFit()
         label.backgroundColor = .clear
             var mFrame = label.frame
@@ -155,13 +157,13 @@ class seeMoreFooterLast: UICollectionReusableView {
             button.frame = mFrame
 
         addTopBorder()
-        self.backgroundColor = bgBlue
+        self.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
     }
     
     func addTopBorder() {
         let border = UIView(frame: CGRect(x: 10, y: 5,
                             width: self.frame.width - 20, height: 1))
-        border.backgroundColor = articleSourceColor
+        border.backgroundColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         addSubview(border)
     }
     

@@ -25,6 +25,13 @@ class Utils {
     // Current layout
     var currentLayout = layoutType.denseIntense
     
+    // Current display mode
+    var displayMode: DisplayMode = .bright
+}
+
+func DARKMODE() -> Bool {
+    if(Utils.shared.displayMode == .dark){ return true }
+    return false
 }
 
 

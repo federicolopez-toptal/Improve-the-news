@@ -9,15 +9,23 @@
 import Foundation
 import UIKit
 
+// bright mode
+let bgWhite_DARK = UIColor(rgb: 0xE8E5E7)
+let bgWhite_LIGHT = UIColor(rgb: 0xFFFFFF)
+let textBlack = UIColor.black
+let textBlackAlpha = UIColor.black.withAlphaComponent(0.3)
 
-var bgBlue = UIColor(rgb: 0x0D1228)
-var bgBlueLight = UIColor(rgb: 0x131b33)
+// dark mode
+let bgBlue_LIGHT = UIColor(rgb: 0x131B33)
+let bgBlue_DARK = UIColor(rgb: 0x0B1229)
+let bgBlue = UIColor(rgb: 0x0D1228)
+let bgBlueLight = UIColor(rgb: 0x131b33)
 
-var accentOrange = UIColor(rgb: 0xD3592D)
-var articleHeadLineColor = UIColor(rgb: 0xE4E5DF)
-var articleSourceColor = UIColor(rgb: 0x334262)
-var biasSliderColor = UIColor(rgb: 0x0B1229)
-var biasSliderTitles = UIColor(rgb: 0x131B33)
+let accentOrange = UIColor(rgb: 0xD3592D)
+let articleHeadLineColor = UIColor(rgb: 0xE4E5DF)
+let articleSourceColor = UIColor(rgb: 0x334262)
+let biasSliderColor = UIColor(rgb: 0x0B1229)
+let biasSliderTitles = UIColor(rgb: 0x131B33)
 
 var hArray = [String]()
     
@@ -39,6 +47,11 @@ enum layoutType: String {
     case denseIntense = "Dense & intense"
     case bigBeautiful = "Big & beautiful"
     case textOnly = "Text only"
+}
+
+enum DisplayMode {
+    case dark
+    case bright
 }
     
     

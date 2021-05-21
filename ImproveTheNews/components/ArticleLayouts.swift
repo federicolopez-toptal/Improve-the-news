@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+let CELL_HEIGHT: CGFloat = 110
+
 struct Section {
     let sectionImage, sectionDescription: String
 }
@@ -58,10 +60,11 @@ class HeadlineCell: UICollectionViewCell {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
+            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12),
             imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            imageView.heightAnchor.constraint(equalToConstant: self.frame.width * 7 / 12)
+            imageView.heightAnchor.constraint(equalToConstant: CELL_HEIGHT)
+            //imageView.heightAnchor.constraint(equalToConstant: self.frame.width * 7 / 12)
         ])
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
@@ -92,8 +95,8 @@ class HeadlineCell: UICollectionViewCell {
         headline.minimumScaleFactor = 0.5
         headline.lineBreakMode = .byClipping
         NSLayoutConstraint.activate([
-            headline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 6),
-            headline.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6),
+            headline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
+            headline.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12),
             headline.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 3),
             //headline.heightAnchor.constraint(equalToConstant: 70)
         ])
@@ -102,13 +105,13 @@ class HeadlineCell: UICollectionViewCell {
         if(APP_CFG_SHOW_FLAGS) {
             addSubview(flag)
             flag.layer.cornerRadius = 10
-            flag.backgroundColor = bgBlue
+            flag.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
         
             flag.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 flag.widthAnchor.constraint(equalToConstant: 18),
                 flag.heightAnchor.constraint(equalToConstant: 18),
-                flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+                flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
                 flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 5)
             ])
         }
@@ -120,7 +123,7 @@ class HeadlineCell: UICollectionViewCell {
             NSLayoutConstraint.activate([
                 source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
                 source.leadingAnchor.constraint(equalTo: flag.trailingAnchor, constant: 6),
-                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
+                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12)
             ])
         } else {
             NSLayoutConstraint.activate([
@@ -158,13 +161,14 @@ class HeadlineCell: UICollectionViewCell {
         ])
         //markupView.backgroundColor = .yellow
         
-        headline.textColor = articleHeadLineColor
-        source.textColor = articleSourceColor
+        headline.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        source.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         pubDate.textColor = .secondaryLabel
         
         pubDate.font = UIFont(name: "OpenSans-Bold", size: 11)
         //markupView.isHidden = true
     
+        self.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
     }
     
 }
@@ -195,13 +199,16 @@ class ArticleCell: UICollectionViewCell {
         
         addSubview(headline)
         
+        let screenWidth = UIScreen.main.bounds.width
+        let textWidth = (screenWidth/2)-24
+        
         headline.numberOfLines = 10
         headline.translatesAutoresizingMaskIntoConstraints = false
         headline.adjustsFontSizeToFitWidth = true
         headline.minimumScaleFactor = 0.8
         NSLayoutConstraint.activate([
-            headline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            headline.widthAnchor.constraint(equalToConstant: 190),
+            headline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
+            headline.widthAnchor.constraint(equalToConstant: textWidth),
             headline.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
             //headline.heightAnchor.constraint(equalToConstant: 90)
         ])
@@ -251,10 +258,10 @@ class ArticleCell: UICollectionViewCell {
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: headline.trailingAnchor, constant: 10),
-            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
+            imageView.leadingAnchor.constraint(equalTo: headline.trailingAnchor, constant: 24),
+            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12),
             imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
-            imageView.heightAnchor.constraint(equalToConstant: 120)
+            imageView.heightAnchor.constraint(equalToConstant: CELL_HEIGHT)
         ])
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
@@ -281,8 +288,8 @@ class ArticleCell: UICollectionViewCell {
             markupView.heightAnchor.constraint(equalToConstant: 20)
         ])
         
-        headline.textColor = articleHeadLineColor
-        source.textColor = articleSourceColor
+        headline.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        source.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         pubDate.textColor = .secondaryLabel
         
         pubDate.font = UIFont(name: "OpenSans-Bold", size: 13)
@@ -316,26 +323,32 @@ class ArticleCellAlt: UICollectionViewCell {
     
     func setupViews() {
         
-        addSubview(headline)
+        let screenWidth = UIScreen.main.bounds.width
+        let imgWidth = (screenWidth/2)-24
         
+        addSubview(headline)
         headline.translatesAutoresizingMaskIntoConstraints = false
         headline.numberOfLines = 10
         headline.adjustsFontSizeToFitWidth = true
         headline.minimumScaleFactor = 0.8
         NSLayoutConstraint.activate([
-            headline.widthAnchor.constraint(equalToConstant: 190),
-            headline.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            headline.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
+            headline.leadingAnchor.constraint(equalTo: self.leadingAnchor,
+                constant: (12*3) + imgWidth),
+            headline.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12),
+            headline.topAnchor.constraint(equalTo: self.topAnchor, constant: 2),
             //headline.heightAnchor.constraint(equalToConstant: 90)
         ])
+        
+        
+        
         
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            imageView.trailingAnchor.constraint(equalTo: headline.leadingAnchor, constant: -10),
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
+            imageView.widthAnchor.constraint(equalToConstant: imgWidth),
             imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
-            imageView.heightAnchor.constraint(equalToConstant: 120)
+            imageView.heightAnchor.constraint(equalToConstant: CELL_HEIGHT)
         ])
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
@@ -349,8 +362,8 @@ class ArticleCellAlt: UICollectionViewCell {
             NSLayoutConstraint.activate([
                 flag.widthAnchor.constraint(equalToConstant: 18),
                 flag.heightAnchor.constraint(equalToConstant: 18),
-                flag.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 8),
-                flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
+                flag.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 24),
+                flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 3)
             ])
         }
         
@@ -371,7 +384,7 @@ class ArticleCellAlt: UICollectionViewCell {
         
         if(APP_CFG_SHOW_FLAGS) {
             NSLayoutConstraint.activate([
-                source.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10+21),
+                source.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 24+21+3),
                 source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40),
                 source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0)
             ])
@@ -406,8 +419,8 @@ class ArticleCellAlt: UICollectionViewCell {
             markupView.heightAnchor.constraint(equalToConstant: 20)
         ])
         
-        headline.textColor = articleHeadLineColor
-        source.textColor = articleSourceColor
+        headline.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        source.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         pubDate.textColor = .secondaryLabel
         
         pubDate.font = UIFont(name: "OpenSans-Bold", size: 13)
@@ -440,10 +453,14 @@ class ArticleCellHalf: UICollectionViewCell {
     
     func setupViews() {
     
-        imageView.frame = CGRect(x: 10, y: 5, width: self.frame.width-20, height: self.frame.height / 3 + 10)
-        headline.frame = CGRect(x: 10, y: imageView.frame.maxY+3, width: imageView.frame.width-5, height: 90)
+        imageView.frame = CGRect(x: 12, y: 5,
+            width: self.frame.width-24,
+            height: CELL_HEIGHT)
+            //height: self.frame.height / 3 + 10)
+        
+        headline.frame = CGRect(x: 12, y: imageView.frame.maxY+3, width: imageView.frame.width, height: 90)
         headline.numberOfLines = 5
-        headline.textAlignment = .left
+        headline.textAlignment = .justified
         //headline.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         headline.adjustsFontSizeToFitWidth = true
         headline.minimumScaleFactor = 0.5
@@ -460,8 +477,8 @@ class ArticleCellHalf: UICollectionViewCell {
         addSubview(pubDate)
         addSubview(markupView)
         
-        headline.textColor = articleHeadLineColor
-        source.textColor = articleSourceColor
+        headline.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        source.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         pubDate.textColor = .secondaryLabel
         
         pubDate.font = UIFont(name: "OpenSans-Bold", size: 11)
@@ -495,7 +512,10 @@ class ArticleCellHalf: UICollectionViewCell {
         headline.sizeToFit()
         
         var mFrame = headline.frame
-        mFrame.origin.x = imageView.frame.origin.x + ((imageView.frame.size.width-mFrame.size.width)/2)
+        //mFrame.origin.x = imageView.frame.origin.x + ((imageView.frame.size.width-mFrame.size.width)/2)
+        
+        mFrame.origin.x = imageView.frame.origin.x
+        mFrame.size.width = imageView.frame.size.width
         headline.frame = mFrame
         
         source.sizeToFit()
@@ -506,13 +526,13 @@ class ArticleCellHalf: UICollectionViewCell {
         if(APP_CFG_SHOW_FLAGS) {
             addSubview(flag)
             flag.layer.cornerRadius = 10
-            flag.backgroundColor = bgBlue
+            flag.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
         
             flag.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 flag.widthAnchor.constraint(equalToConstant: 18),
                 flag.heightAnchor.constraint(equalToConstant: 18),
-                flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+                flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
                 flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 5)
             ])
         }
@@ -522,7 +542,7 @@ class ArticleCellHalf: UICollectionViewCell {
             NSLayoutConstraint.activate([
                 source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
                 source.leadingAnchor.constraint(equalTo: flag.trailingAnchor, constant: 6),
-                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
+                source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12)
             ])
         } else {
             NSLayoutConstraint.activate([

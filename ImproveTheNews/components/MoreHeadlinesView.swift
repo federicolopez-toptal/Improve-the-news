@@ -42,14 +42,14 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
     // MARK: - Init
     func initialize(width: CGFloat) {
         self.frame = CGRect(x: 0, y: 0, width: width, height: 36)
-        self.backgroundColor = bgBlue
+        self.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         
         self.scrollView = customUIScrollView(frame: CGRect(x: 0, y: 0, width: width, height: 36))
         self.scrollView.showsHorizontalScrollIndicator = true
         self.scrollView.flashScrollIndicators()
         self.scrollView.delegate = self
         self.scrollView.canCancelContentTouches = false
-        self.scrollView.backgroundColor = articleSourceColor
+        self.scrollView.backgroundColor = DARKMODE() ? articleSourceColor : bgWhite_DARK
         self.addSubview(self.scrollView)
 
         var x = 0
@@ -59,8 +59,10 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
             }
         
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-            label.textColor = articleHeadLineColor
-            label.backgroundColor = articleSourceColor
+            label.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+            label.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
+            
+            //articleSourceColor
             label.font = UIFont(name: "Poppins-SemiBold", size: 12)
             label.textAlignment = .center
             label.text = Globals.searchTopics[i].uppercased()
@@ -145,8 +147,9 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
             }
         
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-            label.textColor = articleHeadLineColor
-            label.backgroundColor = articleSourceColor
+            label.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+            label.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
+            //articleSourceColor
             label.font = UIFont(name: "Poppins-SemiBold", size: 12)
             label.textAlignment = .center
             label.text = topic.uppercased()

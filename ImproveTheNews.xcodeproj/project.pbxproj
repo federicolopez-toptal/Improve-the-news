@@ -272,6 +272,7 @@
 		BDDA45A22612301100C9C3AF /* NAM64.png in Resources */ = {isa = PBXBuildFile; fileRef = BDDA44DF2612301100C9C3AF /* NAM64.png */; };
 		BDDA45A32612301100C9C3AF /* IRL64.png in Resources */ = {isa = PBXBuildFile; fileRef = BDDA44E02612301100C9C3AF /* IRL64.png */; };
 		BDDA45AB261233A000C9C3AF /* noFlag.png in Resources */ = {isa = PBXBuildFile; fileRef = BDDA45AA2612339F00C9C3AF /* noFlag.png */; };
+		BDE8F4152658414200E3C018 /* ITN_logo_blackText.png in Resources */ = {isa = PBXBuildFile; fileRef = BDE8F4142658414200E3C018 /* ITN_logo_blackText.png */; };
 		BDEAF85625E55D2400588944 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEAF85525E55D2400588944 /* Utils.swift */; };
 		BDEFE59C25D1B95700175C3C /* MoreHeadlinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */; };
 		BDF37F65263AE026003D910D /* HeaderCellTextOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF37F63263AE026003D910D /* HeaderCellTextOnly.swift */; };
@@ -576,6 +577,7 @@
 		BDDA44DF2612301100C9C3AF /* NAM64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NAM64.png; sourceTree = "<group>"; };
 		BDDA44E02612301100C9C3AF /* IRL64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IRL64.png; sourceTree = "<group>"; };
 		BDDA45AA2612339F00C9C3AF /* noFlag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noFlag.png; sourceTree = "<group>"; };
+		BDE8F4142658414200E3C018 /* ITN_logo_blackText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ITN_logo_blackText.png; sourceTree = "<group>"; };
 		BDEAF85525E55D2400588944 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreHeadlinesView.swift; sourceTree = "<group>"; };
 		BDF37F63263AE026003D910D /* HeaderCellTextOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCellTextOnly.swift; sourceTree = "<group>"; };
@@ -745,6 +747,7 @@
 				BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */,
 				A8D61B3524F1633100A0F8F5 /* fonts */,
 				BD98C9F425D58021005106D2 /* ITN_logo.png */,
+				BDE8F4142658414200E3C018 /* ITN_logo_blackText.png */,
 				A8D61B3824F1A10000A0F8F5 /* Launch Screen.storyboard */,
 				A81B3B282481E67500A52A97 /* Assets.xcassets */,
 			);
@@ -1181,6 +1184,7 @@
 				BDDA45532612301100C9C3AF /* LAO64.png in Resources */,
 				BDC68ED5264C983C0072BDF9 /* HeaderCellBig.xib in Resources */,
 				BDDA45262612301100C9C3AF /* ARG64.png in Resources */,
+				BDE8F4152658414200E3C018 /* ITN_logo_blackText.png in Resources */,
 				BDDA44E72612301100C9C3AF /* CYP64.png in Resources */,
 				BDDA451B2612301100C9C3AF /* SLV64.png in Resources */,
 				BDDA451A2612301100C9C3AF /* LTU64.png in Resources */,
