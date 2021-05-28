@@ -65,7 +65,8 @@ class NewsTextViewController: UIViewController {
         self.biasSliders.sliderDelegate = self
         self.biasSliders.shadeDelegate = self
     
-        self.view.backgroundColor = bgBlue
+        self.view.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
+        self.tableView.backgroundColor = self.view.backgroundColor
         self.setUpNavBar()
         self.setUpRefresh()
         self.setupTableView()
@@ -75,7 +76,9 @@ class NewsTextViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
+        navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+    
         self.tableView.delaysContentTouches = false
         self.loadData()
     }
@@ -110,14 +113,12 @@ class NewsTextViewController: UIViewController {
         navigationItem.titleView = titleView
 
         navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.barTintColor = bgBlue
-        navigationController?.navigationBar.backgroundColor = bgBlue
-        navigationController?.navigationBar.barTintColor = bgBlue
-        navigationController?.navigationBar.barTintColor = bgBlue
+        navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         navigationController?.navigationBar.isTranslucent = false
         
         navigationController?.navigationBar.barStyle = .black
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: UIColor.white]
+        let _textColor = DARKMODE() ? UIColor.white : textBlack
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
 
         let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.sectionButtonItemClicked(_:)))
 
@@ -126,8 +127,10 @@ class NewsTextViewController: UIViewController {
         navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
+        var logoFile = "ITN_logo.png"
+        if(!DARKMODE()){ logoFile = "ITN_logo_blackText.png" }
         let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 195, height: 30))
-        let img = UIImage(named: "ITN_logo.png")?.withRenderingMode(.alwaysOriginal)
+        let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
         let homeButton = UIButton(image: img!)
         homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
         homeButton.addTarget(self, action: #selector(homeButtonTapped),
@@ -147,7 +150,7 @@ class NewsTextViewController: UIViewController {
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
-        self.tableView.backgroundColor = bgBlue
+        self.tableView.backgroundColor = self.view.backgroundColor
         
         let headerNib = UINib(nibName: "HeaderCellTextOnly", bundle: nil)
         self.tableView.register(headerNib,
@@ -188,12 +191,16 @@ class NewsTextViewController: UIViewController {
                                         y: ((UIScreen.main.bounds.height-dim)/2) - 88,
                                         width: dim, height: dim)
         self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        if(!DARKMODE()){ self.loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.25) }
+        
+        
         self.loadingView.isHidden = true
         self.loadingView.layer.cornerRadius = 15
     
         let loading = UIActivityIndicatorView(style: .medium)
-        self.loadingView.addSubview(loading)
         loading.color = .white
+        if(!DARKMODE()){ loading.color = darkForBright }
+        self.loadingView.addSubview(loading)
         loading.center = CGPoint(x: dim/2, y: dim/2)
         loading.startAnimating()
     
@@ -437,31 +444,39 @@ class NewsTextViewController: UIViewController {
     
     // MARK: - misc
     func pushNewTopic(_ topicCode: String) {
+        let vc = NewsTextViewController(topic: topicCode)
+        
+        // PARAM (A) // --------------------------------
+        vc.param_A = 4
+        if(topicCode==self.topic && Utils.shared.didTapOnMoreLink) {
+            vc.param_A = 10
+        }
+        Utils.shared.didTapOnMoreLink = false
         
         var topicName = ""
         for (key, value) in Globals.topicmapping {
             if(value == topicCode) {
                 topicName = key
-                break
             }
         }
-        var count = -1
+        
+        var subTopicCount = -1
         if(!topicName.isEmpty) {
-            count = newsParser.getSubTopicCountFor(topic: topicName)
+            subTopicCount = newsParser.getSubTopicCountFor(topic: topicName)
         }
-    
-        let vc = NewsTextViewController(topic: topicCode)
-        vc.param_A = 4
-        vc.param_S = 4 // sumar 4? o 4 fijo?
-        if(count == 0) {
-            vc.param_A = 40
+        if(subTopicCount == 0) {
+            vc.param_A = 40 // no tiene sub-topics
         }
         
-        if(Utils.shared.didTapOnMoreLink) { //} && topicCode=="news") {
-            vc.param_A = 10
+        // PARAM (S) // --------------------------------
+        vc.param_S = 0
+        for _vc in self.navigationController!.viewControllers {
+            let topicAndCount = GET_TOPICARTICLESCOUNT(from: _vc)
+            if(topicAndCount.0 == topicCode) {
+                vc.param_S += topicAndCount.1
+            }
         }
-        Utils.shared.didTapOnMoreLink = false
-        
+
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -489,6 +504,8 @@ extension NewsTextViewController: NewsDelegate {
         if(self.param_A != 40){
             self.horizontalMenu.isHidden = false
         }
+        
+        self.addParamsLabel()
     }
     
 }
@@ -773,4 +790,20 @@ extension NewsTextViewController: BannerInfoDelegate {
         return result
     }
     
+}
+
+extension NewsTextViewController {
+
+    private func addParamsLabel() {
+        /*
+        let paramsLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
+        paramsLabel.backgroundColor = UIColor.blue
+        paramsLabel.textAlignment = .center
+        paramsLabel.textColor = .green
+        paramsLabel.text = "A\(self.param_A).B\(self.param_B).S\(self.param_S)"
+        
+        self.navigationItem.titleView?.addSubview(paramsLabel)
+        */
+    }
+
 }

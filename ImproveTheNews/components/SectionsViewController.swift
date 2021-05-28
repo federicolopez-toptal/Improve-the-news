@@ -54,17 +54,19 @@ class SectionsViewController: UIViewController {
             self.support.append("Change Layout")
         }
         if(Utils.shared.displayMode == .dark) {
-            self.support.append("Bright mode")
+            self.support.append("Enable Bright mode")
         } else {
-            self.support.append("Dark mode")
+            self.support.append("Enable Dark mode")
         }
         
         navigationItem.largeTitleDisplayMode = .never
         safeArea = view.layoutMarginsGuide
         
         navigationItem.title = "Support"
-        
         setupTableView()
+        
+        self.view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
+        self.tableView.backgroundColor = self.view.backgroundColor
     }
     
     func setupTableView() {
@@ -84,7 +86,7 @@ class SectionsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        overrideUserInterfaceStyle = .dark
+        if(DARKMODE()){ overrideUserInterfaceStyle = .dark }
         tableView.register(SectionViewCell.self, forCellReuseIdentifier: SectionViewCell.cellId)
         
         let img = UIImage(systemName: "chevron.right")
@@ -149,7 +151,8 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SectionViewCell.cellId, for: indexPath) as! SectionViewCell
         cell.textLabel?.font = UIFont(name: "Poppins-SemiBold", size: 17)
-        cell.textLabel?.textColor = articleHeadLineColor
+        cell.textLabel?.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        cell.contentView.backgroundColor = DARKMODE() ? .black : .white
         cell.textLabel?.text = support[indexPath.row]
         
         return cell
@@ -176,7 +179,7 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 config.entersReaderIfAvailable = true
 
                 let vc = SFSafariViewController(url: url, configuration: config)
-                vc.preferredBarTintColor = .black
+                vc.preferredBarTintColor = DARKMODE() ? .black : .white
                 vc.preferredControlTintColor = accentOrange
                 present(vc, animated: true, completion: nil)
             case 3:
@@ -203,28 +206,30 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
             Utils.shared.displayMode = .dark
         }
         
+        let newValue = Utils.shared.displayMode.rawValue
+        UserDefaults.standard.set(newValue, forKey: LOCAL_KEY_DISPLAYMODE)
+        UserDefaults.standard.synchronize()
+        
+        
         let topic = self.getMainTopic()
+        var news: UIViewController?
         
-        let news = NewsViewController(topic: topic) //!!!2 - check layout first
-        self.navigationController?.viewControllers = [news, self]
+        let vc = self.navigationController?.viewControllers.first!
+        if(vc is NewsViewController){ news = NewsViewController(topic: topic) }
+        else if(vc is NewsTextViewController){ news = NewsTextViewController(topic: topic) }
+        else if(vc is NewsBigViewController){ news = NewsBigViewController(topic: topic) }
         
-        //let aaa = self.navigationController?.navigationBar.barStyle = .default
-        //UIBarStyle
-        
+        self.navigationController?.viewControllers = [news!, self]
         self.navigationController?.customPopViewController()
     }
     private func getMainTopic() -> String {
         var topic = "news"
         
-        //!!!2 - check topic for each type of layout
-        
-        /*
         let vc = self.navigationController?.viewControllers.first!
         if(vc is NewsViewController){ topic = (vc as! NewsViewController).topic }
-        
-        print( self.navigationController?.viewControllers )
-        */
-        
+        else if(vc is NewsTextViewController){ topic = (vc as! NewsTextViewController).topic }
+        else if(vc is NewsBigViewController){ topic = (vc as! NewsBigViewController).topic }
+
         return topic
     }
     

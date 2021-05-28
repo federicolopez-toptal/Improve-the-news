@@ -20,14 +20,18 @@ class CellTextOnly: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.contentView.backgroundColor = bgBlue
-        self.contentLabel.textColor = articleHeadLineColor
+        self.contentView.backgroundColor = DARKMODE() ? bgBlue: bgWhite_LIGHT
+        self.contentLabel.textColor = DARKMODE() ? articleHeadLineColor : darkForBright
         self.flagImageView.backgroundColor = bgBlue
         self.flagImageView.layer.cornerRadius = 10
-        self.sourceLabel.textColor = articleSourceColor
+        self.sourceLabel.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         
         self.exclamationImageView.image = UIImage(systemName: "exclamationmark.triangle")
         self.exclamationImageView.tintColor = accentOrange
+        
+        if(!DARKMODE()) {
+            self.contentView.subviews.last?.backgroundColor = .black
+        }
     }
     
 }

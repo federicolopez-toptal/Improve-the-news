@@ -151,7 +151,7 @@ class BannerView: UIView {
     // --------------------------
     func populateYouTubeBanner() {
         let info = BannerInfo.shared!
-        self.backgroundColor  = bgBlue
+        self.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
         
         let logo = UIImageView(image: UIImage(named: "N64"))
         self.addSubview(logo)
@@ -159,9 +159,11 @@ class BannerView: UIView {
         self.move(logo, x: 0, y: 10)
         self.centerHorizontally(logo)
         
+        let _textColor = DARKMODE() ? UIColor.white : darkForBright
+        
         let header = UILabel(text: info.header,
                         font: UIFont(name: "Poppins-SemiBold", size: 18),
-                        textColor: .white, textAlignment: .center, numberOfLines: 2)
+                        textColor: _textColor, textAlignment: .center, numberOfLines: 2)
         header.backgroundColor = .clear
         header.sizeToFit()
         self.addSubview(header)
@@ -185,7 +187,7 @@ class BannerView: UIView {
         
         let text = UILabel(text: info.text,
                         font: UIFont(name: "Poppins-SemiBold", size: 14),
-                        textColor: .white, textAlignment: .center, numberOfLines: 1)
+                        textColor: _textColor, textAlignment: .center, numberOfLines: 1)
         text.backgroundColor = .clear
         text.sizeToFit()
         self.addSubview(text)
@@ -207,7 +209,7 @@ class BannerView: UIView {
         containerView.addSubview(button)
         self.resize(button, width: 75, height: 30)
         button.layer.cornerRadius = 15
-        self.move(button, x: containerView.frame.size.width - 75, y: 0, bgColor: accentOrange)
+        self.move(button, x: containerView.frame.size.width - 75, y: 0, bgColor: DARKMODE() ? accentOrange : textBlack)
         button.addTarget(self, action: #selector(closeView(sender:)), for: .touchUpInside)
         
         containerView.addSubview(onOff)
@@ -216,7 +218,7 @@ class BannerView: UIView {
         
         let dontShow = UILabel(text: "Don't show again",
                         font: UIFont(name: "Poppins-SemiBold", size: 14),
-                        textColor: .white, textAlignment: .left, numberOfLines: 1)
+                        textColor: _textColor, textAlignment: .left, numberOfLines: 1)
         dontShow.backgroundColor = .red
         dontShow.sizeToFit()
         containerView.addSubview(dontShow)

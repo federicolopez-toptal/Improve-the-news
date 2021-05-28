@@ -67,7 +67,9 @@ class NewsBigViewController: UIViewController {
         self.biasSliders.sliderDelegate = self
         self.biasSliders.shadeDelegate = self
     
-        self.view.backgroundColor = bgBlue
+        self.view.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
+        self.tableView.backgroundColor = self.view.backgroundColor
+        
         self.setUpNavBar()
         self.setUpRefresh()
         self.setupTableView()
@@ -77,7 +79,9 @@ class NewsBigViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
+        navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        
         self.tableView.delaysContentTouches = false
         self.loadData()
     }
@@ -112,14 +116,12 @@ class NewsBigViewController: UIViewController {
         navigationItem.titleView = titleView
 
         navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.barTintColor = bgBlue
-        navigationController?.navigationBar.backgroundColor = bgBlue
-        navigationController?.navigationBar.barTintColor = bgBlue
-        navigationController?.navigationBar.barTintColor = bgBlue
+        navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         navigationController?.navigationBar.isTranslucent = false
         
         navigationController?.navigationBar.barStyle = .black
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: UIColor.white]
+        let _textColor = DARKMODE() ? UIColor.white : textBlack
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
 
         let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.sectionButtonItemClicked(_:)))
 
@@ -128,8 +130,10 @@ class NewsBigViewController: UIViewController {
         navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
+        var logoFile = "ITN_logo.png"
+        if(!DARKMODE()){ logoFile = "ITN_logo_blackText.png" }
         let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 195, height: 30))
-        let img = UIImage(named: "ITN_logo.png")?.withRenderingMode(.alwaysOriginal)
+        let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
         let homeButton = UIButton(image: img!)
         homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
         homeButton.addTarget(self, action: #selector(homeButtonTapped),
@@ -149,7 +153,6 @@ class NewsBigViewController: UIViewController {
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
-        self.tableView.backgroundColor = bgBlue
         
         let headerNib = UINib(nibName: "HeaderCellBig", bundle: nil)
         self.tableView.register(headerNib,
@@ -196,6 +199,7 @@ class NewsBigViewController: UIViewController {
         let loading = UIActivityIndicatorView(style: .medium)
         self.loadingView.addSubview(loading)
         loading.color = .white
+        if(!DARKMODE()){ loading.color = darkForBright }
         loading.center = CGPoint(x: dim/2, y: dim/2)
         loading.startAnimating()
     
@@ -439,6 +443,44 @@ class NewsBigViewController: UIViewController {
     
     // MARK: - misc
     func pushNewTopic(_ topicCode: String) {
+        let vc = NewsBigViewController(topic: topicCode)
+        
+        // PARAM (A) // --------------------------------
+        vc.param_A = 4
+        if(topicCode==self.topic && Utils.shared.didTapOnMoreLink) {
+            vc.param_A = 10
+        }
+        Utils.shared.didTapOnMoreLink = false
+        
+        var topicName = ""
+        for (key, value) in Globals.topicmapping {
+            if(value == topicCode) {
+                topicName = key
+            }
+        }
+        
+        var subTopicCount = -1
+        if(!topicName.isEmpty) {
+            subTopicCount = newsParser.getSubTopicCountFor(topic: topicName)
+        }
+        if(subTopicCount == 0) {
+            vc.param_A = 40 // no tiene sub-topics
+        }
+        
+        // PARAM (S) // --------------------------------
+        vc.param_S = 0
+        for _vc in self.navigationController!.viewControllers {
+            let topicAndCount = GET_TOPICARTICLESCOUNT(from: _vc)
+            if(topicAndCount.0 == topicCode) {
+                vc.param_S += topicAndCount.1
+            }
+        }
+
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /*
+    func pushNewTopic(_ topicCode: String) {
         
         var topicName = ""
         for (key, value) in Globals.topicmapping {
@@ -466,6 +508,7 @@ class NewsBigViewController: UIViewController {
         
         navigationController?.pushViewController(vc, animated: true)
     }
+    */
     
 }
 
@@ -491,6 +534,8 @@ extension NewsBigViewController: NewsDelegate {
         if(self.param_A != 40){
             self.horizontalMenu.isHidden = false
         }
+        
+        self.addParamsLabel()
     }
     
 }
@@ -787,4 +832,21 @@ extension NewsBigViewController: BannerInfoDelegate {
         return result
     }
     
+}
+
+
+extension NewsBigViewController {
+
+    private func addParamsLabel() {
+        /*
+        let paramsLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
+        paramsLabel.backgroundColor = UIColor.blue
+        paramsLabel.textAlignment = .center
+        paramsLabel.textColor = .green
+        paramsLabel.text = "A\(self.param_A).B\(self.param_B).S\(self.param_S)"
+        
+        self.navigationItem.titleView?.addSubview(paramsLabel)
+        */
+    }
+
 }

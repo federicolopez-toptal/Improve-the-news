@@ -24,7 +24,7 @@ class HeaderCellTextOnly: UITableViewHeaderFooterView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.contentView.backgroundColor = bgBlue
+        self.contentView.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
         self.contentLabel.textColor = accentOrange
         self.contentLabel.isUserInteractionEnabled = true
         
@@ -33,7 +33,7 @@ class HeaderCellTextOnly: UITableViewHeaderFooterView {
         self.contentLabel.addGestureRecognizer(titleTapGesture)
         
         
-        self.hierarchyLabel.textColor = articleSourceColor
+        self.hierarchyLabel.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         self.hierarchyLabel.isUserInteractionEnabled = true
         
         let hierarchyTapGesture = UITapGestureRecognizer(target: self,

@@ -22,7 +22,7 @@ class HorizontalMenuView: UIScrollView {
     init() {
         let w = UIScreen.main.bounds.width
         super.init(frame: CGRect(x: 0, y: 0, width: w, height: 36))
-        self.backgroundColor = articleSourceColor
+        self.backgroundColor = DARKMODE() ? articleSourceColor : bgWhite_DARK
         self.showsHorizontalScrollIndicator = false
     }
     
@@ -40,8 +40,8 @@ class HorizontalMenuView: UIScrollView {
             }
         
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-            label.textColor = articleHeadLineColor
-            label.backgroundColor = articleSourceColor
+            label.textColor = DARKMODE() ? articleHeadLineColor : darkForBright
+            label.backgroundColor = DARKMODE() ? articleSourceColor : bgWhite_DARK
             label.font = UIFont(name: "Poppins-SemiBold", size: 12)
             label.textAlignment = .center
             label.text = topic.uppercased()

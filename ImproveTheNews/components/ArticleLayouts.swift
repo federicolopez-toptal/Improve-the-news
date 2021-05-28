@@ -161,7 +161,7 @@ class HeadlineCell: UICollectionViewCell {
         ])
         //markupView.backgroundColor = .yellow
         
-        headline.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        headline.textColor = DARKMODE() ? articleHeadLineColor : darkForBright
         source.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         pubDate.textColor = .secondaryLabel
         
@@ -288,7 +288,7 @@ class ArticleCell: UICollectionViewCell {
             markupView.heightAnchor.constraint(equalToConstant: 20)
         ])
         
-        headline.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        headline.textColor = DARKMODE() ? articleHeadLineColor : darkForBright
         source.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         pubDate.textColor = .secondaryLabel
         
@@ -419,7 +419,7 @@ class ArticleCellAlt: UICollectionViewCell {
             markupView.heightAnchor.constraint(equalToConstant: 20)
         ])
         
-        headline.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        headline.textColor = DARKMODE() ? articleHeadLineColor : darkForBright
         source.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         pubDate.textColor = .secondaryLabel
         
@@ -477,7 +477,7 @@ class ArticleCellHalf: UICollectionViewCell {
         addSubview(pubDate)
         addSubview(markupView)
         
-        headline.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        headline.textColor = DARKMODE() ? articleHeadLineColor : darkForBright
         source.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         pubDate.textColor = .secondaryLabel
         

@@ -144,7 +144,6 @@ class WebViewController: UIViewController, WKUIDelegate {
         let y: CGFloat = screenSize.size.height - height - 88
         ratingsMenu.frame = CGRect(x: 0, y: y, width: view.frame.width, height: height)
         ratingsMenu.buildView()
-        ratingsMenu.backgroundColor = .black
                 
         view.addSubview(ratingsMenu)
         //ratingsMenu.isHidden = true
@@ -176,7 +175,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         
         let backBarButton = UIBarButtonItem(image: UIImage(named: "chevron-backward")!, style: .plain, target: self, action: #selector(goBack(_:)))
         let shareBarButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up")!, style: .plain, target: self, action: #selector(sharePressed(_:)))
-        shareBarButton.tintColor = accentOrange
+        shareBarButton.tintColor = DARKMODE() ? accentOrange : textBlack
         
         navigationItem.setRightBarButton(shareBarButton, animated: true)
         navigationItem.setLeftBarButton(backBarButton, animated: true)
@@ -190,7 +189,7 @@ class WebViewController: UIViewController, WKUIDelegate {
 // MARK: UI setup
 extension WebViewController {
     func setupWebNavBar() {
-           navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = DARKMODE() ? .white : textBlack
     }
     
     func initControls() {

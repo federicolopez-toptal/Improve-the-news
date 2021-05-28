@@ -44,7 +44,7 @@ class RatingsLauncher: UIView {
         button.setTitle("Rated", for: .selected)
         button.setTitleColor(.white, for: .normal)
         //button.setTitleColor(.black, for: .highlighted)
-        button.backgroundColor = accentOrange
+        button.backgroundColor = DARKMODE() ? accentOrange : .black
         button.layer.cornerRadius = 10
     //    button.layer.border
         button.addTarget(self, action: #selector(submitPressed(_:)), for: .touchUpInside)
@@ -55,7 +55,7 @@ class RatingsLauncher: UIView {
         let btn = UIButton(type: .custom)
         let img = UIImage(systemName: "xmark.circle")
         btn.setBackgroundImage(img, for: .normal)
-        btn.tintColor = accentOrange
+        btn.tintColor = DARKMODE() ? accentOrange : .black
         btn.addTarget(self, action: #selector(closePressed(_:)), for: .touchUpInside)
         return btn
     }()
@@ -65,10 +65,11 @@ class RatingsLauncher: UIView {
     
     func buildView() {
         
-        backgroundColor = .black
+        backgroundColor = DARKMODE() ? .black : bgWhite_DARK
         
         // configuring ratings view
-        let name = UILabel(text: "Rate\narticle", font: .boldSystemFont(ofSize: 16), textColor: accentOrange, textAlignment: .left, numberOfLines: 2)
+        let _textColor = DARKMODE() ? accentOrange : textBlack
+        let name = UILabel(text: "Rate\narticle", font: .boldSystemFont(ofSize: 16), textColor: _textColor, textAlignment: .left, numberOfLines: 2)
         addSubview(name)
         
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -125,21 +126,23 @@ class RatingsLauncher: UIView {
 extension RatingsLauncher {
     
     @objc func closePressed(_ sender: UIButton) {
+        print("CLOSE!")
         self.delegate?.RatingCompleted()
     }
     
     @objc func submitPressed(_ sender:UIButton!) {
         
-        sender.backgroundColor = .black
+        sender.backgroundColor = .clear
         sender.setTitle("Rated", for: .normal)
+        sender.setTitleColor(accentOrange, for: .normal)
         
         let elapsedTime = CFAbsoluteTimeGetCurrent() - WebViewController.startTime
         submitRatings(rating: RatingsLauncher.ratings, seconds: elapsedTime)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             UIView.animate(withDuration: 0.3) {
-                sender.backgroundColor = accentOrange
-                sender.setTitle("Submit", for: .normal)
+                //sender.backgroundColor = accentOrange
+                //sender.setTitle("Submit", for: .normal)
                 self.delegate?.RatingCompleted()
             }
         }

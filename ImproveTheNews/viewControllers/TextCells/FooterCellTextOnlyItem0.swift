@@ -24,10 +24,10 @@ class FooterCellTextOnlyItem0: UITableViewHeaderFooterView {
     // MARK: - Init
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.contentView.backgroundColor = bgBlue
+        self.contentView.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
         
         let moreLabel = self.centeredContainerView.subviews[0] as! UILabel
-        moreLabel.textColor = articleSourceColor
+        moreLabel.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         
         let topicLabel = self.centeredContainerView.subviews[1] as! UILabel
         topicLabel.textColor = accentOrange

@@ -76,10 +76,6 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var sliderValues: SliderValues!
     
     
-    
-    
-
-
 
     // MARK: - Initialization
     init(topic: String) {
@@ -174,7 +170,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     */
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.tintColor = DARKMODE() ? .white : .black
+        navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
         navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
         
         collectionView.delaysContentTouches = false
@@ -195,6 +191,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             self.loadTopicFromSearch()
         }
     }
+    
+    
     
 
     // MARK: - Data loading
@@ -351,7 +349,6 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     // For NewsDelegate protocol
     func didFinishLoadData(finished: Bool) {
-        
         if BannerInfo.shared != nil {
             BannerInfo.shared?.delegate = self
         }
@@ -368,6 +365,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 
         self.moreHeadLines.setTopics(self.newsParser.getAllTopics())
         
+        self.addParamsLabel()
         UIView.animate(withDuration: 0.5, animations: {
             self.collectionView.contentOffset.y = 0
         })
@@ -390,7 +388,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.loadingView.layer.cornerRadius = 15
     
         let loading = UIActivityIndicatorView(style: .medium)
-        if(!DARKMODE()){ loading.color = .black }
+        if(!DARKMODE()){ loading.color = darkForBright }
         self.loadingView.addSubview(loading)
         loading.center = CGPoint(x: dim/2, y: dim/2)
         loading.startAnimating()
@@ -425,7 +423,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         navigationController?.navigationBar.isTranslucent = false
         
         navigationController?.navigationBar.barStyle = .black
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: UIColor.white]
+        let _textColor = DARKMODE() ? UIColor.white : textBlack
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
 
         let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.sectionButtonItemClicked(_:)))
 
@@ -577,48 +576,39 @@ extension NewsViewController: TopicSelectorDelegate {
     
     // MARK: - TopicSelectorDelegate Delegate
     func pushNewTopic(newTopic: String) {
-    
+        let vc = NewsViewController(topic: newTopic)
+        
+        // PARAM (A) // --------------------------------
+        vc.param_A = 4
+        if(newTopic==self.topic && Utils.shared.didTapOnMoreLink) {
+            vc.param_A = 10
+        }
+        Utils.shared.didTapOnMoreLink = false
+        
         var topicName = ""
         for (key, value) in Globals.topicmapping {
             if(value == newTopic) {
                 topicName = key
             }
         }
-        var count = -1
+        
+        var subTopicCount = -1
         if(!topicName.isEmpty) {
-            count = newsParser.getSubTopicCountFor(topic: topicName)
+            subTopicCount = newsParser.getSubTopicCountFor(topic: topicName)
         }
-    
-        /*
-        let mainTopic = newsParser.getTopic(index: 0)
-        let mainTopic_B = Globals.topicmapping[mainTopic]!
-        let subTopicsCount = newsParser.getNumOfSections()
-        */
-        
-        let vc = NewsViewController(topic: newTopic)
-        
-        vc.param_A = 4
-        vc.param_S = 4 // sumar 4? o 4 fijo?
-        if(count == 0) {
-            vc.param_A = 40
+        if(subTopicCount == 0) {
+            vc.param_A = 40 // no tiene sub-topics
         }
         
-        
-        /*
-        if newTopic == mainTopic_B {
-            if(subTopicsCount==1) {
-                vc.param_A = 40
+        // PARAM (S) // --------------------------------
+        vc.param_S = 0
+        for _vc in self.navigationController!.viewControllers {
+            let topicAndCount = GET_TOPICARTICLESCOUNT(from: _vc)
+            if(topicAndCount.0 == newTopic) {
+                vc.param_S += topicAndCount.1
             }
-        } else {
-            
         }
-        */
         
-        if(Utils.shared.didTapOnMoreLink){  // && newTopic=="news") {
-            vc.param_A = 10
-        }
-        Utils.shared.didTapOnMoreLink = false
-
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -1907,3 +1897,20 @@ var headers = [String]()
     var activityIndicator = UIActivityIndicatorView()
 
  */
+
+
+extension NewsViewController {
+
+    private func addParamsLabel() {
+        /*
+        let paramsLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
+        paramsLabel.backgroundColor = UIColor.blue
+        paramsLabel.textAlignment = .center
+        paramsLabel.textColor = .green
+        paramsLabel.text = "A\(self.param_A).B\(self.param_B).S\(self.param_S)"
+        
+        self.navigationItem.titleView?.addSubview(paramsLabel)
+        */
+    }
+
+}

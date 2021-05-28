@@ -26,10 +26,10 @@ class FooterCellBig: UITableViewHeaderFooterView {
     // MARK: - Init
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.contentView.backgroundColor = bgBlue
+        self.contentView.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
         
         let moreLabel = self.centeredContainerView.subviews[0] as! UILabel
-        moreLabel.textColor = articleSourceColor
+        moreLabel.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         
         let topicLabel = self.centeredContainerView.subviews[1] as! UILabel
         topicLabel.textColor = accentOrange
@@ -39,6 +39,18 @@ class FooterCellBig: UITableViewHeaderFooterView {
         self.shareIcon.addTarget(self,
             action: #selector(shareIconTap(sender:)),
             for: .touchUpInside)
+            
+        if(!DARKMODE()) {
+            for v in self.contentView.subviews {
+                if(v.alpha < 1.0) {
+                    v.backgroundColor = .black
+                }
+                
+                if(v is UIImageView) {
+                    (v as! UIImageView).image = UIImage(named: "ITN_logo_blackText.png")
+                }
+            }
+        }
     }
     
     func setTopic(_ topic: String) {

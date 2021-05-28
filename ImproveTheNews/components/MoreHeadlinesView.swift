@@ -59,7 +59,7 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
             }
         
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-            label.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+            label.textColor = DARKMODE() ? articleHeadLineColor : darkForBright
             label.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
             
             //articleSourceColor
@@ -147,7 +147,7 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
             }
         
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-            label.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+            label.textColor = DARKMODE() ? articleHeadLineColor : darkForBright
             label.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
             //articleSourceColor
             label.font = UIFont(name: "Poppins-SemiBold", size: 12)

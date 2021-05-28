@@ -12,10 +12,7 @@ import Foundation
 class Utils {
     
     static var shared = Utils()
-
-
-
-
+    
     // Some util flags across the app
     var didTapOnMoreLink = false
     
@@ -27,6 +24,7 @@ class Utils {
     
     // Current display mode
     var displayMode: DisplayMode = .bright
+
 }
 
 func DARKMODE() -> Bool {
@@ -42,19 +40,50 @@ func DELAY(_ time: TimeInterval, callback: @escaping () ->() ) {
 }
 
 
+func GET_TOPICARTICLESCOUNT(from vc: UIViewController) -> (String, Int) {
+    var topic = ""
+    var count = 0
+    
+    if(vc is NewsViewController) {
+        topic = (vc as! NewsViewController).topic
+        count = (vc as! NewsViewController).param_A
+    } else if(vc is NewsTextViewController) {
+        topic = (vc as! NewsTextViewController).topic
+        count = (vc as! NewsTextViewController).param_A
+    } else if(vc is NewsBigViewController) {
+        topic = (vc as! NewsBigViewController).topic
+        count = (vc as! NewsBigViewController).param_A
+    }
+    
+    return (topic, count)
+}
+
+
+
+
 let LOCAL_KEY_LAYOUT = "userSelectedLayout"
+let LOCAL_KEY_DISPLAYMODE = "userSelectedDisplayMode"
+
 
 func INITIAL_VC() -> UIViewController {
     
     let topic = "news"
-    let layout: layoutType?
     
-    if let userSelection = UserDefaults.standard.string(forKey: LOCAL_KEY_LAYOUT) {
-        layout = layoutType(rawValue: userSelection)
+    let displayMode: DisplayMode?
+    if let userDisplayMode = UserDefaults.standard.string(forKey: LOCAL_KEY_DISPLAYMODE) {
+        displayMode = DisplayMode(rawValue: userDisplayMode)
+    } else {
+        displayMode = .dark
+    }
+    Utils.shared.displayMode = displayMode!
+    
+    let layout: layoutType?
+    if let userLayout = UserDefaults.standard.string(forKey: LOCAL_KEY_LAYOUT) {
+        layout = layoutType(rawValue: userLayout)
     } else {
         layout = .denseIntense
     }
-    
+
     Utils.shared.currentLayout = layout!
     if(layout == .denseIntense) {
         return NewsViewController(topic: topic)

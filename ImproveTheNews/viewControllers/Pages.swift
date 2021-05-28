@@ -52,11 +52,15 @@ This is work in progress, and as you can easily tell, there’s lots of room for
         super.viewDidLoad()
         
         overrideUserInterfaceStyle = .dark
-        view.backgroundColor = .black
+        view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
         configureView()
     }
     
     func configureView() {
+        
+        if(!DARKMODE()){
+            self.dismiss.setTitleColor(textBlack, for: .normal)
+        }
         
         view.addSubview(pagetitle)
         pagetitle.translatesAutoresizingMaskIntoConstraints = false
@@ -79,8 +83,8 @@ This is work in progress, and as you can easily tell, there’s lots of room for
         ])
         
         textView.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: [])
-        textView.textColor = articleHeadLineColor
-        textView.backgroundColor = .black
+        textView.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        textView.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
         textView.isEditable = false
         view.addSubview(textView)
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -358,11 +362,15 @@ We are not part of a regulated industry.
         super.viewDidLoad()
         
         overrideUserInterfaceStyle = .dark
-        view.backgroundColor = .black
+        view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
         configureView()
     }
     
     func configureView() {
+        
+        if(!DARKMODE()) {
+            self.dismiss.setTitleColor(textBlack, for: .normal)
+        }
         
         view.addSubview(pagetitle)
         pagetitle.translatesAutoresizingMaskIntoConstraints = false
@@ -386,8 +394,8 @@ We are not part of a regulated industry.
         let bolded = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: [])
         
         textView.attributedText = bolded
-        textView.textColor = articleHeadLineColor
-        textView.backgroundColor = .black
+        textView.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        textView.backgroundColor = self.view.backgroundColor
         textView.isEditable = false
         view.addSubview(textView)
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -431,11 +439,15 @@ If you have feature requests, bug reports or any other feedback on this app, we 
         super.viewDidLoad()
         
         overrideUserInterfaceStyle = .dark
-        view.backgroundColor = .black
+        view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
         configureView()
     }
     
     func configureView() {
+        
+        if(!DARKMODE()) {
+            self.dismiss.setTitleColor(textBlack, for: .normal)
+        }
         
         view.addSubview(pagetitle)
         pagetitle.translatesAutoresizingMaskIntoConstraints = false
@@ -458,8 +470,8 @@ If you have feature requests, bug reports or any other feedback on this app, we 
         ])
         
         textView.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: [])
-        textView.textColor = articleHeadLineColor
-        textView.backgroundColor = .black
+        textView.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+        textView.backgroundColor = self.view.backgroundColor
         textView.isEditable = false
         //textView.isSelectable = false
         view.addSubview(textView)

@@ -524,7 +524,7 @@ class seeMoreFooterSection0: UICollectionReusableView, UIScrollViewDelegate, Ban
             }
         
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
-            label.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+            label.textColor = DARKMODE() ? articleHeadLineColor : darkForBright
             label.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
             label.font = UIFont(name: "Poppins-SemiBold", size: 12)
             label.textAlignment = .center

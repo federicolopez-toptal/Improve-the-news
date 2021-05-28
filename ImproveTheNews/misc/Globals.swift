@@ -14,12 +14,14 @@ let bgWhite_DARK = UIColor(rgb: 0xE8E5E7)
 let bgWhite_LIGHT = UIColor(rgb: 0xFFFFFF)
 let textBlack = UIColor.black
 let textBlackAlpha = UIColor.black.withAlphaComponent(0.3)
+let darkForBright = UIColor(rgb: 0x222B51)
+let customGreen = UIColor(rgb: 0x8EB26A) // For testing purposes
 
 // dark mode
 let bgBlue_LIGHT = UIColor(rgb: 0x131B33)
 let bgBlue_DARK = UIColor(rgb: 0x0B1229)
 let bgBlue = UIColor(rgb: 0x0D1228)
-let bgBlueLight = UIColor(rgb: 0x131b33)
+let bgBlueLight = UIColor(rgb: 0x131b33) //<<<
 
 let accentOrange = UIColor(rgb: 0xD3592D)
 let articleHeadLineColor = UIColor(rgb: 0xE4E5DF)
@@ -49,9 +51,9 @@ enum layoutType: String {
     case textOnly = "Text only"
 }
 
-enum DisplayMode {
-    case dark
-    case bright
+enum DisplayMode: String {
+    case dark = "darkMode"
+    case bright = "brightMode"
 }
     
     

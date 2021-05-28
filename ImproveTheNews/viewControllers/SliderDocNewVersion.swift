@@ -53,7 +53,7 @@ class SliderDoc: UIViewController {
         super.viewDidLoad()
         
         overrideUserInterfaceStyle = .dark
-        view.backgroundColor = .black
+        view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
         self.configureView()
     }
     
@@ -94,6 +94,12 @@ class SliderDoc: UIViewController {
     // ----------------------------------
 
     private func configureView() {
+        
+        if(!DARKMODE()){
+            dismiss.setTitleColor(textBlack, for: .normal)
+        }
+    
+    
 // MAIN title
         self.view.addSubview(mainTitle)
         mainTitle.sizeToFit()
@@ -143,7 +149,7 @@ class SliderDoc: UIViewController {
         if(!APP_CFG_SHOW_SUPER_SLIDERS){ filename += "b" }
         text = self.readTextFile(filename)
         textView1.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: accented)
-        textView1.textColor = articleHeadLineColor
+        textView1.textColor = DARKMODE() ? articleHeadLineColor : textBlack
         textView1.backgroundColor = .black
         textView1.isEditable = false
         contentView.addSubview(textView1)
@@ -173,7 +179,7 @@ class SliderDoc: UIViewController {
         if(!APP_CFG_SHOW_SUPER_SLIDERS){ filename += "b" }
         text = self.readTextFile(filename)
         textView2.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: accented)
-        textView2.textColor = articleHeadLineColor
+        textView2.textColor = DARKMODE() ? articleHeadLineColor : textBlack
         textView2.backgroundColor = .black
         textView2.isEditable = false
         contentView.addSubview(textView2)
@@ -204,7 +210,7 @@ class SliderDoc: UIViewController {
         if(!APP_CFG_SHOW_SUPER_SLIDERS){ filename += "b" }
         text = self.readTextFile(filename)
         textView3.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: accented)
-        textView3.textColor = articleHeadLineColor
+        textView3.textColor = DARKMODE() ? articleHeadLineColor : textBlack
         textView3.backgroundColor = .black
         textView3.isEditable = false
         contentView.addSubview(textView3)
@@ -242,21 +248,21 @@ class SliderDoc: UIViewController {
         
         let titleLabel = UILabel(frame: CGRect(x: 5, y: 0, width: 400, height: 30))
         titleLabel.font = UIFont(name: "Poppins-Regular", size: 22)
-        titleLabel.textColor = .white
+        titleLabel.textColor = DARKMODE() ? .white : textBlack
         titleLabel.backgroundColor = .clear
         titleLabel.text = title
         view.addSubview(titleLabel)
 
         let leftLabel = UILabel(frame: CGRect(x: 10, y: 35, width: 400, height: 20))
         leftLabel.font = UIFont(name: "Poppins-Regular", size: 13)
-        leftLabel.textColor = .white
+        leftLabel.textColor = DARKMODE() ? .white : textBlack
         leftLabel.backgroundColor = .clear
         leftLabel.text = leftText
         view.addSubview(leftLabel)
         
         let rightLabel = UILabel(frame: CGRect(x: screenSize.width-400-10, y: 35, width: 400, height: 20))
         rightLabel.font = UIFont(name: "Poppins-Regular", size: 13)
-        rightLabel.textColor = .white
+        rightLabel.textColor = DARKMODE() ? .white : textBlack
         rightLabel.textAlignment = .right
         rightLabel.backgroundColor = .clear
         rightLabel.text = rightText

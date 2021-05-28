@@ -23,6 +23,8 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         overrideUserInterfaceStyle = .dark
+        self.view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
+        topicsTable.backgroundColor = self.view.backgroundColor
         
         sliderValues = SliderValues.sharedInstance
         
@@ -51,7 +53,8 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.font = UIFont(name: "Poppins-SemiBold", size: 16)
-            cell.textLabel?.textColor = articleHeadLineColor
+            cell.textLabel?.textColor = DARKMODE() ? articleHeadLineColor : textBlack
+            cell.contentView.backgroundColor = DARKMODE() ? UIColor.black : bgWhite_LIGHT
             cell.textLabel?.text = filteredData[indexPath.row]
             return cell
         }
@@ -131,6 +134,14 @@ extension SearchViewController: UISearchBarDelegate {
 
         navigationItem.title = "Search"
         navigationController?.navigationBar.prefersLargeTitles = false
+        
+        let _textColor = DARKMODE() ? UIColor.white : UIColor.black
+        let buttonAttributes = [NSAttributedString.Key.foregroundColor: _textColor]
+        UIBarButtonItem.appearance().setTitleTextAttributes(buttonAttributes , for: .normal)
+        
+        
+        
+        //navigationController?.navigationBar.tintColor = DARKMODE() ? .white : .black
         
         searchBar.showsCancelButton = true
         navigationItem.titleView = true ? searchBar : nil
