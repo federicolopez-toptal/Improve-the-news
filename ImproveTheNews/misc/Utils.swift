@@ -112,16 +112,25 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
     }
     link += biasStatus
     
+    var displayMode = "0"
+    if(!DARKMODE()){ displayMode = "1" }
+    
     if(Utils.shared.currentLayout == .denseIntense) {
-        link += "LA00"
+        link += "LA0" + displayMode
     } else if(Utils.shared.currentLayout == .textOnly) {
-        link += "LA10"
+        link += "LA1" + displayMode
     } else {
-        link += "LA20"
+        link += "LA2" + displayMode
     }
     
     if let _B = banners {
         link += _B
+    }
+    
+    if(APP_CFG_SHOW_SOURCES) {
+        if let sourcePrefs = UserDefaults.standard.string(forKey: KEY_SOURCES_PREFS) {
+            link += sourcePrefs.replacingOccurrences(of: ",", with: "")
+        }
     }
     
     if let _SL = superSliders {

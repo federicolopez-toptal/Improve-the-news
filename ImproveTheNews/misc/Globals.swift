@@ -33,11 +33,10 @@ var hArray = [String]()
     
 let APP_CFG_SHOW_MINI_SLIDERS = true
 let APP_CFG_SHOW_FLAGS = true
-
-
-
-
 let APP_CFG_SHOW_LAYOUTS = true
+let APP_CFG_SHOW_SOURCES = true
+
+
 
 // false/false for v1
 let APP_CFG_SHOW_PIE_CHART = false

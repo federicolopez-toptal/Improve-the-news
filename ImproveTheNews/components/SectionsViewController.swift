@@ -59,6 +59,10 @@ class SectionsViewController: UIViewController {
             self.support.append("Enable Dark mode")
         }
         
+        if(APP_CFG_SHOW_SOURCES) {
+            self.support.append("Source filters")
+        }
+        
         navigationItem.largeTitleDisplayMode = .never
         safeArea = view.layoutMarginsGuide
         
@@ -192,6 +196,10 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 self.selectLayout()
             case 6:
                 self.changeDisplayMode()
+            case 7:
+                let sources = SourcesViewController()
+                sources.modalPresentationStyle = .fullScreen
+                present(sources, animated: true, completion: nil)
             default:
                 fatalError()
         }

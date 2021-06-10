@@ -73,6 +73,15 @@ class NewsTextViewController: UIViewController {
         self.setUpLoadingView()
         self.setUpHorizontalMenu()
         self.setUpBiasButton()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadAll),
+            name: NOTIFICATION_FORCE_RELOAD_NEWS,
+            object: nil)
+    }
+    
+    @objc private func reloadAll() {
+        self.firstTime = true
+        self.loadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {

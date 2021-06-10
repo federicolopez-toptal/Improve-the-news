@@ -234,6 +234,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
     }
     
+    /*
     private func buildApiCall_b() -> String {
         let link = "topic=\(self.topic)" +
             ".A\(self.param_A)" + ".B\(self.param_B)" +
@@ -241,6 +242,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             
         return link
     }
+    */
     
     func buildApiCall(topicForCall: String? = nil, zeroItems: Bool = false) -> String {
 
