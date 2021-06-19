@@ -9,8 +9,9 @@
 import Foundation
 import UIKit
 
-protocol BiasSliderDelegate {
+@objc protocol BiasSliderDelegate {
     func biasSliderDidChange(sliderId: Int)
+    @objc optional func splitValueChange()
 }
 
 protocol ShadeDelegate {
@@ -19,6 +20,9 @@ protocol ShadeDelegate {
 }
 
 class SliderPopup: UIView {
+    
+    private var politicalStance = false
+    private var establishmentStance = false
     
     let state01_height: CGFloat = 230
     let state02_height: CGFloat = 480 //480
@@ -52,6 +56,10 @@ class SliderPopup: UIView {
     var separatorView = UIView()
     
     var status: String = "SL00"
+    
+    public func stanceValues() -> (Bool, Bool) {
+        return (politicalStance, establishmentStance)
+    }
 }
 
 extension SliderPopup {
@@ -192,6 +200,79 @@ extension SliderPopup {
                 separatorView.heightAnchor.constraint(equalToConstant: 50).isActive = true
                 stackView.addArrangedSubview(separatorView)
             }
+            
+            if(i<2 && Utils.shared.currentLayout == .denseIntense) {
+                let w: CGFloat = 80
+                let x: CGFloat = slider.frame.origin.x + slider.frame.size.width - 55
+                let splitLabel = UILabel(frame: CGRect(x: x, y: 3, width: w, height: 25))
+                splitLabel.backgroundColor = .clear
+                splitLabel.text = "Split"
+                splitLabel.textColor = .black
+                splitLabel.textAlignment = .right
+                splitLabel.font = UIFont(name: "Poppins-SemiBold", size: 15)
+
+                let splitButton = UIButton(type: .custom)
+                splitButton.frame = CGRect(x: x+20, y: 4, width: 60, height: 22)
+                splitButton.tag = i
+                splitButton.tintColor = .black
+                splitButton.contentHorizontalAlignment = .left
+                splitButton.setImage(UIImage(systemName: "square"), for: .normal)
+                splitButton.addTarget(self, action: #selector(splitButtonTap(sender:)),
+                    for: .touchUpInside)
+                splitButton.backgroundColor = .clear
+                
+                var mFrame = slider.frame
+                mFrame.origin.y -= 5
+                mFrame.size.height += 10
+                let splitSliderView = UIView(frame: mFrame)
+                splitSliderView.backgroundColor = accentOrange
+                
+                    let H: CGFloat = 4.5
+                    let W: CGFloat = mFrame.size.width - 6
+                    let X: CGFloat = (mFrame.size.width-W)/2
+                    let Y: CGFloat = (mFrame.size.height - H)/2
+                    
+                    let sliderLine = UIView(frame: CGRect(x: X, y: Y,
+                                            width: W, height: H))
+                    sliderLine.layer.cornerRadius = H/2
+                    sliderLine.backgroundColor = .orange
+                    splitSliderView.addSubview(sliderLine)
+                    
+                    let grayHalf = UIView(frame: CGRect(x: X + (W/2), y: Y,
+                                            width: W/2, height: H))
+                    grayHalf.layer.cornerRadius = H/2
+                    grayHalf.backgroundColor = .lightGray
+                    splitSliderView.addSubview(grayHalf)
+                    
+                    let vline = UIView(frame: CGRect(x: X + (W/2),
+                    y: (mFrame.size.height-20)/2, width: 4.5, height: 20))
+                    vline.layer.cornerRadius = 2.25
+                    vline.backgroundColor = .white
+                    splitSliderView.addSubview(vline)
+                    
+                
+                miniview.addSubview(splitLabel)
+                miniview.addSubview(splitButton)
+                
+                miniview.addSubview(splitSliderView)
+                splitSliderView.tag = 99 + i
+                splitSliderView.isHidden = true
+                
+                
+                let dirs: [UISwipeGestureRecognizer.Direction] = [.left, .right, .up, .down]
+                for D in dirs {
+                    let gesture = UISwipeGestureRecognizer(target: self, action: #selector(self.splitViewOnGesture(gesture:)))
+                    gesture.direction = D
+                    splitSliderView.addGestureRecognizer(gesture)
+                }
+                
+                
+                let gesture = UITapGestureRecognizer(target: self, action: #selector(self.splitViewOnGesture(gesture:)))
+                splitSliderView.addGestureRecognizer(gesture)
+                
+            }
+            
+            
 
         }
         
@@ -228,6 +309,113 @@ extension SliderPopup {
             let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.handleShowLess))
             swipeDown.direction = .down
             stackView.addGestureRecognizer(swipeDown)
+        }
+    }
+    
+    func disableSplit() {
+
+        if(politicalStance) {
+            let row = self.stackView.subviews[2]
+            for v in row.subviews {
+                if(v is UIButton) {
+                    self.splitButtonTap(sender: (v as! UIButton))
+                    break
+                }
+            }
+        } else if(establishmentStance) {
+            let row = self.stackView.subviews[3]
+            for v in row.subviews {
+                if(v is UIButton) {
+                    self.splitButtonTap(sender: (v as! UIButton))
+                    break
+                }
+            }
+        }
+    }
+    
+    @objc func splitViewOnGesture(gesture: UIGestureRecognizer) {
+        let tag = gesture.view!.tag - 99
+        for V in gesture.view!.superview!.subviews {
+            if(V is UIButton) {
+                self.splitButtonTap(sender: (V as! UIButton))
+                break
+            }
+        }
+    }
+    
+    
+    private func updateCheckBox(_ button: UIButton, value: Bool) {
+        let img = value ? UIImage(systemName: "checkmark.square") :
+            UIImage(systemName: "square")
+        button.setImage(img, for: .normal)
+    }
+    
+    @objc func splitButtonTap(sender: UIButton) {
+        
+        // update values
+        if(sender.tag==0) {
+            // Political stance
+            politicalStance = !politicalStance
+            if(politicalStance) {
+                establishmentStance = false
+            }
+        } else {
+            // Establishment stance
+            establishmentStance = !establishmentStance
+            if(establishmentStance) {
+                politicalStance = false
+            }
+        }
+        
+        // update checkboxes
+        let row1 = self.stackView.subviews[2]
+        for v in row1.subviews {
+            if(v is UIButton) {
+                self.updateCheckBox((v as! UIButton), value: politicalStance)
+                break
+            }
+        }
+        let row2 = self.stackView.subviews[3]
+        for v in row2.subviews {
+            if(v is UIButton) {
+                self.updateCheckBox((v as! UIButton), value: establishmentStance)
+                break
+            }
+        }
+        
+        // show/hide the slider replica
+        let slider1Replica = row1.viewWithTag(99+0)
+        slider1Replica?.isHidden = !politicalStance
+        
+        let slider2Replica = row2.viewWithTag(99+1)
+        slider2Replica?.isHidden = !establishmentStance
+        
+        
+        
+        /*
+        var value = false
+        if(sender.tag==0) {
+            // Political stance
+            politicalStance = !politicalStance
+            value = politicalStance
+        } else {
+            // Establishment stance
+            establishmentStance = !establishmentStance
+            value = establishmentStance
+        }
+        */
+
+        /*
+        let overlapView = sender.superview?.viewWithTag(99+sender.tag)
+        overlapView?.isHidden = !value
+
+        let img = value ? UIImage(systemName: "checkmark.square") :
+            UIImage(systemName: "square")
+        sender.setImage(img, for: .normal)
+        */
+        
+        if let valueChanged = self.sliderDelegate?.splitValueChange {
+            valueChanged()
         }
     }
     
@@ -288,7 +476,7 @@ extension SliderPopup {
     
     
     func setupLoading() {
-        var w: CGFloat = 250
+        var w: CGFloat = 140
         var x = UIScreen.main.bounds.width - w - 17
         self.loadingView.frame = CGRect(x: x, y: 40, width: w, height: 25)
         self.loadingView.backgroundColor = .clear
@@ -312,6 +500,8 @@ extension SliderPopup {
         
         self.loadingView.addSubview(label)
         self.showLoading(false)
+        
+        self.loadingView.backgroundColor = accentOrange
     }
     
     func moveLoadingOnTopOfView(_ view: UIView) {

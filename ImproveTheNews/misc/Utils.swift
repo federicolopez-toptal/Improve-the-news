@@ -127,11 +127,13 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
         link += _B
     }
     
+    
     if(APP_CFG_SHOW_SOURCES) {
         if let sourcePrefs = UserDefaults.standard.string(forKey: KEY_SOURCES_PREFS) {
             link += sourcePrefs.replacingOccurrences(of: ",", with: "")
         }
     }
+    
     
     if let _SL = superSliders {
         link += "_" + _SL

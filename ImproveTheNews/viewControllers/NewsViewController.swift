@@ -75,6 +75,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var topicBottomAnchor: NSLayoutConstraint?
     var sliderValues: SliderValues!
     
+    var vDivider = UIView()
     
 
     // MARK: - Initialization
@@ -142,6 +143,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         configureTopicButton() //!!!
         setUpRefresh()
         setUpActivityIndicator()
+        initDivider()
         
         self.moreHeadLines.initialize(width: self.screenWidth)
         self.view.addSubview(self.moreHeadLines)
@@ -153,9 +155,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         pieChartVC.delegate = self
         
+        
         /*
         //testing height(s)
-        let redView = UIView(frame: CGRect(x: 20, y: 666 + 681, width: 100, height: 20))
+        let h1: CGFloat = 51+(240*2)+8+115
+        let redView = UIView(frame: CGRect(x: 20, y: h1 + 51+(240*2)+8+70, width: 100, height: 20))
         redView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         self.collectionView.addSubview(redView)
         */
@@ -277,8 +281,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             superSlider = self.superSliderStr
         }
         
+        var bStatus = self.biasSliders.status
+        var stanceValue = "0"
+        if(self.biasSliders.stanceValues().0){ stanceValue = "1" }
+        else if(self.biasSliders.stanceValues().1){ stanceValue = "2" }
+        bStatus = String(bStatus.prefix(2)) + stanceValue + String(bStatus.suffix(1))
+        
         let link = API_CALL(topicCode: T, abs: ABS,
-                            biasStatus: self.biasSliders.status,
+                            biasStatus: bStatus,
                             banners: banner, superSliders: superSlider)
         return link
     }
@@ -288,7 +298,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         var firsthalf = self.homelink
         if(topicForCall != nil) {
             firsthalf += topicForCall!
-        } else {
+        } else {
             firsthalf += self.topic
         }
         if(zeroItems) {
@@ -368,6 +378,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.moreHeadLines.setTopics(self.newsParser.getAllTopics())
         
         self.addParamsLabel()
+        self.updateDivider()
         UIView.animate(withDuration: 0.5, animations: {
             self.collectionView.contentOffset.y = 0
         })
@@ -1013,6 +1024,58 @@ extension NewsViewController: BannerInfoDelegate {
 
 extension NewsViewController {
 
+    // MARK: - HeadlineCell (4 items on top)
+    func newsItemFor(indexPath: IndexPath, index: Int) -> HeadlineCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeadlineCell.cellId, for: indexPath) as! HeadlineCell
+                
+            cell.setupViews()
+                
+            cell.headline.text = newsParser.getTitle(index: index)
+            cell.pubDate.text = newsParser.getDate(index: index)
+            let imageURL = newsParser.getIMG(index: index)
+            //let imgURL = URL(string: imageURL)!
+            DispatchQueue.global().async {
+                //guard let data = try? Data(contentsOf: imgURL) else { return }
+                DispatchQueue.main.async {
+                    print("loading cell images")
+//                        let img = UIImage(data: data)
+//                        let width = self.view.frame.width - 40
+//                        let rescaled = img?.scalePreservingAspectRatio(targetSize: CGSize(width: width, height: width * 7 / 12))
+                    cell.imageView.contentMode = .scaleAspectFill
+                    cell.imageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
+//                        cell.imageView.image = rescaled
+                }
+            }
+            
+            cell.source.lineBreakMode = .byWordWrapping
+            cell.source.text = newsParser.getSource(index: index) + " - " + newsParser.getDate(index: index)
+            cell.source.numberOfLines = 2
+            //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+            cell.pubDate.text = " "
+            
+            if newsParser.getMarkups(index: index).count > 0 {
+                cell.markupView.isHidden = false
+            }
+            
+            
+            //cell.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+            cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
+                                            val2: newsParser.getPE(index: index),
+                                            source: newsParser.getSource(index: index),
+                                            countryID: newsParser.getCountryID(index: index))
+             
+            cell.miniSlidersView?.viewController = self
+            self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
+        
+            
+            //cell.contentView.backgroundColor = .green
+            
+            return cell
+    }
+    
+
+
+
     // MARK: - Collection view (data source + layout)
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
@@ -1027,63 +1090,17 @@ extension NewsViewController {
             //print("section: \(indexPath.section) row \(indexPath.row): \(newsParser.getTitle(index: indexPath.row+start))")
             
             if indexPath.section == 0 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeadlineCell.cellId, for: indexPath) as! HeadlineCell
-                
-                cell.setupViews()
-                
-                cell.headline.text = newsParser.getTitle(index: index)
-                cell.pubDate.text = newsParser.getDate(index: index)
-                let imageURL = newsParser.getIMG(index: index)
-                //let imgURL = URL(string: imageURL)!
-                DispatchQueue.global().async {
-                    //guard let data = try? Data(contentsOf: imgURL) else { return }
-                    DispatchQueue.main.async {
-                        print("loading cell images")
-//                        let img = UIImage(data: data)
-//                        let width = self.view.frame.width - 40
-//                        let rescaled = img?.scalePreservingAspectRatio(targetSize: CGSize(width: width, height: width * 7 / 12))
-                        cell.imageView.contentMode = .scaleAspectFill
-                        cell.imageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
-//                        cell.imageView.image = rescaled
-                    }
-                }
-                
-                cell.source.lineBreakMode = .byWordWrapping
-                cell.source.text = newsParser.getSource(index: index) + " - " + newsParser.getDate(index: index)
-                cell.source.numberOfLines = 2
-                //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
-                cell.pubDate.text = " "
-                
-                if newsParser.getMarkups(index: index).count > 0 {
-                    cell.markupView.isHidden = false
-                }
-                
-                
-                //cell.backgroundColor = UIColor.red.withAlphaComponent(0.5)
-                cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
-                                                val2: newsParser.getPE(index: index),
-                                                source: newsParser.getSource(index: index),
-                                                countryID: newsParser.getCountryID(index: index))
-                 
-                cell.miniSlidersView?.viewController = self
-                self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
-                
-                /*
-                cell.headline.backgroundColor = UIColor.red.withAlphaComponent(0.5)
-                cell.flag.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
-                cell.source.backgroundColor = UIColor.green.withAlphaComponent(0.5)
-                cell.contentView.backgroundColor = UIColor.orange.withAlphaComponent(0.5)
-                */
-                
-                //cell.contentView.backgroundColor = bgBlue_LIGHT
-                
-                return cell
+                return self.newsItemFor(indexPath: indexPath, index: index)
             }
-                
             else if indexPath.row == 0 || indexPath.row == 1 {
-                                
+                  
+                return self.newsItemFor(indexPath: indexPath, index: index)
+                  
+                /*
                 // text on left
                 if indexPath.section % 2 == 0 {
+                    
+                
                     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ArticleCell.cellId, for: indexPath) as! ArticleCell
                     
                     cell.setupViews()
@@ -1124,7 +1141,6 @@ extension NewsViewController {
                     cell.miniSlidersView?.viewController = self
                     self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                     return cell
-                    
                 }
                 // text on right
                 else {
@@ -1171,10 +1187,14 @@ extension NewsViewController {
                     self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
                     return cell
                 }
+                */
                
             }
             // 2 column cells
             else {
+                return self.newsItemFor(indexPath: indexPath, index: index)
+            
+                /*
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ArticleCellHalf.cellId, for: indexPath) as! ArticleCellHalf
 
                 cell.setupViews()
@@ -1225,9 +1245,10 @@ extension NewsViewController {
                 //cell.flag.backgroundColor = UIColor.red.withAlphaComponent(0.5)
                 //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
                 
-                //cell.contentView.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+                cell.contentView.backgroundColor = .orange
                 
                 return cell
+                */
             }
             
         }
@@ -1328,7 +1349,20 @@ extension NewsViewController {
             return .zero
         }
         
-        // headlines
+        let cellsPerRow = 2
+        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+
+        let totalSpace = flowLayout.sectionInset.left
+            + flowLayout.sectionInset.right
+            //+ (flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1))
+
+        let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(cellsPerRow))
+
+        //let w: CGFloat = (UIScreen.main.bounds.width)/2
+        return CGSize(width: size, height: 240)
+        
+        
+        /*
         if (indexPath.section == 0) {
             // 4 items for the main Topic
             let cellsPerRow = 2
@@ -1359,7 +1393,7 @@ extension NewsViewController {
 
             return CGSize(width: size, height: 220) //250
         }
-        
+        */
     }
     
     
@@ -1577,7 +1611,7 @@ extension NewsViewController {
                 }
                 */
                 
-                print(self.hierarchy)
+                //print(self.hierarchy)
                 
                 var breadcrumbText = ""
                 if(indexPath.section==0 && (self.hierarchy == "Headlines>" || self.hierarchy == "") && self.uniqueID==1) {
@@ -1702,6 +1736,7 @@ extension NewsViewController {
                         }*/
                         seeMore.scrollView.contentOffset = mOffset
                         
+                        //seeMore.backgroundColor = UIColor.green.withAlphaComponent(0.15)
                         return seeMore
                     }
                 
@@ -1713,6 +1748,8 @@ extension NewsViewController {
                     // oMore
                     seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                     seeMore.configure()
+                    
+                    //seeMore.backgroundColor = UIColor.green.withAlphaComponent(0.15)
                     return seeMore
                 }
             
@@ -1735,7 +1772,7 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
         */
         
         var offsetY: CGFloat = 0
-        var firstItemHeight: CGFloat = 666 + 8 - 20
+        var firstItemHeight: CGFloat = 51+(240*2)+8+115 // header + 2rows + margins + bigFooter(0)
         if let info = BannerInfo.shared {
             //let count = self.navigationController!.viewControllers.count
             if(self.uniqueID==1 && info.active) {
@@ -1744,21 +1781,25 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
         }
         
         //736-20-20-20
-        let otherItemsHeight: CGFloat = 681 + 8 - 20 //861-20-20-30-100-20
-        let slidersHeight: CGFloat = 29
+        let otherItemsHeight: CGFloat = 51+(240*2)+8+70 // header + 2rows + margins + footer
+        //let slidersHeight: CGFloat = 29
         
         if(index>0) {
             offsetY += firstItemHeight
 
             let i = CGFloat(index-1)
 
+            /*
             if(self.topic=="news") { // No sliders in header
                 offsetY += otherItemsHeight * i
             } else {
                 offsetY += 49
                 offsetY += (otherItemsHeight+slidersHeight) * i
             }
-            offsetY += -52 // margin
+            */
+            
+            offsetY += otherItemsHeight * i
+            offsetY += -40 // margin (for the horizontal menu fixed at top)
         }
         
         self.collectionView.setContentOffset(CGPoint(x: 0, y: offsetY), animated: true)
@@ -1915,4 +1956,145 @@ extension NewsViewController {
         */
     }
 
+}
+
+
+extension NewsViewController {
+
+    func initDivider() {
+        let w: CGFloat = 60
+        let x: CGFloat = (UIScreen.main.bounds.width-w)/2
+        let h: CGFloat = UIScreen.main.bounds.height
+        vDivider.frame = CGRect(x: x, y: 0, width: w, height: h)
+        vDivider.backgroundColor = .clear
+        
+        let dirs: [UISwipeGestureRecognizer.Direction] = [.left, .right]
+        for D in dirs {
+            let gesture = UISwipeGestureRecognizer(target: self, action: #selector(vDividerOnGesture(gesture:)))
+            gesture.direction = D
+            vDivider.addGestureRecognizer(gesture)
+        }
+        
+        self.collectionView.addSubview(vDivider)
+        vDivider.isHidden = true
+    }
+    
+    @objc func vDividerOnGesture(gesture: UIGestureRecognizer) {
+        self.biasSliders.disableSplit()
+    }
+    
+    func updateDivider() {
+        vDivider.subviews.forEach({ $0.removeFromSuperview() })
+        if(!mustSplit()) {
+            vDivider.isHidden = true
+            return
+        }
+        
+        vDivider.isHidden = false
+        
+        var offsetY: CGFloat = 0
+        let sections = self.numberOfSections(in: self.collectionView)
+        for sec in 0...sections-1 {
+            let items = self.collectionView(self.collectionView, numberOfItemsInSection: sec)
+            
+            let margin: CGFloat = 8
+            var Y: CGFloat = 51  // header
+            let rows = items/2
+            var H: CGFloat = CGFloat(240 * rows)
+            let W: CGFloat = 4
+            let X: CGFloat = (vDivider.frame.size.width - W)/2
+            
+            let line = UIView(frame: CGRect(x: X, y: Y + offsetY + margin, width: W, height: H))
+            
+            line.backgroundColor = DARKMODE() ? .white : bgWhite_DARK
+            //line.alpha = DARKMODE() ? 1.0 : 0.2
+            line.isUserInteractionEnabled = false
+            vDivider.addSubview(line)
+            
+            offsetY += 51 + H + margin
+            if(sec==0) {
+                offsetY += 115
+                
+                if let info = BannerInfo.shared {
+                    if(self.uniqueID==1 && info.active) {
+                        offsetY += BannerView.getHeightForBannerCode(info.adCode)
+                    }
+                }
+            } else {
+                offsetY += 70
+            }
+            
+            // show alpha line
+            if(sec == sections-1) {
+                var segment: CGFloat = 5.0
+                var posY: CGFloat = 0
+                H = line.frame.origin.y + line.frame.size.height
+                
+                while(posY<H) {
+                    let alphaLine = UIView(frame: CGRect(x: X, y: posY,
+                        width: W, height: segment))
+                    alphaLine.backgroundColor = line.backgroundColor
+                    
+                    //line.backgroundColor
+                    alphaLine.alpha = DARKMODE() ? 0.06 : 0.4
+                    alphaLine.isUserInteractionEnabled = false
+                    vDivider.addSubview(alphaLine)
+                    
+                    posY += (segment * 2)
+                }
+                
+                /*
+                H = line.frame.origin.y + line.frame.size.height
+                let alphaLine = UIView(frame: CGRect(x: X, y: 0,
+                    width: W, height: H))
+                alphaLine.backgroundColor = line.backgroundColor
+                alphaLine.alpha = 0.05
+                alphaLine.isUserInteractionEnabled = false
+                vDivider.addSubview(alphaLine)
+                
+                var mFrame = vDivider.frame
+                mFrame.size.height = H
+                vDivider.frame = mFrame
+                */
+            }
+            
+        }
+    }
+    
+    func mustSplit() -> Bool {
+        let stancevalues =  self.biasSliders.stanceValues()
+        if(stancevalues.0 || stancevalues.1) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func splitValueChange() {
+        if( mustSplit() ) {
+            // SPLIT
+            if(vDivider.isHidden) {
+                vDivider.alpha = 0
+                vDivider.isHidden = false
+                UIView.animate(withDuration: 0.25) {
+                    self.vDivider.alpha = 1
+                }
+            }
+        } else {
+            // NORMAL
+            if(!vDivider.isHidden) {
+                UIView.animate(withDuration: 0.25) {
+                    self.vDivider.alpha = 0
+                } completion: { success in
+                    self.vDivider.isHidden = true
+                }
+            }
+        }
+        
+        // reload the news
+        self.firstTime = true
+        self.loadData()
+    }
+    
+    
 }

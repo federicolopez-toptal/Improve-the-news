@@ -26,7 +26,7 @@ struct Source {
 
 // -------------------------
 
-let KEY_SOURCES_PREFS = "userSourcesPreferences"
+let KEY_SOURCES_PREFS = "userSourcesPreferences_v2"
 // -------------------------
 class SourcesViewController: UIViewController {
 
@@ -125,10 +125,14 @@ class SourcesViewController: UIViewController {
             UserDefaults.standard.synchronize()
         }
     
+        self.preferences = []
         if let value = UserDefaults.standard.string(forKey: KEY_SOURCES_PREFS) {
             self.preferences = value.components(separatedBy: ",")
             print("PREFS: " + value)
-        } else {
+        }
+        
+        /*
+        else {
             var value = ""
             for S in self.sources {
                 if(!value.isEmpty){ value += "," }
@@ -138,12 +142,14 @@ class SourcesViewController: UIViewController {
             UserDefaults.standard.synchronize()
             
             self.preferences = value.components(separatedBy: ",")
+            self.preferences = []
         }
+        */
         
         for P in self.preferences {
             let p = String(P.prefix(2))
             let index = self.getSourceIndexFor(code: p)
-            self.sources[index].state = !P.contains("00")
+            self.sources[index].state = false //!P.contains("00")
         }
     }
     
@@ -227,9 +233,11 @@ extension SourcesViewController: SourceCellDelegate {
     private func updatePreferences() {
         var value = ""
         for S in self.sources {
-            if(!value.isEmpty){ value += "," }
-            value += S.code
-            if(!S.state){ value += "00" }
+            if(S.state==false) {
+                if(!value.isEmpty){ value += "," }
+                value += S.code + "00"
+                //if(!S.state){ value += "00" }
+            }
         }
         UserDefaults.standard.set(value, forKey: KEY_SOURCES_PREFS)
         UserDefaults.standard.synchronize()
