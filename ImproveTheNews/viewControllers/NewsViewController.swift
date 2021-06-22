@@ -163,6 +163,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         redView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         self.collectionView.addSubview(redView)
         */
+        
+        let splitValue = UserDefaults.standard.integer(forKey: "userSplitPrefs")
+        if(splitValue != 0) {
+            self.biasSliders.setSplitValue(splitValue-1)
+        }
     }
     
     /*
@@ -286,6 +291,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         if(self.biasSliders.stanceValues().0){ stanceValue = "1" }
         else if(self.biasSliders.stanceValues().1){ stanceValue = "2" }
         bStatus = String(bStatus.prefix(2)) + stanceValue + String(bStatus.suffix(1))
+        bStatus = bStatus.replacingOccurrences(of: "SL", with: "SS")
         
         let link = API_CALL(topicCode: T, abs: ABS,
                             biasStatus: bStatus,

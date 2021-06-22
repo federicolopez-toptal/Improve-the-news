@@ -39,6 +39,9 @@ class seeMoreFooterLast: UICollectionReusableView {
     public func configure2() {
 
         self.titleImage.image = UIImage(named: "ITN_logo_blackText.png")
+        if(DARKMODE()) {
+            self.titleImage.image = UIImage(named: "ITN_logo.png")
+        }
 
         addSubview(view)
         view.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT

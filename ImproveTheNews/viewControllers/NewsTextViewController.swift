@@ -402,8 +402,11 @@ class NewsTextViewController: UIViewController {
             superSlider = self.superSliderStr
         }
         
+        var bStatus = self.biasSliders.status
+        bStatus = bStatus.replacingOccurrences(of: "SL", with: "SS")
+        
         let link = API_CALL(topicCode: T, abs: ABS,
-                            biasStatus: self.biasSliders.status,
+                            biasStatus: bStatus,
                             banners: banner, superSliders: superSlider)
         return link
     }

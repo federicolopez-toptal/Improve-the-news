@@ -350,6 +350,16 @@ extension SliderPopup {
         button.setImage(img, for: .normal)
     }
     
+    func setSplitValue(_ value: Int) {
+        let row = self.stackView.subviews[value+2]
+        for v in row.subviews {
+            if(v is UIButton) {
+                splitButtonTap(sender: (v as! UIButton))
+                break
+            }
+        }
+    }
+    
     @objc func splitButtonTap(sender: UIButton) {
         
         // update values
@@ -366,6 +376,13 @@ extension SliderPopup {
                 politicalStance = false
             }
         }
+        
+        // save prefs locally
+        var splitValue = 0
+        if(politicalStance){ splitValue = 1 }
+        else if(establishmentStance){ splitValue = 2 }
+        UserDefaults.standard.setValue(splitValue, forKey: "userSplitPrefs")
+        UserDefaults.standard.synchronize()
         
         // update checkboxes
         let row1 = self.stackView.subviews[2]
