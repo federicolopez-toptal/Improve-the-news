@@ -122,6 +122,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
        
         // collectionView, register cells
         self.collectionView.register(SubtopicHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SubtopicHeader.headerId)
+        self.collectionView.register(SubtopicHeaderForSplit.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SubtopicHeaderForSplit.headerId)
+        
+        
         self.collectionView.register(FAQFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FAQFooter.footerId)
         self.collectionView.register(seeMoreFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooter.footerId)
         self.collectionView.register(seeMoreFooterSection0.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: seeMoreFooterSection0.footerId)
@@ -1059,9 +1062,18 @@ extension NewsViewController {
             //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
             cell.pubDate.text = " "
             
+            var showMarkup = false
+            for M in newsParser.getMarkups(index: index) {
+                let type = M.type.lowercased()
+                if(!type.contains("prediction")){ showMarkup = true }
+            }
+            cell.markupView.isHidden = !showMarkup
+            
+            /*
             if newsParser.getMarkups(index: index).count > 0 {
                 cell.markupView.isHidden = false
             }
+            */
             
             
             //cell.backgroundColor = UIColor.red.withAlphaComponent(0.5)
@@ -1272,8 +1284,11 @@ extension NewsViewController {
         //return .init(width: view.frame.width, height: 120)
         //return .init(width: view.frame.width, height: 75)
         
-        
+        // SubtopicHeader
         var h: CGFloat = 120
+        if(mustSplit()){
+            h += 45
+        }
         /*
         let iPath = IndexPath(item: 0, section: section)
         let cell = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: iPath) as! SubtopicHeader
@@ -1281,24 +1296,49 @@ extension NewsViewController {
         
         let kind = UICollectionView.elementKindSectionHeader
         let iPath = IndexPath(row: 0, section: section)
-        if let header = self.collectionView(self.collectionView,
-                        viewForSupplementaryElementOfKind: kind,
-                        at: iPath) as? SubtopicHeader {
-            
-            if(header.hierarchy.text == "  " && self.uniqueID==1) {
+        
+        if( self.mustSplit() ) {
+            if let header = self.collectionView(self.collectionView,
+                            viewForSupplementaryElementOfKind: kind,
+                            at: iPath) as? SubtopicHeaderForSplit {
+                
+                if(header.hierarchy.text == "  " && self.uniqueID==1) {
+                    h -= 20
+                }
+                
+                //if(header.prioritySlider.isHidden) {
+                    h -= 29
+                //}
+                
+                
+                // % label tmp removed !!!
                 h -= 20
+                
+                if(section>0) {
+                    h -= 20
+                }
             }
-            
-            //if(header.prioritySlider.isHidden) {
-                h -= 29
-            //}
-            
-            
-            // % label tmp removed !!!
-            h -= 20
-            
-            if(section>0) {
+        }
+        else {
+            if let header = self.collectionView(self.collectionView,
+                            viewForSupplementaryElementOfKind: kind,
+                            at: iPath) as? SubtopicHeader {
+                
+                if(header.hierarchy.text == "  " && self.uniqueID==1) {
+                    h -= 20
+                }
+                
+                //if(header.prioritySlider.isHidden) {
+                    h -= 29
+                //}
+                
+                
+                // % label tmp removed !!!
                 h -= 20
+                
+                if(section>0) {
+                    h -= 20
+                }
             }
         }
         
@@ -1511,175 +1551,136 @@ extension NewsViewController {
             
             case UICollectionView.elementKindSectionHeader:
                 let kind = UICollectionView.elementKindSectionHeader
-                let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SubtopicHeader.headerId, for: indexPath) as! SubtopicHeader
                 
-                sectionHeader.delegate = self
-                sectionHeader.ssDelegate = self
-                sectionHeader.topicDelegate = self
-                sectionHeader.tag = indexPath.section
-                sectionHeader.configure()
+                if( mustSplit() ) {
+                    let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SubtopicHeaderForSplit.headerId, for: indexPath) as! SubtopicHeaderForSplit
                 
-                let subTopic = newsParser.getTopic(index: indexPath.section)
-                sectionHeader.setHeaderText(subtopic: subTopic)
-                
-                sectionHeader.topicSlidersButton.isHidden = false
-                sectionHeader.prioritySlider.isHidden = false
-                
-                
-                var globalPopularity: Float = 0
-                if(newsParser.getGlobalPopularities().count==0) {
-                    globalPopularity = 0
-                } else if(indexPath.section<0 || indexPath.section>=self.newsParser.getGlobalPopularities().count) {
-                    globalPopularity = 0
-                } else {
-                    globalPopularity = newsParser.getGlobalPopularities()[indexPath.section]
-                }
-                sectionHeader.updateSuperSlider(num: globalPopularity)
-                
-                
-                /*
-                var popularity: Float = 0
-                if(newsParser.getPopularities().count==0) {
-                    popularity = 0
-                } else if(indexPath.section<0 || indexPath.section>=self.newsParser.getPopularities().count) {
-                    popularity = 0
-                } else {
-                    popularity = newsParser.getPopularities()[indexPath.section]
-                }
-                sectionHeader.updateSuperSlider(num: popularity)
-                */
-                
-                //print("GATO", section, popularity)
-                
-                
-                if indexPath.section == 0 {
-                    sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 40)
-                    //sectionHeader.label.heightAnchor.constraint(equalToConstant: 36).isActive = true
-                } else {
-                    sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 30)
-                    //sectionHeader.label.heightAnchor.constraint(equalToConstant: 20).isActive = true
-                }
-                                
-                // no super sliders on main page
-                if self.topic == "news" {
-                    sectionHeader.prioritySlider.isHidden = true
-                }
-                
-                // no topic sliders on childless topics
-                if newsParser.getAllTopics().count == 1 {
-                    sectionHeader.topicSlidersButton.isHidden = true
-                }
-                
-                /*
-                // breadcrumbs
-                if indexPath.section == 0 {
-                    sectionHeader.hierarchy.text = ""
-                } else {
-                    
-                    sectionHeader.hierarchy.text = self.hierarchy + newsParser.getTopic(index: indexPath.section)
+                    sectionHeader.delegate = self
+                    sectionHeader.ssDelegate = self
+                    sectionHeader.topicDelegate = self
+                    sectionHeader.tag = indexPath.section
+                    sectionHeader.configure(biasSliders.stanceValues())
                     
                     
-                    // Example: Headlines>Money>Industries>Marketing>whateEver
+                    let subTopic = newsParser.getTopic(index: indexPath.section)
+                    sectionHeader.setHeaderText(subtopic: subTopic)
                     
-                    /*
-                    var text = ""
-                    let components = self.hierarchy.components(separatedBy: ">")
-                    if(components.count > 1) {
-                        text = components[components.count-2] + ">"
-                    }
-                    text += newsParser.getTopic(index: indexPath.section)
-                    sectionHeader.hierarchy.text = text
+                    sectionHeader.topicSlidersButton.isHidden = false
+                    sectionHeader.prioritySlider.isHidden = false
                     
-                    */
                     
-                    sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
-                }
-                */
-                
-                /*
-                if indexPath.section == 0 {
-                    if self.hierarchy == "Headlines>" {
-                        sectionHeader.hierarchy.text = ""
+                    var globalPopularity: Float = 0
+                    if(newsParser.getGlobalPopularities().count==0) {
+                        globalPopularity = 0
+                    } else if(indexPath.section<0 || indexPath.section>=self.newsParser.getGlobalPopularities().count) {
+                        globalPopularity = 0
                     } else {
-                        sectionHeader.hierarchy.text = String(self.hierarchy.dropLast())
-                        hArray.append(sectionHeader.hierarchy.text!)
+                        globalPopularity = newsParser.getGlobalPopularities()[indexPath.section]
                     }
-                } else {
-                    sectionHeader.hierarchy.text = self.hierarchy + newsParser.getTopic(index: indexPath.section)
-                    sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
-                    hArray.append(sectionHeader.hierarchy.text!)
+                    sectionHeader.updateSuperSlider(num: globalPopularity)
                     
-//                    var label = UILabel(text: "hey", font: .systemFont(ofSize: 12), textColor: .white, textAlignment: .left, numberOfLines: 1)
-//                    var label2 = UILabel(text: "hey", font: .systemFont(ofSize: 12), textColor: .white, textAlignment: .left, numberOfLines: 1)
-//                    sectionHeader.myStack.addArrangedSubview(label)
-//                    sectionHeader.myStack.addArrangedSubview(label2)
-                    //sectionHeader.setUpStackView(atIndex: sectionHeader.tag)
-                }
-                */
-                
-                //print(self.hierarchy)
-                
-                var breadcrumbText = ""
-                if(indexPath.section==0 && (self.hierarchy == "Headlines>" || self.hierarchy == "") && self.uniqueID==1) {
-                    breadcrumbText = "  "
-                    sectionHeader.hierarchy.text = breadcrumbText
-                } else {
-                    breadcrumbText = self.hierarchy + newsParser.getTopic(index: indexPath.section)
-                    sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
-                    hArray.append(breadcrumbText)
+                    if indexPath.section == 0 {
+                        sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 40)
+                    } else {
+                        sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 30)
+                    }
+                                    
+                    // no super sliders on main page
+                    if self.topic == "news" {
+                        sectionHeader.prioritySlider.isHidden = true
+                    }
                     
-                    let components = breadcrumbText.components(separatedBy: ">")
-                    if(components.count > 1) {
-                        let last = components.last!
-                        breadcrumbText = breadcrumbText.replacingOccurrences(of: ">" + last, with: "")
+                    // no topic sliders on childless topics
+                    if newsParser.getAllTopics().count == 1 {
+                        sectionHeader.topicSlidersButton.isHidden = true
+                    }
+                    
+                    var breadcrumbText = ""
+                    if(indexPath.section==0 && (self.hierarchy == "Headlines>" || self.hierarchy == "") && self.uniqueID==1) {
+                        breadcrumbText = "  "
+                        sectionHeader.hierarchy.text = breadcrumbText
+                    } else {
+                        breadcrumbText = self.hierarchy + newsParser.getTopic(index: indexPath.section)
+                        sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
                         hArray.append(breadcrumbText)
-                    }
-                    sectionHeader.hierarchy.text = breadcrumbText
-                }
-
-                
-                
-                
-                /*
-                    if self.hierarchy == "Headlines>" {
                         
-                    } else {
-                        breadcrumbText = String(self.hierarchy.dropLast())
-                        hArray.append(breadcrumbText)
+                        let components = breadcrumbText.components(separatedBy: ">")
+                        if(components.count > 1) {
+                            let last = components.last!
+                            breadcrumbText = breadcrumbText.replacingOccurrences(of: ">" + last, with: "")
+                            hArray.append(breadcrumbText)
+                        }
+                        sectionHeader.hierarchy.text = breadcrumbText
                     }
-                    hArray.append(breadcrumbText)
-                    sectionHeader.hierarchy.text = breadcrumbText
+
+                    sectionHeader.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
+                    //sectionHeader.backgroundColor = UIColor.yellow.withAlphaComponent(0.4)
+                    return sectionHeader
+                
                 } else {
-                    breadcrumbText = self.hierarchy + newsParser.getTopic(index: indexPath.section)
-                    sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
-                    hArray.append(breadcrumbText)
+                    let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SubtopicHeader.headerId, for: indexPath) as! SubtopicHeader
+                
+                    sectionHeader.delegate = self
+                    sectionHeader.ssDelegate = self
+                    sectionHeader.topicDelegate = self
+                    sectionHeader.tag = indexPath.section
+                    sectionHeader.configure()
                     
-                    let components = breadcrumbText.components(separatedBy: ">")
-                    if(components.count > 1) {
-                        let last = components.last!
-                        breadcrumbText = breadcrumbText.replacingOccurrences(of: ">" + last, with: "")
+                    let subTopic = newsParser.getTopic(index: indexPath.section)
+                    sectionHeader.setHeaderText(subtopic: subTopic)
+                    
+                    sectionHeader.topicSlidersButton.isHidden = false
+                    sectionHeader.prioritySlider.isHidden = false
+                    
+                    
+                    var globalPopularity: Float = 0
+                    if(newsParser.getGlobalPopularities().count==0) {
+                        globalPopularity = 0
+                    } else if(indexPath.section<0 || indexPath.section>=self.newsParser.getGlobalPopularities().count) {
+                        globalPopularity = 0
+                    } else {
+                        globalPopularity = newsParser.getGlobalPopularities()[indexPath.section]
+                    }
+                    sectionHeader.updateSuperSlider(num: globalPopularity)
+                    
+                    if indexPath.section == 0 {
+                        sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 40)
+                    } else {
+                        sectionHeader.label.titleLabel?.font = UIFont(name: "PTSerif-Bold", size: 30)
+                    }
+                                    
+                    // no super sliders on main page
+                    if self.topic == "news" {
+                        sectionHeader.prioritySlider.isHidden = true
+                    }
+                    
+                    // no topic sliders on childless topics
+                    if newsParser.getAllTopics().count == 1 {
+                        sectionHeader.topicSlidersButton.isHidden = true
+                    }
+                    
+                    var breadcrumbText = ""
+                    if(indexPath.section==0 && (self.hierarchy == "Headlines>" || self.hierarchy == "") && self.uniqueID==1) {
+                        breadcrumbText = "  "
+                        sectionHeader.hierarchy.text = breadcrumbText
+                    } else {
+                        breadcrumbText = self.hierarchy + newsParser.getTopic(index: indexPath.section)
+                        sectionHeader.hierarchy.adjustsFontSizeToFitWidth = true
                         hArray.append(breadcrumbText)
+                        
+                        let components = breadcrumbText.components(separatedBy: ">")
+                        if(components.count > 1) {
+                            let last = components.last!
+                            breadcrumbText = breadcrumbText.replacingOccurrences(of: ">" + last, with: "")
+                            hArray.append(breadcrumbText)
+                        }
+                        sectionHeader.hierarchy.text = breadcrumbText
                     }
-                    sectionHeader.hierarchy.text = breadcrumbText
+
+                    sectionHeader.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
+                    //sectionHeader.backgroundColor = .green
+                    return sectionHeader
                 }
-                */
-                
-                
-                /*
-                let components = self.hierarchy.components(separatedBy: ">")
-                    if(components.count > 1) {
-                        text = components[components.count-2] + ">"
-                    }
-                    text += newsParser.getTopic(index: indexPath.section)
-                */
-                
-                sectionHeader.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
-                //sectionHeader.backgroundColor = .green
-                
-                
-                //sectionHeader.backgroundColor  = UIColor.yellow.withAlphaComponent(0.25) //!!!
-                return sectionHeader
-                
             
             case UICollectionView.elementKindSectionFooter:
                 let kind = UICollectionView.elementKindSectionFooter
@@ -1972,7 +1973,7 @@ extension NewsViewController {
         let x: CGFloat = (UIScreen.main.bounds.width-w)/2
         let h: CGFloat = UIScreen.main.bounds.height
         vDivider.frame = CGRect(x: x, y: 0, width: w, height: h)
-        vDivider.backgroundColor = .clear
+        vDivider.backgroundColor = .clear //UIColor.red.withAlphaComponent(0.25)
         
         let dirs: [UISwipeGestureRecognizer.Direction] = [.left, .right]
         for D in dirs {
@@ -2004,7 +2005,7 @@ extension NewsViewController {
             let items = self.collectionView(self.collectionView, numberOfItemsInSection: sec)
             
             let margin: CGFloat = 8
-            var Y: CGFloat = 51  // header
+            var Y: CGFloat = 51 + 45 // header
             let rows = items/2
             var H: CGFloat = CGFloat(240 * rows)
             let W: CGFloat = 4
@@ -2017,7 +2018,7 @@ extension NewsViewController {
             line.isUserInteractionEnabled = false
             vDivider.addSubview(line)
             
-            offsetY += 51 + H + margin
+            offsetY += (51+45) + H + margin
             if(sec==0) {
                 offsetY += 115
                 

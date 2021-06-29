@@ -44,8 +44,8 @@ class WebViewController: UIViewController, WKUIDelegate {
     }()
     
     let sourceLinkAttributes: [NSAttributedString.Key: Any] = [
-        .font: UIFont(name: "OpenSans-Bold", size: 14)!,
-    .foregroundColor: UIColor.white]
+        .font: UIFont(name: "OpenSans-Regular", size: 14)!,
+        .foregroundColor: UIColor.white]
     
     // markup constraints
     var markupTopAnchorHidden: NSLayoutConstraint?
@@ -295,61 +295,108 @@ extension WebViewController {
         var heightSum: CGFloat = 0.0
         self.markupsLinks = [String]()
         for (i, cc) in self.contestedclaims.enumerated() {
-
+            var prediction = false
+            if(cc.type.lowercased().contains("prediction")) {
+                prediction = true
+            }
+            
             let markup = UIView(backgroundColor: accentOrange)
+            if(prediction){
+                markup.backgroundColor = UIColor(rgb: 0xAAAAAA)
+            }
             stackView.addArrangedSubview(markup)
+            
+            let fullText = cc.type + ": " + cc.description + " | source"
+            let lines = Int( (CGFloat(fullText.count)/42.0).rounded(.up) )
+            let viewHeight: CGFloat = CGFloat(25 + (lines * 20))
+            
+            print("####", lines, viewHeight)
             
             markup.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                markup.heightAnchor.constraint(equalToConstant: 100),
+                markup.heightAnchor.constraint(equalToConstant: viewHeight),
                 markup.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
                 markup.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             ])
-            heightSum += 100
+            heightSum += viewHeight
             
             // add top border
             if !first {
                 
                 let border = UIView()
                 
-                border.backgroundColor = UIColor(rgb: 0xcc5500)
+                border.backgroundColor = UIColor(rgb: 0x6D7071)
                 markup.addSubview(border)
                 
                 border.translatesAutoresizingMaskIntoConstraints = false
                 NSLayoutConstraint.activate([
-                    border.heightAnchor.constraint(equalToConstant: 2),
+                    border.heightAnchor.constraint(equalToConstant: 1),
                     border.trailingAnchor.constraint(equalTo: markup.trailingAnchor),
                     border.leadingAnchor.constraint(equalTo: markup.leadingAnchor),
                     border.topAnchor.constraint(equalTo: markup.topAnchor)
                 ])
             }
             
+            /*
             let markupTitle = UILabel(text: cc.type, font: UIFont(name: "OpenSans-Bold", size: 15), textColor: .black, textAlignment: .left, numberOfLines: 2)
-            let str = NSMutableAttributedString(string: cc.description + " | Source", attributes: sourceLinkAttributes)
-            let foundRange = str.mutableString.range(of: "Source")
-            str.addAttribute(NSAttributedString.Key.link, value: cc.link, range: foundRange)
-            let markupText = ResponsiveTextView(backgroundColor: accentOrange)
+            */
+            // -------
+            
+            let str = NSMutableAttributedString(string: fullText, attributes: sourceLinkAttributes)
+            
+            var foundRange = str.mutableString.range(of: cc.type + ": ")
+            str.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.black,
+                range: foundRange)
+            str.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "OpenSans-Bold",
+                size: 14)!, range: foundRange)
+            
+            foundRange = str.mutableString.range(of: "source")
+            str.addAttribute(NSAttributedString.Key.link, value: cc.link,
+                range: foundRange)
+            str.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.black,
+                range: foundRange)
+
+            let markupText = ResponsiveTextView(backgroundColor: markup.backgroundColor!)
             markupText.attributedText = str
-            markupText.textContainerInset.left = -4
+            //markupText.textContainerInset.left = -4
             markupText.isEditable = false
             markupText.dataDetectorTypes = .all
             
+            var iconImage = UIImage(named: "warningIcon.png")
+            if(prediction){
+                iconImage = UIImage(named: "infoIcon.png")
+            }
+            let iconImageView = UIImageView(image: iconImage)
+            markup.addSubview(iconImageView)
+            iconImageView.backgroundColor = .clear
+            iconImageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                iconImageView.leadingAnchor.constraint(equalTo: markup.leadingAnchor, constant: 10),
+                iconImageView.topAnchor.constraint(equalTo: markup.topAnchor, constant: 12),
+                iconImageView.heightAnchor.constraint(equalToConstant: 20),
+                iconImageView.widthAnchor.constraint(equalToConstant: 20),
+            ])
+            
+            /*
             markup.addSubview(markupTitle)
+            markupTitle.backgroundColor = UIColor.red.withAlphaComponent(0.25)
             markupTitle.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 markupTitle.leadingAnchor.constraint(equalTo: markup.leadingAnchor, constant: 15),
                 markupTitle.trailingAnchor.constraint(equalTo: markup.trailingAnchor, constant: -40),
                 markupTitle.topAnchor.constraint(equalTo: markup.topAnchor, constant: 10),
                 markupTitle.heightAnchor.constraint(equalToConstant: 20)
-            ])
+            ])*/
             
             markup.addSubview(markupText)
             markupText.translatesAutoresizingMaskIntoConstraints = false
+            //markupText.backgroundColor = .
             NSLayoutConstraint.activate([
-                markupText.leadingAnchor.constraint(equalTo: markup.leadingAnchor, constant: 15),
-                markupText.trailingAnchor.constraint(equalTo: markup.trailingAnchor, constant: -15),
-                markupText.topAnchor.constraint(equalTo: markupTitle.bottomAnchor, constant: 5),
-                markupText.bottomAnchor.constraint(equalTo: markup.bottomAnchor, constant: -10),
+                markupText.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor,
+                    constant: 5),
+                markupText.trailingAnchor.constraint(equalTo: markup.trailingAnchor, constant: -45),
+                markupText.topAnchor.constraint(equalTo: markup.topAnchor, constant: 5)
+                //markupText.bottomAnchor.constraint(equalTo: markup.bottomAnchor, constant: -5),
             ])
             
             
@@ -371,7 +418,7 @@ extension WebViewController {
             
             // add cancel button
             if first {
-                let dismissButton = UIButton(backgroundColor: accentOrange)
+                let dismissButton = UIButton(backgroundColor: .clear)
                 dismissButton.setImage(UIImage(systemName: "xmark"), for: .normal)
                 dismissButton.tintColor = .black
                 dismissButton.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
@@ -380,7 +427,8 @@ extension WebViewController {
                 dismissButton.translatesAutoresizingMaskIntoConstraints = false
                 NSLayoutConstraint.activate([
                     dismissButton.topAnchor.constraint(equalTo: markup.topAnchor, constant: 7),
-                    dismissButton.trailingAnchor.constraint(equalTo: markup.trailingAnchor, constant: -15),
+                    dismissButton.trailingAnchor.constraint(equalTo: markup.trailingAnchor,
+                        constant: -4),
                     dismissButton.widthAnchor.constraint(equalToConstant: 30),
                     dismissButton.heightAnchor.constraint(equalToConstant: 30)
                 ])

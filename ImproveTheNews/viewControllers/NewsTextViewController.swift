@@ -603,10 +603,13 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         self.setFlag(imageView: cell.flagImageView, ID: newsParser.getCountryID(index: index))
         cell.sourceLabel.text = newsParser.getSource(index: index) + " - " + newsParser.getDate(index: index)
         
+        var showMarkup = false
         cell.exclamationImageView.isHidden = true
-        if newsParser.getMarkups(index: index).count > 0 {
-            cell.exclamationImageView.isHidden = false
+        for M in newsParser.getMarkups(index: index) {
+            let type = M.type.lowercased()
+            if(!type.contains("prediction")){ showMarkup = true }
         }
+        cell.exclamationImageView.isHidden = !showMarkup
         
         return cell
     }
