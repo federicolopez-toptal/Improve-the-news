@@ -139,7 +139,8 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
         link += "_" + _SL
     }
     
-    link += "&uid=3"
+    link += "&uid=" + USER_ID()
+    /*
     if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
         var fixedID = deviceId.uppercased()
         fixedID = fixedID.replacingOccurrences(of: "-", with: "")
@@ -157,9 +158,63 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
         
         link += fixedID
     }
+    */
     
     link += "&v=I" + Bundle.main.releaseVersionNumber!
     link += "&dev=" + UIDevice.current.modelName.replacingOccurrences(of: " ", with: "_")
     
     return link
 }
+
+func USER_ID() -> String {
+    var result = "3"
+    if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
+        var fixedID = deviceId.uppercased()
+        fixedID = fixedID.replacingOccurrences(of: "-", with: "")
+        fixedID = fixedID.replacingOccurrences(of: "A", with: "0")
+        fixedID = fixedID.replacingOccurrences(of: "B", with: "1")
+        fixedID = fixedID.replacingOccurrences(of: "C", with: "2")
+        fixedID = fixedID.replacingOccurrences(of: "D", with: "3")
+        fixedID = fixedID.replacingOccurrences(of: "E", with: "4")
+        fixedID = fixedID.replacingOccurrences(of: "F", with: "5")
+        
+        // only 19 characters!
+        if(fixedID.count > 19) {
+            fixedID = String( fixedID[0...18] )
+        }
+        result += fixedID
+    }
+    return result
+}
+
+// MARK: - Validations
+func VALIDATE_EMAIL(_ email:String) -> Bool {
+    let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+    let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+    return emailPred.evaluate(with: email)
+}
+
+func VALIDATE_NAME(_ name: String) -> Bool {
+    if(name.isEmpty) {
+        return false
+    } else {
+        if(name.count<3) {
+            return false
+        } else {
+            return true
+        }
+    }
+}
+
+func VALIDATE_PASS(_ pass: String) -> Bool {
+    if(pass.isEmpty) {
+        return false
+    } else {
+        if(pass.count<4) {
+            return false
+        } else {
+            return true
+        }
+    }
+}
+

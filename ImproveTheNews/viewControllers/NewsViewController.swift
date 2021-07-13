@@ -36,6 +36,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var hierarchy = ""                      // hierarchy (path)
     var superSliderStr = ""                 // para armar el request
     var topicCodeFromSearch = ""
+    var splitChangeFirstTime = false
     
     // --------------------------------------------------------
     // horizontal menu
@@ -107,8 +108,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         topicSliders.dismissDelegate = self //!!!
         topicSliders.sliderDelegate = self  //!!!
         
+        NotificationCenter.default.addObserver(self, selector: #selector(setUpNavBar),
+            name: NOTIFICATION_UPDATE_NAVBAR, object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(showSlidersInfo),
             name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+            
         NotificationCenter.default.addObserver(self,
             selector: #selector(reloadOtherInstances(notification:)),
             name: NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES, object: nil)
@@ -161,17 +166,59 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         /*
         //testing height(s)
-        let h1: CGFloat = 51+(240*2)+8+115
-        let redView = UIView(frame: CGRect(x: 20, y: h1 + 51+(240*2)+8+70, width: 100, height: 20))
+        var AAA: CGFloat = 96+(240*2)+8+115 // header + 2rows + margins + bigFooter(0)
+        var BBB: CGFloat = 96+(240*2)+8+70 // header + 2rows + margins + bigFooter(0)
+        
+        let redView = UIView(frame: CGRect(x: 20, y: AAA + BBB + BBB, width: 100, height: 20))
         redView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         self.collectionView.addSubview(redView)
         */
         
+        self.splitChangeFirstTime = true
         let splitValue = UserDefaults.standard.integer(forKey: "userSplitPrefs")
         if(splitValue != 0) {
+            self.splitChangeFirstTime = false
             self.biasSliders.setSplitValue(splitValue-1)
         }
+        
+        /*
+        // App become active
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(applicationDidBecomeActive),
+            name: UIApplication.didBecomeActiveNotification, object: nil)
+        }
+        */
+        
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(applicationDidBecomeActive),
+            name: UIApplication.didBecomeActiveNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification, object: nil)
+            
     }
+    
+    var lastTimeActive: Date?
+    @objc func applicationDidBecomeActive() {
+        if let _lastTimeActive = self.lastTimeActive {
+            let now = Date()
+            let diff = now - _lastTimeActive
+            let limit: TimeInterval = 60 * APP_CFG_INACTIVE_MINS
+            
+            if(diff >= limit) {
+                self.firstTime = true
+                self.loadData()
+            }
+        }
+        
+    }
+    @objc func applicationDidEnterBackground() {
+        self.lastTimeActive = Date()
+    }
+    
+    
+    
     
     /*
     open override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -202,8 +249,15 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         if(!self.firstTime && !self.topicCodeFromSearch.isEmpty) {
             self.loadTopicFromSearch()
         }
+        
+        
+        DELAY(1.0) {
+            let newVC = AuthViewController()
+            newVC.mode = .registration
+            //self.navigationController?.pushViewController(newVC, animated: true)
+        }
+        
     }
-    
     
     
 
@@ -428,8 +482,101 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.view.addSubview(self.loadingView)
     }
     
-    private func setUpNavBar() {
+    @objc private func setUpNavBar() {
+        DispatchQueue.main.async {
+            if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+                self.setUpNavBar_new()
+            } else {
+                self.setUpNavBar_old()
+            }
+        }
+    }
 
+    private func setUpNavBar_new() {
+        searchBar.sizeToFit()
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.searchTextField.textColor = .black
+        searchBar.tintColor = .black
+
+        let logo = UIImage(named: "N64")
+        let titleView = UIImageView(image: logo)
+        titleView.contentMode = .scaleAspectFit
+        navigationItem.titleView = titleView
+
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
+        navigationController?.navigationBar.isTranslucent = false
+        
+        navigationController?.navigationBar.barStyle = .black
+        let _textColor = DARKMODE() ? UIColor.white : textBlack
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
+
+        let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.sectionButtonItemClicked(_:)))
+
+        let iconsMargin: CGFloat = 45.0
+
+        let bellButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain,
+            target: self, action: #selector(bellButtonTap(_:)) )
+        bellButton.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: iconsMargin)
+
+
+
+        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self,
+            action: #selector(searchItemClicked(_:)))
+        
+        var userImage = UIImage(systemName: "person")
+        if(MarkupUser.shared.userInfo != nil) {
+            userImage = UIImage(systemName: "person.fill")
+        }
+        
+        let userButton = UIBarButtonItem(image: userImage, style: .plain, target: self,
+            action: #selector(userButtonTap(_:)) )
+        userButton.imageInsets = UIEdgeInsets(top: 0, left: iconsMargin,
+            bottom: 0, right: 0)
+
+        var leftButtons: [UIBarButtonItem] = [sectionsButton]
+        var rightButtons: [UIBarButtonItem] = [searchButton]
+
+        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+            leftButtons.append(bellButton)
+            rightButtons.append(userButton)
+        }
+        
+        navigationItem.leftBarButtonItems = leftButtons
+        navigationItem.rightBarButtonItems = rightButtons
+        
+        navigationItem.leftItemsSupplementBackButton = true
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+
+        var logoFile = "ITN_logo.png"
+        if(!DARKMODE()){ logoFile = "ITN_logo_blackText.png" }
+
+        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 165, height: 30))
+        //view.backgroundColor = .green
+        let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
+        let homeButton = UIButton(image: img!)
+        
+        
+        var valX: CGFloat = ((view.frame.size.width - 195)/2) //- 10.0
+        let elementsSizeSum: CGFloat = (44*4)+195+(5*2)
+        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+            if(elementsSizeSum>=UIScreen.main.bounds.width) {
+                valX -= 10.0
+            }
+        }
+        
+        
+        homeButton.frame = CGRect(x: valX, y: 0, width: 195, height: 30)
+        homeButton.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
+        
+        
+        view.addSubview(homeButton)
+        //view.addSubview(label)
+        view.center = navigationItem.titleView!.center
+        self.navigationItem.titleView = view
+    }
+    
+    private func setUpNavBar_old() {
         searchBar.sizeToFit()
         searchBar.searchTextField.backgroundColor = .white
         searchBar.searchTextField.textColor = .black
@@ -464,19 +611,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
         homeButton.addTarget(self, action: #selector(homeButtonTapped),
                             for: .touchUpInside)
-        //homeButton.isUserInteractionEnabled = false
-        
-        /*
-        let label = UILabel.init(frame: CGRect(x: 35, y: 5, width: 180, height: 20))
-        label.text = "IMPROVE THE NEWS"
-        label.font = UIFont(name: "OpenSans-Bold", size: 17)
-        label.textColor = .white
-        label.textAlignment = .left
-        //label.center.y = view.center.y
-        */
-        
+
         view.addSubview(homeButton)
-        //view.addSubview(label)
         view.center = navigationItem.titleView!.center
         self.navigationItem.titleView = view
     }
@@ -510,6 +646,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     @objc func homeButtonTapped() {
         if let firstVC = navigationController?.viewControllers.first as? NewsViewController {
+            /*
             if(firstVC == self) {
                 // I'm in the first screen
                 if(self.topic == "news") {
@@ -531,7 +668,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     newsVC.topic = "news"
                 }
                 navigationController!.popToRootViewController(animated: true)
-        }
+            }
+            */
+            
+            self.firstTime = true
+            self.loadData()
     }}
     
     @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
@@ -1615,6 +1756,7 @@ extension NewsViewController {
 
                     sectionHeader.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
                     //sectionHeader.backgroundColor = UIColor.yellow.withAlphaComponent(0.4)
+                    
                     return sectionHeader
                 
                 } else {
@@ -1780,6 +1922,10 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
         
         var offsetY: CGFloat = 0
         var firstItemHeight: CGFloat = 51+(240*2)+8+115 // header + 2rows + margins + bigFooter(0)
+        if(mustSplit()) {
+            firstItemHeight = 96+(240*2)+8+115
+        }
+
         if let info = BannerInfo.shared {
             //let count = self.navigationController!.viewControllers.count
             if(self.uniqueID==1 && info.active) {
@@ -1787,9 +1933,11 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
             }
         }
         
-        //736-20-20-20
-        let otherItemsHeight: CGFloat = 51+(240*2)+8+70 // header + 2rows + margins + footer
+        var otherItemsHeight: CGFloat = 51+(240*2)+8+70 // header + 2rows + margins + footer
         //let slidersHeight: CGFloat = 29
+        if(mustSplit()) {
+            otherItemsHeight = 96+(240*2)+8+70
+        }
         
         if(index>0) {
             offsetY += firstItemHeight
@@ -1920,7 +2068,8 @@ extension NewsViewController {
                     self.param_A = 4
                     if(count==0){ self.param_A = 40 }
                     self.topic = self.topicCodeFromSearch
-                            
+                    self.topicCodeFromSearch = ""
+                    
                     self.loadData()
                 }
                 
@@ -2099,9 +2248,27 @@ extension NewsViewController {
         }
         
         // reload the news
-        self.firstTime = true
+        if(splitChangeFirstTime) {
+            self.firstTime = true
+        }
+        
+        self.splitChangeFirstTime = true
         self.loadData()
     }
     
     
+}
+
+extension NewsViewController {
+
+    @objc func userButtonTap(_ sender: UIBarButtonItem) {
+        MarkupUser.shared.showActionSheet(self)
+    }
+
+    @objc func bellButtonTap(_ sender: UIBarButtonItem) {
+        /*
+        let notifications = MarkupNotificationsViewController()
+        self.navigationController?.pushViewController(notifications, animated: true)
+        */
+    }
 }

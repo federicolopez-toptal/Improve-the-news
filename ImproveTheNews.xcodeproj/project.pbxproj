@@ -78,6 +78,9 @@
 		BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */; };
 		BDC68ED4264C983C0072BDF9 /* HeaderCellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC68ED2264C983C0072BDF9 /* HeaderCellBig.swift */; };
 		BDC68ED5264C983C0072BDF9 /* HeaderCellBig.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDC68ED3264C983C0072BDF9 /* HeaderCellBig.xib */; };
+		BDD1512D268CF13E00EE256F /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD1512C268CF13E00EE256F /* AuthViewController.swift */; };
+		BDD1512F268CF96300EE256F /* MarkupUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD1512E268CF96300EE256F /* MarkupUser.swift */; };
+		BDD15131268CFBDD00EE256F /* MarkupNotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD15130268CFBDD00EE256F /* MarkupNotificationsViewController.swift */; };
 		BDD540D525EEDCB500AF4F91 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD540D425EEDCB500AF4F91 /* StringExtension.swift */; };
 		BDD540DB25EEE09600AF4F91 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD540DA25EEE09600AF4F91 /* DateExtension.swift */; };
 		BDD67D822638433200B7FD7C /* NewsTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD67D812638433200B7FD7C /* NewsTextViewController.swift */; };
@@ -390,6 +393,9 @@
 		BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = seeMoreFooterLast.swift; sourceTree = "<group>"; };
 		BDC68ED2264C983C0072BDF9 /* HeaderCellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderCellBig.swift; sourceTree = "<group>"; };
 		BDC68ED3264C983C0072BDF9 /* HeaderCellBig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderCellBig.xib; sourceTree = "<group>"; };
+		BDD1512C268CF13E00EE256F /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		BDD1512E268CF96300EE256F /* MarkupUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupUser.swift; sourceTree = "<group>"; };
+		BDD15130268CFBDD00EE256F /* MarkupNotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupNotificationsViewController.swift; sourceTree = "<group>"; };
 		BDD540D425EEDCB500AF4F91 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		BDD540DA25EEE09600AF4F91 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		BDD67D812638433200B7FD7C /* NewsTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTextViewController.swift; sourceTree = "<group>"; };
@@ -787,6 +793,9 @@
 				BDC68ED1264C980A0072BDF9 /* BigCells */,
 				BD17DB0826668D9D00AEFF9A /* SourcesViewController.swift */,
 				BD17DB0A2666938400AEFF9A /* Sources */,
+				BDD1512E268CF96300EE256F /* MarkupUser.swift */,
+				BDD1512C268CF13E00EE256F /* AuthViewController.swift */,
+				BDD15130268CFBDD00EE256F /* MarkupNotificationsViewController.swift */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -1590,6 +1599,7 @@
 				A89B803624AFAB8B009BB0F8 /* WebViewController.swift in Sources */,
 				A87144EA24F43B3100A7E404 /* SearchViewController.swift in Sources */,
 				BD3F58DA264CA5CC00B99522 /* FooterCellBig.swift in Sources */,
+				BDD15131268CFBDD00EE256F /* MarkupNotificationsViewController.swift in Sources */,
 				A81B3B202481E67200A52A97 /* AppDelegate.swift in Sources */,
 				A82A270224F6A1420028272B /* TopicSliders.swift in Sources */,
 				BD7881422686282F00824D1C /* SubtopicHeaderForSplit.swift in Sources */,
@@ -1598,6 +1608,7 @@
 				A8B2F846249728F40069EF76 /* NewsParser.swift in Sources */,
 				BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */,
 				A8D61B3724F1656C00A0F8F5 /* Pages.swift in Sources */,
+				BDD1512D268CF13E00EE256F /* AuthViewController.swift in Sources */,
 				A8CA063424EB3B0A00B91778 /* BiasSliders.swift in Sources */,
 				BDF37F6C263AE2E5003D910D /* CellTextOnly.swift in Sources */,
 				BD88FD52264CA93C00F8BCCB /* FooterCellBigItem0.swift in Sources */,
@@ -1615,6 +1626,7 @@
 				A8E94A1724F096B000936E07 /* ArticleLayouts.swift in Sources */,
 				BD17DB0D266693A700AEFF9A /* SourceCell.swift in Sources */,
 				BDF37F79263B0B09003D910D /* FooterCellTextOnly.swift in Sources */,
+				BDD1512F268CF96300EE256F /* MarkupUser.swift in Sources */,
 				BDF71B542677970A0026C615 /* NewsViewController.swift in Sources */,
 				BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */,
 				A8C5B9D424B67A0E0077E306 /* Globals.swift in Sources */,
@@ -1780,7 +1792,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = " 2.6";
+				CURRENT_PROJECT_VERSION = " 2.8";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -1807,7 +1819,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = " 2.6";
+				CURRENT_PROJECT_VERSION = " 2.8";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;

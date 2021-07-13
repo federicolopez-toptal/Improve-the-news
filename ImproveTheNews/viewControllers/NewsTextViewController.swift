@@ -77,6 +77,32 @@ class NewsTextViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAll),
             name: NOTIFICATION_FORCE_RELOAD_NEWS,
             object: nil)
+            
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(applicationDidBecomeActive),
+            name: UIApplication.didBecomeActiveNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification, object: nil)
+    }
+    
+    var lastTimeActive: Date?
+    @objc func applicationDidBecomeActive() {
+        if let _lastTimeActive = self.lastTimeActive {
+            let now = Date()
+            let diff = now - _lastTimeActive
+            let limit: TimeInterval = 60 * APP_CFG_INACTIVE_MINS
+            
+            if(diff >= limit) {
+                self.firstTime = true
+                self.loadData()
+            }
+        }
+        
+    }
+    @objc func applicationDidEnterBackground() {
+        self.lastTimeActive = Date()
     }
     
     @objc private func reloadAll() {
@@ -131,17 +157,56 @@ class NewsTextViewController: UIViewController {
 
         let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.sectionButtonItemClicked(_:)))
 
+        let iconsMargin: CGFloat = 45.0
+
+        let bellButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain,
+            target: self, action: #selector(bellButtonTap(_:)) )
+        bellButton.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: iconsMargin)
+
+        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self,
+            action: #selector(searchItemClicked(_:)))
+            
+        let userButton = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain,
+            target: self, action: #selector(userButtonTap(_:)) )
+        userButton.imageInsets = UIEdgeInsets(top: 0, left: iconsMargin, bottom: 0, right: 0)
+
+        var leftButtons: [UIBarButtonItem] = [sectionsButton]
+        var rightButtons: [UIBarButtonItem] = [searchButton]
+
+        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+            leftButtons.append(bellButton)
+            rightButtons.append(userButton)
+        }
+        
+        
+        navigationItem.leftBarButtonItems = leftButtons
+        navigationItem.rightBarButtonItems = rightButtons
+
+        /*
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchItemClicked(_:)))
         navigationItem.leftBarButtonItem = sectionsButton
+        */
         navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         var logoFile = "ITN_logo.png"
         if(!DARKMODE()){ logoFile = "ITN_logo_blackText.png" }
-        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 195, height: 30))
+        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 165, height: 30))
+        
         let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
         let homeButton = UIButton(image: img!)
-        homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
+        
+        var valX: CGFloat = 0
+        let elementsSizeSum: CGFloat = (44*4)+195+(5*2)
+        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+            valX = ((view.frame.size.width - 195)/2) //- 10.0
+            if(elementsSizeSum>=UIScreen.main.bounds.width) {
+                valX -= 10.0
+            }
+        }
+        
+        //homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
+        homeButton.frame = CGRect(x: valX, y: 0, width: 195, height: 30)
         homeButton.addTarget(self, action: #selector(homeButtonTapped),
                             for: .touchUpInside)
         
@@ -330,6 +395,9 @@ class NewsTextViewController: UIViewController {
     }
     
     @objc func homeButtonTapped() {
+        self.firstTime = true
+        self.loadData()
+        
         let offset = CGPoint(x: 0, y: 0)
         self.tableView.setContentOffset(offset, animated: true)
         self.horizontalMenu.backToZero()
@@ -441,6 +509,7 @@ class NewsTextViewController: UIViewController {
                     self.param_A = 4
                     if(count==0){ self.param_A = 40 }
                     self.topic = self.topicCodeFromSearch
+                    self.topicCodeFromSearch = ""
                             
                     self.loadData()
                 }
@@ -821,4 +890,19 @@ extension NewsTextViewController {
         */
     }
 
+}
+
+
+extension NewsTextViewController {
+
+    @objc func userButtonTap(_ sender: UIBarButtonItem) {
+        MarkupUser.shared.showActionSheet(self)
+    }
+
+    @objc func bellButtonTap(_ sender: UIBarButtonItem) {
+        /*
+        let notifications = MarkupNotificationsViewController()
+        self.navigationController?.pushViewController(notifications, animated: true)
+        */
+    }
 }

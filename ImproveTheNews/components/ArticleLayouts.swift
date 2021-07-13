@@ -156,8 +156,8 @@ class HeadlineCell: UICollectionViewCell {
             //markupView.leadingAnchor.constraint(equalTo: pubDate.trailingAnchor, constant: 10),
             markupView.leadingAnchor.constraint(equalTo: self.trailingAnchor, constant: -32),
             markupView.widthAnchor.constraint(equalToConstant: 25),
-            markupView.topAnchor.constraint(equalTo: source.bottomAnchor, constant: 3),
-            markupView.heightAnchor.constraint(equalToConstant: 25)
+            markupView.heightAnchor.constraint(equalToConstant: 25),
+            markupView.topAnchor.constraint(equalTo: source.topAnchor, constant: 18)
         ])
         //markupView.backgroundColor = .yellow
         
