@@ -38,6 +38,8 @@ class HeadlineCell: UICollectionViewCell {
     let logoView = UIImageView()
     let markupView = UIImageView()
     let flag = UIImageView()
+    var sourceLeadingConstraint: NSLayoutConstraint?
+      
       
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -85,6 +87,7 @@ class HeadlineCell: UICollectionViewCell {
             }
             miniSlidersView?.setValues(val1: 3, val2: 1)
         }
+        miniSlidersView?.isHidden = !MorePrefsViewController.showStanceInsets()
         
         addSubview(headline)
         headline.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +104,6 @@ class HeadlineCell: UICollectionViewCell {
             //headline.heightAnchor.constraint(equalToConstant: 70)
         ])
         
-        
         if(APP_CFG_SHOW_FLAGS) {
             addSubview(flag)
             flag.layer.cornerRadius = 10
@@ -114,28 +116,39 @@ class HeadlineCell: UICollectionViewCell {
                 flag.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
                 flag.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 5)
             ])
+            
+            flag.isHidden = !MorePrefsViewController.showFlags()
         }
         
         addSubview(source)
         source.translatesAutoresizingMaskIntoConstraints = false
+        if(sourceLeadingConstraint == nil){
+            self.sourceLeadingConstraint = source.leadingAnchor.constraint(equalTo: flag.trailingAnchor, constant: 6)
+        }
         
         if(APP_CFG_SHOW_FLAGS) {
             NSLayoutConstraint.activate([
                 source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
-                source.leadingAnchor.constraint(equalTo: flag.trailingAnchor, constant: 6),
+                self.sourceLeadingConstraint!,
                 source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12)
             ])
+            
+            if(flag.isHidden) {
+                self.sourceLeadingConstraint?.constant = -18.0
+            } else {
+                self.sourceLeadingConstraint?.constant = 6.0
+            }
+        
         } else {
             NSLayoutConstraint.activate([
                 source.topAnchor.constraint(equalTo: headline.bottomAnchor, constant: 0),
-                source.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+                self.sourceLeadingConstraint!,
                 source.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -6)
             ])
         }
         
-        
+
         addSubview(pubDate)
-        
         pubDate.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             pubDate.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),

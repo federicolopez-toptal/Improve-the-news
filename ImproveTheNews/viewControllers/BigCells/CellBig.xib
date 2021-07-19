@@ -90,6 +90,7 @@
                 <outlet property="flagImageView" destination="hyN-n0-pnn" id="Qgm-N2-7r2"/>
                 <outlet property="mainPic" destination="8E0-oa-WMB" id="Omo-3F-n8y"/>
                 <outlet property="sourceLabel" destination="ZLF-TR-Zx0" id="fiV-pu-OMb"/>
+                <outlet property="sourceLeadingConstraint" destination="OFg-Za-Kme" id="RIQ-Qp-Swk"/>
             </connections>
             <point key="canvasLocation" x="-1559.4202898550725" y="176.11607142857142"/>
         </tableViewCell>

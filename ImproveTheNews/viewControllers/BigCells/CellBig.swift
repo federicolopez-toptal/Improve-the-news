@@ -15,6 +15,8 @@ class CellBig: UITableViewCell {
     @IBOutlet weak var sourceLabel: UILabel!
     @IBOutlet weak var exclamationImageView: UIImageView!
     @IBOutlet weak var mainPic: UIImageView!
+    @IBOutlet weak var sourceLeadingConstraint: NSLayoutConstraint!
+    
     
     var miniSlidersView: MiniSlidersView?
     

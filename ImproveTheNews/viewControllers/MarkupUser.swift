@@ -18,11 +18,13 @@ struct UserInfo {
     var email: String
     var role: Int
     var notifications: Int
+    var token: String
 
     init(json: [String: Any]) {
         self.id = Int(json["id"] as! String)!
         self.name = json["name"] as! String
         self.email = json["email"] as! String
+        self.token = ""
         
         self.role = 0
         if let _strRole = json["role"] as? String {
@@ -34,13 +36,13 @@ struct UserInfo {
 }
 // ---------------------------------
 
+let markupAPI_baseURl = "http://ec2-3-19-242-162.us-east-2.compute.amazonaws.com/"
 
 
 class MarkupUser {
 
     static var shared = MarkupUser()
-    
-    let url = "http://ec2-3-19-242-162.us-east-2.compute.amazonaws.com/Clean/api.php"
+    let apiUrl = markupAPI_baseURl + "Clean/api.php"
     var userInfo: UserInfo?
 
     func showActionSheet(_ vc: UIViewController) {
@@ -101,62 +103,58 @@ class MarkupUser {
         }
     }
 
-    func register(email: String, pass: String, name: String, callback: @escaping (Bool) -> () ) {
+    func register(email: String, pass: String, name: String, callback: @escaping (Int) -> () ) {
         let body = self.body(email: email, name: name, pass: pass)
-        var request = self.request(reqUrl: self.url + "?type=register")
+        var request = self.request(reqUrl: self.apiUrl + "?type=register")
         request.httpBody = body.data(using: .utf8)
         
         let task = URLSession.shared.dataTask(with: request) { data, resp, error in
             if let _error = error {
                 print("ERROR! " + _error.localizedDescription)
-                callback(false)
+                callback(999)
             } else {
-                let json = self.json(fromData: data)
-                
-                var errorAction = false
-                if let _json = json {
-                    if let _ = _json["notifications"] {
-                        errorAction = false
-                        self.userInfo = UserInfo(json: _json)
+                if let _json = self.json(fromData: data) {
+                    if let _code = _json["code"] as? Int {
+                        if(_code==200) {
+                            self.userInfo = UserInfo(json: _json)
+                            self.oAuth(pass: pass)
+                        }
+                        callback(_code)
                     } else {
-                        errorAction = true
+                        callback(999)
                     }
                 } else {
-                    errorAction = true
+                    callback(999)
                 }
-
-                callback(!errorAction)
             }
         }
         
         task.resume()
     }
 
-    func login(email: String, pass: String, callback: @escaping (Bool) -> () ) {
+    func login(email: String, pass: String, callback: @escaping (Int) -> () ) {
         let body = self.body(email: email, name: "", pass: pass)
-        var request = self.request(reqUrl: self.url + "?type=login")
+        var request = self.request(reqUrl: self.apiUrl + "?type=login")
         request.httpBody = body.data(using: .utf8)
         
         let task = URLSession.shared.dataTask(with: request) { data, resp, error in
             if let _error = error {
                 print("ERROR! " + _error.localizedDescription)
-                callback(false)
+                callback(999)
             } else {
-                let json = self.json(fromData: data)
-                
-                var errorAction = false
-                if let _json = json {
-                    if let _ = _json["notifications"] {
-                        errorAction = false
-                        self.userInfo = UserInfo(json: _json)
+                if let _json = self.json(fromData: data) {
+                    if let _code = _json["code"] as? Int {
+                        if(_code==200) {
+                            self.userInfo = UserInfo(json: _json)
+                            self.oAuth(pass: pass)
+                        }
+                        callback(_code)
                     } else {
-                        errorAction = true
+                        callback(999)
                     }
                 } else {
-                    errorAction = true
+                    callback(999)
                 }
-
-                callback(!errorAction)
             }
         }
         
@@ -181,6 +179,43 @@ class MarkupUser {
             
             vc.present(alert, animated: true) {
             }
+    }
+    
+    func oAuth(pass: String) {
+        let uInfo = self.userInfo!
+        let body = self.body(email: uInfo.email, name: uInfo.name, pass: pass)
+        var request = self.request(reqUrl: self.apiUrl + "?type=oauth")
+        request.httpBody = body.data(using: .utf8)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                print("ERROR! " + _error.localizedDescription)
+                //callback(false)
+            } else {
+                let json = self.json(fromData: data)
+                
+                var errorAction = false
+                if let _json = json {
+                    if let _token = _json["token"] as? String {
+                        self.userInfo?.token = _token
+                    } else {
+                        errorAction = true
+                    }
+                } else {
+                    errorAction = true
+                }
+
+                //callback(!errorAction)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func openNotifications() {
+        let strUrl = markupAPI_baseURl + "mobilereceiver.php?token=" + self.userInfo!.token
+        let url = URL(string: strUrl)!
+        UIApplication.shared.open(url)
     }
     
     // --------------------------------------------------------------

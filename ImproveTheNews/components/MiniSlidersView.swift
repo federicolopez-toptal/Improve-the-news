@@ -202,21 +202,22 @@ class MiniSlidersView: UIView {
     }
     
     @objc func buttonAreaTap(sender: UIButton) {
-        
-        let alert = UIAlertController(title: "", message: self.textOnTap,
-            preferredStyle: .alert)
-        
-        let detailsAction = UIAlertAction(title: "Details", style: .default) { (action) in
-            NotificationCenter.default.post(name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
-        }
-        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        
-        alert.addAction(detailsAction)
-        alert.addAction(okAction)
-        alert.preferredAction = okAction
+        if(MorePrefsViewController.showStancePopUp()) {
+            let alert = UIAlertController(title: "", message: self.textOnTap,
+                preferredStyle: .alert)
+            
+            let detailsAction = UIAlertAction(title: "Details", style: .default) { (action) in
+                NotificationCenter.default.post(name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+            }
+            let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+            
+            alert.addAction(detailsAction)
+            alert.addAction(okAction)
+            alert.preferredAction = okAction
 
-        if let vc = self.viewController {
-            vc.present(alert, animated: true, completion: nil)
+            if let vc = self.viewController {
+                vc.present(alert, animated: true, completion: nil)
+            }
         }
     }
     

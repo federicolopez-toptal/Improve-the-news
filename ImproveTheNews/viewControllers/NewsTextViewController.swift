@@ -57,6 +57,10 @@ class NewsTextViewController: UIViewController {
         fatalError()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.badgeView.removeFromSuperview()
+    }
+    
     override func viewDidLoad() {
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
@@ -73,6 +77,9 @@ class NewsTextViewController: UIViewController {
         self.setUpLoadingView()
         self.setUpHorizontalMenu()
         self.setUpBiasButton()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(setUpNavBar),
+            name: NOTIFICATION_UPDATE_NAVBAR, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAll),
             name: NOTIFICATION_FORCE_RELOAD_NEWS,
@@ -113,6 +120,7 @@ class NewsTextViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
         navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        self.setUpNavBar()
     
         self.tableView.delaysContentTouches = false
         self.loadData()
@@ -121,6 +129,12 @@ class NewsTextViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         if(!self.firstTime && !self.topicCodeFromSearch.isEmpty) {
             self.loadTopicFromSearch()
+        }
+        
+        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+            DELAY(0.3) {
+                CookiesAlert.shared.show(viewController: self)
+            }
         }
     }
     
@@ -135,8 +149,51 @@ class NewsTextViewController: UIViewController {
         self.horizontalMenu.customDelegate = self
     }
     
-    private func setUpNavBar() {
-
+    let badgeView = UIView(frame: .zero)
+    private func addBadge() {
+    
+        if(self.badgeView.superview == nil) {
+            var valX: CGFloat = 65.0
+            let elementsSizeSum: CGFloat = (44*4)+195+(5*2)
+            if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+                if(elementsSizeSum < UIScreen.main.bounds.width) {
+                    valX += 8
+                }
+            }
+        
+            self.badgeView.frame = CGRect(x: valX, y: 6, width: 15, height: 15)
+            self.badgeView.layer.cornerRadius = 7.5
+            self.badgeView.backgroundColor = accentOrange
+            self.navigationController?.navigationBar.addSubview(self.badgeView)
+        }
+    
+        self.badgeView.subviews.forEach({ $0.removeFromSuperview() })
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.textAlignment = .center
+        label.text = "10"
+        self.badgeView.addSubview(label)
+        
+        self.badgeView.isHidden = true
+        if(MarkupUser.shared.userInfo != nil && self.uniqueID==1) {
+            var count = MarkupUser.shared.userInfo!.notifications
+            if(count>99){ count=99 }
+        
+            //if(count>0) {
+                self.badgeView.isHidden = false
+                label.text = String(count)
+            //}
+        }
+    }
+    
+    @objc private func setUpNavBar() {
+        print("GATO999", self.uniqueID)
+        DispatchQueue.main.async {
+            self.setUpNavBar_2()
+        }
+    }
+    
+    @objc private func setUpNavBar_2() {
         searchBar.sizeToFit()
         searchBar.searchTextField.backgroundColor = .white
         searchBar.searchTextField.textColor = .black
@@ -151,7 +208,7 @@ class NewsTextViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         navigationController?.navigationBar.isTranslucent = false
         
-        navigationController?.navigationBar.barStyle = .black
+        //navigationController?.navigationBar.barStyle = .black
         let _textColor = DARKMODE() ? UIColor.white : textBlack
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
 
@@ -166,7 +223,12 @@ class NewsTextViewController: UIViewController {
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self,
             action: #selector(searchItemClicked(_:)))
             
-        let userButton = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain,
+        var userImage = UIImage(systemName: "person")
+        if(MarkupUser.shared.userInfo != nil) {
+            userImage = UIImage(systemName: "person.fill")
+        }
+            
+        let userButton = UIBarButtonItem(image: userImage, style: .plain,
             target: self, action: #selector(userButtonTap(_:)) )
         userButton.imageInsets = UIEdgeInsets(top: 0, left: iconsMargin, bottom: 0, right: 0)
 
@@ -205,6 +267,7 @@ class NewsTextViewController: UIViewController {
             }
         }
         
+        self.addBadge()
         //homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
         homeButton.frame = CGRect(x: valX, y: 0, width: 195, height: 30)
         homeButton.addTarget(self, action: #selector(homeButtonTapped),
@@ -900,9 +963,18 @@ extension NewsTextViewController {
     }
 
     @objc func bellButtonTap(_ sender: UIBarButtonItem) {
-        /*
-        let notifications = MarkupNotificationsViewController()
-        self.navigationController?.pushViewController(notifications, animated: true)
-        */
+        if(MarkupUser.shared.userInfo == nil) {
+            self.alert("Please log in to access this feature")
+        } else {
+            MarkupUser.shared.openNotifications()
+        }
+    }
+    
+    private func alert(_ text: String) {
+        let alert = UIAlertController(title: "", message: text, preferredStyle: .alert)
+            
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
     }
 }

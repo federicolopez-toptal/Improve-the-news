@@ -63,6 +63,10 @@ class SectionsViewController: UIViewController {
             self.support.append("Source filters")
         }
         
+        if(APP_CFG_MORE_PREFS) {
+            self.support.append("More Preferences")
+        }
+        
         navigationItem.largeTitleDisplayMode = .never
         safeArea = view.layoutMarginsGuide
         
@@ -200,6 +204,10 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 let sources = SourcesViewController()
                 sources.modalPresentationStyle = .fullScreen
                 present(sources, animated: true, completion: nil)
+            case 8:
+                let prefs = MorePrefsViewController()
+                prefs.modalPresentationStyle = .fullScreen
+                present(prefs, animated: true, completion: nil)
             default:
                 fatalError()
         }
@@ -222,6 +230,7 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
         let topic = self.getMainTopic()
         var news: UIViewController?
         
+        Utils.shared.newsViewController_ID = 0
         let vc = self.navigationController?.viewControllers.first!
         if(vc is NewsViewController){ news = NewsViewController(topic: topic) }
         else if(vc is NewsTextViewController){ news = NewsTextViewController(topic: topic) }

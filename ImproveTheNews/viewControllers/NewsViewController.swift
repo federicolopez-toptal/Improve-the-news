@@ -90,6 +90,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         fatalError()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.badgeView.removeFromSuperview()
+    }
+    
     override func viewDidLoad() {
     
         Utils.shared.newsViewController_ID += 1
@@ -231,6 +235,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
         navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        self.setUpNavBar()
         
         collectionView.delaysContentTouches = false
         for view in collectionView.subviews {
@@ -251,10 +256,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
         
         
-        DELAY(1.0) {
-            let newVC = AuthViewController()
-            newVC.mode = .registration
-            //self.navigationController?.pushViewController(newVC, animated: true)
+        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+            DELAY(0.3) {
+                CookiesAlert.shared.show(viewController: self)
+            }
         }
         
     }
@@ -483,6 +488,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     @objc private func setUpNavBar() {
+        print("GATO999", self.uniqueID)
+        
         DispatchQueue.main.async {
             if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
                 self.setUpNavBar_new()
@@ -491,7 +498,97 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             }
         }
     }
+    
+    private func bellIcon_A() -> UIBarButtonItem {
+        let iconsMargin: CGFloat = 45.0
+    
+        let image = UIImage(systemName: "bell")
+        let button = UIBarButtonItem(image: image, style: .plain,
+            target: self, action: #selector(bellButtonTap(_:)) )
+        button.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: iconsMargin)
+        
+        return button
+    }
+    
+    private func bellIcon_B() { //-> UIBarButtonItem {
+        /*
+        
+        */
+        
+        
+        let bellInnerButton = UIButton(type: .custom)
+        //bellInnerButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        bellInnerButton.backgroundColor = .green
+        bellInnerButton.setImage(UIImage(systemName: "bell"), for: .normal)
+        //bellInnerButton.setBackgroundImage(UIImage(systemName: "bell"), for: .normal)
+        
+        //print( bellInnerButton.contentEdgeInsets )
+        
+        bellInnerButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 22,
+                                            bottom: 0, right: 0)
+        let bellButton = UIBarButtonItem(customView: bellInnerButton)
+        bellButton.style = .plain
+        //bellButton.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: iconsMargin)
+        
+        /*
+        let bellImage = UIImageView(image: UIImage(systemName: "bell"))
+        bellImage.backgroundColor = accentOrange
+        //bellImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        let bellButton = UIBarButtonItem(customView: bellImage)
+        bellButton.style = .plain
+        */
+        
+        //bellButton.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: iconsMargin)
+        
+    
+        /*
+        let badgeView = UIView(frame: CGRect(x: 0, y: 0, width: 4, height: 4))
+        badgeView.backgroundColor = accentOrange
+        bellButton.customView = badgeView
+        */
+    }
 
+    let badgeView = UIView(frame: .zero)
+    private func addBadge() {
+    
+        if(self.badgeView.superview == nil) {
+            var valX: CGFloat = 65.0
+            let elementsSizeSum: CGFloat = (44*4)+195+(5*2)
+            if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+                if(elementsSizeSum < UIScreen.main.bounds.width) {
+                    valX += 8
+                }
+            }
+        
+            self.badgeView.frame = CGRect(x: valX, y: 6, width: 15, height: 15)
+            self.badgeView.layer.cornerRadius = 7.5
+            self.badgeView.backgroundColor = accentOrange
+            
+            //self.view.addSubview(self.badgeView)
+            self.navigationController?.navigationBar.addSubview(self.badgeView)
+            //let aaa = self.navigationItem.leftBarButtonItems![0]
+            //aaa.customView?.addSubview(self.badgeView)
+        }
+    
+        self.badgeView.subviews.forEach({ $0.removeFromSuperview() })
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.textAlignment = .center
+        label.text = "10"
+        self.badgeView.addSubview(label)
+        
+        self.badgeView.isHidden = true
+        if(MarkupUser.shared.userInfo != nil && self.uniqueID==1) {
+            var count = MarkupUser.shared.userInfo!.notifications
+            if(count>99){ count=99 }
+        
+            //if(count>0) {
+                self.badgeView.isHidden = false
+                label.text = String(count)
+            //}
+        }
+    }
+    
     private func setUpNavBar_new() {
         searchBar.sizeToFit()
         searchBar.searchTextField.backgroundColor = .white
@@ -507,7 +604,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         navigationController?.navigationBar.isTranslucent = false
         
-        navigationController?.navigationBar.barStyle = .black
+        //navigationController?.navigationBar.barStyle = .black
         let _textColor = DARKMODE() ? UIColor.white : textBlack
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
 
@@ -515,11 +612,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 
         let iconsMargin: CGFloat = 45.0
 
-        let bellButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain,
-            target: self, action: #selector(bellButtonTap(_:)) )
-        bellButton.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: iconsMargin)
-
-
+        let bellButton = self.bellIcon_A()
 
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self,
             action: #selector(searchItemClicked(_:)))
@@ -565,7 +658,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             }
         }
         
-        
+        self.addBadge()
         homeButton.frame = CGRect(x: valX, y: 0, width: 195, height: 30)
         homeButton.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
         
@@ -591,7 +684,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         navigationController?.navigationBar.isTranslucent = false
         
-        navigationController?.navigationBar.barStyle = .black
+        //navigationController?.navigationBar.barStyle = .black
         let _textColor = DARKMODE() ? UIColor.white : textBlack
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
 
@@ -2266,9 +2359,19 @@ extension NewsViewController {
     }
 
     @objc func bellButtonTap(_ sender: UIBarButtonItem) {
-        /*
-        let notifications = MarkupNotificationsViewController()
-        self.navigationController?.pushViewController(notifications, animated: true)
-        */
+        if(MarkupUser.shared.userInfo == nil) {
+            self.alert("Please log in to access this feature")
+        } else {
+            MarkupUser.shared.openNotifications()
+        }
     }
+    
+    private func alert(_ text: String) {
+        let alert = UIAlertController(title: "", message: text, preferredStyle: .alert)
+            
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
 }

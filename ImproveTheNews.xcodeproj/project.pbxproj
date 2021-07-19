@@ -74,6 +74,7 @@
 		BD9D55CA264ABCAF00509722 /* FooterCellTextOnlyItem0.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD9D55C8264ABCAF00509722 /* FooterCellTextOnlyItem0.xib */; };
 		BD9D55D2264ACFDE00509722 /* HorizontalMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9D55D1264ACFDE00509722 /* HorizontalMenuView.swift */; };
 		BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */; };
+		BD9FBD71269F4FA700E52197 /* MorePrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9FBD70269F4FA700E52197 /* MorePrefsViewController.swift */; };
 		BDBC97F525E3F1F3004FA5E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */; };
 		BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */; };
 		BDC68ED4264C983C0072BDF9 /* HeaderCellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC68ED2264C983C0072BDF9 /* HeaderCellBig.swift */; };
@@ -291,6 +292,7 @@
 		BDF37F79263B0B09003D910D /* FooterCellTextOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF37F77263B0B09003D910D /* FooterCellTextOnly.swift */; };
 		BDF37F7A263B0B09003D910D /* FooterCellTextOnly.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDF37F78263B0B09003D910D /* FooterCellTextOnly.xib */; };
 		BDF71B542677970A0026C615 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF71B532677970A0026C615 /* NewsViewController.swift */; };
+		BDF72F63269DC960006B095D /* CookiesAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF72F62269DC960006B095D /* CookiesAlert.swift */; };
 		D8C1E0E4AAAC3176E6A67953 /* Pods_ImproveTheNews.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D40DE6D85DB7FEB79892932 /* Pods_ImproveTheNews.framework */; };
 /* End PBXBuildFile section */
 
@@ -389,6 +391,7 @@
 		BD9D55C8264ABCAF00509722 /* FooterCellTextOnlyItem0.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellTextOnlyItem0.xib; sourceTree = "<group>"; };
 		BD9D55D1264ACFDE00509722 /* HorizontalMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMenuView.swift; sourceTree = "<group>"; };
 		BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		BD9FBD70269F4FA700E52197 /* MorePrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorePrefsViewController.swift; sourceTree = "<group>"; };
 		BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = seeMoreFooterLast.swift; sourceTree = "<group>"; };
 		BDC68ED2264C983C0072BDF9 /* HeaderCellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderCellBig.swift; sourceTree = "<group>"; };
@@ -606,6 +609,7 @@
 		BDF37F77263B0B09003D910D /* FooterCellTextOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterCellTextOnly.swift; sourceTree = "<group>"; };
 		BDF37F78263B0B09003D910D /* FooterCellTextOnly.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FooterCellTextOnly.xib; sourceTree = "<group>"; };
 		BDF71B532677970A0026C615 /* NewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
+		BDF72F62269DC960006B095D /* CookiesAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookiesAlert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -796,6 +800,8 @@
 				BDD1512E268CF96300EE256F /* MarkupUser.swift */,
 				BDD1512C268CF13E00EE256F /* AuthViewController.swift */,
 				BDD15130268CFBDD00EE256F /* MarkupNotificationsViewController.swift */,
+				BD9FBD6F269F4F6800E52197 /* morePrefs */,
+				BD9FBD70269F4FA700E52197 /* MorePrefsViewController.swift */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -816,6 +822,7 @@
 				BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */,
 				BD9D55D1264ACFDE00509722 /* HorizontalMenuView.swift */,
 				BD7881412686282F00824D1C /* SubtopicHeaderForSplit.swift */,
+				BDF72F62269DC960006B095D /* CookiesAlert.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -858,6 +865,13 @@
 				BD252537261CCF2A0090D04A /* text3b.txt */,
 			);
 			path = SliderDocFiles;
+			sourceTree = "<group>";
+		};
+		BD9FBD6F269F4F6800E52197 /* morePrefs */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = morePrefs;
 			sourceTree = "<group>";
 		};
 		BDC68ED1264C980A0072BDF9 /* BigCells */ = {
@@ -1623,11 +1637,13 @@
 				BD962478261B425F009EC21D /* PieChartViewController.swift in Sources */,
 				BDD67D822638433200B7FD7C /* NewsTextViewController.swift in Sources */,
 				BD4D53E5260A546F00635C48 /* MiniSlidersView.swift in Sources */,
+				BDF72F63269DC960006B095D /* CookiesAlert.swift in Sources */,
 				A8E94A1724F096B000936E07 /* ArticleLayouts.swift in Sources */,
 				BD17DB0D266693A700AEFF9A /* SourceCell.swift in Sources */,
 				BDF37F79263B0B09003D910D /* FooterCellTextOnly.swift in Sources */,
 				BDD1512F268CF96300EE256F /* MarkupUser.swift in Sources */,
 				BDF71B542677970A0026C615 /* NewsViewController.swift in Sources */,
+				BD9FBD71269F4FA700E52197 /* MorePrefsViewController.swift in Sources */,
 				BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */,
 				A8C5B9D424B67A0E0077E306 /* Globals.swift in Sources */,
 				BDEAF85625E55D2400588944 /* Utils.swift in Sources */,
@@ -1792,7 +1808,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = " 2.8";
+				CURRENT_PROJECT_VERSION = " 2.8.4";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -1819,7 +1835,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = " 2.8";
+				CURRENT_PROJECT_VERSION = " 2.8.4";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;

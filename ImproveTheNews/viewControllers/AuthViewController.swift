@@ -340,21 +340,29 @@ class AuthViewController: UIViewController {
         self.formEnabled(false)
         
         if(self.mode == .login) {
-            MarkupUser.shared.login(email: em, pass: ps) { (success) in
+            MarkupUser.shared.login(email: em, pass: ps) { (responseCode) in
                 self.formEnabled(true)
-                if(!success) {
-                    self.msg("Login fail. Check your info and try again")
-                } else {
-                    self.backToMainScreen(true)
+                
+                switch(responseCode) {
+                    case 200:
+                        self.backToMainScreen(true)
+                    case 500:
+                        self.msg("Login error. Check your credentials and try again")
+                    default:
+                        self.msg("Unknown error. Please try again")
                 }
             }
         } else if(self.mode == .registration) {
-            MarkupUser.shared.register(email: em, pass: ps, name: nm) { (success) in
+            MarkupUser.shared.register(email: em, pass: ps, name: nm) { (responseCode) in
                 self.formEnabled(true)
-                if(!success) {
-                    self.msg("Registration fail. Check your info and try again")
-                } else {
-                    self.backToMainScreen(true)
+                
+                switch(responseCode) {
+                    case 200:
+                        self.backToMainScreen(true)
+                    case 500:
+                        self.msg("Registration error. Email already in use")
+                    default:
+                        self.msg("Unknown error. Please try again")
                 }
             }
         }
