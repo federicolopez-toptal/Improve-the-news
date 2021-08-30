@@ -702,6 +702,13 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
         let homeButton = UIButton(image: img!)
         homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
+        
+        if(IS_ZOOMED() && self.uniqueID>1) {
+            let f: CGFloat = 0.85
+            homeButton.frame = CGRect(x: 0, y: 0,
+                    width: 195 * f, height: 30 * f)
+        }
+        
         homeButton.addTarget(self, action: #selector(homeButtonTapped),
                             for: .touchUpInside)
 
@@ -906,7 +913,30 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
                 posY -= 88
             }
         }
-        posY += size.height - self.biasSliders.state01_height + 15
+        
+        //print( "ZOOM", isZoomed() )
+        
+        /*
+        if(isZoomed()) {
+            posY += size.height - self.biasSliders.state01_height - 15
+        } else {
+            posY += size.height - self.biasSliders.state01_height + 15
+        }
+        */
+        
+        
+        //posY += size.height - //self.biasSliders.state01_height // + 15
+        
+        //posY
+        
+        /*
+        posY += size.height
+        let margin: CGFloat = 6
+        posY -= self.biasSliders.state01_height - margin
+        */
+        
+        
+        posY = 50
         
         biasButton.frame = CGRect(x: posX, y: posY,
                                 width: size.width, height: size.height)
@@ -924,14 +954,14 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         let screenSize = UIScreen.main.bounds
         
         var posY = screenSize.height - mFrame.size.height
-        if let nav = navigationController {
+        /*if let nav = navigationController {
             if(!nav.navigationBar.isTranslucent) {
                 posY -= 88
             }
-        }
+        }*/
         posY += mFrame.size.height
         
-        let margin: CGFloat = 6
+        //let margin: CGFloat = 6
         let status = self.biasSliders.status
         
         /*
@@ -945,10 +975,14 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         */
         
         if(status == "SL02") {
-            posY -= self.biasSliders.state02_height - margin
+            posY -= self.biasSliders.state02_height + 110
+        } else if(status == "SL01") {
+            posY -= self.biasSliders.state01_height + 85
+            if(SAFE_AREA()!.bottom>0) { posY -= 25 }
         } else {
-            posY -= self.biasSliders.state01_height - margin
+            posY -= self.biasSliders.state01_height - 20
         }
+        //posY -= margin
         
         mFrame.origin.y = posY
         self.biasButton.frame = mFrame
@@ -2375,3 +2409,4 @@ extension NewsViewController {
     }
     
 }
+

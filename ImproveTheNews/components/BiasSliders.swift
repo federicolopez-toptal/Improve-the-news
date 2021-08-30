@@ -24,8 +24,24 @@ class SliderPopup: UIView {
     private var politicalStance = false
     private var establishmentStance = false
     
-    let state01_height: CGFloat = 230
-    let state02_height: CGFloat = 480 //480
+    var state01_height: CGFloat {
+        var result: CGFloat = 230
+        if(IS_ZOOMED() || SAFE_AREA()!.bottom==0) {
+            result -= 40
+        }
+        
+        return result
+    }
+    
+    var state02_height: CGFloat {
+        var result: CGFloat = 480
+        if(IS_ZOOMED() || SAFE_AREA()!.bottom==0) {
+            result -= 40
+        }
+        
+        return result
+    }
+    
     var latestBiasSliderUsed: Int = -1
     
     
@@ -145,8 +161,12 @@ extension SliderPopup {
 
             
             let name = UILabel(text: labels[i], font: UIFont(name: "Poppins-SemiBold", size: 17), textColor: biasSliderTitles, textAlignment: .left, numberOfLines: 1)
-            name.frame = CGRect(x: margin, y: 0, width: stackView.frame.width-(margin*2), height: 30)
+            
+            //let w: CGFloat = stackView.frame.width-(margin*2)
+            let w: CGFloat = 220
+            name.frame = CGRect(x: margin, y: 0, width: w, height: 30)
             //name.backgroundColor = .blue
+            name.adjustsFontSizeToFitWidth = true
             
             let minLabel = createLabel(name: descriptions[i][0])
             let maxLabel = createLabel(name: descriptions[i][1])
@@ -203,7 +223,7 @@ extension SliderPopup {
             
             if(i<2 && Utils.shared.currentLayout == .denseIntense) {
                 let w: CGFloat = 80
-                let x: CGFloat = slider.frame.origin.x + slider.frame.size.width - 55
+                let x: CGFloat = slider.frame.origin.x + slider.frame.size.width - 10
                 let splitLabel = UILabel(frame: CGRect(x: x, y: 3, width: w, height: 25))
                 splitLabel.backgroundColor = .clear
                 splitLabel.text = "Split"
@@ -636,3 +656,6 @@ extension SliderPopup: UIGestureRecognizerDelegate {
     }
     
 }
+
+
+

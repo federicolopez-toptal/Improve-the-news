@@ -39,13 +39,14 @@ class RatingsLauncher: UIView {
     
      lazy var submit: UIButton = {
         let button = UIButton()
-        button.setTitle("Submit", for: .normal)
-        button.setTitle("Rated", for: .highlighted)
-        button.setTitle("Rated", for: .selected)
+        button.setTitle(" Submit ", for: .normal)
+        button.setTitle(" Rated ", for: .highlighted)
+        button.setTitle(" Rated ", for: .selected)
         button.setTitleColor(.white, for: .normal)
         //button.setTitleColor(.black, for: .highlighted)
         button.backgroundColor = DARKMODE() ? accentOrange : .black
         button.layer.cornerRadius = 10
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
     //    button.layer.border
         button.addTarget(self, action: #selector(submitPressed(_:)), for: .touchUpInside)
         return button

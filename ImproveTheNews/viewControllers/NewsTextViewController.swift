@@ -387,20 +387,29 @@ class NewsTextViewController: UIViewController {
         let screenSize = UIScreen.main.bounds
         
         var posY = screenSize.height - mFrame.size.height
-        if let nav = navigationController {
+        /*if let nav = navigationController {
             if(!nav.navigationBar.isTranslucent) {
                 posY -= 88
             }
-        }
+        }*/
         posY += mFrame.size.height
         
-        let margin: CGFloat = 6
+        //let margin: CGFloat = 6
         let status = self.biasSliders.status
         
+        /*
         if(status == "SL02") {
             posY -= self.biasSliders.state02_height - margin
         } else {
             posY -= self.biasSliders.state01_height - margin
+        }*/
+        if(status == "SL02") {
+            posY -= self.biasSliders.state02_height + 110
+        } else if(status == "SL01") {
+            posY -= self.biasSliders.state01_height + 85
+            if(SAFE_AREA()!.bottom>0) { posY -= 25 }
+        } else {
+            posY -= self.biasSliders.state01_height - 20
         }
         
         mFrame.origin.y = posY

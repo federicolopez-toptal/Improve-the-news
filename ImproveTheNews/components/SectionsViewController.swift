@@ -107,7 +107,11 @@ class SectionsViewController: UIViewController {
     
     private func addVersionNumber() {
         
-        let val_y = UIScreen.main.bounds.height - 25 - 88 - 20
+        var val_y = UIScreen.main.bounds.height - 25 - 88 - 20
+        if(SAFE_AREA()!.bottom==0) {
+            val_y = UIScreen.main.bounds.height - 25 - 20 - 48
+        }
+        
         let val_w = UIScreen.main.bounds.width - 30
         let vLabel = UILabel(text: "version 1.0",
                         font: UIFont(name: "Poppins-SemiBold", size: 13),

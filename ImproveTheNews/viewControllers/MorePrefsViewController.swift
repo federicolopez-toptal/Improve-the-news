@@ -87,8 +87,8 @@ class MorePrefsViewController: UIViewController {
             list.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
         
-        let cellNib = UINib(nibName: "SourceCell", bundle: nil)
-        list.register(cellNib, forCellReuseIdentifier: "SourceCell")
+        let cellNib = UINib(nibName: "PrefCell", bundle: nil)
+        list.register(cellNib, forCellReuseIdentifier: "PrefCell")
         list.delegate = self
         list.dataSource = self
         list.separatorStyle = .none
@@ -106,6 +106,10 @@ class MorePrefsViewController: UIViewController {
         
         self.prefsDataSource.append(
             Preference(text: "Enable newspaper info popups", key: "appCfg_stancePopup")
+        )
+        
+        self.prefsDataSource.append(
+            Preference(text: "Star ratings for articles", key: "appCfg_starRatings")
         )
 
     }
@@ -149,13 +153,12 @@ extension MorePrefsViewController: UITableViewDelegate, UITableViewDataSource {
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier:
-            "SourceCell") as! SourceCell
+            "PrefCell") as! PrefCell
         cell.delegate = self
         cell.index = indexPath.row
             
         let P = self.prefsDataSource[indexPath.row]
         cell.nameLabel.text = P.text
-        cell.highlight(false)
         cell.state.setOn(P.status, animated: false)
         
         return cell
@@ -165,7 +168,7 @@ extension MorePrefsViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 
-extension MorePrefsViewController: SourceCellDelegate {
+extension MorePrefsViewController: PrefCellDelegate {
     
     func onStateChange(state: Bool, index: Int) {
         self.prefsDataSource[index].status = state
@@ -207,6 +210,18 @@ extension MorePrefsViewController {
     
     public static func showStancePopUp() -> Bool {
         let key = "appCfg_stancePopup"
+        
+        if let _value = UserDefaults.standard.value(forKey: key) as? Bool {
+            return _value
+        } else {
+            UserDefaults.standard.setValue(true, forKey: key)
+            UserDefaults.standard.synchronize()
+            return true
+        }
+    }
+    
+    public static func showStarRating() -> Bool {
+        let key = "appCfg_starRatings"
         
         if let _value = UserDefaults.standard.value(forKey: key) as? Bool {
             return _value

@@ -218,3 +218,11 @@ func VALIDATE_PASS(_ pass: String) -> Bool {
     }
 }
 
+func IS_ZOOMED() -> Bool {
+    let screen = UIScreen.main
+    if(screen.scale == screen.nativeScale) {
+        return false
+    } else {
+        return true
+    }
+}

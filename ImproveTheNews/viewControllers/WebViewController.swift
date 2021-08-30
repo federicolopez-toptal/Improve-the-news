@@ -137,16 +137,26 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
     
     func showRatingsMenu() {
-        
-        let screenSize: CGRect = UIScreen.main.bounds
-        
-        let height: CGFloat = 75
-        let y: CGFloat = screenSize.size.height - height - 88
-        ratingsMenu.frame = CGRect(x: 0, y: y, width: view.frame.width, height: height)
-        ratingsMenu.buildView()
-                
-        view.addSubview(ratingsMenu)
-        //ratingsMenu.isHidden = true
+        if(MorePrefsViewController.showStarRating()) {
+            let screenSize: CGRect = UIScreen.main.bounds
+            
+            let height: CGFloat = 75
+            var y: CGFloat = screenSize.size.height - height// - 88
+            if(SAFE_AREA()!.bottom == 0) {
+                y -= 50
+            } else {
+                y -= 88
+            }
+            
+            ratingsMenu.frame = CGRect(x: 0, y: y,
+                    width: view.frame.width, height: height)
+            ratingsMenu.buildView()
+                    
+            view.addSubview(ratingsMenu)
+            //ratingsMenu.isHidden = true
+        } else {
+            self.webViewBottomConstraint?.constant = 0
+        }
     }
     
     func hideRatingView() {
@@ -552,4 +562,9 @@ extension WebViewController: RatingsLauncherDelegate {
         
     }
     
+}
+
+func SAFE_AREA() -> UIEdgeInsets? {
+    let window = UIApplication.shared.windows.filter{$0.isKeyWindow}.first
+    return window?.safeAreaInsets
 }

@@ -103,7 +103,11 @@ class SliderDoc: UIViewController {
 // MAIN title
         self.view.addSubview(mainTitle)
         mainTitle.sizeToFit()
-        self.move(mainTitle, x: 15, y: 5)
+        if(IS_ZOOMED()) {
+            self.move(mainTitle, x: 15, y: 30)
+        } else {
+            self.move(mainTitle, x: 15, y: 5)
+        }
         
 // RESET button
         dismiss.titleLabel?.textColor = accentOrange

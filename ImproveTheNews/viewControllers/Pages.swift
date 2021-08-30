@@ -177,11 +177,12 @@ The shelf-life slider ranges from fast-expiring topics such as celebrity gossip 
         // How the sliders work (orange TITLE)
         view.addSubview(pagetitle)
         pagetitle.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
+        
+            NSLayoutConstraint.activate([
             pagetitle.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 5),
             pagetitle.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
             pagetitle.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -70)
-        ])
+            ])
         pagetitle.adjustsFontSizeToFitWidth = true
         
         // BACK button

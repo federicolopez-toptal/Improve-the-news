@@ -36,7 +36,7 @@ let APP_CFG_SHOW_FLAGS = true
 let APP_CFG_SHOW_LAYOUTS = true
 let APP_CFG_SHOW_SOURCES = true
 
-let APP_CFG_SHOW_MARKUPS = true
+let APP_CFG_SHOW_MARKUPS = false //
 let APP_CFG_INACTIVE_MINS: TimeInterval = 30.0
 let APP_CFG_MORE_PREFS = true
 
