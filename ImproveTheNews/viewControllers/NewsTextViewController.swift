@@ -43,6 +43,8 @@ class NewsTextViewController: UIViewController {
 
     let NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES =             Notification.Name("reloadNewsInOtherInstances")
 
+    var onBoard: OnBoardingView?
+
 
 
 
@@ -92,6 +94,19 @@ class NewsTextViewController: UIViewController {
         NotificationCenter.default.addObserver(self,
             selector: #selector(applicationDidEnterBackground),
             name: UIApplication.didEnterBackgroundNotification, object: nil)
+            
+        if(SHOW_ONBOARD()) {
+            self.onBoard = OnBoardingView(container: self.view)
+            self.onBoard?.delegate = self
+            
+            if let obView = self.onBoard {
+                obView.alpha = 0.0
+                UIView.animate(withDuration: 0.4, delay: 1.0, options: .curveLinear) {
+                    obView.alpha = 1.0
+                } completion: { success in
+                }
+            }
+        }
     }
     
     var lastTimeActive: Date?
@@ -452,12 +467,16 @@ class NewsTextViewController: UIViewController {
     
     // MARK: - Some action(s)
     @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
-        navigationController?.customPushViewController(SectionsViewController())
+        if(self.onBoard == nil) {
+            navigationController?.customPushViewController(SectionsViewController())
+        }
     }
     
     @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
-        let searchvc = SearchViewController()
-        navigationController?.pushViewController(searchvc, animated: true)
+        if(self.onBoard == nil) {
+            let searchvc = SearchViewController()
+            navigationController?.pushViewController(searchvc, animated: true)
+        }
     }
     
     @objc func refresh(_ sender: UIRefreshControl!) {
@@ -467,12 +486,14 @@ class NewsTextViewController: UIViewController {
     }
     
     @objc func homeButtonTapped() {
-        self.firstTime = true
-        self.loadData()
-        
-        let offset = CGPoint(x: 0, y: 0)
-        self.tableView.setContentOffset(offset, animated: true)
-        self.horizontalMenu.backToZero()
+        if(self.onBoard == nil) {
+            self.firstTime = true
+            self.loadData()
+            
+            let offset = CGPoint(x: 0, y: 0)
+            self.tableView.setContentOffset(offset, animated: true)
+            self.horizontalMenu.backToZero()
+        }
     }
     
     @objc func showBiasSliders(_ sender:UIButton!) {
@@ -985,5 +1006,12 @@ extension NewsTextViewController {
         let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
+    }
+}
+
+extension NewsTextViewController: OnBoardingViewDelegate {
+    func onBoardingClose() {
+        self.onBoard?.removeFromSuperview()
+        self.onBoard = nil
     }
 }

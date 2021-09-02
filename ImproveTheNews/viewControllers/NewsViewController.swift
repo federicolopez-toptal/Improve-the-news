@@ -65,7 +65,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         return button
     }()
     
-    
+    var onBoard: OnBoardingView?
     
     
     
@@ -201,6 +201,18 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             selector: #selector(applicationDidEnterBackground),
             name: UIApplication.didEnterBackgroundNotification, object: nil)
             
+        if(SHOW_ONBOARD()) {
+            self.onBoard = OnBoardingView(container: self.view)
+            self.onBoard?.delegate = self
+            
+            if let obView = self.onBoard {
+                obView.alpha = 0.0
+                UIView.animate(withDuration: 0.4, delay: 1.0, options: .curveLinear) {
+                    obView.alpha = 1.0
+                } completion: { success in
+                }
+            }
+        }
     }
     
     var lastTimeActive: Date?
@@ -745,6 +757,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     @objc func homeButtonTapped() {
+        if(self.onBoard == nil) {
         if let firstVC = navigationController?.viewControllers.first as? NewsViewController {
             /*
             if(firstVC == self) {
@@ -773,15 +786,20 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             
             self.firstTime = true
             self.loadData()
+        }
     }}
     
     @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
-        let searchvc = SearchViewController()
-        navigationController?.pushViewController(searchvc, animated: true)
+        if(self.onBoard == nil) {
+            let searchvc = SearchViewController()
+            navigationController?.pushViewController(searchvc, animated: true)
+        }
     }
 
     @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
-        navigationController?.customPushViewController(SectionsViewController())
+        if(self.onBoard == nil) {
+            navigationController?.customPushViewController(SectionsViewController())
+        }
     }
     
     // MARK: - misc
@@ -2410,3 +2428,9 @@ extension NewsViewController {
     
 }
 
+extension NewsViewController: OnBoardingViewDelegate {
+    func onBoardingClose() {
+        self.onBoard?.removeFromSuperview()
+        self.onBoard = nil
+    }
+}

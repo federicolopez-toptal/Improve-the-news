@@ -94,6 +94,10 @@ func INITIAL_VC() -> UIViewController {
     }
 }
 
+func SHOW_ONBOARD() -> Bool {
+    return true
+}
+
 func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
                 banners: String?, superSliders: String?) -> String {
 

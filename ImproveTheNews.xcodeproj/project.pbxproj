@@ -47,9 +47,12 @@
 		BD17DB0D266693A700AEFF9A /* SourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD17DB0B266693A700AEFF9A /* SourceCell.swift */; };
 		BD17DB0E266693A700AEFF9A /* SourceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD17DB0C266693A700AEFF9A /* SourceCell.xib */; };
 		BD1B39CE262F270000CDC9F0 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1B39CD262F270000CDC9F0 /* UIDeviceExtension.swift */; };
+		BD24A51526E071A500251999 /* OnBoardingView3.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD24A51426E071A500251999 /* OnBoardingView3.swift */; };
 		BD252539261CCF2A0090D04A /* text1b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD252536261CCF2A0090D04A /* text1b.txt */; };
 		BD25253A261CCF2A0090D04A /* text3b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD252537261CCF2A0090D04A /* text3b.txt */; };
 		BD25253B261CCF2A0090D04A /* text2b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD252538261CCF2A0090D04A /* text2b.txt */; };
+		BD26A82926DD4725001EC167 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD26A82826DD4725001EC167 /* OnBoardingView.swift */; };
+		BD26A82B26DD5E48001EC167 /* OrangeRoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD26A82A26DD5E48001EC167 /* OrangeRoundedButton.swift */; };
 		BD2813EE25F6A7D000A91E38 /* SliderDocNewVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2813ED25F6A7D000A91E38 /* SliderDocNewVersion.swift */; };
 		BD2813F525F6B5EC00A91E38 /* text1.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD2813F425F6B5EC00A91E38 /* text1.txt */; };
 		BD2813FD25F6BC1B00A91E38 /* text2.txt in Resources */ = {isa = PBXBuildFile; fileRef = BD2813FC25F6BC1B00A91E38 /* text2.txt */; };
@@ -77,6 +80,11 @@
 		BD9D55D2264ACFDE00509722 /* HorizontalMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9D55D1264ACFDE00509722 /* HorizontalMenuView.swift */; };
 		BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */; };
 		BD9FBD71269F4FA700E52197 /* MorePrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9FBD70269F4FA700E52197 /* MorePrefsViewController.swift */; };
+		BDA9162D26DE5E1600AE38F0 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDA9162A26DE5E1600AE38F0 /* Roboto-Regular.ttf */; };
+		BDA9162E26DE5E1600AE38F0 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDA9162B26DE5E1600AE38F0 /* Roboto-Bold.ttf */; };
+		BDA9163026DE623E00AE38F0 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDA9162F26DE623E00AE38F0 /* Roboto-Medium.ttf */; };
+		BDA9163626DEB47000AE38F0 /* headlines01.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA9163526DEB47000AE38F0 /* headlines01.png */; };
+		BDA9163826DEB60300AE38F0 /* Merriweather-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDA9163726DEB60300AE38F0 /* Merriweather-Bold.ttf */; };
 		BDBC97F525E3F1F3004FA5E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */; };
 		BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */; };
 		BDC68ED4264C983C0072BDF9 /* HeaderCellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC68ED2264C983C0072BDF9 /* HeaderCellBig.swift */; };
@@ -366,9 +374,12 @@
 		BD17DB0B266693A700AEFF9A /* SourceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceCell.swift; sourceTree = "<group>"; };
 		BD17DB0C266693A700AEFF9A /* SourceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SourceCell.xib; sourceTree = "<group>"; };
 		BD1B39CD262F270000CDC9F0 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
+		BD24A51426E071A500251999 /* OnBoardingView3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView3.swift; sourceTree = "<group>"; };
 		BD252536261CCF2A0090D04A /* text1b.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text1b.txt; sourceTree = "<group>"; };
 		BD252537261CCF2A0090D04A /* text3b.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text3b.txt; sourceTree = "<group>"; };
 		BD252538261CCF2A0090D04A /* text2b.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = text2b.txt; sourceTree = "<group>"; };
+		BD26A82826DD4725001EC167 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
+		BD26A82A26DD5E48001EC167 /* OrangeRoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrangeRoundedButton.swift; sourceTree = "<group>"; };
 		BD2813ED25F6A7D000A91E38 /* SliderDocNewVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderDocNewVersion.swift; sourceTree = "<group>"; };
 		BD2813F425F6B5EC00A91E38 /* text1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = text1.txt; sourceTree = "<group>"; };
 		BD2813FC25F6BC1B00A91E38 /* text2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = text2.txt; sourceTree = "<group>"; };
@@ -396,6 +407,11 @@
 		BD9D55D1264ACFDE00509722 /* HorizontalMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMenuView.swift; sourceTree = "<group>"; };
 		BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		BD9FBD70269F4FA700E52197 /* MorePrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorePrefsViewController.swift; sourceTree = "<group>"; };
+		BDA9162A26DE5E1600AE38F0 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		BDA9162B26DE5E1600AE38F0 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		BDA9162F26DE623E00AE38F0 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		BDA9163526DEB47000AE38F0 /* headlines01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headlines01.png; sourceTree = "<group>"; };
+		BDA9163726DEB60300AE38F0 /* Merriweather-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Merriweather-Bold.ttf"; sourceTree = "<group>"; };
 		BDBC97F425E3F1F3004FA5E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = seeMoreFooterLast.swift; sourceTree = "<group>"; };
 		BDC68ED2264C983C0072BDF9 /* HeaderCellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderCellBig.swift; sourceTree = "<group>"; };
@@ -727,6 +743,11 @@
 		A8D61B3524F1633100A0F8F5 /* fonts */ = {
 			isa = PBXGroup;
 			children = (
+				BDA9163726DEB60300AE38F0 /* Merriweather-Bold.ttf */,
+				BDA9163526DEB47000AE38F0 /* headlines01.png */,
+				BDA9162B26DE5E1600AE38F0 /* Roboto-Bold.ttf */,
+				BDA9162F26DE623E00AE38F0 /* Roboto-Medium.ttf */,
+				BDA9162A26DE5E1600AE38F0 /* Roboto-Regular.ttf */,
 				BD9D862725D2D41C002E2065 /* OpenSans-Bold.ttf */,
 				BD0FED9E25D170330079A32B /* PTSerif-Bold.ttf */,
 				BD0FEDA725D170500079A32B /* Poppins-Regular.ttf */,
@@ -806,6 +827,8 @@
 				BDD15130268CFBDD00EE256F /* MarkupNotificationsViewController.swift */,
 				BD817A5E26D68867007BE315 /* PrefCell */,
 				BD9FBD70269F4FA700E52197 /* MorePrefsViewController.swift */,
+				BD26A82826DD4725001EC167 /* OnBoardingView.swift */,
+				BD24A51426E071A500251999 /* OnBoardingView3.swift */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -827,6 +850,7 @@
 				BD9D55D1264ACFDE00509722 /* HorizontalMenuView.swift */,
 				BD7881412686282F00824D1C /* SubtopicHeaderForSplit.swift */,
 				BDF72F62269DC960006B095D /* CookiesAlert.swift */,
+				BD26A82A26DD5E48001EC167 /* OrangeRoundedButton.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -1245,6 +1269,7 @@
 				BDE8F4152658414200E3C018 /* ITN_logo_blackText.png in Resources */,
 				BDDA44E72612301100C9C3AF /* CYP64.png in Resources */,
 				BDDA451B2612301100C9C3AF /* SLV64.png in Resources */,
+				BDA9163026DE623E00AE38F0 /* Roboto-Medium.ttf in Resources */,
 				BDDA451A2612301100C9C3AF /* LTU64.png in Resources */,
 				BDDA453A2612301100C9C3AF /* CAN64.png in Resources */,
 				BDDA45992612301100C9C3AF /* NOR64.png in Resources */,
@@ -1259,6 +1284,7 @@
 				BDDA44F32612301100C9C3AF /* BIH64.png in Resources */,
 				BDDA458C2612301100C9C3AF /* IRN64.png in Resources */,
 				BD817A6226D688A8007BE315 /* PrefCell.xib in Resources */,
+				BDA9162E26DE5E1600AE38F0 /* Roboto-Bold.ttf in Resources */,
 				BD366753268A413F0031C6FF /* warningIcon.png in Resources */,
 				BDDA45032612301100C9C3AF /* BEL64.png in Resources */,
 				BDDA453F2612301100C9C3AF /* ETH64.png in Resources */,
@@ -1315,6 +1341,7 @@
 				BD3F58D9264CA5CC00B99522 /* FooterCellBig.xib in Resources */,
 				BDDA45952612301100C9C3AF /* ECU64.png in Resources */,
 				BDDA45182612301100C9C3AF /* DJI64.png in Resources */,
+				BDA9162D26DE5E1600AE38F0 /* Roboto-Regular.ttf in Resources */,
 				BDDA45412612301100C9C3AF /* TUR64.png in Resources */,
 				BDDA44EF2612301100C9C3AF /* HUN64.png in Resources */,
 				BDDA456F2612301100C9C3AF /* ABW64.png in Resources */,
@@ -1420,6 +1447,7 @@
 				BD4A4FD725E5438200AB37DA /* prefsButton.png in Resources */,
 				BDDA45222612301100C9C3AF /* LCA64.png in Resources */,
 				BD0FEDD225D17AF60079A32B /* OpenSans-Regular.ttf in Resources */,
+				BDA9163826DEB60300AE38F0 /* Merriweather-Bold.ttf in Resources */,
 				BD98C9F525D58021005106D2 /* ITN_logo.png in Resources */,
 				BDDA45A32612301100C9C3AF /* IRL64.png in Resources */,
 				BDDA45AB261233A000C9C3AF /* noFlag.png in Resources */,
@@ -1428,6 +1456,7 @@
 				BDDA45872612301100C9C3AF /* PER64.png in Resources */,
 				BDDA45482612301100C9C3AF /* MRT64.png in Resources */,
 				BDDA44F22612301100C9C3AF /* ASM64.png in Resources */,
+				BDA9163626DEB47000AE38F0 /* headlines01.png in Resources */,
 				BDDA44EE2612301100C9C3AF /* KOR64.png in Resources */,
 				BDDA45922612301100C9C3AF /* SOM64.png in Resources */,
 				BDDA452B2612301100C9C3AF /* BMU64.png in Resources */,
@@ -1615,6 +1644,7 @@
 				A8E94A1524F08E9200936E07 /* SupplementaryViews.swift in Sources */,
 				B6B87DA225626E9F00707A5C /* CustomSlider.swift in Sources */,
 				BDF37F65263AE026003D910D /* HeaderCellTextOnly.swift in Sources */,
+				BD26A82B26DD5E48001EC167 /* OrangeRoundedButton.swift in Sources */,
 				A81B3B252481E67200A52A97 /* ImproveTheNews.xcdatamodeld in Sources */,
 				BD03C9B5264C5A1200F3BE1F /* NewsBigViewController.swift in Sources */,
 				A89B803624AFAB8B009BB0F8 /* WebViewController.swift in Sources */,
@@ -1643,8 +1673,10 @@
 				BDD540DB25EEE09600AF4F91 /* DateExtension.swift in Sources */,
 				BD962478261B425F009EC21D /* PieChartViewController.swift in Sources */,
 				BDD67D822638433200B7FD7C /* NewsTextViewController.swift in Sources */,
+				BD26A82926DD4725001EC167 /* OnBoardingView.swift in Sources */,
 				BD4D53E5260A546F00635C48 /* MiniSlidersView.swift in Sources */,
 				BDF72F63269DC960006B095D /* CookiesAlert.swift in Sources */,
+				BD24A51526E071A500251999 /* OnBoardingView3.swift in Sources */,
 				A8E94A1724F096B000936E07 /* ArticleLayouts.swift in Sources */,
 				BD17DB0D266693A700AEFF9A /* SourceCell.swift in Sources */,
 				BDF37F79263B0B09003D910D /* FooterCellTextOnly.swift in Sources */,
