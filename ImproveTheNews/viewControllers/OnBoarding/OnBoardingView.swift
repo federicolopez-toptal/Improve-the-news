@@ -42,26 +42,22 @@ class OnBoardingView: UIView {
         ])
         
         //self.addTestButton()
-        self.addView1()
-        self.addView2()
-        self.addView3()
+        self.createView1()
+        self.createView2()
+        self.createView3()
         
-        self.view3.delegate = self
-        
-        
-        // !!!
+        //self.testSteps() // !!!
+    }
+    
+    private func testSteps() {
         self.view1.isHidden = true
         self.view2.isHidden = true
         self.view3.isHidden = false
     }
 
-}
 
-///////////////////////////////////////////////////////
-// view1
-extension OnBoardingView {
-
-    private func addView1() {
+    // MARK: - View1 /////////////////////////
+    private func createView1() {
         var offset: CGFloat = 0
     
         self.view1.backgroundColor = self.backgroundColor
@@ -87,7 +83,7 @@ extension OnBoardingView {
             showMeButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: offset)
         ])
         
-        showMeButton.addTarget(self, action: #selector(gotoStep2(_:)),
+        showMeButton.addTarget(self, action: #selector(showView2(_:)),
                 for: .touchUpInside)
         
         ///////////////////////////////////////////////////
@@ -97,6 +93,7 @@ extension OnBoardingView {
         label1.font = UIFont(name: "Roboto-Regular", size: 20)
         
         offset = SAFE_AREA()!.bottom
+        if(offset==0){ offset = 34 }
         self.view1.addSubview(label1)
         label1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -122,24 +119,9 @@ extension OnBoardingView {
         ])
     }
     
-    @objc func gotoStep2(_ sender: UIButton?) {
-        self.view2.alpha = 0
-        self.view2.isHidden = false
-        UIView.animate(withDuration: 0.4) {
-            self.view2.alpha = 1
-        } completion: { _ in
-            self.view1.isHidden = true
-            self.gotoStep3()
-        }
-
-    }
-}
-
-///////////////////////////////////////////////////////
-// view2
-extension OnBoardingView {
-
-    private func addView2() {
+    
+    // MARK: - View2 /////////////////////////
+    private func createView2() {
         
         self.view2.backgroundColor = self.backgroundColor
         self.addSubview(view2)
@@ -187,6 +169,41 @@ extension OnBoardingView {
         self.view2.isHidden = true
     }
     
+    @objc func showView2(_ sender: UIButton?) {
+        self.view2.alpha = 0
+        self.view2.isHidden = false
+        UIView.animate(withDuration: 0.4) {
+            self.view2.alpha = 1
+        } completion: { _ in
+            self.view1.isHidden = true
+            DELAY(1.0) {
+                self.showView3()
+            }
+        }
+
+    }
+    
+    @objc func showView3() {
+        self.view3.alpha = 0
+        self.view3.isHidden = false
+        UIView.animate(withDuration: 0.4) {
+            self.view3.alpha = 1
+        } completion: { _ in
+            self.view2.isHidden = true
+            self.view3.showStep3()
+        }
+    }
+
+
+    // MARK: - View3 /////////////////////////
+    private func createView3() {
+        self.view3.insertInto(container: self)
+        self.view3.isHidden = true
+        self.view3.delegate = self
+    }
+    
+    
+    // MARK: - Components
     static func headlinesType1() -> UIView {
         let result = UIView()
         
@@ -260,173 +277,120 @@ extension OnBoardingView {
         return result
     }
     
-    @objc func gotoStep3() {
-        DELAY(1.0) {
-            self.view3.alpha = 0
-            self.view3.isHidden = false
-            UIView.animate(withDuration: 0.4) {
-                self.view3.alpha = 1
-            } completion: { _ in
-                self.view2.isHidden = true
-                self.view3.showStep3()
-            }
-        }
-    }
-}
+    static func headlinesType2() -> UIView {
+        let result = UIView()
+        
+        let screenSize = UIScreen.main.bounds.size
+        var w: CGFloat = screenSize.width - 30
+        let h: CGFloat = (401 * w)/1335
+        
+        let pics = UIImageView(image: UIImage(named: "headlines02"))
+        result.addSubview(pics)
+        pics.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pics.topAnchor.constraint(equalTo: result.topAnchor),
+            pics.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: 15),
+            pics.widthAnchor.constraint(equalToConstant: w),
+            pics.heightAnchor.constraint(equalToConstant: h)
+        ])
 
-///////////////////////////////////////////////////////
-// view3
-extension OnBoardingView {
-
-    private func addView3() {
-        
-        self.view3.insertInto(container: self)
-        
-        
-        /*
-        var offset: CGFloat = 22 + 38 + 16 + 204 + 4
-        
-        let headline1 = headlinesType1()
-        headline1.tag = 200
-        self.view3.addSubview(headline1)
-        headline1.translatesAutoresizingMaskIntoConstraints = false
+        w = (screenSize.width/2)-30
+        let title1 = UILabel()
+        title1.text = "The pros and cons of wind power"
+        title1.textColor = .white
+        title1.numberOfLines = 2
+        title1.font = UIFont(name: "Poppins-SemiBold", size: 14)
+        result.addSubview(title1)
+        title1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            headline1.topAnchor.constraint(equalTo: self.view3.topAnchor, constant: offset),
-            headline1.leadingAnchor.constraint(equalTo: self.view3.leadingAnchor),
-            headline1.trailingAnchor.constraint(equalTo: self.view3.trailingAnchor),
-            headline1.heightAnchor.constraint(equalToConstant: 204)
-        ])
-        */
-        
-        /*
-        ////////////////////////////////////////////////////////////
-        let middleView = UIView()
-        middleView.tag = 300
-        //middleView.backgroundColor = .blue
-        self.view3.addSubview(middleView)
-        middleView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            middleView.topAnchor.constraint(equalTo: headline1.bottomAnchor),
-            middleView.leadingAnchor.constraint(equalTo: self.view3.leadingAnchor),
-            middleView.trailingAnchor.constraint(equalTo: self.view3.trailingAnchor),
-            middleView.heightAnchor.constraint(equalToConstant: 120)
+            title1.topAnchor.constraint(equalTo: pics.bottomAnchor, constant: 6),
+            title1.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: 15),
+            title1.widthAnchor.constraint(equalToConstant: w),
         ])
         
-        let dots = UIPageControl()
-        dots.numberOfPages = 4
-        dots.currentPage = 0
-        dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4)
-        dots.currentPageIndicatorTintColor = accentOrange
-        middleView.addSubview(dots)
-        dots.translatesAutoresizingMaskIntoConstraints = false
+        let subText = UILabel()
+        subText.text = "TechCrunch • 25 minutes ago"
+        subText.textColor = UIColor.white.withAlphaComponent(0.2)
+        subText.numberOfLines = 2
+        subText.font = UIFont(name: "Poppins-SemiBold", size: 12)
+        result.addSubview(subText)
+        subText.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dots.topAnchor.constraint(equalTo: middleView.topAnchor, constant: 0),
-            dots.centerXAnchor.constraint(equalTo: middleView.centerXAnchor)
+            subText.topAnchor.constraint(equalTo: title1.bottomAnchor, constant: 6),
+            subText.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: 15),
+            subText.widthAnchor.constraint(equalToConstant: w),
         ])
+        
+        let title2 = UILabel()
+        title2.text = "Recent trends in world energy use"
+        title2.textColor = .white
+        title2.numberOfLines = 2
+        title2.font = UIFont(name: "Poppins-SemiBold", size: 14)
+        result.addSubview(title2)
+        title2.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            title2.topAnchor.constraint(equalTo: pics.bottomAnchor, constant: 6),
+            title2.trailingAnchor.constraint(equalTo: result.trailingAnchor, constant: -15),
+            title2.widthAnchor.constraint(equalToConstant: w),
+        ])
+        
+        let subText2 = UILabel()
+        subText2.text = "NY Times • 4 hours ago"
+        subText2.textColor = UIColor.white.withAlphaComponent(0.2)
+        subText2.numberOfLines = 2
+        subText2.font = UIFont(name: "Poppins-SemiBold", size: 12)
+        result.addSubview(subText2)
+        subText2.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            subText2.topAnchor.constraint(equalTo: title2.bottomAnchor, constant: 6),
+            subText2.trailingAnchor.constraint(equalTo: result.trailingAnchor, constant: -15),
+            subText2.widthAnchor.constraint(equalToConstant: w),
+        ])
+        
+        let divLine = UIView()
+        divLine.backgroundColor = .white
+        result.addSubview(divLine)
+        divLine.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            divLine.centerXAnchor.constraint(equalTo: result.centerXAnchor),
+            divLine.topAnchor.constraint(equalTo: result.topAnchor, constant: -60),
+            divLine.widthAnchor.constraint(equalToConstant: 1.0),
+            divLine.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height + 50)
+        ])
+        
+        let halfScreen = UIScreen.main.bounds.size.width / 2
         
         let label1 = UILabel()
-        label1.text = "On a typical news feed, you lack control over what newspapers you're shown."
-        label1.numberOfLines = 3
+        label1.textColor = .white
+        label1.font = UIFont(name: "Merriweather-Bold", size: 22)
+        label1.text = "LEFT"
         label1.textAlignment = .center
-        label1.textColor = UIColor(rgb: 0x93A0B4)
-        label1.font = UIFont(name: "Roboto-Regular", size: 20)
-        middleView.addSubview(label1)
+        result.addSubview(label1)
         label1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            label1.topAnchor.constraint(equalTo: dots.bottomAnchor, constant: 15),
-            label1.leadingAnchor.constraint(equalTo: middleView.leadingAnchor, constant: 30),
-            label1.trailingAnchor.constraint(equalTo: middleView.trailingAnchor, constant: -30)
+            label1.topAnchor.constraint(equalTo: result.topAnchor,
+                    constant: -50),
+            label1.widthAnchor.constraint(equalToConstant: halfScreen),
+            label1.leadingAnchor.constraint(equalTo: result.leadingAnchor)
         ])
         
-        ////////////////////////////////////////////////////////////
-        offset = SAFE_AREA()!.bottom
-        
-        let bottomView = UIView()
-        bottomView.tag = 400
-        self.view3.addSubview(bottomView)
-        bottomView.translatesAutoresizingMaskIntoConstraints = false
+        let label2 = UILabel()
+        label2.textColor = .white
+        label2.font = UIFont(name: "Merriweather-Bold", size: 22)
+        label2.text = "RIGHT"
+        label2.textAlignment = .center
+        result.addSubview(label2)
+        label2.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bottomView.bottomAnchor.constraint(equalTo: self.view3.bottomAnchor, constant: 0),
-            bottomView.leadingAnchor.constraint(equalTo: self.view3.leadingAnchor),
-            bottomView.trailingAnchor.constraint(equalTo: self.view3.trailingAnchor),
-            bottomView.heightAnchor.constraint(equalToConstant: 100 + offset)
+            label2.topAnchor.constraint(equalTo: result.topAnchor,
+                    constant: -50),
+            label2.widthAnchor.constraint(equalToConstant: halfScreen),
+            label2.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: halfScreen)
         ])
-        
-        let nextButton = OrangeRoundedButton(title: "NEXT")
-        bottomView.addSubview(nextButton)
-        nextButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            nextButton.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 30),
-            nextButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -30),
-            nextButton.heightAnchor.constraint(equalToConstant: 50),
-            nextButton.topAnchor.constraint(equalTo: bottomView.topAnchor)
-        ])
-        nextButton.addTarget(self, action: #selector(step3_ShowText2(_:)), for: .touchUpInside)
-        
-        let exitButton = UIButton(type: .custom)
-        exitButton.setTitle("EXIT TOUR", for: .normal)
-        exitButton.setTitleColor(accentOrange, for: .normal)
-        exitButton.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 16)
-        exitButton.addTarget(self, action: #selector(closeButtonOnTap(_:)), for: .touchUpInside)
-        bottomView.addSubview(exitButton)
-        exitButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            exitButton.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 30),
-            exitButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -30),
-            exitButton.heightAnchor.constraint(equalToConstant: 40),
-            exitButton.topAnchor.constraint(equalTo: nextButton.bottomAnchor, constant: 10)
-        ])
-        
-        middleView.isHidden = true
-        bottomView.isHidden = true
-        */
-        
-        self.view3.isHidden = true
+
+        return result
     }
     
-    /*
-    @objc func step3_ShowText2(_ sender: UIButton?){
-        let middleView = self.view3.viewWithTag(300)!
-        
-        for view in middleView.subviews {
-            if(view is UILabel) {
-                (view as! UILabel).text = "We put YOU in the drivers seat and you choose what you want to be shown."
-            }
-        }
-    }
-    
-    func completeStep3() {
-        let headline = self.view3.viewWithTag(200)!
-        let middleView = self.view3.viewWithTag(300)!
-        let bottomView = self.view3.viewWithTag(400)!
-        
-        //let top = headline.frame.origin.y
-        let h = middleView.frame.size.height
-        
-        bottomView.alpha = 0
-        bottomView.isHidden = false
-        middleView.alpha = 0
-        middleView.isHidden = false
-        
-        UIView.animate(withDuration: 0.4) {
-            bottomView.alpha = 1
-            middleView.alpha = 1
-            
-            var mFrame = headline.frame
-            mFrame.origin.y -= h
-            headline.frame = mFrame
-            
-            mFrame = middleView.frame
-            mFrame.origin.y -= h
-            middleView.frame = mFrame
-            
-            
-        } completion: { _ in
-        }
-
-    }
-    */
-
 }
 
 ///////////////////////////////////////////////////////

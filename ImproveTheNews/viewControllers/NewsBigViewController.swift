@@ -79,6 +79,9 @@ class NewsBigViewController: UIViewController {
         self.setUpHorizontalMenu()
         self.setUpBiasButton()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(showOnboardingAgain),
+            name: NOTIFICATION_SHOW_ONBOARDING, object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(setUpNavBar),
             name: NOTIFICATION_UPDATE_NAVBAR, object: nil)
         
@@ -94,7 +97,7 @@ class NewsBigViewController: UIViewController {
             selector: #selector(applicationDidEnterBackground),
             name: UIApplication.didEnterBackgroundNotification, object: nil)
             
-        if(SHOW_ONBOARD()) {
+        if(SHOW_ONBOARD() && self.uniqueID==1) {
             self.onBoard = OnBoardingView(container: self.view)
             self.onBoard?.delegate = self
             
@@ -1059,8 +1062,22 @@ extension NewsBigViewController {
 }
 
 extension NewsBigViewController: OnBoardingViewDelegate {
+    
     func onBoardingClose() {
-        self.onBoard?.removeFromSuperview()
-        self.onBoard = nil
+        UserDefaults.standard.setValue("ABC", forKey: ONBOARDING_ID)
+        UserDefaults.standard.synchronize()
+        
+        UIView.animate(withDuration: 0.4) {
+            self.onBoard?.alpha = 0.0
+        } completion: { _ in
+            self.onBoard?.removeFromSuperview()
+            self.onBoard = nil
+        }
     }
+    
+    @objc func showOnboardingAgain() {
+        self.onBoard = OnBoardingView(container: self.view)
+        self.onBoard?.delegate = self
+    }
+    
 }

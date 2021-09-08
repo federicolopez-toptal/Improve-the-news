@@ -95,7 +95,11 @@ func INITIAL_VC() -> UIViewController {
 }
 
 func SHOW_ONBOARD() -> Bool {
-    return true
+    if let onBoardingValue = UserDefaults.standard.string(forKey: ONBOARDING_ID) {
+        return false
+    } else {
+        return true
+    }
 }
 
 func API_CALL(topicCode: String, abs: [Int], biasStatus: String,

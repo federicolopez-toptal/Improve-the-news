@@ -33,6 +33,7 @@ class SectionViewCell: UITableViewCell {
     }
 }
 
+let NOTIFICATION_SHOW_ONBOARDING = Notification.Name("showOnboarding")
 class SectionsViewController: UIViewController {
     
     var support = [String]()
@@ -66,6 +67,7 @@ class SectionsViewController: UIViewController {
         if(APP_CFG_MORE_PREFS) {
             self.support.append("More Preferences")
         }
+        self.support.append("Onboarding")
         
         navigationItem.largeTitleDisplayMode = .never
         safeArea = view.layoutMarginsGuide
@@ -212,12 +214,18 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 let prefs = MorePrefsViewController()
                 prefs.modalPresentationStyle = .fullScreen
                 present(prefs, animated: true, completion: nil)
+            case 9:
+                self.showOnboarding()
             default:
                 fatalError()
         }
             
     }
     
+    private func showOnboarding() {
+        NotificationCenter.default.post(name: NOTIFICATION_SHOW_ONBOARDING, object: nil)
+        self.navigationController?.customPopViewController()
+    }
     
     private func changeDisplayMode() {
         if(Utils.shared.displayMode == .dark) {

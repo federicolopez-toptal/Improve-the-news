@@ -44,6 +44,8 @@ let APP_CFG_MORE_PREFS = true
 let APP_CFG_SHOW_PIE_CHART = false
 let APP_CFG_SHOW_SUPER_SLIDERS = false
 
+// onboarding
+let ONBOARDING_ID = "onboarding 0.1"
     
     
 enum layoutType: String {
