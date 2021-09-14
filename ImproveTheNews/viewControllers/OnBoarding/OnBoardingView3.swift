@@ -23,18 +23,24 @@ class OnBoardingView3: UIView {
     var headline3 = UIView()
     
     var animHeadlineLC: NSLayoutConstraint?
+    var animPanel01LC: NSLayoutConstraint?
+    var animPanel02LC: NSLayoutConstraint?
+    var exitButtonBottomOffset: CGFloat = 0.0
+    var panelTopOffset: CGFloat = 0.0
+    
+    
     var animExitButtonLC: NSLayoutConstraint?
     var animExitButton2LC: NSLayoutConstraint?
-    var exitButtonBottomOffset: CGFloat = 0.0
+    
     var sliderValue: CGFloat = 0.0
     
     let texts = [
-        "On a typical news feed, you lack control over what newspapers you're shown.",
-        "We put YOU in the drivers seat and you choose what you want to be shown.",
-        "Use the sliders to see different perspectives.",
-        "Sometimes you want to compare both sides – we call it the ‘split’.",
-        "Now you can see what is really going on in the world!",
-        "And we have more sliders to play with!"
+        "Stories on your usual news feed come from a variety of sources which you can’t control.",
+        "We put YOU in the drivers seat and you choose what to read based on your views.",
+        "Use the sliders to decide what news you see.",
+        "Sometimes you want to see both sides, we call it the 'split'.\nGo ahead and give it a try!",
+        "Now you can see what is really going on in the world!\n ",
+        "And we have more sliders\nto play with!"
     ]
 
     var step3view = UIView()
@@ -97,18 +103,25 @@ class OnBoardingView3: UIView {
             headline.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height)
         ])
         
+        /*
         var offset2 = offset
         offset2 -= 140
         if(SAFE_AREA()!.bottom == 0) { offset2 -= 70 }
-        
+        */
         
         // headline 2
         self.headline2 = OnBoardingView.headlinesType1()
         self.addSubview(self.headline2)
         headline2.translatesAutoresizingMaskIntoConstraints = false
         
+        print(SAFE_AREA()!.top)
+        var topOffset: CGFloat = 70 //95
+        if(SAFE_AREA()!.bottom == 0) {
+            topOffset -= 70
+        }
+        
         NSLayoutConstraint.activate([
-            headline2.topAnchor.constraint(equalTo: self.topAnchor, constant: offset2),
+            headline2.topAnchor.constraint(equalTo: self.topAnchor, constant: topOffset),
             headline2.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             headline2.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             headline2.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height)
@@ -125,7 +138,7 @@ class OnBoardingView3: UIView {
         self.addSubview(self.headline3)
         self.headline3.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            headline3.topAnchor.constraint(equalTo: self.topAnchor, constant: offset2),
+            headline3.topAnchor.constraint(equalTo: self.topAnchor, constant: topOffset),
             headline3.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             headline3.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             headline.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height)
@@ -155,16 +168,17 @@ class OnBoardingView3: UIView {
     
         self.exitButtonBottomOffset = -SAFE_AREA()!.bottom
         if(self.exitButtonBottomOffset == 0){ self.exitButtonBottomOffset = -10 }
+        self.exitButtonBottomOffset -= 150
     
         self.initStep(self.step3view)
-        let dots = self.createDots(currentPage: -1, container: self.step3view)
-        dots.alpha = 0.25
-        self.createLabel(self.texts[0], container: self.step3view, below: dots, topOffset: 15)
+        self.createLabel_B(self.texts[0], container: self.step3view, topOffset: 20)
+        
         let exitButton = self.createExitButton(container: self.step3view,
             bottomOffset: self.exitButtonBottomOffset)
-        let nextButton = self.createOrangeButton(text: "NEXT",
-                container: self.step3view, above: exitButton, bottomOffset: -10)
-                
+        let dots = self.createDots_B(currentPage: 1, container: self.step3view,
+            below: exitButton, topOffset: 10)
+        let nextButton = self.createOrangeButton_B(text: "NEXT", container: self.step3view, below: dots, topOffset: 35)
+        
         nextButton.addTarget(self, action: #selector(showStep4(_:)), for: .touchUpInside)
     }
     
@@ -173,12 +187,13 @@ class OnBoardingView3: UIView {
         self.step3view.alpha = 0
         self.step3view.isHidden = false
         
-        self.animHeadlineLC?.constant -= 140
+        self.animHeadlineLC?.constant = 70
+        //95
         if(SAFE_AREA()!.bottom == 0) {
             self.animHeadlineLC?.constant -= 70
         }
         
-        UIView.animate(withDuration: 0.4) {
+        UIView.animate(withDuration: 0.6) {
             self.layoutIfNeeded()
             self.step3view.alpha = 1
         } completion: { _ in
@@ -187,15 +202,15 @@ class OnBoardingView3: UIView {
     
     // MARK: - Step 4 /////////////////////////
     func createStep4() {
-    
         self.initStep(self.step4view)
-        let dots = self.createDots(currentPage: 1, container: self.step4view)
-        self.createLabel(self.texts[1], container: self.step4view, below: dots, topOffset: 15)
+        
+        self.createLabel_B(self.texts[1], container: self.step4view, topOffset: 20)
         let exitButton = self.createExitButton(container: self.step4view,
             bottomOffset: self.exitButtonBottomOffset)
-        let nextButton = self.createOrangeButton(text: "NEXT",
-                container: self.step4view, above: exitButton, bottomOffset: -10)
-                
+        let dots = self.createDots_B(currentPage: 2, container: self.step4view,
+            below: exitButton, topOffset: 10)
+        let nextButton = self.createOrangeButton_B(text: "NEXT", container: self.step4view, below: dots, topOffset: 35)
+        
         nextButton.addTarget(self, action: #selector(showStep5_6(_:)), for: .touchUpInside)
     }
     
@@ -213,25 +228,27 @@ class OnBoardingView3: UIView {
     
     // MARK: - Step 5_6 /////////////////////////
     func createStep5_6() {
-    
         self.initStep(self.step5_6view)
-        let dots = self.createDots(currentPage: 2, container: self.step5_6view)
-        self.createLabel(self.texts[2], container: self.step5_6view, below: dots, topOffset: 15)
-        let exitButton = self.createExitButton(container: self.step5_6view,
-            bottomOffset: self.exitButtonBottomOffset, forAnim: true)
+        self.createLabel_B(self.texts[2], container: self.step5_6view, topOffset: 20)
         
-        let panel = self.createOrangePanel(container: self.step5_6view,
-            below: exitButton, topOffset: 15)
-        panel.alpha = 0.0
+        let exitButton = self.createExitButton(container: self.step5_6view,
+            bottomOffset: self.exitButtonBottomOffset)
+        let dots = self.createDots_B(currentPage: 3, container: self.step5_6view,
+            below: exitButton, topOffset: 10)
+        
+        let panel = self.createOrangePanel_B(container: self.step5_6view,
+                    topOffset: 0, forAnim: true)
         panel.tag = 11
         
+        
         let nextButton = self.createOrangeButton(text: "I'M GOOD!",
-            container: self.step5_6view, above: exitButton, bottomOffset: -10)
+            container: self.step5_6view, above: exitButton, bottomOffset: -25)
         nextButton.isHidden = true
         nextButton.tag = 22
         nextButton.addTarget(self, action: #selector(showStep7(_:)), for: .touchUpInside)
         
-        self.exitButtonBottomOffset -= 90
+        self.panelTopOffset = -100
+        if(SAFE_AREA()!.bottom>0){ self.panelTopOffset -= 15 }
     }
     
     @objc func showStep5_6(_ sender: UIButton?) {
@@ -244,42 +261,34 @@ class OnBoardingView3: UIView {
         } completion: { _ in
             self.step4view.isHidden = true
             
-            self.animExitButtonLC?.constant -= 90
+            self.animPanel01LC?.constant -= 100
+            if(SAFE_AREA()!.bottom>0){ self.animPanel01LC?.constant -= 15 }
+            
             UIView.animate(withDuration: 0.4) {
-                let panel = self.step5_6view.viewWithTag(11)!
-                panel.alpha = 1.0
                 self.layoutIfNeeded()
             } completion: { _ in
-                /*
-                DELAY(1.0) {
-                    let nextButton = self.step5_6view.viewWithTag(22) as! UIButton
-                    nextButton.alpha = 0.0
-                    nextButton.isHidden = false
-                    UIView.animate(withDuration: 0.4) {
-                        nextButton.alpha = 1.0
-                    }
-                }
-                */
             }
-            
+
         }
     }
     
     // MARK: - Step 7 /////////////////////////
     func createStep7() {
         self.initStep(self.step7view)
-        let dots = self.createDots(currentPage: 3, container: self.step7view)
-        let label = self.createLabel(self.texts[3], container: self.step7view, below: dots,
-            topOffset: 15)
+        
+        let label = self.createLabel_B(self.texts[3], container: self.step7view, topOffset: 20)
         let exitButton = self.createExitButton(container: self.step7view,
             bottomOffset: self.exitButtonBottomOffset)
+        let dots = self.createDots_B(currentPage: 4, container: self.step7view,
+            below: exitButton, topOffset: 10)
         
-        let panel = self.createOrangePanel(container: self.step7view,
-            below: exitButton, topOffset: 15, showSplit: true, splitState: false)
+        let panel = self.createOrangePanel_B(container: self.step7view,
+                    topOffset: self.panelTopOffset, showSplit: true,
+                    splitState: false)
         panel.tag = 11
-            
+        
         let checkbox = self.createCheckboxLarge(container: self.step7view,
-            below: label, topOffset: 20)
+            below: label, topOffset: 30)
         checkbox.tag = 22
     }
     
@@ -330,17 +339,20 @@ class OnBoardingView3: UIView {
     // MARK: - Step 8 /////////////////////////
     func createStep8() {
         self.initStep(self.step8view)
-        let dots = self.createDots(currentPage: 3, container: self.step8view)
-        let label = self.createLabel(self.texts[4], container: self.step8view, below: dots, topOffset: 15)
+        
+        let label = self.createLabel_B(self.texts[4], container: self.step8view, topOffset: 20)
         let exitButton = self.createExitButton(container: self.step8view,
             bottomOffset: self.exitButtonBottomOffset)
+        let dots = self.createDots_B(currentPage: 4, container: self.step8view,
+            below: exitButton, topOffset: 10)
         
-        let panel = self.createOrangePanel(container: self.step8view,
-            below: exitButton, topOffset: 15, showSplit: true, splitState: true)
+        let panel = self.createOrangePanel_B(container: self.step8view,
+                    topOffset: self.panelTopOffset, showSplit: true,
+                    splitState: true)
         panel.tag = 11
-            
+        
         let checkbox = self.createCheckboxLarge(container: self.step8view,
-            below: label, topOffset: 20, state: true)
+            below: label, topOffset: 30, state: true)
     }
     
     @objc func showStep8(_ sender: UIButton?) {
@@ -361,7 +373,7 @@ class OnBoardingView3: UIView {
             self.headline2.alpha = 1.0
             self.headline2.isHidden = true
             
-            DELAY(5.0) {
+            DELAY(7.0) { //5
                 self.showStep9(nil)
             }
         }
@@ -370,18 +382,29 @@ class OnBoardingView3: UIView {
     // MARK: - Step 9 /////////////////////////
     func createStep9() {
         self.initStep(self.step9view)
-        let dots = self.createDots(currentPage: 4, container: self.step9view)
-        let label = self.createLabel(self.texts[5], container: self.step9view,
-            below: dots, topOffset: 15)
+        
+        let label = self.createLabel_B(self.texts[5], container: self.step9view, topOffset: 20)
         let exitButton = self.createExitButton(container: self.step9view,
             bottomOffset: self.exitButtonBottomOffset)
+        /*exitButton.isEnabled = false
+        exitButton.alpha = 0
+        */
+        let dots = self.createDots_B(currentPage: 5, container: self.step9view,
+            below: exitButton, topOffset: 10)
         
-        let panel = self.createOrangePanel(container: self.step9view,
-            below: exitButton, topOffset: 15, showSplit: false, splitState: false)
+        let panel = self.createOrangePanel_B(container: self.step9view,
+                    topOffset: self.panelTopOffset, showSplit: false,
+                    splitState: false)
         panel.tag = 11
-            
-        let nextButton = self.createPrefsButton(container: self.step9view, below: label, topOffset: 20)
+        
+        let nextButton = self.createPrefsButton_B(container: self.step9view, above: panel, bottomOffset: -25)
+        
+        //(container: self.step9view, below: label, topOffset: 55)
         nextButton.addTarget(self, action: #selector(showStep10(_:)), for: .touchUpInside)
+        
+        /*
+        let dots = self.createDots_C(currentPage: 4, container: self.step9view, above: panel, bottomOffset: -32)
+        */
     }
     
     @objc func showStep9(_ sender: UIButton?) {
@@ -406,6 +429,21 @@ class OnBoardingView3: UIView {
     // MARK: - Step 10 /////////////////////////
     func createStep10() {
         self.initStep(self.step10view)
+        
+        let label = self.createLabel_B(self.texts[5], container: self.step10view, topOffset: 20)
+        
+        let panel = self.createOrangePanel_B(container: self.step10view,
+                    topOffset: self.panelTopOffset, showSplit: false,
+                    splitState: false, secondRow: true, forAnim: true)
+        panel.tag = 11
+        
+        let dots = self.createDots_C(currentPage: 5, container: self.step10view, above: panel, bottomOffset: -32)
+        
+        let nextButton = self.createPrefsButton_B(container: self.step10view, above: panel, bottomOffset: -25)
+        
+        let exitButton = self.createExitButton_B(container: self.step10view, above: dots, topOffset: -10)
+        
+        /*
         let dots = self.createDots(currentPage: 4, container: self.step10view)
         let label = self.createLabel(self.texts[5], container: self.step10view,
             below: dots, topOffset: 15)
@@ -416,9 +454,18 @@ class OnBoardingView3: UIView {
             below: exitButton, topOffset: 15, showSplit: false, splitState: false,
             secondRow: true)
         panel.tag = 11
+        */
     }
     
     @objc func showStep10(_ sender: UIButton?) {
+        /*
+        self.animPanel02LC?.constant -= 80
+        UIView.animate(withDuration: 0.4) {
+            self.layoutIfNeeded()
+        } completion: { _ in
+        }*/
+        
+    
         self.step10view.alpha = 0.0
         self.step10view.isHidden = false
         self.headline.isHidden = false
@@ -430,7 +477,7 @@ class OnBoardingView3: UIView {
             self.headline2.alpha = 0.0
         } completion: { _ in
             self.step9view.isHidden = true
-            self.animExitButton2LC?.constant -= 80
+            self.animPanel02LC?.constant -= 80
             self.headline2.alpha = 1.0
             self.headline2.isHidden = true
             
@@ -466,11 +513,48 @@ class OnBoardingView3: UIView {
         dots.numberOfPages = 4
         if(currentPage != -1) { dots.currentPage = currentPage-1 }
         dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4)
-        dots.currentPageIndicatorTintColor = accentOrange
+        dots.currentPageIndicatorTintColor = UIColor(rgb: 0xFF8B3C)
         container.addSubview(dots)
         dots.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             dots.topAnchor.constraint(equalTo: container.topAnchor, constant: topOffset),
+            dots.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+        ])
+        
+        return dots
+    }
+
+    
+    private func createDots_B(currentPage: Int, container: UIView,
+        below: UIView, topOffset: CGFloat = 0.0) -> UIPageControl {
+        
+        let dots = UIPageControl()
+        dots.numberOfPages = 5
+        if(currentPage != -1) { dots.currentPage = currentPage-1 }
+        dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4)
+        dots.currentPageIndicatorTintColor = UIColor(rgb: 0xFF8B3C)
+        container.addSubview(dots)
+        dots.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dots.topAnchor.constraint(equalTo: below.bottomAnchor, constant: topOffset),
+            dots.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+        ])
+        
+        return dots
+    }
+    
+    private func createDots_C(currentPage: Int, container: UIView,
+        above: UIView, bottomOffset: CGFloat = 0.0) -> UIPageControl {
+        
+        let dots = UIPageControl()
+        dots.numberOfPages = 5
+        if(currentPage != -1) { dots.currentPage = currentPage-1 }
+        dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4)
+        dots.currentPageIndicatorTintColor = UIColor(rgb: 0xFF8B3C)
+        container.addSubview(dots)
+        dots.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dots.bottomAnchor.constraint(equalTo: above.topAnchor, constant: bottomOffset),
             dots.centerXAnchor.constraint(equalTo: container.centerXAnchor)
         ])
         
@@ -497,6 +581,31 @@ class OnBoardingView3: UIView {
         return label
     }
     
+    private func createLabel_B(_ text: String, container: UIView,
+        topOffset: CGFloat = 0.0) -> UILabel {
+        
+        let label = UILabel()
+        label.text = text
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.textColor = UIColor(rgb: 0x93A0B4)
+        label.font = UIFont(name: "Roboto-Regular", size: 20)
+        if(IS_ZOOMED()){ label.font = UIFont(name: "Roboto-Regular", size: 15) }
+        container.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        var _topOffset: CGFloat = topOffset
+        if(IS_ZOOMED()){ _topOffset = -10 }
+        
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: container.topAnchor, constant: _topOffset),
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 30),
+            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -30)
+        ])
+        
+        return label
+    }
+    
     private func createExitButton(container: UIView,
         bottomOffset: CGFloat = 0.0,
         forAnim: Bool = false) -> UIButton {
@@ -505,6 +614,7 @@ class OnBoardingView3: UIView {
         button.setTitle("EXIT TOUR", for: .normal)
         button.setTitleColor(accentOrange, for: .normal)
         button.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 16)
+        if(IS_ZOOMED()){ button.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 14) }
         
         container.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -514,35 +624,45 @@ class OnBoardingView3: UIView {
             button.trailingAnchor.constraint(equalTo: container.trailingAnchor,
                 constant: -30),
             button.heightAnchor.constraint(equalToConstant: 40),
+            button.bottomAnchor.constraint(equalTo: container.bottomAnchor,
+                constant: bottomOffset)
         ])
         
-        if(forAnim) {
-            if(container == self.step5_6view) {
-                self.animExitButtonLC = button.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: bottomOffset)
-            
-                NSLayoutConstraint.activate([
-                    self.animExitButtonLC!
-                ])
-            }
-            
-            if(container == self.step10view) {
-                self.animExitButton2LC = button.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: bottomOffset)
-            
-                NSLayoutConstraint.activate([
-                    self.animExitButton2LC!
-                ])
-            }
-        } else {
-            NSLayoutConstraint.activate([
-                button.bottomAnchor.constraint(equalTo: container.bottomAnchor,
-                constant: bottomOffset)
-            ])
-        }
         
         button.addTarget(self, action: #selector(exitButtonOnTap(_:)), for: .touchUpInside)
         
         return button
     }
+    
+    private func createExitButton_B(container: UIView,
+        above: UIView,
+        topOffset: CGFloat = 0.0
+        ) -> UIButton {
+        
+        let button = UIButton(type: .custom)
+        button.setTitle("EXIT TOUR", for: .normal)
+        button.setTitleColor(accentOrange, for: .normal)
+        button.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 16)
+        if(IS_ZOOMED()){ button.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 14) }
+        
+        container.addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                constant: 30),
+            button.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                constant: -30),
+            button.heightAnchor.constraint(equalToConstant: 40),
+            button.bottomAnchor.constraint(equalTo: above.topAnchor,
+                constant: topOffset)
+        ])
+        
+        
+        button.addTarget(self, action: #selector(exitButtonOnTap(_:)), for: .touchUpInside)
+        
+        return button
+    }
+    
     
     private func createExitButton2(container: UIView, offset: CGFloat) -> UIButton {
         let button = UIButton(type: .custom)
@@ -581,6 +701,24 @@ class OnBoardingView3: UIView {
             button.trailingAnchor.constraint(equalTo: container.trailingAnchor,
                     constant: -30),
             button.bottomAnchor.constraint(equalTo: above.topAnchor, constant: bottomOffset),
+            button.heightAnchor.constraint(equalToConstant: 50),
+            
+        ])
+        
+        return button
+    }
+    
+    private func createOrangeButton_B(text: String, container: UIView,
+        below: UIView, topOffset: CGFloat = 0.0) -> UIButton {
+        
+        let button = OrangeRoundedButton(title: text)
+        container.addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 30),
+            button.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                    constant: -30),
+            button.topAnchor.constraint(equalTo: below.bottomAnchor, constant: topOffset),
             button.heightAnchor.constraint(equalToConstant: 50),
             
         ])
@@ -641,6 +779,85 @@ class OnBoardingView3: UIView {
                         
         return view
     }
+    
+    private func createOrangePanel_B(container: UIView,
+        topOffset: CGFloat, showSplit: Bool = false, splitState: Bool = false,
+        secondRow: Bool = false, forAnim: Bool = false) -> UIView {
+        
+        let view = UIView()
+        view.backgroundColor = accentOrange
+        view.layer.cornerRadius = 25
+        
+        container.addSubview(view)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            view.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            view.heightAnchor.constraint(equalToConstant: 200)
+        ])
+        
+        if(forAnim) {
+            if(container == self.step10view) {
+                self.animPanel02LC = view.topAnchor.constraint(equalTo: container.bottomAnchor, constant: topOffset)
+        
+                NSLayoutConstraint.activate([
+                    self.animPanel02LC!
+                ])
+            } else if(container == self.step5_6view) {
+                self.animPanel01LC = view.topAnchor.constraint(equalTo: container.bottomAnchor, constant: topOffset)
+        
+                NSLayoutConstraint.activate([
+                    self.animPanel01LC!
+                ])
+            }
+        } else {
+            NSLayoutConstraint.activate([
+                view.topAnchor.constraint( equalTo: container.bottomAnchor, constant: topOffset)
+            ])
+        }
+        
+        
+        
+        
+        let whiteLine = UIView()
+        whiteLine.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        view.addSubview(whiteLine)
+        whiteLine.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            whiteLine.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            whiteLine.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
+            whiteLine.widthAnchor.constraint(equalToConstant: 50),
+            whiteLine.heightAnchor.constraint(equalToConstant: 6)
+        ])
+        whiteLine.layer.cornerRadius = 3
+        
+        if(showSplit) {
+            let checkbox = self.createCheckboxSmall(container: view,
+                    topOffset: 0, trailingOffset: -10, state: splitState)
+            checkbox.tag = 212
+        }
+        
+        var slider1: UIView
+        if(splitState) {
+            slider1 = sliderRow(container: view, below: whiteLine, offset: 4,
+                        title: "Political stance", left: "LEFT", right: "RIGHT", sliderEnabled: false)
+        } else {
+            slider1 = sliderRow(container: view, below: whiteLine, offset: 4,
+                        title: "Political stance", left: "LEFT", right: "RIGHT")
+        }
+        slider1.tag = 101
+                        
+        if(secondRow) {
+            sliderRow(container: view, below: slider1, offset: 20,
+                        title: "Establishment stance", left: "CRITICAL", right: "PRO",
+                        separatorOnTop: true)
+        }
+                        
+        return view
+    }
+    
+    
+    
     
     private func sliderRow(container: UIView, below: UIView, offset: CGFloat,
                             title: String, left: String, right: String,
@@ -718,6 +935,7 @@ class OnBoardingView3: UIView {
         slider.maximumTrackTintColor = UIColor(rgb: 0x913A1F)
         slider.minimumValue = 0
         slider.maximumValue = 99
+        slider.setValue(50, animated: false)
         view.addSubview(slider)
              
         slider.translatesAutoresizingMaskIntoConstraints = false
@@ -780,7 +998,7 @@ class OnBoardingView3: UIView {
                                             self.headline.alpha = 1.0
                                             self.headline.isHidden = true
                                             
-                                            DELAY(3.0) {
+                                            DELAY(1.0) {
                                                 let nextButton = self.step5_6view.viewWithTag(22) as! UIButton
                                                 
                                                 nextButton.alpha = 0.0
@@ -815,9 +1033,13 @@ class OnBoardingView3: UIView {
         //view.backgroundColor = UIColor.yellow.withAlphaComponent(0.1)
         container.addSubview(view)
         view.translatesAutoresizingMaskIntoConstraints = false
+        
+        var _topOffset = topOffset
+        if(IS_ZOOMED()){ _topOffset /= 2 }
+        
         NSLayoutConstraint.activate([
             view.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            view.topAnchor.constraint(equalTo: below.bottomAnchor, constant: topOffset),
+            view.topAnchor.constraint(equalTo: below.bottomAnchor, constant: _topOffset),
             view.widthAnchor.constraint(equalToConstant: 100),
             view.heightAnchor.constraint(equalToConstant: 40)
         ])
@@ -924,7 +1146,24 @@ class OnBoardingView3: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             button.topAnchor.constraint(equalTo: below.bottomAnchor, constant: topOffset),
-            button.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            button.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
+            button.widthAnchor.constraint(equalToConstant: 78),
+            button.heightAnchor.constraint(equalToConstant: 82)
+        ])
+        
+        return button
+    }
+    
+    private func createPrefsButton_B(container: UIView, above: UIView,
+        bottomOffset: CGFloat) -> UIButton {
+        
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(named: "onBoardingPrefsButton"), for: .normal)
+        container.addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.bottomAnchor.constraint(equalTo: above.topAnchor, constant: bottomOffset),
+            button.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
             button.widthAnchor.constraint(equalToConstant: 78),
             button.heightAnchor.constraint(equalToConstant: 82)
         ])

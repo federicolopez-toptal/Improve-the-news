@@ -88,9 +88,12 @@ class OnBoardingView: UIView {
         
         ///////////////////////////////////////////////////
         let label1 = UILabel()
-        label1.text = "Would you like a quick tour?"
+        label1.numberOfLines = 2
+        label1.text = "It looks like you’re new here.\nWould you like a tour?"
+        label1.textAlignment = .center
         label1.textColor = UIColor(rgb: 0x93A0B4)
         label1.font = UIFont(name: "Roboto-Regular", size: 20)
+        if(IS_ZOOMED()){ label1.font = UIFont(name: "Roboto-Regular", size: 16) }
         
         offset = SAFE_AREA()!.bottom
         if(offset==0){ offset = 34 }
@@ -106,6 +109,7 @@ class OnBoardingView: UIView {
         button1.setTitle("NO THANKS.", for: .normal)
         button1.setTitleColor(accentOrange, for: .normal)
         button1.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 16)
+        if(IS_ZOOMED()){ button1.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 14) }
         button1.addTarget(self, action: #selector(closeButtonOnTap(_:)),
                 for: .touchUpInside)
         
@@ -227,6 +231,7 @@ class OnBoardingView: UIView {
         title1.textColor = .white
         title1.numberOfLines = 2
         title1.font = UIFont(name: "Poppins-SemiBold", size: 14)
+        if(IS_ZOOMED()){ title1.font = UIFont(name: "Poppins-SemiBold", size: 12) }
         result.addSubview(title1)
         title1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -240,6 +245,7 @@ class OnBoardingView: UIView {
         subText.textColor = UIColor.white.withAlphaComponent(0.2)
         subText.numberOfLines = 2
         subText.font = UIFont(name: "Poppins-SemiBold", size: 12)
+        if(IS_ZOOMED()){ subText.font = UIFont(name: "Poppins-SemiBold", size: 10) }
         result.addSubview(subText)
         subText.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -355,7 +361,7 @@ class OnBoardingView: UIView {
             divLine.centerXAnchor.constraint(equalTo: result.centerXAnchor),
             divLine.topAnchor.constraint(equalTo: result.topAnchor, constant: -60),
             divLine.widthAnchor.constraint(equalToConstant: 1.0),
-            divLine.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height + 50)
+            divLine.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height + 60)
         ])
         
         let halfScreen = UIScreen.main.bounds.size.width / 2

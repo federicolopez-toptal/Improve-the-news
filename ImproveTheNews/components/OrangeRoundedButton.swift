@@ -15,6 +15,7 @@ class OrangeRoundedButton: UIButton {
         self.backgroundColor = accentOrange
         self.setTitle(title, for: .normal)
         self.titleLabel?.font = UIFont(name: "Roboto-Bold", size: 14)
+        if(IS_ZOOMED()){ self.titleLabel?.font = UIFont(name: "Roboto-Bold", size: 12) }
         self.setTitleColor(.white, for: .normal)
         self.layer.cornerRadius = 25
     }
