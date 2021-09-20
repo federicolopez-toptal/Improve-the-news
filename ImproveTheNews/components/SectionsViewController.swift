@@ -67,7 +67,7 @@ class SectionsViewController: UIViewController {
         if(APP_CFG_MORE_PREFS) {
             self.support.append("More Preferences")
         }
-        self.support.append("Onboarding")
+        self.support.append("Tour")
         
         navigationItem.largeTitleDisplayMode = .never
         safeArea = view.layoutMarginsGuide
@@ -88,10 +88,10 @@ class SectionsViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor,
+            constant: -25).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         tableView.tableFooterView = UIView()
-        
     }
     
     override func viewDidLoad() {

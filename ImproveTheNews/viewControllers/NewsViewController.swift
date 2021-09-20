@@ -2446,7 +2446,7 @@ extension NewsViewController: OnBoardingViewDelegate {
     }
     
     @objc func showOnboardingAgain() {
-        self.onBoard = OnBoardingView(container: self.view)
+        self.onBoard = OnBoardingView(container: self.view, skipFirstStep: true)
         self.onBoard?.delegate = self
     }
 

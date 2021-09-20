@@ -16,8 +16,7 @@ protocol OnBoardingViewDelegate {
 ///////////////////////////////////////////////////////
 class OnBoardingView: UIView {
 
-    var delegate: OnBoardingViewDelegate?
-    
+    var delegate: OnBoardingViewDelegate? 
     static let headlinesType1_height: CGFloat = 204
     
     var view1 = UIView()
@@ -28,7 +27,7 @@ class OnBoardingView: UIView {
         super.init(coder: coder)
     }
     
-    init(container: UIView) {
+    init(container: UIView, skipFirstStep: Bool = false) {
         super.init(frame: .zero)
         self.backgroundColor = bgBlue
         
@@ -47,6 +46,14 @@ class OnBoardingView: UIView {
         self.createView3()
         
         //self.testSteps() // !!!
+        
+        if(skipFirstStep) {
+            self.view1.isHidden = true
+            self.view2.isHidden = false
+            DELAY(2) {
+                self.showView3()
+            }
+        }
     }
     
     private func testSteps() {
@@ -366,6 +373,9 @@ class OnBoardingView: UIView {
         
         let halfScreen = UIScreen.main.bounds.size.width / 2
         
+        var headersTopOffset: CGFloat = -50
+        if(SAFE_AREA()!.bottom == 0){ headersTopOffset = -32 }
+        
         let label1 = UILabel()
         label1.textColor = .white
         label1.font = UIFont(name: "Merriweather-Bold", size: 22)
@@ -375,7 +385,7 @@ class OnBoardingView: UIView {
         label1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label1.topAnchor.constraint(equalTo: result.topAnchor,
-                    constant: -50),
+                    constant: headersTopOffset),
             label1.widthAnchor.constraint(equalToConstant: halfScreen),
             label1.leadingAnchor.constraint(equalTo: result.leadingAnchor)
         ])
@@ -389,7 +399,7 @@ class OnBoardingView: UIView {
         label2.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label2.topAnchor.constraint(equalTo: result.topAnchor,
-                    constant: -50),
+                    constant: headersTopOffset),
             label2.widthAnchor.constraint(equalToConstant: halfScreen),
             label2.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: halfScreen)
         ])

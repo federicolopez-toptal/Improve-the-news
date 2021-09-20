@@ -117,7 +117,7 @@ class OnBoardingView3: UIView {
         print(SAFE_AREA()!.top)
         var topOffset: CGFloat = 70 //95
         if(SAFE_AREA()!.bottom == 0) {
-            topOffset -= 70
+            topOffset -= 35
         }
         
         NSLayoutConstraint.activate([
@@ -169,6 +169,7 @@ class OnBoardingView3: UIView {
         self.exitButtonBottomOffset = -SAFE_AREA()!.bottom
         if(self.exitButtonBottomOffset == 0){ self.exitButtonBottomOffset = -10 }
         self.exitButtonBottomOffset -= 150
+        if(IS_ZOOMED() && SAFE_AREA()!.bottom==0){ self.exitButtonBottomOffset += 35 }
     
         self.initStep(self.step3view)
         self.createLabel_B(self.texts[0], container: self.step3view, topOffset: 20)
@@ -190,7 +191,7 @@ class OnBoardingView3: UIView {
         self.animHeadlineLC?.constant = 70
         //95
         if(SAFE_AREA()!.bottom == 0) {
-            self.animHeadlineLC?.constant -= 70
+            self.animHeadlineLC?.constant -= 35
         }
         
         UIView.animate(withDuration: 0.6) {
@@ -287,8 +288,10 @@ class OnBoardingView3: UIView {
                     splitState: false)
         panel.tag = 11
         
+        var checkboxTopOffset: CGFloat = 30
+        if(SAFE_AREA()!.bottom == 0){ checkboxTopOffset = 15 }
         let checkbox = self.createCheckboxLarge(container: self.step7view,
-            below: label, topOffset: 30)
+            below: label, topOffset: checkboxTopOffset)
         checkbox.tag = 22
     }
     
@@ -351,8 +354,10 @@ class OnBoardingView3: UIView {
                     splitState: true)
         panel.tag = 11
         
+        var checkboxTopOffset: CGFloat = 30
+        if(SAFE_AREA()!.bottom == 0){ checkboxTopOffset = 15 }
         let checkbox = self.createCheckboxLarge(container: self.step8view,
-            below: label, topOffset: 30, state: true)
+            below: label, topOffset: checkboxTopOffset, state: true)
     }
     
     @objc func showStep8(_ sender: UIButton?) {
@@ -437,11 +442,18 @@ class OnBoardingView3: UIView {
                     splitState: false, secondRow: true, forAnim: true)
         panel.tag = 11
         
-        let dots = self.createDots_C(currentPage: 5, container: self.step10view, above: panel, bottomOffset: -32)
+        var dotsBottomOffset: CGFloat = -32
+        if(SAFE_AREA()!.bottom == 0){ dotsBottomOffset = -23 }
+        if(IS_ZOOMED()){ dotsBottomOffset = -3 }
+        
+        let dots = self.createDots_C(currentPage: 5, container: self.step10view, above: panel, bottomOffset: dotsBottomOffset)
         
         let nextButton = self.createPrefsButton_B(container: self.step10view, above: panel, bottomOffset: -25)
+        nextButton.tag = 797
         
-        let exitButton = self.createExitButton_B(container: self.step10view, above: dots, topOffset: -10)
+        var exitTopOffset: CGFloat = -10
+        if(IS_ZOOMED()){ exitTopOffset = 5 }
+        let exitButton = self.createExitButton_B(container: self.step10view, above: dots, topOffset: exitTopOffset)
         
         /*
         let dots = self.createDots(currentPage: 4, container: self.step10view)
@@ -476,12 +488,15 @@ class OnBoardingView3: UIView {
             self.headline.alpha = 1.0
             self.headline2.alpha = 0.0
         } completion: { _ in
+            let nextButton = self.step10view.viewWithTag(797) as! UIView
+            
             self.step9view.isHidden = true
             self.animPanel02LC?.constant -= 80
             self.headline2.alpha = 1.0
             self.headline2.isHidden = true
             
             UIView.animate(withDuration: 0.4) {
+                if(IS_ZOOMED()){ nextButton.alpha = 0 }
                 self.layoutIfNeeded()
             } completion: { _ in
             }
@@ -495,12 +510,17 @@ class OnBoardingView3: UIView {
         view.backgroundColor = bgBlue
         //view.backgroundColor = .blue
         self.addSubview(view)
+        
+        var viewBottomOffset: CGFloat = 0.0
+        if(IS_ZOOMED()){ viewBottomOffset = -30 }
+        
         view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             view.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
             view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            view.topAnchor.constraint(equalTo: self.headline.bottomAnchor)
+            view.topAnchor.constraint(equalTo: self.headline.bottomAnchor,
+                constant: viewBottomOffset)
         ])
         
         view.isHidden = true
@@ -535,8 +555,12 @@ class OnBoardingView3: UIView {
         dots.currentPageIndicatorTintColor = UIColor(rgb: 0xFF8B3C)
         container.addSubview(dots)
         dots.translatesAutoresizingMaskIntoConstraints = false
+        
+        var _topOffset = topOffset
+        if(IS_ZOOMED()){ _topOffset = -5 }
+        
         NSLayoutConstraint.activate([
-            dots.topAnchor.constraint(equalTo: below.bottomAnchor, constant: topOffset),
+            dots.topAnchor.constraint(equalTo: below.bottomAnchor, constant: _topOffset),
             dots.centerXAnchor.constraint(equalTo: container.centerXAnchor)
         ])
         
@@ -595,7 +619,7 @@ class OnBoardingView3: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         var _topOffset: CGFloat = topOffset
-        if(IS_ZOOMED()){ _topOffset = -10 }
+        if(IS_ZOOMED()){ _topOffset -= 10 }
         
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: container.topAnchor, constant: _topOffset),
@@ -713,12 +737,16 @@ class OnBoardingView3: UIView {
         
         let button = OrangeRoundedButton(title: text)
         container.addSubview(button)
+        
+        var _topOffset = topOffset
+        if(IS_ZOOMED()){ _topOffset = topOffset/2 }
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 30),
             button.trailingAnchor.constraint(equalTo: container.trailingAnchor,
                     constant: -30),
-            button.topAnchor.constraint(equalTo: below.bottomAnchor, constant: topOffset),
+            button.topAnchor.constraint(equalTo: below.bottomAnchor, constant: _topOffset),
             button.heightAnchor.constraint(equalToConstant: 50),
             
         ])
@@ -739,7 +767,7 @@ class OnBoardingView3: UIView {
         NSLayoutConstraint.activate([
             view.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             view.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            view.heightAnchor.constraint(equalToConstant: 200),
+            view.heightAnchor.constraint(equalToConstant: 300),
             view.topAnchor.constraint( equalTo: below.bottomAnchor, constant: topOffset)
         ])
         
@@ -793,7 +821,7 @@ class OnBoardingView3: UIView {
         NSLayoutConstraint.activate([
             view.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             view.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            view.heightAnchor.constraint(equalToConstant: 200)
+            view.heightAnchor.constraint(equalToConstant: 300)
         ])
         
         if(forAnim) {
