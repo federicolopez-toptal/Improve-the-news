@@ -99,7 +99,7 @@ class NewsTextViewController: UIViewController {
             name: UIApplication.didEnterBackgroundNotification, object: nil)
             
         if(SHOW_ONBOARD() && self.uniqueID==1) {
-            self.onBoard = OnBoardingView(container: self.view)
+            self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser)
             self.onBoard?.delegate = self
             
             if let obView = self.onBoard {
@@ -683,6 +683,7 @@ extension NewsTextViewController: NewsDelegate {
         }
         
         self.addParamsLabel()
+        NotificationCenter.default.post(name: NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED, object: nil)
     }
     
 }
@@ -1027,7 +1028,8 @@ extension NewsTextViewController: OnBoardingViewDelegate {
     }
     
     @objc func showOnboardingAgain() {
-        self.onBoard = OnBoardingView(container: self.view, skipFirstStep: true)
+        self.navigationController?.popViewController(animated: false)
+        self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser, skipFirstStep: true)
         self.onBoard?.delegate = self
     }
     

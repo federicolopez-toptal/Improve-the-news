@@ -9,6 +9,15 @@
 import UIKit
 
 ///////////////////////////////////////////////////////
+let NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED = Notification.Name("forOnboardingNewsLoaded")
+
+struct SimplestNews {
+    var title: String
+    var sourceTime: String
+    var imageUrl: String
+}
+
+///////////////////////////////////////////////////////
 protocol OnBoardingViewDelegate {
     func onBoardingClose()
 }
@@ -22,12 +31,14 @@ class OnBoardingView: UIView {
     var view1 = UIView()
     var view2 = UIView()
     var view3 = OnBoardingView3()
+    var parser: News?
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
-    init(container: UIView, skipFirstStep: Bool = false) {
+    init(container: UIView, parser: News, skipFirstStep: Bool = false) {
+        self.parser = parser
         super.init(frame: .zero)
         self.backgroundColor = bgBlue
         
@@ -46,12 +57,19 @@ class OnBoardingView: UIView {
         self.createView3()
         
         //self.testSteps() // !!!
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(onNewsLoaded),
+            name: NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED, object: nil)
+            
         if(skipFirstStep) {
             self.view1.isHidden = true
             self.view2.isHidden = false
             DELAY(2) {
                 self.showView3()
+            }
+        } else {
+            self.alpha = 0.0
+            UIView.animate(withDuration: 0.7) {
+                self.alpha = 1.0
             }
         }
     }
@@ -157,7 +175,7 @@ class OnBoardingView: UIView {
                     constant: 15),
         ])
         
-        let headline1 = OnBoardingView.headlinesType1()
+        let headline1 = OnBoardingView.headlinesType1_dynamic()
         self.view2.addSubview(headline1)
         headline1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -166,8 +184,12 @@ class OnBoardingView: UIView {
             headline1.trailingAnchor.constraint(equalTo: self.view2.trailingAnchor),
             headline1.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height)
         ])
+        headline1.tag = 100
+        if(self.parser != nil) {
+            self.showNews(headline: headline1, indexes: [0, 1])
+        }
         
-        let headline2 = OnBoardingView.headlinesType1()
+        let headline2 = OnBoardingView.headlinesType1_dynamic()
         self.view2.addSubview(headline2)
         headline2.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -176,6 +198,10 @@ class OnBoardingView: UIView {
             headline2.trailingAnchor.constraint(equalTo: self.view2.trailingAnchor),
             headline2.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height)
         ])
+        headline2.tag = 200
+        if(self.parser != nil) {
+            self.showNews(headline: headline2, indexes: [2, 3])
+        }
         
         self.view2.isHidden = true
     }
@@ -197,18 +223,24 @@ class OnBoardingView: UIView {
     @objc func showView3() {
         self.view3.alpha = 0
         self.view3.isHidden = false
-        UIView.animate(withDuration: 0.4) {
+        if(SAFE_AREA()!.bottom>0){
+            self.view3.showStep3()
+        }
+
+        UIView.animate(withDuration: 0.7) {
             self.view3.alpha = 1
         } completion: { _ in
             self.view2.isHidden = true
-            self.view3.showStep3()
+            if(SAFE_AREA()!.bottom==0) {
+                self.view3.showStep3_animated()
+            }
         }
     }
 
 
     // MARK: - View3 /////////////////////////
     private func createView3() {
-        self.view3.insertInto(container: self)
+        self.view3.insertInto(container: self, parser: self.parser)
         self.view3.isHidden = true
         self.view3.delegate = self
     }
@@ -287,6 +319,187 @@ class OnBoardingView: UIView {
             subText2.widthAnchor.constraint(equalToConstant: w),
         ])
 
+        return result
+    }
+    
+    static func headlinesType1_dynamic() -> UIView {
+        let result = UIView()
+        
+        let screenSize = UIScreen.main.bounds.size
+        var w: CGFloat = screenSize.width - 30
+        let h: CGFloat = (401 * w)/1335
+        
+        w = (screenSize.width/2)-30
+        let pic1 = UIImageView()
+        pic1.backgroundColor = .gray
+        pic1.layer.cornerRadius = 15.0
+        pic1.clipsToBounds = true
+        result.addSubview(pic1)
+        pic1.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pic1.topAnchor.constraint(equalTo: result.topAnchor),
+            pic1.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: 15),
+            pic1.widthAnchor.constraint(equalToConstant: w),
+            pic1.heightAnchor.constraint(equalToConstant: h)
+        ])
+        pic1.tag = 101
+        
+        let title1 = UILabel()
+        title1.text = "The pros and cons of wind power"
+        title1.textColor = .white
+        title1.numberOfLines = 2
+        title1.font = UIFont(name: "Poppins-SemiBold", size: 14)
+        if(IS_ZOOMED()){ title1.font = UIFont(name: "Poppins-SemiBold", size: 12) }
+        result.addSubview(title1)
+        title1.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            title1.topAnchor.constraint(equalTo: pic1.bottomAnchor, constant: 6),
+            title1.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: 15),
+            title1.widthAnchor.constraint(equalToConstant: w),
+        ])
+        title1.tag = 102
+        
+        let subText = UILabel()
+        subText.text = "TechCrunch • 25 minutes ago"
+        subText.textColor = UIColor.white.withAlphaComponent(0.2)
+        subText.numberOfLines = 2
+        subText.font = UIFont(name: "Poppins-SemiBold", size: 12)
+        if(IS_ZOOMED()){ subText.font = UIFont(name: "Poppins-SemiBold", size: 10) }
+        result.addSubview(subText)
+        subText.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            subText.topAnchor.constraint(equalTo: title1.bottomAnchor, constant: 6),
+            subText.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: 15),
+            subText.widthAnchor.constraint(equalToConstant: w),
+        ])
+        subText.tag = 103
+        
+        let pic2 = UIImageView()
+        pic2.backgroundColor = .gray
+        pic2.layer.cornerRadius = pic1.layer.cornerRadius
+        pic2.clipsToBounds = true
+        result.addSubview(pic2)
+        pic2.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pic2.topAnchor.constraint(equalTo: result.topAnchor),
+            pic2.trailingAnchor.constraint(equalTo: result.trailingAnchor, constant: -15),
+            pic2.widthAnchor.constraint(equalToConstant: w),
+            pic2.heightAnchor.constraint(equalToConstant: h)
+        ])
+        pic2.tag = 201
+        
+        let title2 = UILabel()
+        title2.text = "Recent trends in world energy use"
+        title2.textColor = .white
+        title2.numberOfLines = 2
+        title2.font = UIFont(name: "Poppins-SemiBold", size: 14)
+        result.addSubview(title2)
+        title2.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            title2.topAnchor.constraint(equalTo: pic1.bottomAnchor, constant: 6),
+            title2.trailingAnchor.constraint(equalTo: result.trailingAnchor, constant: -15),
+            title2.widthAnchor.constraint(equalToConstant: w),
+        ])
+        title2.tag = 202
+        
+        let subText2 = UILabel()
+        subText2.text = "NY Times • 4 hours ago"
+        subText2.textColor = UIColor.white.withAlphaComponent(0.2)
+        subText2.numberOfLines = 2
+        subText2.font = UIFont(name: "Poppins-SemiBold", size: 12)
+        result.addSubview(subText2)
+        subText2.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            subText2.topAnchor.constraint(equalTo: title2.bottomAnchor, constant: 6),
+            subText2.trailingAnchor.constraint(equalTo: result.trailingAnchor, constant: -15),
+            subText2.widthAnchor.constraint(equalToConstant: w),
+        ])
+        subText2.tag = 203
+
+        // Loading...
+        let loadingView = UIView()
+        loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        loadingView.layer.cornerRadius = 15
+        result.addSubview(loadingView)
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loadingView.topAnchor.constraint(equalTo: result.topAnchor, constant: 30),
+            loadingView.centerXAnchor.constraint(equalTo: result.centerXAnchor),
+            loadingView.widthAnchor.constraint(equalToConstant: 65),
+            loadingView.heightAnchor.constraint(equalToConstant: 65)
+        ])
+        loadingView.layer.borderWidth = 3.0
+        loadingView.layer.borderColor = UIColor.black.withAlphaComponent(0.25).cgColor
+        
+        let loading = UIActivityIndicatorView(style: .medium)
+        loading.color = .white
+        loadingView.addSubview(loading)
+        loading.center = CGPoint(x: 65/2, y: 65/2)
+        loading.startAnimating()
+        
+        loadingView.tag = 444
+        loadingView.isHidden = true
+        
+        // Splitted view ##########################################
+        let splittedView = UIView()
+        splittedView.backgroundColor = .clear
+        result.addSubview(splittedView)
+        splittedView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            splittedView.topAnchor.constraint(equalTo: result.topAnchor),
+            splittedView.leadingAnchor.constraint(equalTo: result.leadingAnchor),
+            splittedView.trailingAnchor.constraint(equalTo: result.trailingAnchor),
+            splittedView.bottomAnchor.constraint(equalTo: result.bottomAnchor)
+        ])
+        result.sendSubviewToBack(splittedView)
+        
+        let divLine = UIView()
+        divLine.backgroundColor = .white
+        splittedView.addSubview(divLine)
+        divLine.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            divLine.centerXAnchor.constraint(equalTo: splittedView.centerXAnchor),
+            divLine.topAnchor.constraint(equalTo: splittedView.topAnchor, constant: -60),
+            divLine.widthAnchor.constraint(equalToConstant: 1.0),
+            divLine.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height + 60)
+        ])
+        
+        let halfScreen = UIScreen.main.bounds.size.width / 2
+        var headersTopOffset: CGFloat = -50
+        if(SAFE_AREA()!.bottom == 0){ headersTopOffset = -32 }
+        
+        let label1 = UILabel()
+        label1.textColor = .white
+        label1.font = UIFont(name: "Merriweather-Bold", size: 22)
+        label1.text = "LEFT"
+        label1.textAlignment = .center
+        splittedView.addSubview(label1)
+        label1.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label1.topAnchor.constraint(equalTo: splittedView.topAnchor,
+                    constant: headersTopOffset),
+            label1.widthAnchor.constraint(equalToConstant: halfScreen),
+            label1.leadingAnchor.constraint(equalTo: splittedView.leadingAnchor)
+        ])
+        
+        let label2 = UILabel()
+        label2.textColor = .white
+        label2.font = UIFont(name: "Merriweather-Bold", size: 22)
+        label2.text = "RIGHT"
+        label2.textAlignment = .center
+        splittedView.addSubview(label2)
+        label2.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label2.topAnchor.constraint(equalTo: splittedView.topAnchor,
+                    constant: headersTopOffset),
+            label2.widthAnchor.constraint(equalToConstant: halfScreen),
+            label2.leadingAnchor.constraint(equalTo: splittedView.leadingAnchor, constant: halfScreen)
+        ])
+        
+        splittedView.tag = 777
+        splittedView.isHidden = true
+        
+        
         return result
     }
     
@@ -439,6 +652,56 @@ extension OnBoardingView {
     
     @objc func closeButtonOnTap(_ sender: UIButton) {
         self.delegate?.onBoardingClose()
+    }
+
+    @objc func onNewsLoaded() { // on notification
+        let headline1 = self.view2.viewWithTag(100)!
+        self.showNews(headline: headline1, indexes: [0, 1])
+        
+        let headline2 = self.view2.viewWithTag(200)!
+        self.showNews(headline: headline2, indexes: [2, 3])
+    }
+    
+    private func getNews(index i: Int) -> SimplestNews? {
+        if let news = self.parser {
+            let title = news.getTitle(index: i)
+            let sourceTime = news.getSource(index: i) + " - " + news.getDate(index: i)
+            let imageUrl = news.getIMG(index: i)
+            
+            return SimplestNews(title: title, sourceTime: sourceTime,
+                imageUrl: imageUrl)
+        }
+        return nil
+    }
+    
+    private func showNews(headline: UIView, indexes: [Int]) {
+        let news1 = getNews(index: indexes[0])!
+        let pic1 = headline.viewWithTag(101) as! UIImageView
+        let title1 = headline.viewWithTag(102) as! UILabel
+        let subText = headline.viewWithTag(103) as! UILabel
+        
+        title1.text = news1.title
+        subText.text = news1.sourceTime
+        
+        DispatchQueue.main.async {
+            pic1.contentMode = .scaleAspectFill
+            pic1.sd_setImage(with: URL(string: news1.imageUrl), placeholderImage: nil)
+        }
+        
+        //////////////
+        let news2 = getNews(index: indexes[1])!
+        let pic2 = headline.viewWithTag(201) as! UIImageView
+        let title2 = headline.viewWithTag(202) as! UILabel
+        let subText2 = headline.viewWithTag(203) as! UILabel
+        
+        title2.text = news2.title
+        subText2.text = news2.sourceTime
+        
+        DispatchQueue.main.async {
+            pic2.contentMode = .scaleAspectFill
+            pic2.sd_setImage(with: URL(string: news2.imageUrl), placeholderImage: nil)
+        }
+
     }
 
 }

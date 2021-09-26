@@ -205,7 +205,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             name: UIApplication.didEnterBackgroundNotification, object: nil)
             
         if(SHOW_ONBOARD() && self.uniqueID==1) {
-            self.onBoard = OnBoardingView(container: self.view)
+            self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser)
             self.onBoard?.delegate = self
             
             if let obView = self.onBoard {
@@ -462,6 +462,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         self.addParamsLabel()
         self.updateDivider()
+        
+        NotificationCenter.default.post(name: NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED, object: nil)
+        
         UIView.animate(withDuration: 0.5, animations: {
             self.collectionView.contentOffset.y = 0
         })
@@ -2446,7 +2449,10 @@ extension NewsViewController: OnBoardingViewDelegate {
     }
     
     @objc func showOnboardingAgain() {
-        self.onBoard = OnBoardingView(container: self.view, skipFirstStep: true)
+        self.navigationController?.popViewController(animated: false)
+        self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser,
+            skipFirstStep: true)
+            
         self.onBoard?.delegate = self
     }
 

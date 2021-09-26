@@ -213,6 +213,7 @@ extension SliderPopup {
             miniview.addSubview(slider)
             miniview.addSubview(minLabel)
             miniview.addSubview(maxLabel)
+            miniview.tag = 400 + i
             
             if(i==1) {
                 separatorView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
@@ -330,6 +331,14 @@ extension SliderPopup {
             swipeDown.direction = .down
             stackView.addGestureRecognizer(swipeDown)
         }
+        
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(onBoardingSliderChanged(_:)),
+            name: NOTIFICATION_ONBOARDING_SLIDER_CHANGED, object: nil)
+            
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(onBoardingSplitChanged(_:)),
+            name: NOTIFICATION_ONBOARDING_SPLIT_CHANGED, object: nil)
     }
     
     func disableSplit() {
@@ -381,7 +390,10 @@ extension SliderPopup {
     }
     
     @objc func splitButtonTap(sender: UIButton) {
+        self.splitButtonTap_b(sender: sender, callDelegateUpdate: true)
+    }
         
+    func splitButtonTap_b(sender: UIButton, callDelegateUpdate: Bool) {
         // update values
         if(sender.tag==0) {
             // Political stance
@@ -451,8 +463,10 @@ extension SliderPopup {
         sender.setImage(img, for: .normal)
         */
         
-        if let valueChanged = self.sliderDelegate?.splitValueChange {
-            valueChanged()
+        if(callDelegateUpdate) {
+            if let valueChanged = self.sliderDelegate?.splitValueChange {
+                valueChanged()
+            }
         }
     }
     
@@ -654,6 +668,101 @@ extension SliderPopup: UIGestureRecognizerDelegate {
         self.separatorView.isHidden = false
         addShowMore()
     }
+    
+}
+
+extension SliderPopup {
+
+    @objc func onBoardingSliderChanged(_ notification: NSNotification) {
+        let dataDict = notification.userInfo as! [Int: CGFloat]
+        
+        let id = dataDict.keys.first!
+        let value = Float(dataDict[id]!)
+        
+        for miniView in stackView.subviews {
+            if(miniView.tag >= 400) {
+                for component in miniView.subviews {
+                    if(self.politicalStance && miniView.tag==400 && (component is UIButton)) {
+                        let splitButton = component as! UIButton
+                        self.splitButtonTap_b(sender: splitButton, callDelegateUpdate: false)
+                    }
+                    
+                    if(self.establishmentStance && miniView.tag==401 && (component is UIButton)) {
+                        let splitButton = component as! UIButton
+                        self.splitButtonTap_b(sender: splitButton, callDelegateUpdate: false)
+                    }
+                    
+
+                    if(component is UISlider) {
+                        if(component.tag == id + 50 - 1) {
+                            let slider = component as! UISlider
+                            slider.setValue(value, animated: false)
+                            let key = keys[id-1]
+                            
+                            self.sliderValues.setLR(LR: Int(value))
+                            UserDefaults.setSliderValue(value: Float(self.sliderValues.getLR()), slider: key)
+                            
+                            //miniView.backgroundColor = .green
+                            self.biasSliderValueDidChange(slider)
+                        }
+                    }
+                }
+                
+            }
+        }
+        
+    }
+    
+    
+    @objc func onBoardingSplitChanged(_ notification: NSNotification) {
+        let dataDict = notification.userInfo as! [Int: Bool]
+        let index = dataDict.keys.first!
+        let value = dataDict[index]!
+        
+        for miniView in stackView.subviews {
+            if(miniView.tag == 400+index) {
+                for component in miniView.subviews {
+                    if(component is UIButton) {
+                        let splitButton = component as! UIButton
+                        self.splitButtonTap(sender: splitButton)
+                    }
+                }
+            
+                /*
+                for component in miniView.subviews {
+                    if(self.politicalStance && miniView.tag==400 && (component is UIButton)) {
+                        let splitButton = component as! UIButton
+                        self.splitButtonTap_b(sender: splitButton, callDelegateUpdate: false)
+                    }
+                    
+                    if(self.establishmentStance && miniView.tag==401 && (component is UIButton)) {
+                        let splitButton = component as! UIButton
+                        self.splitButtonTap_b(sender: splitButton, callDelegateUpdate: false)
+                    }
+                    
+
+                    if(component is UISlider) {
+                        if(component.tag == id + 50 - 1) {
+                            let slider = component as! UISlider
+                            slider.setValue(value, animated: false)
+                            let key = keys[id-1]
+                            
+                            self.sliderValues.setLR(LR: Int(value))
+                            UserDefaults.setSliderValue(value: Float(self.sliderValues.getLR()), slider: key)
+                            
+                            //miniView.backgroundColor = .green
+                            self.biasSliderValueDidChange(slider)
+                        }
+                    }
+                }
+                */
+                
+            }
+        }
+        
+    }
+    
+    
     
 }
 

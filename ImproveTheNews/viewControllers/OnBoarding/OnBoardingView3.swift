@@ -9,6 +9,10 @@
 import UIKit
 
 ///////////////////////////////////////////////////////
+let NOTIFICATION_ONBOARDING_SLIDER_CHANGED = Notification.Name("onBoardingSliderChanged")
+let NOTIFICATION_ONBOARDING_SPLIT_CHANGED = Notification.Name("onBoardingSplitChanged")
+
+///////////////////////////////////////////////////////
 protocol OnBoardingView3Delegate {
     func onBoardingView3Close()
 }
@@ -17,6 +21,7 @@ protocol OnBoardingView3Delegate {
 class OnBoardingView3: UIView {
 
     var delegate: OnBoardingView3Delegate?
+    var parser: News?
     
     var headline = UIView()
     var headline2 = UIView()
@@ -61,8 +66,8 @@ class OnBoardingView3: UIView {
     }
     
     ///////////////////////////////////////////////////////
-    func insertInto(container: UIView) {
-        
+    func insertInto(container: UIView, parser: News?) {
+        self.parser = parser
         self.backgroundColor = container.backgroundColor
         
         container.addSubview(self)
@@ -84,13 +89,19 @@ class OnBoardingView3: UIView {
         self.createStep10()
         
         //self.testSteps() // !!!
+        NotificationCenter.default.addObserver(self, selector: #selector(onNewsLoaded),
+            name: NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED, object: nil)
     }
     
     private func initHeadlines() {
-        let offset: CGFloat = 22 + 38 + 16 + OnBoardingView.headlinesType1_height + 4
+        let offset: CGFloat = 22 + 38 + 16 //+ OnBoardingView.headlinesType1_height + 4
         
         // headline 1
-        self.headline = OnBoardingView.headlinesType1()
+        self.headline = OnBoardingView.headlinesType1_dynamic()
+        if(self.parser != nil) {
+            self.showNews(headline: self.headline, indexes: [0, 1])
+        }
+        
         self.addSubview(self.headline)
         headline.translatesAutoresizingMaskIntoConstraints = false
         
@@ -184,7 +195,12 @@ class OnBoardingView3: UIView {
     }
     
     func showStep3() {
+        self.step3view.isHidden = false
+        self.step3view.alpha = 1
+        self.bringAllContentOnTop()
+    }
     
+    func showStep3_animated() {
         self.step3view.alpha = 0
         self.step3view.isHidden = false
         
@@ -198,6 +214,7 @@ class OnBoardingView3: UIView {
             self.layoutIfNeeded()
             self.step3view.alpha = 1
         } completion: { _ in
+            self.bringAllContentOnTop()
         }
     }
     
@@ -224,6 +241,7 @@ class OnBoardingView3: UIView {
             self.step4view.alpha = 1
         } completion: { _ in
             self.step3view.isHidden = true
+            self.bringAllContentOnTop()
         }
     }
     
@@ -237,10 +255,15 @@ class OnBoardingView3: UIView {
         let dots = self.createDots_B(currentPage: 3, container: self.step5_6view,
             below: exitButton, topOffset: 10)
         
+        var LR: Int = 0
+        if UserDefaults.exists(key: "LeRi") {
+            LR = Int(UserDefaults.getValue(key: "LeRi"))
+        } else {
+            LR = 50
+        }
         let panel = self.createOrangePanel_B(container: self.step5_6view,
-                    topOffset: 0, forAnim: true)
+                    topOffset: 0, forAnim: true, sliderValue1: LR)
         panel.tag = 11
-        
         
         let nextButton = self.createOrangeButton(text: "I'M GOOD!",
             container: self.step5_6view, above: exitButton, bottomOffset: -25)
@@ -264,6 +287,7 @@ class OnBoardingView3: UIView {
             
             self.animPanel01LC?.constant -= 100
             if(SAFE_AREA()!.bottom>0){ self.animPanel01LC?.constant -= 15 }
+            self.bringAllContentOnTop()
             
             UIView.animate(withDuration: 0.4) {
                 self.layoutIfNeeded()
@@ -303,10 +327,15 @@ class OnBoardingView3: UIView {
             self.step7view.alpha = 1
         } completion: { _ in
             self.step5_6view.isHidden = true
+            self.bringAllContentOnTop()
+            
+             if let panel = self.step7view.viewWithTag(11) {
+                self.setSliderState(panel: panel, value: false)
+            }
         }
     }
     
-    @objc func checkboxOnCheck(_ sender: UIButton) {
+    @objc func checkboxOnCheck(_ sender: UIButton?) {
         // checkbox large
         let checkBox = self.step7view.viewWithTag(22)!
         for sv in checkBox.subviews {
@@ -336,6 +365,24 @@ class OnBoardingView3: UIView {
             }
         }
         
+        
+        if let loadingView = self.headline.viewWithTag(444) {
+            loadingView.isHidden = false
+        }
+        
+        if let splittedView = self.headline.viewWithTag(777) {
+            if(splittedView.isHidden) {
+                splittedView.alpha = 0
+                splittedView.isHidden = false
+                UIView.animate(withDuration: 0.4) {
+                    splittedView.alpha = 1.0
+                }
+            }
+        }
+        
+        NotificationCenter.default.post(name: NOTIFICATION_ONBOARDING_SPLIT_CHANGED,
+            object: nil, userInfo: [0: true])
+        
         self.showStep8(nil)
     }
     
@@ -358,29 +405,52 @@ class OnBoardingView3: UIView {
         if(SAFE_AREA()!.bottom == 0){ checkboxTopOffset = 15 }
         let checkbox = self.createCheckboxLarge(container: self.step8view,
             below: label, topOffset: checkboxTopOffset, state: true)
+            
+        let nextButton = self.createOrangeButton_B(text: "NEXT",
+            container: self.step8view, below: label, topOffset: checkboxTopOffset)
+        nextButton.tag = 65
+        nextButton.isHidden = true
+        nextButton.addTarget(self, action: #selector(showStep9(_:)), for: .touchUpInside)
     }
     
     @objc func showStep8(_ sender: UIButton?) {
         self.step8view.alpha = 0.0
         self.step8view.isHidden = false
         
+        /*
         self.headline3.alpha = 0.0
         self.headline3.isHidden = false
         self.headline2.alpha = 1.0
+        */
         
         UIView.animate(withDuration: 0.4) {
             self.step8view.alpha = 1.0
+            
+            /*
             self.headline3.alpha = 1.0
             self.headline2.alpha = 0.0
+            */
         } completion: { _ in
             self.step7view.isHidden = true
             
+            /*
             self.headline2.alpha = 1.0
             self.headline2.isHidden = true
-            
-            DELAY(7.0) { //5
-                self.showStep9(nil)
+            */
+            self.bringAllContentOnTop()
+            DELAY(3.0) {
+                //self.showStep9(nil)
+                //print("## aparecer NEXT")
+                
+                let nextButton = self.step8view.viewWithTag(65)!
+                nextButton.alpha = 0.0
+                nextButton.isHidden = false
+                
+                UIView.animate(withDuration: 0.4) {
+                    nextButton.alpha = 1.0
+                }
             }
+
         }
     }
     
@@ -398,8 +468,8 @@ class OnBoardingView3: UIView {
             below: exitButton, topOffset: 10)
         
         let panel = self.createOrangePanel_B(container: self.step9view,
-                    topOffset: self.panelTopOffset, showSplit: false,
-                    splitState: false)
+                    topOffset: self.panelTopOffset, showSplit: true,
+                    splitState: true)
         panel.tag = 11
         
         let nextButton = self.createPrefsButton_B(container: self.step9view, above: panel, bottomOffset: -25)
@@ -416,18 +486,18 @@ class OnBoardingView3: UIView {
         self.step9view.alpha = 0.0
         self.step9view.isHidden = false
         
-        self.headline2.alpha = 0.0
-        self.headline2.isHidden = false
+        //self.headline2.alpha = 0.0
+        //self.headline2.isHidden = false
         
         UIView.animate(withDuration: 0.4) {
             self.step9view.alpha = 1.0
-            self.headline2.alpha = 1.0
-            self.headline3.alpha = 0.0
+            //self.headline2.alpha = 1.0
+            //self.headline3.alpha = 0.0
         } completion: { _ in
             self.step8view.isHidden = true
-            
-            self.headline3.alpha = 1.0
-            self.headline3.isHidden = true
+            self.bringAllContentOnTop()
+            //self.headline3.alpha = 1.0
+            //self.headline3.isHidden = true
         }
     }
     
@@ -437,10 +507,18 @@ class OnBoardingView3: UIView {
         
         let label = self.createLabel_B(self.texts[5], container: self.step10view, topOffset: 20)
         
+        var PE: Int = 0
+        if UserDefaults.exists(key: "proest") {
+            PE = Int(UserDefaults.getValue(key: "proest"))
+        } else {
+            PE = 50
+        }
         let panel = self.createOrangePanel_B(container: self.step10view,
-                    topOffset: self.panelTopOffset, showSplit: false,
-                    splitState: false, secondRow: true, forAnim: true)
+                    topOffset: self.panelTopOffset, showSplit: true,
+                    splitState: true, secondRow: true, forAnim: true,
+                    sliderValue2: PE)
         panel.tag = 11
+        self.setSliderState(panel: panel, value: false)
         
         var dotsBottomOffset: CGFloat = -32
         if(SAFE_AREA()!.bottom == 0){ dotsBottomOffset = -23 }
@@ -451,9 +529,11 @@ class OnBoardingView3: UIView {
         let nextButton = self.createPrefsButton_B(container: self.step10view, above: panel, bottomOffset: -25)
         nextButton.tag = 797
         
+        /*
         var exitTopOffset: CGFloat = -10
         if(IS_ZOOMED()){ exitTopOffset = 5 }
         let exitButton = self.createExitButton_B(container: self.step10view, above: dots, topOffset: exitTopOffset)
+        */
         
         /*
         let dots = self.createDots(currentPage: 4, container: self.step10view)
@@ -480,25 +560,29 @@ class OnBoardingView3: UIView {
     
         self.step10view.alpha = 0.0
         self.step10view.isHidden = false
-        self.headline.isHidden = false
-        self.headline.alpha = 0.0
+        //self.headline.isHidden = false
+        //self.headline.alpha = 0.0
         
         UIView.animate(withDuration: 0.4) {
             self.step10view.alpha = 1.0
-            self.headline.alpha = 1.0
-            self.headline2.alpha = 0.0
+            //self.headline.alpha = 1.0
+            //self.headline2.alpha = 0.0
         } completion: { _ in
             let nextButton = self.step10view.viewWithTag(797) as! UIView
             
             self.step9view.isHidden = true
             self.animPanel02LC?.constant -= 80
-            self.headline2.alpha = 1.0
-            self.headline2.isHidden = true
+            //self.headline2.alpha = 1.0
+            //self.headline2.isHidden = true
+            self.bringAllContentOnTop()
             
             UIView.animate(withDuration: 0.4) {
                 if(IS_ZOOMED()){ nextButton.alpha = 0 }
                 self.layoutIfNeeded()
             } completion: { _ in
+                DELAY(5.0) {
+                    self.exitButtonOnTap(nil)
+                }
             }
         }
     }
@@ -791,16 +875,16 @@ class OnBoardingView3: UIView {
         
         var slider1: UIView
         if(splitState) {
-            slider1 = sliderRow(container: view, below: whiteLine, offset: 4,
+            slider1 = sliderRow(container: view, below: whiteLine, offset: 4, id:1,
                         title: "Political stance", left: "LEFT", right: "RIGHT", sliderEnabled: false)
         } else {
-            slider1 = sliderRow(container: view, below: whiteLine, offset: 4,
+            slider1 = sliderRow(container: view, below: whiteLine, offset: 4, id: 1,
                         title: "Political stance", left: "LEFT", right: "RIGHT")
         }
         slider1.tag = 101
                         
         if(secondRow) {
-            sliderRow(container: view, below: slider1, offset: 20,
+            sliderRow(container: view, below: slider1, offset: 20, id: 2,
                         title: "Establishment stance", left: "CRITICAL", right: "PRO",
                         separatorOnTop: true)
         }
@@ -810,7 +894,8 @@ class OnBoardingView3: UIView {
     
     private func createOrangePanel_B(container: UIView,
         topOffset: CGFloat, showSplit: Bool = false, splitState: Bool = false,
-        secondRow: Bool = false, forAnim: Bool = false) -> UIView {
+        secondRow: Bool = false, forAnim: Bool = false, sliderValue1: Int = 50,
+        sliderValue2: Int = 50) -> UIView {
         
         let view = UIView()
         view.backgroundColor = accentOrange
@@ -867,18 +952,28 @@ class OnBoardingView3: UIView {
         
         var slider1: UIView
         if(splitState) {
-            slider1 = sliderRow(container: view, below: whiteLine, offset: 4,
+            slider1 = sliderRow(container: view, below: whiteLine, offset: 4, id:1,
                         title: "Political stance", left: "LEFT", right: "RIGHT", sliderEnabled: false)
         } else {
-            slider1 = sliderRow(container: view, below: whiteLine, offset: 4,
-                        title: "Political stance", left: "LEFT", right: "RIGHT")
+            slider1 = sliderRow(container: view, below: whiteLine, offset: 4, id:1,
+                        title: "Political stance", left: "LEFT", right: "RIGHT",
+                        sliderValue: sliderValue1)
         }
         slider1.tag = 101
                         
         if(secondRow) {
-            sliderRow(container: view, below: slider1, offset: 20,
+            sliderRow(container: view, below: slider1, offset: 20, id:2,
                         title: "Establishment stance", left: "CRITICAL", right: "PRO",
-                        separatorOnTop: true)
+                        separatorOnTop: true, sliderValue: sliderValue2)
+                        
+            let checkbox2 = self.createCheckboxSmall(container: view,
+                    topOffset: 85, trailingOffset: -10, state: false)
+            for sv in checkbox2.subviews {
+                if(sv is UIButton) {
+                    sv.removeFromSuperview()
+                    break
+                }
+            }
         }
                         
         return view
@@ -887,10 +982,11 @@ class OnBoardingView3: UIView {
     
     
     
-    private func sliderRow(container: UIView, below: UIView, offset: CGFloat,
+    private func sliderRow(container: UIView, below: UIView, offset: CGFloat, id: Int,
                             title: String, left: String, right: String,
                             separatorOnTop: Bool = false,
-                            sliderEnabled: Bool = true) -> UIView {
+                            sliderEnabled: Bool = true,
+                            sliderValue: Int = 50) -> UIView {
                             
         let view = UIView()
         //view.backgroundColor = .green
@@ -963,7 +1059,9 @@ class OnBoardingView3: UIView {
         slider.maximumTrackTintColor = UIColor(rgb: 0x913A1F)
         slider.minimumValue = 0
         slider.maximumValue = 99
-        slider.setValue(50, animated: false)
+        slider.tag = 300 + id
+        slider.isContinuous = false
+        slider.setValue(Float(sliderValue), animated: false)
         view.addSubview(slider)
              
         slider.translatesAutoresizingMaskIntoConstraints = false
@@ -975,7 +1073,9 @@ class OnBoardingView3: UIView {
         
         if(!sliderEnabled) {
             slider.thumbTintColor = .clear
-            slider.isEnabled = false
+            slider.isUserInteractionEnabled = false
+            
+            //isEnabled = false
             
             let vLine = UIView()
             vLine.backgroundColor = .white
@@ -1001,6 +1101,9 @@ class OnBoardingView3: UIView {
     }
     
     @objc func sliderOnValueChange(_ sender: UISlider) {
+        //sender.isEnabled = false
+        sender.isUserInteractionEnabled = false
+        
         let views = [self.step3view, self.step4view, self.step5_6view, self.step7view,
                 self.step8view, self.step9view, self.step10view]
         
@@ -1008,14 +1111,18 @@ class OnBoardingView3: UIView {
         
         for v in views {
             if let panel = v.viewWithTag(11), let sliderRow = panel.viewWithTag(101) {
-                for sb in sliderRow.subviews {
-                    if(sb is UISlider) {
-                        let slider = (sb as! UISlider)
+                for sv in sliderRow.subviews {
+                    if(sv is UISlider) {
+                        let slider = (sv as! UISlider)
                         if(slider != sender) {
                             slider.setValue(Float(self.sliderValue), animated: false)
                         } else {
                             if(v == self.step5_6view) {
-                                if(headline2.isHidden) {
+                                if let loadingView = self.headline.viewWithTag(444) {
+                                    loadingView.isHidden = false
+                                }
+                            
+                                /*if(headline2.isHidden) {
                                     self.headline2.alpha = 0.0
                                     self.headline2.isHidden = false
                                     
@@ -1036,7 +1143,7 @@ class OnBoardingView3: UIView {
                                                 }
                                             }
                                         }
-                                }
+                                }*/
                             
                             
                                 
@@ -1051,6 +1158,12 @@ class OnBoardingView3: UIView {
                 }
             }
         }
+        
+        let id = sender.tag - 300
+        let dataDict = [id: self.sliderValue]
+        
+        NotificationCenter.default.post(name: NOTIFICATION_ONBOARDING_SLIDER_CHANGED,
+            object: nil, userInfo: dataDict)
         
     }
     
@@ -1158,11 +1271,18 @@ class OnBoardingView3: UIView {
                 button.bottomAnchor.constraint(equalTo: view.bottomAnchor),
                 button.topAnchor.constraint(equalTo: view.topAnchor),
             ])
-            button.addTarget(self, action: #selector(checkboxOnCheck(_:)), for: .touchUpInside)
-            //button.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+            //button.addTarget(self, action: #selector(checkboxOnCheck(_:)), for: .touchUpInside)
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(checkboxOnCheckFromGesture(_:)))
+            button.addGestureRecognizer(tapGesture)
+            button.backgroundColor = .clear //UIColor.green.withAlphaComponent(0.5)
         }
         
         return view
+    }
+    
+    @objc func checkboxOnCheckFromGesture(_ gesture: UITapGestureRecognizer) {
+        self.checkboxOnCheck(nil)
     }
     
     private func createPrefsButton(container: UIView, below: UIView,
@@ -1206,4 +1326,102 @@ extension OnBoardingView3 {
     @objc func exitButtonOnTap(_ sender: UIButton?) {
         self.delegate?.onBoardingView3Close()
     }
+    
+    private func getNews(index i: Int) -> SimplestNews? {
+        if let news = self.parser {
+            let title = news.getTitle(index: i)
+            let sourceTime = news.getSource(index: i) + " - " + news.getDate(index: i)
+            let imageUrl = news.getIMG(index: i)
+            
+            return SimplestNews(title: title, sourceTime: sourceTime,
+                imageUrl: imageUrl)
+        }
+        return nil
+    }
+    
+    private func showNews(headline: UIView, indexes: [Int]) {
+        let news1 = getNews(index: indexes[0])!
+        let pic1 = headline.viewWithTag(101) as! UIImageView
+        let title1 = headline.viewWithTag(102) as! UILabel
+        let subText = headline.viewWithTag(103) as! UILabel
+        
+        title1.text = news1.title
+        subText.text = news1.sourceTime
+        
+        DispatchQueue.main.async {
+            pic1.contentMode = .scaleAspectFill
+            pic1.sd_setImage(with: URL(string: news1.imageUrl), placeholderImage: nil)
+        }
+        
+        //////////////
+        let news2 = getNews(index: indexes[1])!
+        let pic2 = headline.viewWithTag(201) as! UIImageView
+        let title2 = headline.viewWithTag(202) as! UILabel
+        let subText2 = headline.viewWithTag(203) as! UILabel
+        
+        title2.text = news2.title
+        subText2.text = news2.sourceTime
+        
+        DispatchQueue.main.async {
+            pic2.contentMode = .scaleAspectFill
+            pic2.sd_setImage(with: URL(string: news2.imageUrl), placeholderImage: nil)
+        }
+
+    }
+    
+    @objc func onNewsLoaded() { // on notification received
+        self.showNews(headline: self.headline, indexes: [0, 1])
+        
+        if let loadingView = self.headline.viewWithTag(444) {
+            loadingView.isHidden = true
+        }
+        
+        if(!self.step5_6view.isHidden) {
+            DELAY(0.5) {
+                let nextButton = self.step5_6view.viewWithTag(22) as! UIButton
+                
+                if(nextButton.isHidden) {
+                    nextButton.alpha = 0.0
+                    nextButton.isHidden = false
+                    UIView.animate(withDuration: 0.4) {
+                        nextButton.alpha = 1.0
+                    }
+                }
+            }
+            
+            if let panel = self.step5_6view.viewWithTag(11) {
+                self.setSliderState(panel: panel, value: true)
+            }
+        }
+        
+    }
+    
+    func setSliderState(panel: UIView, value: Bool) {
+        if let sliderRow = panel.viewWithTag(101) {
+            for sv in sliderRow.subviews {
+                if(sv is UISlider) {
+                    sv.isUserInteractionEnabled = value
+                }
+            }
+        }
+        
+        if(panel.superview == self.step10view) {
+            for sv in panel.subviews {
+                if(sv.subviews.count >= 4) {
+                    for component in sv.subviews {
+                        if(component is UISlider) {
+                            component.isUserInteractionEnabled = false
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    func bringAllContentOnTop() {
+        let superView = self.superview!.superview!
+        superView.bringSubviewToFront(self.superview!.superview!)
+    }
+    
 }

@@ -424,16 +424,16 @@ class ContactPage: UIViewController, UITextViewDelegate {
     let textView = UITextView()
     let text = """
 This Improve the News app is published by the non-profit Improve the News Foundation, which is lead by MIT professor Max Tegmark.
-Contact: improvethenews@gmail.com
+Contact: contact@improvethenews.org
 
 If you have feature requests, bug reports or any other feedback on this app, we recommend that you instead send it to us using our feedback form, which makes it easier for us to respond to it.
 """
     let bold = ["What is this?", "How is this funded?", "How does it work?", "Won’t this contribute to filter bubbles?", "What is your privacy policy?", "How can I contact you with feedback?"] as [NSString]
     
-    let paths = ["mailto:improvethenews@gmail.com",
+    let paths = ["mailto:contact@improvethenews.org",
                 "https://docs.google.com/forms/d/e/1FAIpQLSfoGi4VkL99kV4nESvK71k4NgzcVuIo4o-JDrlmBqArLR_IYA/viewform"]
                 
-    let linked = ["improvethenews@gmail.com",
+    let linked = ["contact@improvethenews.org",
                             "feedback form"]
     
     override func viewDidLoad() {
