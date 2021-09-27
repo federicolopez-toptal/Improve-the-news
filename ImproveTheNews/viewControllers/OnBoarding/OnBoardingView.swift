@@ -15,6 +15,7 @@ struct SimplestNews {
     var title: String
     var sourceTime: String
     var imageUrl: String
+    var articleUrl: String
 }
 
 ///////////////////////////////////////////////////////
@@ -499,9 +500,40 @@ class OnBoardingView: UIView {
         splittedView.tag = 777
         splittedView.isHidden = true
         
+        // Buttons (to open news)
+        let link1 = UIButton()
+        link1.backgroundColor = .clear
+        result.addSubview(link1)
+        link1.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            link1.leadingAnchor.constraint(equalTo: pic1.leadingAnchor),
+            link1.topAnchor.constraint(equalTo: pic1.topAnchor),
+            link1.widthAnchor.constraint(equalTo: pic1.widthAnchor),
+            link1.heightAnchor.constraint(equalTo: pic1.heightAnchor)
+        ])
+        link1.tag = 901
+        
+        let link2 = UIButton()
+        link2.backgroundColor = .clear
+        result.addSubview(link2)
+        link2.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            link2.leadingAnchor.constraint(equalTo: pic2.leadingAnchor),
+            link2.topAnchor.constraint(equalTo: pic2.topAnchor),
+            link2.widthAnchor.constraint(equalTo: pic2.widthAnchor),
+            link2.heightAnchor.constraint(equalTo: pic2.heightAnchor)
+        ])
+        link2.tag = 902
         
         return result
     }
+    
+    /*
+    
+    @objc func linkButtonOnTap(_ sender: UIButton) {
+        print("LINK TAP!")
+    }
+    */
     
     static func headlinesType2() -> UIView {
         let result = UIView()
@@ -667,9 +699,10 @@ extension OnBoardingView {
             let title = news.getTitle(index: i)
             let sourceTime = news.getSource(index: i) + " - " + news.getDate(index: i)
             let imageUrl = news.getIMG(index: i)
+            let articleUrl = news.getURL(index: i)
             
             return SimplestNews(title: title, sourceTime: sourceTime,
-                imageUrl: imageUrl)
+                imageUrl: imageUrl, articleUrl: articleUrl)
         }
         return nil
     }

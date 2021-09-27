@@ -96,6 +96,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidLoad() {
     
+        Utils.shared.navController = self.navigationController
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
     
@@ -111,6 +112,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         topicSliders.dismissDelegate = self //!!!
         topicSliders.sliderDelegate = self  //!!!
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(showOnboardingAgain),
             name: NOTIFICATION_SHOW_ONBOARDING, object: nil)

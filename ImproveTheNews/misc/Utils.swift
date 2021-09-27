@@ -25,6 +25,8 @@ class Utils {
     // Current display mode
     var displayMode: DisplayMode = .bright
 
+    // main navigatorController
+    var navController: UINavigationController?
 }
 
 func DARKMODE() -> Bool {
@@ -95,13 +97,15 @@ func INITIAL_VC() -> UIViewController {
 }
 
 func SHOW_ONBOARD() -> Bool {
+    /*
     if let onBoardingValue = UserDefaults.standard.string(forKey: ONBOARDING_ID) {
         return false
     } else {
         return true
     }
+    */
     
-    //return true
+    return true
 }
 
 func API_CALL(topicCode: String, abs: [Int], biasStatus: String,

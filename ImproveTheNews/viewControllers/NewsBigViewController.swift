@@ -62,6 +62,7 @@ class NewsBigViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        Utils.shared.navController = self.navigationController
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 ///////////////////////////////////////////////////////
 let NOTIFICATION_ONBOARDING_SLIDER_CHANGED = Notification.Name("onBoardingSliderChanged")
@@ -38,6 +39,8 @@ class OnBoardingView3: UIView {
     var animExitButton2LC: NSLayoutConstraint?
     
     var sliderValue: CGFloat = 0.0
+    var newsShown = [Int]()
+    var parent: UIView?
     
     let texts = [
         "Stories on your usual news feed come from a variety of sources which you can’t control.",
@@ -67,6 +70,7 @@ class OnBoardingView3: UIView {
     
     ///////////////////////////////////////////////////////
     func insertInto(container: UIView, parser: News?) {
+        self.parent = container
         self.parser = parser
         self.backgroundColor = container.backgroundColor
         
@@ -1332,18 +1336,22 @@ extension OnBoardingView3 {
             let title = news.getTitle(index: i)
             let sourceTime = news.getSource(index: i) + " - " + news.getDate(index: i)
             let imageUrl = news.getIMG(index: i)
+            let articleUrl = news.getURL(index: i)
             
             return SimplestNews(title: title, sourceTime: sourceTime,
-                imageUrl: imageUrl)
+                imageUrl: imageUrl, articleUrl: articleUrl)
         }
         return nil
     }
     
     private func showNews(headline: UIView, indexes: [Int]) {
+        self.newsShown = indexes
+        
         let news1 = getNews(index: indexes[0])!
         let pic1 = headline.viewWithTag(101) as! UIImageView
         let title1 = headline.viewWithTag(102) as! UILabel
         let subText = headline.viewWithTag(103) as! UILabel
+        let link1 = headline.viewWithTag(901) as! UIButton
         
         title1.text = news1.title
         subText.text = news1.sourceTime
@@ -1358,6 +1366,7 @@ extension OnBoardingView3 {
         let pic2 = headline.viewWithTag(201) as! UIImageView
         let title2 = headline.viewWithTag(202) as! UILabel
         let subText2 = headline.viewWithTag(203) as! UILabel
+        let link2 = headline.viewWithTag(902) as! UIButton
         
         title2.text = news2.title
         subText2.text = news2.sourceTime
@@ -1366,7 +1375,21 @@ extension OnBoardingView3 {
             pic2.contentMode = .scaleAspectFill
             pic2.sd_setImage(with: URL(string: news2.imageUrl), placeholderImage: nil)
         }
-
+        
+        link1.addTarget(self, action: #selector(onNewsTap(_:)), for: .touchUpInside)
+        link2.addTarget(self, action: #selector(onNewsTap(_:)), for: .touchUpInside)
+    }
+    
+    @objc func onNewsTap(_ sender: UIButton) {
+        let _index = sender.tag - 900 - 1
+        let index = self.newsShown[_index]
+        
+        var link = self.parser!.getURL(index: index)
+        let title = self.parser!.getTitle(index: index)
+        let markups = self.parser!.getMarkups(index: index)
+        
+        let vc = WebViewController(url: link, title: title, annotations: markups)
+        Utils.shared.navController!.pushViewController(vc, animated: true)
     }
     
     @objc func onNewsLoaded() { // on notification received

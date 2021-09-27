@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let newsAggregator = INITIAL_VC()
         let navController = UINavigationController(rootViewController: newsAggregator)
         window?.rootViewController = navController
-        
+
         // MARK: INCOMPLETE
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "FLI.Mindy-Long.fetchImproveTheNews",
             using: nil) { (task) in
