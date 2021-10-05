@@ -1,4 +1,8 @@
 PODS:
+  - Charts (3.6.0):
+    - Charts/Core (= 3.6.0)
+  - Charts/Core (3.6.0)
+  - Cosmos (23.0.0)
   - Firebase/CoreOnly (7.5.0):
     - FirebaseCore (= 7.5.0)
   - Firebase/Crashlytics (7.5.0):
@@ -32,18 +36,30 @@ PODS:
     - GoogleUtilities/Environment
   - GoogleUtilities/UserDefaults (7.2.2):
     - GoogleUtilities/Logger
+  - LBTATools (1.0.12)
   - nanopb (2.30907.0):
     - nanopb/decode (= 2.30907.0)
     - nanopb/encode (= 2.30907.0)
   - nanopb/decode (2.30907.0)
   - nanopb/encode (2.30907.0)
   - PromisesObjC (1.2.12)
+  - SDWebImage (5.10.4):
+    - SDWebImage/Core (= 5.10.4)
+  - SDWebImage/Core (5.10.4)
+  - SwiftyJSON (5.0.1)
 
 DEPENDENCIES:
+  - Charts
+  - Cosmos
   - Firebase/Crashlytics
+  - LBTATools
+  - SDWebImage
+  - SwiftyJSON
 
 SPEC REPOS:
   trunk:
+    - Charts
+    - Cosmos
     - Firebase
     - FirebaseCore
     - FirebaseCoreDiagnostics
@@ -51,10 +67,15 @@ SPEC REPOS:
     - FirebaseInstallations
     - GoogleDataTransport
     - GoogleUtilities
+    - LBTATools
     - nanopb
     - PromisesObjC
+    - SDWebImage
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
+  Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
+  Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
   Firebase: fd5e4d2b756292c6e7ee6faac1eb320225d6e97e
   FirebaseCore: 06a2b68af8901f2244eb989419eb89edc3789b4d
   FirebaseCoreDiagnostics: 35685db68b11fe7d19d2d8b557fd7e3a56ac81cc
@@ -62,9 +83,12 @@ SPEC CHECKSUMS:
   FirebaseInstallations: a46ae59915f0931e18814164849cd0354bea24ed
   GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
   GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
+  LBTATools: 389a901a01b9a56bea5682c40cd6e23530f40015
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
 
-PODFILE CHECKSUM: bba112d6dce48b5eeab6ffdb62b69ccfad59db1f
+PODFILE CHECKSUM: b918d496b4ac63bd4d8b12ea40426ede0d4a30f1
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.1

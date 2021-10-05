@@ -7,6 +7,11 @@ target 'ImproveTheNews' do
 
   # Pods for ImproveTheNews
   pod 'Firebase/Crashlytics'
+  pod 'Charts'
+  pod 'Cosmos'
+  pod 'LBTATools'
+  pod 'SwiftyJSON'
+  pod 'SDWebImage'
 
   target 'ImproveTheNewsTests' do
     inherit! :search_paths

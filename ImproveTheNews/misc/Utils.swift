@@ -79,12 +79,19 @@ func INITIAL_VC() -> UIViewController {
     }
     Utils.shared.displayMode = displayMode!
     
-    let layout: layoutType?
+    var layout: layoutType?
     if let userLayout = UserDefaults.standard.string(forKey: LOCAL_KEY_LAYOUT) {
         layout = layoutType(rawValue: userLayout)
     } else {
         layout = .denseIntense
     }
+    
+    if(SHOW_ONBOARD()) {
+        layout = .denseIntense
+        UserDefaults.standard.set(layout!.rawValue, forKey: LOCAL_KEY_LAYOUT)
+        UserDefaults.standard.synchronize()
+    }
+    
 
     Utils.shared.currentLayout = layout!
     if(layout == .denseIntense) {
@@ -111,7 +118,9 @@ func SHOW_ONBOARD() -> Bool {
 func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
                 banners: String?, superSliders: String?) -> String {
 
-    var link = "https://www.improvethenews.org/appserver.php/?topic=" + topicCode
+    //var link = "https://www.improvethenews.org/appserver.php/?topic=" + topicCode
+    
+    var link = "https://www.improvemynews.com/appserver.php/?topic=" + topicCode
     link += ".A\(abs[0]).B\(abs[1]).S\(abs[2])"
     link += SliderValues.sharedInstance.getBiasPrefs()
     
@@ -233,10 +242,19 @@ func VALIDATE_PASS(_ pass: String) -> Bool {
 }
 
 func IS_ZOOMED() -> Bool {
+
     let screen = UIScreen.main
-    if(screen.scale == screen.nativeScale) {
-        return false
-    } else {
+    return screen.scale < screen.nativeScale
+    
+    /*
+    if(screen.scale > screen.nativeScale) {
         return true
+    } else {
+        return false
     }
+    */
+   
 }
+
+
+

@@ -223,8 +223,21 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     private func showOnboarding() {
-        NotificationCenter.default.post(name: NOTIFICATION_SHOW_ONBOARDING, object: nil)
-        self.navigationController?.customPopViewController()
+        if(Utils.shared.currentLayout == .denseIntense) {
+            self.navigationController?.customPopViewController()
+            DELAY(0.1) {
+                NotificationCenter.default.post(name: NOTIFICATION_SHOW_ONBOARDING, object: nil)
+            }
+            
+            //print("??? ONBOARDING load!")
+        } else {
+            self.selectLayout(.denseIntense)
+            DELAY(0.8) {
+                NotificationCenter.default.post(name: NOTIFICATION_SHOW_ONBOARDING, object: nil)
+            }
+            
+            //print("??? ONBOARDING load!")
+        }
     }
     
     private func changeDisplayMode() {

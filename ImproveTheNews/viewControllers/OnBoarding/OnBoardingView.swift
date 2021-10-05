@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import SwiftUI
 
 ///////////////////////////////////////////////////////
 let NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED = Notification.Name("forOnboardingNewsLoaded")
+let NOTIFICATION_CLOSE_ONBOARDING_FROM_OUTSIDE = Notification.Name("closeOnboardingFromOutside")
 
 struct SimplestNews {
     var title: String
@@ -34,11 +36,21 @@ class OnBoardingView: UIView {
     var view3 = OnBoardingView3()
     var parser: News?
     
+    var topic: String?
+    var sliderValues: String?
+    var currentStep: logEventStep = .step1_invitation
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
-    init(container: UIView, parser: News, skipFirstStep: Bool = false) {
+    init(container: UIView, parser: News, skipFirstStep: Bool = false,
+        topic: String = "news", sliderValues: String = "") {
+        
+        print("???", "ONBOARDING INIT")
+        self.topic = topic
+        self.sliderValues = sliderValues
+        
         self.parser = parser
         super.init(frame: .zero)
         self.backgroundColor = bgBlue
@@ -61,16 +73,28 @@ class OnBoardingView: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(onNewsLoaded),
             name: NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED, object: nil)
             
+        NotificationCenter.default.addObserver(self, selector: #selector(closeFromOutside),
+            name: NOTIFICATION_CLOSE_ONBOARDING_FROM_OUTSIDE, object: nil)
+            
         if(skipFirstStep) {
             self.view1.isHidden = true
             self.view2.isHidden = false
-            DELAY(2) {
+            self.logEvent(type: .started, step: .step2_lackControl)
+            
+            DELAY(1.0) { // 2
                 self.showView3()
+            }
+            
+            self.alpha = 0.0
+            UIView.animate(withDuration: 0.2) {
+                self.alpha = 1.0
             }
         } else {
             self.alpha = 0.0
             UIView.animate(withDuration: 0.7) {
                 self.alpha = 1.0
+                self.currentStep = .step1_invitation
+                self.logEvent(type: .started, step: .step1_invitation)
             }
         }
     }
@@ -208,17 +232,17 @@ class OnBoardingView: UIView {
     }
     
     @objc func showView2(_ sender: UIButton?) {
+        self.logEvent(type: .completed, step: self.currentStep)
         self.view2.alpha = 0
         self.view2.isHidden = false
         UIView.animate(withDuration: 0.4) {
             self.view2.alpha = 1
         } completion: { _ in
             self.view1.isHidden = true
-            DELAY(1.0) {
+            DELAY(0.5) { // 1
                 self.showView3()
             }
         }
-
     }
     
     @objc func showView3() {
@@ -241,7 +265,9 @@ class OnBoardingView: UIView {
 
     // MARK: - View3 /////////////////////////
     private func createView3() {
-        self.view3.insertInto(container: self, parser: self.parser)
+        self.view3.insertInto(container: self, parser: self.parser,
+            topic: self.topic!, sliderValues: self.sliderValues!)
+        
         self.view3.isHidden = true
         self.view3.delegate = self
     }
@@ -657,6 +683,7 @@ class OnBoardingView: UIView {
 ///////////////////////////////////////////////////////
 extension OnBoardingView: OnBoardingView3Delegate {
     func onBoardingView3Close() {
+        NotificationCenter.default.removeObserver(self)
         self.delegate?.onBoardingClose()
     }
 }
@@ -682,7 +709,9 @@ extension OnBoardingView {
         button.addTarget(self, action: #selector(closeButtonOnTap(_:)), for: .touchUpInside)
     }
     
-    @objc func closeButtonOnTap(_ sender: UIButton) {
+    @objc func closeButtonOnTap(_ sender: UIButton?) {
+        NotificationCenter.default.removeObserver(self)
+        self.logEvent(type: .exited, step: self.currentStep)
         self.delegate?.onBoardingClose()
     }
 
@@ -692,6 +721,16 @@ extension OnBoardingView {
         
         let headline2 = self.view2.viewWithTag(200)!
         self.showNews(headline: headline2, indexes: [2, 3])
+    }
+    
+    @objc func closeFromOutside() {
+        if(!view1.isHidden) {
+            // step 1
+            self.closeButtonOnTap(nil)
+        } else {
+            // step 3 on
+            view3.exitButtonOnTap(nil)
+        }
     }
     
     private func getNews(index i: Int) -> SimplestNews? {
@@ -736,5 +775,87 @@ extension OnBoardingView {
         }
 
     }
+    
+    
+    func logEvent(type: logEventType, step: logEventStep) {
+        OnBoardingView.logEvent(type: type, step: step,
+            topic: self.topic!, sliderValues: self.sliderValues!)
+    }
+    
+    static func logEvent(type: logEventType, step: logEventStep,
+        topic: String, sliderValues: String) {
 
+        let logUrl = "https://www.improvemynews.com/php/util/log.php"
+        
+        /*
+        let json: [String: Any] = [
+            "event": "onboarding_started", //type.rawValue,
+            "userId": "39999999999999999999", //USER_ID(),
+            "sliderValues": sliderValues,
+            "topic": topic,
+            "additionalEvent": "invitation", //step.rawValue,
+            "onboardingVersion": ONBOARDING_VERSION
+        ]
+        */
+        
+        let json: [String: Any] = [
+            "event": type.rawValue,
+            "userId": USER_ID(),
+            "sliderValues": sliderValues,
+            "topic": topic,
+            "additionalEvent": step.rawValue,
+            "onboardingVersion": ONBOARDING_VERSION
+        ]
+        
+        print("???", "ONBOARDING EVENT", type.rawValue, step.rawValue)
+        
+        print("ONBOARDING EVENT", type.rawValue, step.rawValue)
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        let jsonSize = String(jsonData!.count)
+        
+        var request = URLRequest(url: URL(string: logUrl)!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(jsonSize, forHTTPHeaderField: "Content-Length")
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if(error != nil) {
+                print("Error \(error)")
+                return
+            }
+            
+            let statusCode = (response as! HTTPURLResponse).statusCode
+            let text = String(data: data!, encoding: .utf8)
+            
+            if(statusCode==200 && text=="OK") {
+                print("???", "ONBOARDING EVENT completed")
+                print("ONBOARDING EVENT", "log event OK")
+            } else {
+                print("ONBOARDING EVENT", "log event FAIL")
+            }
+        }
+        
+        task.resume()
+    }
+    
+
+}
+
+enum logEventType: String {
+    case started = "onboarding_started"
+    case exited = "onboarding_exited"
+    case completed = "onboarding_step_completed"
+}
+
+enum logEventStep: String {
+    case step1_invitation = "invitation"
+    case step2_lackControl = "lack-control"
+    case step3_takeControl = "take-control"
+    case step4_sliderIntro = "slider-intro"
+    case step4_sliderMoved = "slider-moved"
+    case step5_splitIntro = "split-intro"
+    case step5_splitChecked = "split-activated"
+    case step6_otherSliders = "other-sliders"
 }

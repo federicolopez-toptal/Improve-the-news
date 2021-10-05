@@ -88,6 +88,8 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
             self.navigationController?.popViewController(animated: true)
+            NotificationCenter.default.post(name: NOTIFICATION_CLOSE_ONBOARDING_FROM_OUTSIDE,
+                object: nil)
         }
         
         func insertNewVCInNavigationStack(_ vc: UIViewController) {

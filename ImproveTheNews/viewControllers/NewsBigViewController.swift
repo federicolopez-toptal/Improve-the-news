@@ -80,6 +80,12 @@ class NewsBigViewController: UIViewController {
         self.setUpHorizontalMenu()
         self.setUpBiasButton()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(showPrefsPanelFromTour),
+            name: NOTIFICATION_ONBOARDING_PREFS_PANEL_SHOW, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(hidePrefsPanel),
+            name: NOTIFICATION_ONBOARDING_PREFS_PANEL_HIDE, object: nil)
+            
         NotificationCenter.default.addObserver(self, selector: #selector(showOnboardingAgain),
             name: NOTIFICATION_SHOW_ONBOARDING, object: nil)
         
@@ -99,7 +105,9 @@ class NewsBigViewController: UIViewController {
             name: UIApplication.didEnterBackgroundNotification, object: nil)
             
         if(SHOW_ONBOARD() && self.uniqueID==1) {
-            self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser)
+            self.onBoard = OnBoardingView(container: self.view,
+                parser: self.newsParser,
+                topic: self.topic, sliderValues: self.getSliderValues())
             self.onBoard?.delegate = self
             
             if let obView = self.onBoard {
@@ -227,6 +235,15 @@ class NewsBigViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         navigationController?.navigationBar.isTranslucent = false
+        
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        }
+        
         
         //navigationController?.navigationBar.barStyle = .black
         let _textColor = DARKMODE() ? UIColor.white : textBlack
@@ -466,16 +483,16 @@ class NewsBigViewController: UIViewController {
     
     // MARK: - Some action(s)
     @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
-        if(self.onBoard == nil) {
+        //if(self.onBoard == nil) {
             navigationController?.customPushViewController(SectionsViewController())
-        }
+        //}
     }
     
     @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
-        if(self.onBoard == nil) {
+        //if(self.onBoard == nil) {
             let searchvc = SearchViewController()
             navigationController?.pushViewController(searchvc, animated: true)
-        }
+        //}
     }
     
     @objc func refresh(_ sender: UIRefreshControl!) {
@@ -556,6 +573,8 @@ class NewsBigViewController: UIViewController {
                 banner = value
             }
         }
+        if(banner == nil){ banner = "" }
+        banner! += NewsViewController.get_vParams()
         
         var superSlider: String?
         if(!self.superSliderStr.isEmpty){
@@ -1078,9 +1097,57 @@ extension NewsBigViewController: OnBoardingViewDelegate {
     }
     
     @objc func showOnboardingAgain() {
-        self.navigationController?.popViewController(animated: false)
-        self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser, skipFirstStep: true)
+        self.onBoard?.removeFromSuperview()
+        self.onBoard = nil
+        //self.navigationController?.popViewController(animated: false)
+        
+        self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser,
+        skipFirstStep: true, topic: self.topic, sliderValues: self.getSliderValues())
         self.onBoard?.delegate = self
     }
     
+    func getSliderValues() -> String {
+        var result = SliderValues.sharedInstance.getBiasPrefs()
+        result = result.replacingOccurrences(of: "&sliders=", with: "")
+        
+        var biasStatus = self.biasSliders.status
+        biasStatus = biasStatus.replacingOccurrences(of: "SL", with: "SS")
+        result += biasStatus
+        
+        var displayMode = "0"
+        if(!DARKMODE()){ displayMode = "1" }
+        if(Utils.shared.currentLayout == .denseIntense) {
+            result += "LA0" + displayMode
+        } else if(Utils.shared.currentLayout == .textOnly) {
+            result += "LA1" + displayMode
+        } else {
+            result += "LA2" + displayMode
+        }
+        
+        for bannerID in BannerView.bannerHeights.keys {
+            let key = "banner_apiParam_" + bannerID
+            if let value = UserDefaults.standard.string(forKey: key) {
+                result += value
+                break
+            }
+        }
+        result += NewsViewController.get_vParams()
+        
+        return result
+    }
+    
+    @objc func hidePrefsPanel() {
+        let status = self.biasSliders.status
+        
+        if(status != "SL00") {
+            // opened
+            self.biasSliders.handleDismiss()
+        }
+    }
+    
+    @objc func showPrefsPanelFromTour() {
+        DELAY(0.2) {
+            self.configureBiasSliders()
+        }
+    }
 }

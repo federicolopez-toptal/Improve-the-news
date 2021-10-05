@@ -12,6 +12,8 @@ import SwiftUI
 ///////////////////////////////////////////////////////
 let NOTIFICATION_ONBOARDING_SLIDER_CHANGED = Notification.Name("onBoardingSliderChanged")
 let NOTIFICATION_ONBOARDING_SPLIT_CHANGED = Notification.Name("onBoardingSplitChanged")
+let NOTIFICATION_ONBOARDING_PREFS_PANEL_SHOW = Notification.Name("onBoardingPrefsPanelShow")
+let NOTIFICATION_ONBOARDING_PREFS_PANEL_HIDE = Notification.Name("onBoardingPrefsPanelHide")
 
 ///////////////////////////////////////////////////////
 protocol OnBoardingView3Delegate {
@@ -23,7 +25,12 @@ class OnBoardingView3: UIView {
 
     var delegate: OnBoardingView3Delegate?
     var parser: News?
-    
+
+    var topic: String?
+    var sliderValues: String?
+    var currentStep: logEventStep = .step1_invitation
+    var splitState = false
+
     var headline = UIView()
     var headline2 = UIView()
     var headline3 = UIView()
@@ -69,7 +76,12 @@ class OnBoardingView3: UIView {
     }
     
     ///////////////////////////////////////////////////////
-    func insertInto(container: UIView, parser: News?) {
+    func insertInto(container: UIView, parser: News?,
+        topic: String = "news", sliderValues: String = "") {
+        
+        self.topic = topic
+        self.sliderValues = sliderValues
+        
         self.parent = container
         self.parser = parser
         self.backgroundColor = container.backgroundColor
@@ -199,9 +211,13 @@ class OnBoardingView3: UIView {
     }
     
     func showStep3() {
+        self.currentStep = .step2_lackControl
         self.step3view.isHidden = false
         self.step3view.alpha = 1
         self.bringAllContentOnTop()
+        
+        NotificationCenter.default.post(name: NOTIFICATION_ONBOARDING_PREFS_PANEL_HIDE,
+                object: nil)
     }
     
     func showStep3_animated() {
@@ -238,6 +254,9 @@ class OnBoardingView3: UIView {
     
     @objc func showStep4(_ sender: UIButton?) {
     
+        self.logEvent(type: .completed, step: .step2_lackControl)
+        self.currentStep = .step3_takeControl
+        
         self.step4view.alpha = 0
         self.step4view.isHidden = false
         
@@ -281,6 +300,9 @@ class OnBoardingView3: UIView {
     
     @objc func showStep5_6(_ sender: UIButton?) {
     
+        self.logEvent(type: .completed, step: .step3_takeControl)
+        self.currentStep = .step4_sliderIntro
+        
         self.step5_6view.alpha = 0
         self.step5_6view.isHidden = false
         
@@ -324,6 +346,9 @@ class OnBoardingView3: UIView {
     }
     
     @objc func showStep7(_ sender: UIButton?) {
+        self.logEvent(type: .completed, step: .step4_sliderIntro)
+        self.currentStep = .step5_splitIntro
+        
         self.step7view.alpha = 0
         self.step7view.isHidden = false
         
@@ -333,40 +358,68 @@ class OnBoardingView3: UIView {
             self.step5_6view.isHidden = true
             self.bringAllContentOnTop()
             
-             if let panel = self.step7view.viewWithTag(11) {
+            /*
+            if let panel = self.step7view.viewWithTag(11) {
                 self.setSliderState(panel: panel, value: false)
             }
+            */
         }
     }
     
     @objc func checkboxOnCheck(_ sender: UIButton?) {
+        self.logEvent(type: .completed, step: .step5_splitChecked)
+        self.splitState = !self.splitState
+        
+        var parent = self.step7view
+        if(!self.step8view.isHidden) {
+            parent = self.step8view
+        } else if(!self.step9view.isHidden){
+            parent = self.step9view
+        }
+        
         // checkbox large
-        let checkBox = self.step7view.viewWithTag(22)!
-        for sv in checkBox.subviews {
-            if(sv is UIImageView) {
-                let img = (sv as! UIImageView)
-                img.image = UIImage(named: "onboardingCheckON.png")
-            }
-            
-            if(sv is UIButton) {
-                let button = (sv as! UIButton)
-                button.isEnabled = false
+        if let checkBox = parent.viewWithTag(22) {
+            for sv in checkBox.subviews {
+                if(sv is UIImageView) {
+                    let img = (sv as! UIImageView)
+                    if(self.splitState) {
+                        img.image = UIImage(named: "onboardingCheckON.png")
+                    } else {
+                        img.image = UIImage(named: "onboardingCheckOFF.png")
+                    }
+                    
+                }
+                
+                /*if(sv is UIButton) {
+                    let button = (sv as! UIButton)
+                    button.isEnabled = self.splitState
+                }*/
             }
         }
         
+        
         // checkbox small
-        let panel = self.step7view.viewWithTag(11)!
+        let panel = parent.viewWithTag(11)!
         let checkBox2 = panel.viewWithTag(212)!
         for sv in checkBox2.subviews {
             if(sv is UIImageView) {
                 let img = (sv as! UIImageView)
-                img.image = UIImage(systemName: "checkmark.square")
+                
+                if(self.splitState) {
+                    img.image = UIImage(systemName: "checkmark.square")
+                } else {
+                    img.image = UIImage(systemName: "square")
+                }
+                
+                img.tintColor = .black
             }
             
+            /*
             if(sv is UIButton) {
                 let button = (sv as! UIButton)
-                button.isEnabled = false
+                button.isEnabled = self.splitState
             }
+            */
         }
         
         
@@ -375,19 +428,38 @@ class OnBoardingView3: UIView {
         }
         
         if let splittedView = self.headline.viewWithTag(777) {
-            if(splittedView.isHidden) {
+            if(splittedView.isHidden && self.splitState) {
                 splittedView.alpha = 0
                 splittedView.isHidden = false
                 UIView.animate(withDuration: 0.4) {
                     splittedView.alpha = 1.0
                 }
             }
+            
+            if(!splittedView.isHidden && !self.splitState) {
+                splittedView.alpha = 1.0
+                splittedView.isHidden = false
+                UIView.animate(withDuration: 0.4) {
+                    splittedView.alpha = 0.0
+                } completion: { _ in
+                    splittedView.isHidden = true
+                }
+                
+            }
+        }
+        
+        if(!self.step8view.isHidden) {
+            self.setSliderSplit(parent: self.step8view, state: self.splitState)
+        } else if(!self.step9view.isHidden) {
+            self.setSliderSplit(parent: self.step9view, state: self.splitState)
         }
         
         NotificationCenter.default.post(name: NOTIFICATION_ONBOARDING_SPLIT_CHANGED,
-            object: nil, userInfo: [0: true])
+            object: nil, userInfo: [0: self.splitState])
         
-        self.showStep8(nil)
+        if(self.step8view.isHidden && self.step9view.isHidden) {
+            self.showStep8(nil)
+        }
     }
     
     // MARK: - Step 8 /////////////////////////
@@ -442,7 +514,7 @@ class OnBoardingView3: UIView {
             self.headline2.isHidden = true
             */
             self.bringAllContentOnTop()
-            DELAY(3.0) {
+            DELAY(1.0) {
                 //self.showStep9(nil)
                 //print("## aparecer NEXT")
                 
@@ -487,6 +559,27 @@ class OnBoardingView3: UIView {
     }
     
     @objc func showStep9(_ sender: UIButton?) {
+        self.logEvent(type: .completed, step: .step5_splitIntro)
+        self.currentStep = .step6_otherSliders
+    
+        // update split checkbox
+        let panel = self.step9view.viewWithTag(11)!
+        let checkBox2 = panel.viewWithTag(212)!
+        for sv in checkBox2.subviews {
+            if(sv is UIImageView) {
+                let img = (sv as! UIImageView)
+                
+                if(self.splitState) {
+                    img.image = UIImage(systemName: "checkmark.square")
+                } else {
+                    img.image = UIImage(systemName: "square")
+                }
+                
+                img.tintColor = .black
+            }
+        }
+        self.setSliderSplit(parent: self.step9view, state: self.splitState)
+    
         self.step9view.alpha = 0.0
         self.step9view.isHidden = false
         
@@ -519,7 +612,7 @@ class OnBoardingView3: UIView {
         }
         let panel = self.createOrangePanel_B(container: self.step10view,
                     topOffset: self.panelTopOffset, showSplit: true,
-                    splitState: true, secondRow: true, forAnim: true,
+                    splitState: true, secondRow: false, forAnim: true,
                     sliderValue2: PE)
         panel.tag = 11
         self.setSliderState(panel: panel, value: false)
@@ -560,33 +653,62 @@ class OnBoardingView3: UIView {
             self.layoutIfNeeded()
         } completion: { _ in
         }*/
-        
+        self.setSliderSplit(parent: self.step10view, state: self.splitState)
     
         self.step10view.alpha = 0.0
         self.step10view.isHidden = false
         //self.headline.isHidden = false
         //self.headline.alpha = 0.0
         
-        UIView.animate(withDuration: 0.4) {
+        // update split checkbox
+        let panel = self.step10view.viewWithTag(11)!
+        let checkBox2 = panel.viewWithTag(212)!
+        for sv in checkBox2.subviews {
+            if(sv is UIImageView) {
+                let img = (sv as! UIImageView)
+                
+                if(self.splitState) {
+                    img.image = UIImage(systemName: "checkmark.square")
+                } else {
+                    img.image = UIImage(systemName: "square")
+                }
+                
+                img.tintColor = .black
+            }
+        }
+        
+        
+        
+        UIView.animate(withDuration: 0.2) {
             self.step10view.alpha = 1.0
             //self.headline.alpha = 1.0
             //self.headline2.alpha = 0.0
         } completion: { _ in
             let nextButton = self.step10view.viewWithTag(797) as! UIView
             
+            var movement: CGFloat = 100
+            if(SAFE_AREA()!.bottom>0){ movement += 15 }
+            
             self.step9view.isHidden = true
-            self.animPanel02LC?.constant -= 80
+            self.animPanel02LC?.constant += movement
             //self.headline2.alpha = 1.0
             //self.headline2.isHidden = true
             self.bringAllContentOnTop()
             
-            UIView.animate(withDuration: 0.4) {
-                if(IS_ZOOMED()){ nextButton.alpha = 0 }
+            UIView.animate(withDuration: 0.3) {
+                //if(IS_ZOOMED()){ nextButton.alpha = 0 }
+                
+                nextButton.alpha = 0
+                
+                self.exitButtonOnTap(nil)
+                self.logEvent(type: .completed, step: .step6_otherSliders)
+                    
                 self.layoutIfNeeded()
             } completion: { _ in
-                DELAY(5.0) {
-                    self.exitButtonOnTap(nil)
-                }
+                //DELAY(5.0) {
+                NotificationCenter.default.post(name: NOTIFICATION_ONBOARDING_PREFS_PANEL_SHOW,
+                object: nil)
+                //}
             }
         }
     }
@@ -702,7 +824,9 @@ class OnBoardingView3: UIView {
         label.textAlignment = .center
         label.textColor = UIColor(rgb: 0x93A0B4)
         label.font = UIFont(name: "Roboto-Regular", size: 20)
-        if(IS_ZOOMED()){ label.font = UIFont(name: "Roboto-Regular", size: 15) }
+        if(IS_ZOOMED()){
+            label.font = UIFont(name: "Roboto-Regular", size: 15)
+        }
         container.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -892,7 +1016,11 @@ class OnBoardingView3: UIView {
                         title: "Establishment stance", left: "CRITICAL", right: "PRO",
                         separatorOnTop: true)
         }
-                        
+                
+                
+        let smallCheckbox = view.viewWithTag(212)!
+        view.bringSubviewToFront(smallCheckbox)
+                
         return view
     }
     
@@ -979,7 +1107,12 @@ class OnBoardingView3: UIView {
                 }
             }
         }
-                        
+            
+        if(showSplit) {
+            let smallCheckbox = view.viewWithTag(212)!
+            view.bringSubviewToFront(smallCheckbox)
+        }
+        
         return view
     }
     
@@ -1079,9 +1212,8 @@ class OnBoardingView3: UIView {
             slider.thumbTintColor = .clear
             slider.isUserInteractionEnabled = false
             
-            //isEnabled = false
-            
             let vLine = UIView()
+            vLine.tag = 74
             vLine.backgroundColor = .white
             slider.addSubview(vLine)
             vLine.translatesAutoresizingMaskIntoConstraints = false
@@ -1108,6 +1240,7 @@ class OnBoardingView3: UIView {
         //sender.isEnabled = false
         sender.isUserInteractionEnabled = false
         
+        self.logEvent(type: .completed, step: .step4_sliderMoved)
         let views = [self.step3view, self.step4view, self.step5_6view, self.step7view,
                 self.step8view, self.step9view, self.step10view]
         
@@ -1121,7 +1254,7 @@ class OnBoardingView3: UIView {
                         if(slider != sender) {
                             slider.setValue(Float(self.sliderValue), animated: false)
                         } else {
-                            if(v == self.step5_6view) {
+                            if(v==self.step5_6view || v==self.step7view || v==self.step8view || v==self.step9view) {
                                 if let loadingView = self.headline.viewWithTag(444) {
                                     loadingView.isHidden = false
                                 }
@@ -1265,7 +1398,7 @@ class OnBoardingView3: UIView {
             label.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 5),
         ])
         
-        if(!state) {
+        //if(!state) {
             let button = UIButton(type: .system)
             view.addSubview(button)
             button.translatesAutoresizingMaskIntoConstraints = false
@@ -1275,15 +1408,18 @@ class OnBoardingView3: UIView {
                 button.bottomAnchor.constraint(equalTo: view.bottomAnchor),
                 button.topAnchor.constraint(equalTo: view.topAnchor),
             ])
-            //button.addTarget(self, action: #selector(checkboxOnCheck(_:)), for: .touchUpInside)
+            button.addTarget(self, action: #selector(checkboxOnCheck(_:)), for: .touchUpInside)
             
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(checkboxOnCheckFromGesture(_:)))
             button.addGestureRecognizer(tapGesture)
-            button.backgroundColor = .clear //UIColor.green.withAlphaComponent(0.5)
-        }
+            button.backgroundColor = UIColor.green.withAlphaComponent(0.0)
+            
+            //button.backgroundColor = .clear
+        //}
         
         return view
     }
+    
     
     @objc func checkboxOnCheckFromGesture(_ gesture: UITapGestureRecognizer) {
         self.checkboxOnCheck(nil)
@@ -1327,7 +1463,11 @@ class OnBoardingView3: UIView {
 
 extension OnBoardingView3 {
     // Event(s)
+    
     @objc func exitButtonOnTap(_ sender: UIButton?) {
+        print("LIST TAP close view 3")
+        NotificationCenter.default.removeObserver(self)
+        self.logEvent(type: .exited, step: self.currentStep)
         self.delegate?.onBoardingView3Close()
     }
     
@@ -1417,7 +1557,47 @@ extension OnBoardingView3 {
             }
         }
         
+        if(!self.step7view.isHidden) {
+            if let panel = self.step7view.viewWithTag(11) {
+                self.setSliderState(panel: panel, value: true)
+            }
+        } else if(!self.step8view.isHidden) {
+            if let panel = self.step8view.viewWithTag(11) {
+                self.setSliderState(panel: panel, value: true)
+            }
+        } else if(!self.step9view.isHidden) {
+            if let panel = self.step9view.viewWithTag(11) {
+                self.setSliderState(panel: panel, value: true)
+            }
+        }
+        
     }
+    
+    
+    func setSliderSplit(parent: UIView, state: Bool) {
+        let panel = parent.viewWithTag(11)!
+        
+        if let sliderRow = panel.viewWithTag(101) {
+            for sv in sliderRow.subviews {
+                if(sv is UISlider) {
+                    let slider = sv as! UISlider
+                    let vLine = slider.viewWithTag(74)!
+                    
+                    if(state) {
+                        slider.thumbTintColor = .clear
+                        slider.isUserInteractionEnabled = false
+                        vLine.isHidden = false
+                    } else {
+                        slider.thumbTintColor = .white
+                        slider.isUserInteractionEnabled =  true
+                        vLine.isHidden = true
+                    }
+                }
+            }
+        }
+        
+    }
+    
     
     func setSliderState(panel: UIView, value: Bool) {
         if let sliderRow = panel.viewWithTag(101) {
@@ -1445,6 +1625,11 @@ extension OnBoardingView3 {
     func bringAllContentOnTop() {
         let superView = self.superview!.superview!
         superView.bringSubviewToFront(self.superview!.superview!)
+    }
+    
+    func logEvent(type: logEventType, step: logEventStep) {
+        OnBoardingView.logEvent(type: type, step: step,
+            topic: self.topic!, sliderValues: self.sliderValues!)
     }
     
 }

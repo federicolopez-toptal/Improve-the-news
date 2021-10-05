@@ -113,9 +113,16 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         topicSliders.dismissDelegate = self //!!!
         topicSliders.sliderDelegate = self  //!!!
         
+        NotificationCenter.default.addObserver(self, selector: #selector(showPrefsPanelFromTour),
+            name: NOTIFICATION_ONBOARDING_PREFS_PANEL_SHOW, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(showOnboardingAgain),
+        NotificationCenter.default.addObserver(self, selector: #selector(hidePrefsPanel),
+            name: NOTIFICATION_ONBOARDING_PREFS_PANEL_HIDE, object: nil)
+        
+        if(self.uniqueID==1) {
+            NotificationCenter.default.addObserver(self, selector: #selector(showOnboardingAgain),
             name: NOTIFICATION_SHOW_ONBOARDING, object: nil)
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(setUpNavBar),
             name: NOTIFICATION_UPDATE_NAVBAR, object: nil)
@@ -207,7 +214,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             name: UIApplication.didEnterBackgroundNotification, object: nil)
             
         if(SHOW_ONBOARD() && self.uniqueID==1) {
-            self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser)
+            self.onBoard = OnBoardingView(container: self.view,
+                parser: self.newsParser,
+                topic: self.topic,
+                sliderValues: self.getSliderValues())
             self.onBoard?.delegate = self
             
             if let obView = self.onBoard {
@@ -359,6 +369,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 banner = value
             }
         }
+        if(banner == nil){ banner = "" }
+        banner! += NewsViewController.get_vParams()
         
         var superSlider: String?
         if(!self.superSliderStr.isEmpty){
@@ -624,6 +636,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         navigationController?.navigationBar.isTranslucent = false
         
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        }
+        
         //navigationController?.navigationBar.barStyle = .black
         let _textColor = DARKMODE() ? UIColor.white : textBlack
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
@@ -703,6 +723,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
         navigationController?.navigationBar.isTranslucent = false
+        
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        }
         
         //navigationController?.navigationBar.barStyle = .black
         let _textColor = DARKMODE() ? UIColor.white : textBlack
@@ -798,16 +826,16 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }}
     
     @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
-        if(self.onBoard == nil) {
+        //if(self.onBoard == nil) {
             let searchvc = SearchViewController()
             navigationController?.pushViewController(searchvc, animated: true)
-        }
+        //}
     }
 
     @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
-        if(self.onBoard == nil) {
+        //if(self.onBoard == nil) {
             navigationController?.customPushViewController(SectionsViewController())
-        }
+        //}
     }
     
     // MARK: - misc
@@ -2451,11 +2479,98 @@ extension NewsViewController: OnBoardingViewDelegate {
     }
     
     @objc func showOnboardingAgain() {
-        self.navigationController?.popViewController(animated: false)
+        self.onBoard?.removeFromSuperview()
+        self.onBoard = nil
+        //self.navigationController?.popViewController(animated: false)
+        
         self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser,
-            skipFirstStep: true)
+            skipFirstStep: true, topic: self.topic, sliderValues: self.getSliderValues())
             
         self.onBoard?.delegate = self
     }
+    
+    
+    static func get_vParams() -> String {
+        var result = ""
+        
+        var vKeys = [
+            "VA": "appCfg_showFlags",
+            "VB": "appCfg_showStance",
+            "VC": "appCfg_stancePopup",
+            "VM": "appCfg_starRatings"
+        ]
+        
+        for (vKey, vValue) in vKeys {
+            var vText = vKey
+            
+            if let _value = UserDefaults.standard.value(forKey: vValue) as? Bool {
+                if(_value) {
+                    vText += "00"
+                } else {
+                    vText += "01"
+                }
+            } else {
+                vText += "00"
+            }
+            
+            result += vText
+        }
+        
+        // version
+        result += "VE3"
+        var version = Bundle.main.releaseVersionNumber!
+        if(version.count>=3) {
+            let minorVersion = version[2]
+            result += String(minorVersion)
+        } else {
+            result += "0"
+        }
 
+        return result
+    }
+    
+    func getSliderValues() -> String {
+        var result = SliderValues.sharedInstance.getBiasPrefs()
+        result = result.replacingOccurrences(of: "&sliders=", with: "")
+        
+        var biasStatus = self.biasSliders.status
+        biasStatus = biasStatus.replacingOccurrences(of: "SL", with: "SS")
+        result += biasStatus
+        
+        var displayMode = "0"
+        if(!DARKMODE()){ displayMode = "1" }
+        if(Utils.shared.currentLayout == .denseIntense) {
+            result += "LA0" + displayMode
+        } else if(Utils.shared.currentLayout == .textOnly) {
+            result += "LA1" + displayMode
+        } else {
+            result += "LA2" + displayMode
+        }
+        
+        for bannerID in BannerView.bannerHeights.keys {
+            let key = "banner_apiParam_" + bannerID
+            if let value = UserDefaults.standard.string(forKey: key) {
+                result += value
+                break
+            }
+        }
+        result += NewsViewController.get_vParams()
+        
+        return result
+    }
+
+    @objc func hidePrefsPanel() {
+        let status = self.biasSliders.status
+        
+        if(status != "SL00") {
+            // opened
+            self.biasSliders.handleDismiss()
+        }
+    }
+    
+    @objc func showPrefsPanelFromTour() {
+        //DELAY(0.2) {
+            self.configureBiasSliders()
+        //}
+    }
 }

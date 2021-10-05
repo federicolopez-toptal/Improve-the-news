@@ -45,7 +45,7 @@ let APP_CFG_SHOW_PIE_CHART = false
 let APP_CFG_SHOW_SUPER_SLIDERS = false
 
 // onboarding
-let ONBOARDING_VERSION = "01"
+let ONBOARDING_VERSION = "v1"
 let ONBOARDING_ID = "onboarding " + ONBOARDING_VERSION
     
     
