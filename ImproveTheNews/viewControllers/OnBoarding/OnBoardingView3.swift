@@ -700,7 +700,7 @@ class OnBoardingView3: UIView {
                 
                 nextButton.alpha = 0
                 
-                self.exitButtonOnTap(nil)
+                self.exitButtonOnTap2(logEvent: false)
                 self.logEvent(type: .completed, step: .step6_otherSliders)
                     
                 self.layoutIfNeeded()
@@ -1465,9 +1465,14 @@ extension OnBoardingView3 {
     // Event(s)
     
     @objc func exitButtonOnTap(_ sender: UIButton?) {
-        print("LIST TAP close view 3")
+        self.exitButtonOnTap2(logEvent: true)
+    }
+    
+    func exitButtonOnTap2(logEvent: Bool) {
         NotificationCenter.default.removeObserver(self)
-        self.logEvent(type: .exited, step: self.currentStep)
+        if(logEvent) {
+            self.logEvent(type: .exited, step: self.currentStep)
+        }
         self.delegate?.onBoardingView3Close()
     }
     

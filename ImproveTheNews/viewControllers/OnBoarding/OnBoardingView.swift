@@ -782,40 +782,83 @@ extension OnBoardingView {
             topic: self.topic!, sliderValues: self.sliderValues!)
     }
     
+    
+    static func stepToNumber(_ step: logEventStep, offset: Int = 0) -> String {
+        var value = 0
+        switch step {
+            case .step1_invitation:
+                value = 1
+            case .step2_lackControl:
+                value = 2
+            case .step3_takeControl:
+                value = 3
+            case .step4_sliderIntro:
+                value = 4
+                    case .step4_sliderMoved:
+                    value = 4
+            case .step5_splitIntro:
+                value = 5
+                    case .step5_splitChecked:
+                    value = 5
+            case .step6_otherSliders:
+                value = 6
+        }
+        
+        if(offset>0) {
+            value += offset
+            if(value>6){ value=6 }
+        }
+        
+        return String(value)
+    }
+    static func OBparam(_ event: logEventType, _ step: logEventStep) -> String {
+        
+        if(step == .step4_sliderMoved || step == .step5_splitChecked) {
+            return OB_PARAM()
+        } else {
+            var ob = "oB"
+            if(event == .exited) { ob += "1" + OnBoardingView.stepToNumber(step) }
+            else if(event == .started) { ob += "0" + OnBoardingView.stepToNumber(step) }
+            else if(event == .completed) {
+                if(step == .step6_otherSliders) {
+                    ob += "1"
+                } else {
+                    ob += "0"
+                }
+                ob += OnBoardingView.stepToNumber(step, offset: 1)
+            }
+            
+            SET_OB_PARAM(ob)
+            return ob
+        }
+    }
+    
     static func logEvent(type: logEventType, step: logEventStep,
         topic: String, sliderValues: String) {
 
-        let logUrl = "https://www.improvemynews.com/php/util/log.php"
-        
-        /*
-        let json: [String: Any] = [
-            "event": "onboarding_started", //type.rawValue,
-            "userId": "39999999999999999999", //USER_ID(),
-            "sliderValues": sliderValues,
-            "topic": topic,
-            "additionalEvent": "invitation", //step.rawValue,
-            "onboardingVersion": ONBOARDING_VERSION
-        ]
-        */
+        let sliderValues2 = sliderValues + OnBoardingView.OBparam(type, step)
+
+        //let logUrl = "https://www.improvemynews.com/php/util/log.php"
+        let logUrl = "https://www.improvethenews.org/php/util/log.php"
         
         let json: [String: Any] = [
             "event": type.rawValue,
             "userId": USER_ID(),
-            "sliderValues": sliderValues,
+            "sliderValues": sliderValues2,
             "topic": topic,
             "additionalEvent": step.rawValue,
             "onboardingVersion": ONBOARDING_VERSION
         ]
         
         print("???", "ONBOARDING EVENT", type.rawValue, step.rawValue)
-        
-        print("ONBOARDING EVENT", type.rawValue, step.rawValue)
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
         let jsonSize = String(jsonData!.count)
+        print("???", "ONBOARDING EVENT size", jsonSize)
+        print("???", "ONBOARDING sliderValues", sliderValues2)
         
         var request = URLRequest(url: URL(string: logUrl)!)
         request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        //request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(jsonSize, forHTTPHeaderField: "Content-Length")
         request.httpBody = jsonData
@@ -826,15 +869,19 @@ extension OnBoardingView {
                 return
             }
             
-            let statusCode = (response as! HTTPURLResponse).statusCode
-            let text = String(data: data!, encoding: .utf8)
-            
-            if(statusCode==200 && text=="OK") {
-                print("???", "ONBOARDING EVENT completed")
-                print("ONBOARDING EVENT", "log event OK")
+            if let _response = response as? HTTPURLResponse, let _data = data {
+                let statusCode = _response.statusCode
+                let text = String(data: _data, encoding: .utf8)
+                
+                if(statusCode==200 && text=="OK") {
+                    print("???", "ONBOARDING EVENT completed")
+                } else {
+                    print("??? ONBOARDING EVENT", "log event FAIL")
+                }
             } else {
-                print("ONBOARDING EVENT", "log event FAIL")
+                print("??? ONBOARDING EVENT", "log event FAIL")
             }
+            
         }
         
         task.resume()
