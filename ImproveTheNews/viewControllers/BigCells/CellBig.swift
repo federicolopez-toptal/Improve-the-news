@@ -52,6 +52,10 @@ class CellBig: UITableViewCell {
                 }
             }
         }
+        
+        if(IS_ZOOMED()) {
+            self.sourceLabel.font = UIFont(name: "Poppins-SemiBold", size: 13)
+        }
     }
     
 }

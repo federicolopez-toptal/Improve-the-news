@@ -837,6 +837,8 @@ extension OnBoardingView {
         topic: String, sliderValues: String) {
 
         let sliderValues2 = sliderValues + OnBoardingView.OBparam(type, step)
+        let v = "I" + Bundle.main.releaseVersionNumber!
+        let dev = UIDevice.current.modelName.replacingOccurrences(of: " ", with: "_")
 
         //let logUrl = "https://www.improvemynews.com/php/util/log.php"
         let logUrl = "https://www.improvethenews.org/php/util/log.php"
@@ -847,7 +849,9 @@ extension OnBoardingView {
             "sliderValues": sliderValues2,
             "topic": topic,
             "additionalEvent": step.rawValue,
-            "onboardingVersion": ONBOARDING_VERSION
+            "onboardingVersion": ONBOARDING_VERSION,
+            "v": v,
+            "dev": dev
         ]
         
         print("???", "ONBOARDING EVENT", type.rawValue, step.rawValue)

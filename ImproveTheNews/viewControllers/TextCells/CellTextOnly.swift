@@ -32,6 +32,13 @@ class CellTextOnly: UITableViewCell {
         if(!DARKMODE()) {
             self.contentView.subviews.last?.backgroundColor = .black
         }
+        
+        //self.contentLabel.font = UIFont(name: "Poppins-SemiBold", size: 13)
+        //self.contentLabel.minimumScaleFactor = 0.5
+        
+        if(IS_ZOOMED()) {
+            self.sourceLabel.font = UIFont(name: "Poppins-SemiBold", size: 11.5)
+        }
     }
     
 }

@@ -54,6 +54,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         var navBarFrame = CGRect.zero
     // -----------
     var firstTime = true
+    var scrollToTopOnLoad = true
     let pieChartVC = PieChartViewController()
     
     let shadeView = UIView()
@@ -481,9 +482,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         NotificationCenter.default.post(name: NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED, object: nil)
         
-        UIView.animate(withDuration: 0.5, animations: {
-            self.collectionView.contentOffset.y = 0
-        })
+        if(self.scrollToTopOnLoad) {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.collectionView.contentOffset.y = 0
+            })
+        }
+        self.scrollToTopOnLoad = true
     }
     
     func resendRequest() {
@@ -1144,6 +1148,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         biasSliders.showLoading(true)
         
         DispatchQueue.main.async {
+            self.scrollToTopOnLoad = false
             self.loadArticles()
             self.reload()
 

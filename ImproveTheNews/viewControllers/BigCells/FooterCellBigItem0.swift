@@ -33,6 +33,11 @@ class FooterCellBigItem0: UITableViewHeaderFooterView {
         topicLabel.textColor = accentOrange
         
         self.centeredContainerView.backgroundColor = .clear
+        
+        if(IS_ZOOMED()) {
+            moreLabel.font = UIFont(name: "PTSerif-Bold", size: 22)
+            topicLabel.font = UIFont(name: "PTSerif-Bold", size: 22)
+        }
     }
     
     func setTopic(_ topic: String) {

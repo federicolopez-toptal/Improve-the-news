@@ -51,6 +51,11 @@ class FooterCellBig: UITableViewHeaderFooterView {
                 }
             }
         }
+        
+        if(IS_ZOOMED()) {
+            moreLabel.font = UIFont(name: "PTSerif-Bold", size: 22)
+            topicLabel.font = UIFont(name: "PTSerif-Bold", size: 22)
+        }
     }
     
     func setTopic(_ topic: String) {

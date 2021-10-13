@@ -788,8 +788,15 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         let index = indexPath.row + start
             
         cell.contentLabel.text = self.newsParser.getTitle(index: index)
+        
+        /*
+        cell.contentLabel.text = "Yes, the latest jobs data may look disappointing, but leisure and transportation sectors give reason for cheer"
+        */
+        
         self.setFlag(imageView: cell.flagImageView, ID: newsParser.getCountryID(index: index))
         cell.sourceLabel.text = newsParser.getSource(index: index) + " - " + newsParser.getDate(index: index)
+        
+        //cell.sourceLabel.text = "The Conversation #1 - 39 minutes ago"
         
         var showMarkup = false
         cell.exclamationImageView.isHidden = true
