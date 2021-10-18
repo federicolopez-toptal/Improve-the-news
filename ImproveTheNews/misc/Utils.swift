@@ -27,6 +27,8 @@ class Utils {
 
     // main navigatorController
     var navController: UINavigationController?
+    
+    var didLoadBanner: Bool = false
 }
 
 func DARKMODE() -> Bool {
@@ -128,8 +130,8 @@ func SET_OB_PARAM(_ value: String) {
 func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
                 banners: String?, superSliders: String?) -> String {
 
-    var link = "https://www.improvethenews.org/appserver.php/?topic=" + topicCode
-    //var link = "https://www.improvemynews.com/appserver.php/?topic=" + topicCode
+    //var link = "https://www.improvethenews.org/appserver.php/?topic=" + topicCode
+    var link = "https://www.improvemynews.com/appserver.php/?topic=" + topicCode
     
     link += ".A\(abs[0]).B\(abs[1]).S\(abs[2])"
     link += SliderValues.sharedInstance.getBiasPrefs()

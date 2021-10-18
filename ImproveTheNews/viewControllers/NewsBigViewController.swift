@@ -717,15 +717,19 @@ extension NewsBigViewController: NewsDelegate {
     }
     
     func didFinishLoadData(finished: Bool) {
+        if(BannerInfo.shared != nil) {
+            if(self.uniqueID==1 && BannerInfo.shared?.delegate==nil) {
+                print("######### DELEGATE SET!")
+                BannerInfo.shared?.delegate = self
+            }
+        }
+    
         self.hierarchy = newsParser.getHierarchy()
         self.loadingView.isHidden = true
         self.firstTime = false
         self.tableView.reloadData()
         self.stopRefresher()
         
-        if BannerInfo.shared != nil {
-            BannerInfo.shared?.delegate = self
-        }
         self.horizontalMenu.setTopics(self.newsParser.getAllTopics())
         if(self.param_A != 40){
             self.horizontalMenu.isHidden = false

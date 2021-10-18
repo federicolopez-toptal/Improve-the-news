@@ -206,24 +206,26 @@ class News {
         self.globalPopularities.removeAll()
         self.hierarchy = ""
 
+        //print(">>>", BannerInfo.shared)
+
         do {
             let decodedData = try JSON(data: jsonData)
             
-            //BannerInfo.shared = nil
-            for (index1,subtopic):(String, JSON) in decodedData {
-                
-                /*
-                print(decodedData)
-                print(decodedData[1][0][0])
-                */
+            for (index1, subtopic):(String, JSON) in decodedData {
                 
                 //if decodedData[1][0][0].stringValue == "INFO" {
-                if subtopic[0][0].stringValue == "INFO" {
-                    BannerInfo.shared = BannerInfo(json: subtopic[0])
-                    continue
-                }
-                
-                
+                    if subtopic[0][0].stringValue == "INFO" {
+                        if(!Utils.shared.didLoadBanner) {
+                            let jsonForBanner = subtopic[0]
+                            if(BannerView.bannerIsValid(id: jsonForBanner[5].stringValue)) {
+                                BannerInfo.shared = BannerInfo(json: jsonForBanner)
+                                Utils.shared.didLoadBanner = true
+                            }
+                        }
+                        
+                        continue
+                    }
+
                 /*
                 print("GATO", index1, subtopic[0][0].stringValue)
                 */
@@ -371,7 +373,16 @@ class News {
             }
             
             //self.reArrangeAllData()
-            
+            // test
+            /*
+            if(BannerInfo.shared == nil) {
+                BannerInfo.shared = BannerInfo(test: true)
+                Utils.shared.didLoadBanner = true
+            }
+            */
+        
+        
+        
             DispatchQueue.main.async{
                 self.newsDelegate!.didFinishLoadData(finished: true)
             }
@@ -380,6 +391,9 @@ class News {
             print(String(decoding: jsonData, as: UTF8.self))
             print(jsonErr)
         }
+        
+        
+        
     }
     
     func getJSONContents(jsonName: String) {

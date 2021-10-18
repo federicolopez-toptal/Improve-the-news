@@ -462,7 +462,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     // For NewsDelegate protocol
     func didFinishLoadData(finished: Bool) {
         if BannerInfo.shared != nil {
-            BannerInfo.shared?.delegate = self
+            if(self.uniqueID==1 && BannerInfo.shared?.delegate==nil) {
+                print("######### DELEGATE SET!")
+                BannerInfo.shared?.delegate = self
+            }
         }
         
         guard finished else {

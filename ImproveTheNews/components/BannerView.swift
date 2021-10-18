@@ -33,6 +33,20 @@ class BannerInfo {
     var active: Bool
     var apiParam: String
     
+    init(test: Bool = true) {
+        header = "Why improve the news?"
+        text = "The world is not a fairy tale."
+        colorScheme = 0
+        adType = "hl"
+        adCode = "yT"
+        imgSize = 2
+        imgUrl = "https://www.improvethenews.org/images/itn_youtube_thumbnail4.jpg"
+        url = "https://www.youtube.com/watch?v=PRLF17Pb6vo"
+        
+        active = true
+        apiParam = ""
+    }
+    
     init(json: JSON) {
         header = json[1].stringValue
         text = json[2].stringValue
@@ -140,7 +154,7 @@ class BannerView: UIView {
     }
     
     // --------------------------
-    func bannerIsValid(id: String) -> Bool {
+    static func bannerIsValid(id: String) -> Bool {
         var result = false
         if(BannerView.bannerHeights[id] != nil) {
             result = true
@@ -232,6 +246,8 @@ class BannerView: UIView {
         }    
     }
     @objc func closeView(sender: UIButton) {
+        print("######### CLOSE BANNER!", BannerInfo.shared?.delegate)
+        
         if(self.onOff.isOn) {
             if let info = BannerInfo.shared {
                 info.setApiParamValue("03") // Close + Don't show again

@@ -840,8 +840,8 @@ extension OnBoardingView {
         let v = "I" + Bundle.main.releaseVersionNumber!
         let dev = UIDevice.current.modelName.replacingOccurrences(of: " ", with: "_")
 
-        //let logUrl = "https://www.improvemynews.com/php/util/log.php"
-        let logUrl = "https://www.improvethenews.org/php/util/log.php"
+        let logUrl = "https://www.improvemynews.com/php/util/log.php"
+        //let logUrl = "https://www.improvethenews.org/php/util/log.php"
         
         let json: [String: Any] = [
             "event": type.rawValue,
