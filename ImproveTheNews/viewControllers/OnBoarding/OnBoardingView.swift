@@ -40,6 +40,11 @@ class OnBoardingView: UIView {
     var sliderValues: String?
     var currentStep: logEventStep = .step1_invitation
     
+    static var eventCount = [
+                    "slider-moved": 0,
+                    "split-activated": 0
+                ]
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -53,7 +58,7 @@ class OnBoardingView: UIView {
         
         self.parser = parser
         super.init(frame: .zero)
-        self.backgroundColor = bgBlue
+        self.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
         
         container.addSubview(self)
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -142,6 +147,9 @@ class OnBoardingView: UIView {
         label1.text = "It looks like you’re new here.\nWould you like a tour?"
         label1.textAlignment = .center
         label1.textColor = UIColor(rgb: 0x93A0B4)
+        //if(!DARKMODE()){ label1.textColor = darkForBright.withAlphaComponent(0.6) }
+        if(!DARKMODE()){ label1.textColor = UIColor(rgb: 0x93A0B4) }
+        
         label1.font = UIFont(name: "Roboto-Regular", size: 20)
         if(IS_ZOOMED()){ label1.font = UIFont(name: "Roboto-Regular", size: 16) }
         
@@ -191,6 +199,7 @@ class OnBoardingView: UIView {
         label1.textColor = .white
         label1.font = UIFont(name: "Merriweather-Bold", size: 30)
         label1.text = "Headlines"
+        if(!DARKMODE()){ label1.textColor = accentOrange }
         self.view2.addSubview(label1)
         label1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -346,6 +355,15 @@ class OnBoardingView: UIView {
             subText2.widthAnchor.constraint(equalToConstant: w),
         ])
 
+        if(!DARKMODE()) {
+            title1.textColor = darkForBright
+            subText.textColor = textBlackAlpha
+            
+            title2.textColor = title1.textColor
+            subText2.textColor = subText.textColor
+        }
+
+
         return result
     }
     
@@ -467,6 +485,17 @@ class OnBoardingView: UIView {
         loadingView.tag = 444
         loadingView.isHidden = true
         
+        if(!DARKMODE()) {
+            //loadingView.backgroundColor = UIColor.gray.withAlphaComponent(0.25)
+            //loading.color = .gray
+            
+            loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+            loading.color = darkForBright
+            loadingView.layer.borderWidth = 0.0
+        }
+        
+        
+        
         // Splitted view ##########################################
         let splittedView = UIView()
         splittedView.backgroundColor = .clear
@@ -550,6 +579,16 @@ class OnBoardingView: UIView {
             link2.heightAnchor.constraint(equalTo: pic2.heightAnchor)
         ])
         link2.tag = 902
+        
+        
+        
+        if(!DARKMODE()) {
+            title1.textColor = darkForBright
+            subText.textColor = textBlackAlpha
+            
+            title2.textColor = title1.textColor
+            subText2.textColor = subText.textColor
+        }
         
         return result
     }
@@ -836,6 +875,17 @@ extension OnBoardingView {
     static func logEvent(type: logEventType, step: logEventStep,
         topic: String, sliderValues: String) {
 
+        for (key, value) in OnBoardingView.eventCount {
+            if(key==step.rawValue) {
+                if(value==0) {
+                    OnBoardingView.eventCount[key] = 1
+                } else {
+                    return
+                }
+            }
+        }
+
+
         let sliderValues2 = sliderValues + OnBoardingView.OBparam(type, step)
         let v = "I" + Bundle.main.releaseVersionNumber!
         let dev = UIDevice.current.modelName.replacingOccurrences(of: " ", with: "_")
@@ -857,8 +907,8 @@ extension OnBoardingView {
         print("???", "ONBOARDING EVENT", type.rawValue, step.rawValue)
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
         let jsonSize = String(jsonData!.count)
-        print("???", "ONBOARDING EVENT size", jsonSize)
-        print("???", "ONBOARDING sliderValues", sliderValues2)
+        //print("???", "ONBOARDING EVENT size", jsonSize)
+        //print("???", "ONBOARDING sliderValues", sliderValues2)
         
         var request = URLRequest(url: URL(string: logUrl)!)
         request.httpMethod = "POST"

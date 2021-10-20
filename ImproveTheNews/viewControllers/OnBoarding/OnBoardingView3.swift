@@ -382,12 +382,20 @@ class OnBoardingView3: UIView {
             for sv in checkBox.subviews {
                 if(sv is UIImageView) {
                     let img = (sv as! UIImageView)
+                    var checkFoxImageFile = "onboardingCheck"
+                    
                     if(self.splitState) {
-                        img.image = UIImage(named: "onboardingCheckON.png")
+                        checkFoxImageFile += "ON"
                     } else {
-                        img.image = UIImage(named: "onboardingCheckOFF.png")
+                        checkFoxImageFile += "OFF"
                     }
                     
+                    // img.image = UIImage(named: "onboardingCheckON.png")
+                    // img.image = UIImage(named: "onboardingCheckOFF.png")
+                    
+                    if(!DARKMODE()){ checkFoxImageFile += "_bright" }
+                    checkFoxImageFile += ".png"
+                    img.image = UIImage(named: checkFoxImageFile)
                 }
                 
                 /*if(sv is UIButton) {
@@ -717,8 +725,8 @@ class OnBoardingView3: UIView {
     
     // MARK: - Components
     private func initStep(_ view: UIView) {
-        view.backgroundColor = bgBlue
-        //view.backgroundColor = .blue
+        //view.backgroundColor = bgBlue
+        view.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
         self.addSubview(view)
         
         var viewBottomOffset: CGFloat = 0.0
@@ -743,6 +751,8 @@ class OnBoardingView3: UIView {
         dots.numberOfPages = 4
         if(currentPage != -1) { dots.currentPage = currentPage-1 }
         dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4)
+        if(!DARKMODE()){ dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4).withAlphaComponent(0.5) }
+        
         dots.currentPageIndicatorTintColor = UIColor(rgb: 0xFF8B3C)
         container.addSubview(dots)
         dots.translatesAutoresizingMaskIntoConstraints = false
@@ -763,6 +773,8 @@ class OnBoardingView3: UIView {
         if(currentPage != -1) { dots.currentPage = currentPage-1 }
         dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4)
         dots.currentPageIndicatorTintColor = UIColor(rgb: 0xFF8B3C)
+        if(!DARKMODE()){ dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4).withAlphaComponent(0.5) }
+        
         container.addSubview(dots)
         dots.translatesAutoresizingMaskIntoConstraints = false
         
@@ -785,6 +797,8 @@ class OnBoardingView3: UIView {
         if(currentPage != -1) { dots.currentPage = currentPage-1 }
         dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4)
         dots.currentPageIndicatorTintColor = UIColor(rgb: 0xFF8B3C)
+        if(!DARKMODE()){ dots.pageIndicatorTintColor = UIColor(rgb: 0x93A0B4).withAlphaComponent(0.5) }
+        
         container.addSubview(dots)
         dots.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -803,6 +817,7 @@ class OnBoardingView3: UIView {
         label.numberOfLines = 0
         label.textAlignment = .center
         label.textColor = UIColor(rgb: 0x93A0B4)
+        if(!DARKMODE()){ label.textColor = UIColor(rgb: 0x93A0B4) }
         label.font = UIFont(name: "Roboto-Regular", size: 20)
         container.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -823,6 +838,7 @@ class OnBoardingView3: UIView {
         label.numberOfLines = 0
         label.textAlignment = .center
         label.textColor = UIColor(rgb: 0x93A0B4)
+        if(!DARKMODE()){ label.textColor = UIColor(rgb: 0x93A0B4) }
         label.font = UIFont(name: "Roboto-Regular", size: 20)
         if(IS_ZOOMED()){
             label.font = UIFont(name: "Roboto-Regular", size: 15)
@@ -1322,8 +1338,15 @@ class OnBoardingView3: UIView {
             view.heightAnchor.constraint(equalToConstant: 40)
         ])
     
-        let img = UIImageView(image: UIImage(named: "onboardingCheckOFF.png"))
-        if(state) { img.image = UIImage(named: "onboardingCheckON.png") }
+        var checkFoxImageFile = "onboardingCheck"
+        if(state) { checkFoxImageFile += "ON" }
+        else { checkFoxImageFile += "OFF" }
+        if(!DARKMODE()){ checkFoxImageFile += "_bright" }
+        checkFoxImageFile += ".png"
+        let img = UIImageView(image: UIImage(named: checkFoxImageFile))
+        
+        //let img = UIImageView(image: UIImage(named: "onboardingCheckOFF.png"))
+        //if(state) { img.image = UIImage(named: "onboardingCheckON.png") }
         view.addSubview(img)
         img.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

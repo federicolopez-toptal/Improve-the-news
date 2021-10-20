@@ -63,6 +63,8 @@
 		BD366753268A413F0031C6FF /* warningIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = BD366751268A413F0031C6FF /* warningIcon.png */; };
 		BD3F58D9264CA5CC00B99522 /* FooterCellBig.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD3F58D7264CA5CC00B99522 /* FooterCellBig.xib */; };
 		BD3F58DA264CA5CC00B99522 /* FooterCellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3F58D8264CA5CC00B99522 /* FooterCellBig.swift */; };
+		BD4158EE27206B49002F3A20 /* onboardingCheckOFF_bright.png in Resources */ = {isa = PBXBuildFile; fileRef = BD4158EC27206B48002F3A20 /* onboardingCheckOFF_bright.png */; };
+		BD4158EF27206B49002F3A20 /* onboardingCheckON_bright.png in Resources */ = {isa = PBXBuildFile; fileRef = BD4158ED27206B49002F3A20 /* onboardingCheckON_bright.png */; };
 		BD4652A3260E68EC00FFFB11 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */; };
 		BD47A397264C9BA5003D3F2F /* CellBig.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD47A395264C9BA5003D3F2F /* CellBig.xib */; };
 		BD47A398264C9BA5003D3F2F /* CellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD47A396264C9BA5003D3F2F /* CellBig.swift */; };
@@ -394,6 +396,8 @@
 		BD366751268A413F0031C6FF /* warningIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warningIcon.png; sourceTree = "<group>"; };
 		BD3F58D7264CA5CC00B99522 /* FooterCellBig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellBig.xib; sourceTree = "<group>"; };
 		BD3F58D8264CA5CC00B99522 /* FooterCellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellBig.swift; sourceTree = "<group>"; };
+		BD4158EC27206B48002F3A20 /* onboardingCheckOFF_bright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingCheckOFF_bright.png; sourceTree = "<group>"; };
+		BD4158ED27206B49002F3A20 /* onboardingCheckON_bright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingCheckON_bright.png; sourceTree = "<group>"; };
 		BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		BD47A395264C9BA5003D3F2F /* CellBig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellBig.xib; sourceTree = "<group>"; };
 		BD47A396264C9BA5003D3F2F /* CellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellBig.swift; sourceTree = "<group>"; };
@@ -918,6 +922,8 @@
 				BDB1DF2026E6FB8000879C4B /* headlines02.png */,
 				BDB1DF1C26E6E67B00879C4B /* onboardingCheckOFF.png */,
 				BDB1DF1D26E6E67B00879C4B /* onboardingCheckON.png */,
+				BD4158EC27206B48002F3A20 /* onboardingCheckOFF_bright.png */,
+				BD4158ED27206B49002F3A20 /* onboardingCheckON_bright.png */,
 				BD26A82826DD4725001EC167 /* OnBoardingView.swift */,
 				BD24A51426E071A500251999 /* OnBoardingView3.swift */,
 			);
@@ -1387,6 +1393,7 @@
 				BDDA45382612301100C9C3AF /* STP64.png in Resources */,
 				BDDA45162612301100C9C3AF /* LKA64.png in Resources */,
 				BDDA452E2612301100C9C3AF /* AFG64.png in Resources */,
+				BD4158EE27206B49002F3A20 /* onboardingCheckOFF_bright.png in Resources */,
 				BDDA44E62612301100C9C3AF /* NZL64.png in Resources */,
 				BDDA45302612301100C9C3AF /* EGY64.png in Resources */,
 				BDDA45652612301100C9C3AF /* TJK64.png in Resources */,
@@ -1404,6 +1411,7 @@
 				BDDA45282612301100C9C3AF /* IND64.png in Resources */,
 				BDDA45432612301100C9C3AF /* BOL64.png in Resources */,
 				BDDA455B2612301100C9C3AF /* MAR64.png in Resources */,
+				BD4158EF27206B49002F3A20 /* onboardingCheckON_bright.png in Resources */,
 				BDDA454D2612301100C9C3AF /* GBR64.png in Resources */,
 				BDDA45822612301100C9C3AF /* BGD64.png in Resources */,
 				BDDA45502612301100C9C3AF /* MCO64.png in Resources */,
@@ -1872,7 +1880,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -1899,7 +1907,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;

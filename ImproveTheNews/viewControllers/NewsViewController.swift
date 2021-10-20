@@ -262,11 +262,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
-        navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
         //UINavigationBar.appearance().    = DARKMODE() ? .black : .default
+        navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
         
         self.setUpNavBar()
-        
+
         collectionView.delaysContentTouches = false
         for view in collectionView.subviews {
           if view is UIScrollView {
@@ -559,7 +559,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         let bellInnerButton = UIButton(type: .custom)
         //bellInnerButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        bellInnerButton.backgroundColor = .green
+        //bellInnerButton.backgroundColor = .green
         bellInnerButton.setImage(UIImage(systemName: "bell"), for: .normal)
         //bellInnerButton.setBackgroundImage(UIImage(systemName: "bell"), for: .normal)
         

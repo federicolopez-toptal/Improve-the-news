@@ -106,13 +106,15 @@ func INITIAL_VC() -> UIViewController {
 }
 
 func SHOW_ONBOARD() -> Bool {
+    /*
     if let onBoardingValue = UserDefaults.standard.string(forKey: ONBOARDING_ID) {
         return false
     } else {
         return true
     }
+    */
     
-    //return true
+    return true
 }
 
 func OB_PARAM() -> String {
@@ -204,6 +206,8 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
 
 func USER_ID() -> String {
     var result = "3"
+    let limit = 19
+    
     if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
         var fixedID = deviceId.uppercased()
         fixedID = fixedID.replacingOccurrences(of: "-", with: "")
@@ -215,8 +219,8 @@ func USER_ID() -> String {
         fixedID = fixedID.replacingOccurrences(of: "F", with: "5")
         
         // only 19 characters!
-        if(fixedID.count > 19) {
-            fixedID = String( fixedID[0...18] )
+        if(fixedID.count > (limit-1)) {
+            fixedID = String( fixedID[0...(limit-2)] )
         }
         result += fixedID
     }

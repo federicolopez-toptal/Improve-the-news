@@ -140,6 +140,8 @@ class SectionsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.hidesBackButton = true
+        //navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        navigationController?.navigationBar.barStyle = .default
     }
     
     @objc func customBackButtonTap(sender: UIBarButtonItem) {
