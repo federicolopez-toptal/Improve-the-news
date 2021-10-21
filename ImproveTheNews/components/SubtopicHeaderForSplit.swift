@@ -151,6 +151,10 @@ class SubtopicHeaderForSplit: UICollectionReusableView {
                 labelSplit.backgroundColor = UIColor.blue.withAlphaComponent(0.2)
             }*/
             
+            labelSplit.textColor = .white
+            if(!DARKMODE()){ labelSplit.textColor = textBlackAlpha }
+            
+            //label.backgroundColor = DARKMODE() ? articleSourceColor :
             stackViewSplit.addArrangedSubview(labelSplit)
             
             

@@ -29,7 +29,7 @@ protocol TopicSelectorDelegate {
 class HeadlineCell: UICollectionViewCell {
     
     static let cellId = "HeadlineCell"
-      
+    
     var miniSlidersView: MiniSlidersView?
     let imageView = UIImageView(backgroundColor: .clear)
     var headline = UILabel(font: UIFont(name: "Poppins-SemiBold", size: 11), numberOfLines: 3)

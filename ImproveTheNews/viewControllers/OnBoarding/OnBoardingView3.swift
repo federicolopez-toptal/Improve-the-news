@@ -1505,13 +1505,27 @@ extension OnBoardingView3 {
             let sourceTime = news.getSource(index: i) + " - " + news.getDate(index: i)
             let imageUrl = news.getIMG(index: i)
             let articleUrl = news.getURL(index: i)
+            let countryID = news.getCountryID(index: i)
+            let LR = news.getLR(index: i)
+            let PE = news.getPE(index: i)
             
             return SimplestNews(title: title, sourceTime: sourceTime,
-                imageUrl: imageUrl, articleUrl: articleUrl)
+                imageUrl: imageUrl, articleUrl: articleUrl, countryID: countryID,
+                LR: LR, PE: PE)
         }
         return nil
     }
     
+    private func setFlag(imageView: UIImageView, ID: String) {
+        let img = UIImage(named: "\(ID.uppercased())64.png")
+        
+        imageView.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
+        if(img != nil) {
+            imageView.image = img
+        } else {
+            imageView.image = UIImage(named: "noFlag.png")
+        }
+    }
     private func showNews(headline: UIView, indexes: [Int]) {
         self.newsShown = indexes
         
@@ -1523,6 +1537,13 @@ extension OnBoardingView3 {
         
         title1.text = news1.title
         subText.text = news1.sourceTime
+        
+        if let miniSlider1 = headline.viewWithTag(111) as? MiniSlidersView {
+            miniSlider1.setValues(val1: news1.LR, val2: news1.PE)
+        }
+        if let flag1 = headline.viewWithTag(121) as? UIImageView {
+            self.setFlag(imageView: flag1, ID: news1.countryID)
+        }
         
         DispatchQueue.main.async {
             pic1.contentMode = .scaleAspectFill
@@ -1538,6 +1559,13 @@ extension OnBoardingView3 {
         
         title2.text = news2.title
         subText2.text = news2.sourceTime
+        
+        if let miniSlider2 = headline.viewWithTag(211) as? MiniSlidersView {
+            miniSlider2.setValues(val1: news2.LR, val2: news2.PE)
+        }
+        if let flag2 = headline.viewWithTag(221) as? UIImageView {
+            self.setFlag(imageView: flag2, ID: news2.countryID)
+        }
         
         DispatchQueue.main.async {
             pic2.contentMode = .scaleAspectFill

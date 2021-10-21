@@ -18,6 +18,10 @@ struct SimplestNews {
     var sourceTime: String
     var imageUrl: String
     var articleUrl: String
+    
+    var countryID: String
+    var LR: Int
+    var PE: Int
 }
 
 ///////////////////////////////////////////////////////
@@ -367,8 +371,17 @@ class OnBoardingView: UIView {
         return result
     }
     
+    // ---------------------------------------
+    // ---------------------------------------
+    // ---------------------------------------
+    static let showFlagAndStance = false
+    // ---------------------------------------
+    
     static func headlinesType1_dynamic() -> UIView {
         let result = UIView()
+        
+        var miniSlidersView1: MiniSlidersView?
+        var miniSlidersView2: MiniSlidersView?
         
         let screenSize = UIScreen.main.bounds.size
         var w: CGFloat = screenSize.width - 30
@@ -388,6 +401,12 @@ class OnBoardingView: UIView {
             pic1.heightAnchor.constraint(equalToConstant: h)
         ])
         pic1.tag = 101
+        
+        if(OnBoardingView.showFlagAndStance) {
+            miniSlidersView1 = MiniSlidersView(some: "")
+            miniSlidersView1?.insertInto(view: pic1)
+            miniSlidersView1?.tag = 111
+        }
         
         let title1 = UILabel()
         title1.text = "The pros and cons of wind power"
@@ -413,11 +432,33 @@ class OnBoardingView: UIView {
         result.addSubview(subText)
         subText.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            subText.topAnchor.constraint(equalTo: title1.bottomAnchor, constant: 6),
-            subText.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: 15),
-            subText.widthAnchor.constraint(equalToConstant: w),
+            subText.topAnchor.constraint(equalTo: title1.bottomAnchor, constant: 6)
         ])
+        if(!OnBoardingView.showFlagAndStance) {
+            subText.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: 15).isActive = true
+            subText.widthAnchor.constraint(equalToConstant: w).isActive = true
+        } else {
+            subText.leadingAnchor.constraint(equalTo: result.leadingAnchor, constant: 15+18+3).isActive = true
+            subText.widthAnchor.constraint(equalToConstant: w-18-3).isActive = true
+        }
         subText.tag = 103
+        
+        if(OnBoardingView.showFlagAndStance) {
+            let flag = UIImageView()
+            flag.tag = 121
+            result.addSubview(flag)
+            flag.layer.cornerRadius = 10
+            flag.backgroundColor = .red //DARKMODE() ? bgBlue : bgWhite_LIGHT
+        
+            flag.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                flag.widthAnchor.constraint(equalToConstant: 18),
+                flag.heightAnchor.constraint(equalToConstant: 18),
+                flag.leadingAnchor.constraint(equalTo: pic1.leadingAnchor),
+                flag.topAnchor.constraint(equalTo: subText.topAnchor)
+            ])
+        }
+        
         
         let pic2 = UIImageView()
         pic2.backgroundColor = .gray
@@ -432,6 +473,12 @@ class OnBoardingView: UIView {
             pic2.heightAnchor.constraint(equalToConstant: h)
         ])
         pic2.tag = 201
+        
+        if(OnBoardingView.showFlagAndStance) {
+            miniSlidersView2 = MiniSlidersView(some: "")
+            miniSlidersView2?.insertInto(view: pic2)
+            miniSlidersView2?.tag = 211
+        }
         
         let title2 = UILabel()
         title2.text = "Recent trends in world energy use"
@@ -456,10 +503,32 @@ class OnBoardingView: UIView {
         subText2.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             subText2.topAnchor.constraint(equalTo: title2.bottomAnchor, constant: 6),
-            subText2.trailingAnchor.constraint(equalTo: result.trailingAnchor, constant: -15),
-            subText2.widthAnchor.constraint(equalToConstant: w),
         ])
+        if(!OnBoardingView.showFlagAndStance) {
+            subText2.leadingAnchor.constraint(equalTo: title2.leadingAnchor).isActive = true
+            subText2.widthAnchor.constraint(equalToConstant: w).isActive = true
+        } else {
+            subText2.leadingAnchor.constraint(equalTo: title2.leadingAnchor,
+            constant: 18+3).isActive = true
+            subText2.widthAnchor.constraint(equalToConstant: w-18-3).isActive = true
+        }
         subText2.tag = 203
+
+        if(OnBoardingView.showFlagAndStance) {
+            let flag = UIImageView()
+            flag.tag = 221
+            result.addSubview(flag)
+            flag.layer.cornerRadius = 10
+            flag.backgroundColor = .red //DARKMODE() ? bgBlue : bgWhite_LIGHT
+        
+            flag.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                flag.widthAnchor.constraint(equalToConstant: 18),
+                flag.heightAnchor.constraint(equalToConstant: 18),
+                flag.leadingAnchor.constraint(equalTo: pic2.leadingAnchor),
+                flag.topAnchor.constraint(equalTo: subText2.topAnchor)
+            ])
+        }
 
         // Loading...
         let loadingView = UIView()
@@ -511,6 +580,7 @@ class OnBoardingView: UIView {
         
         let divLine = UIView()
         divLine.backgroundColor = .white
+        if(!DARKMODE()){ divLine.backgroundColor = textBlackAlpha }
         splittedView.addSubview(divLine)
         divLine.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -526,6 +596,7 @@ class OnBoardingView: UIView {
         
         let label1 = UILabel()
         label1.textColor = .white
+        if(!DARKMODE()){ label1.textColor = textBlackAlpha }
         label1.font = UIFont(name: "Merriweather-Bold", size: 22)
         label1.text = "LEFT"
         label1.textAlignment = .center
@@ -540,6 +611,7 @@ class OnBoardingView: UIView {
         
         let label2 = UILabel()
         label2.textColor = .white
+        if(!DARKMODE()){ label2.textColor = textBlackAlpha }
         label2.font = UIFont(name: "Merriweather-Bold", size: 22)
         label2.text = "RIGHT"
         label2.textAlignment = .center
@@ -778,13 +850,27 @@ extension OnBoardingView {
             let sourceTime = news.getSource(index: i) + " - " + news.getDate(index: i)
             let imageUrl = news.getIMG(index: i)
             let articleUrl = news.getURL(index: i)
+            let countryID = news.getCountryID(index: i)
+            let LR = news.getLR(index: i)
+            let PE = news.getPE(index: i)
             
             return SimplestNews(title: title, sourceTime: sourceTime,
-                imageUrl: imageUrl, articleUrl: articleUrl)
+                imageUrl: imageUrl, articleUrl: articleUrl, countryID: countryID,
+                LR: LR, PE: PE)
         }
         return nil
     }
     
+    private func setFlag(imageView: UIImageView, ID: String) {
+        let img = UIImage(named: "\(ID.uppercased())64.png")
+        
+        imageView.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
+        if(img != nil) {
+            imageView.image = img
+        } else {
+            imageView.image = UIImage(named: "noFlag.png")
+        }
+    }
     private func showNews(headline: UIView, indexes: [Int]) {
         let news1 = getNews(index: indexes[0])!
         let pic1 = headline.viewWithTag(101) as! UIImageView
@@ -793,6 +879,13 @@ extension OnBoardingView {
         
         title1.text = news1.title
         subText.text = news1.sourceTime
+        
+        if let miniSlider1 = headline.viewWithTag(111) as? MiniSlidersView {
+            miniSlider1.setValues(val1: news1.LR, val2: news1.PE)
+        }
+        if let flag1 = headline.viewWithTag(121) as? UIImageView {
+            self.setFlag(imageView: flag1, ID: news1.countryID)
+        }
         
         DispatchQueue.main.async {
             pic1.contentMode = .scaleAspectFill
@@ -807,6 +900,13 @@ extension OnBoardingView {
         
         title2.text = news2.title
         subText2.text = news2.sourceTime
+        
+        if let miniSlider2 = headline.viewWithTag(211) as? MiniSlidersView {
+            miniSlider2.setValues(val1: news2.LR, val2: news2.PE)
+        }
+        if let flag2 = headline.viewWithTag(221) as? UIImageView {
+            self.setFlag(imageView: flag2, ID: news2.countryID)
+        }
         
         DispatchQueue.main.async {
             pic2.contentMode = .scaleAspectFill
@@ -890,8 +990,8 @@ extension OnBoardingView {
         let v = "I" + Bundle.main.releaseVersionNumber!
         let dev = UIDevice.current.modelName.replacingOccurrences(of: " ", with: "_")
 
-        let logUrl = "https://www.improvemynews.com/php/util/log.php"
-        //let logUrl = "https://www.improvethenews.org/php/util/log.php"
+        //let logUrl = "https://www.improvemynews.com/php/util/log.php"
+        let logUrl = "https://www.improvethenews.org/php/util/log.php"
         
         let json: [String: Any] = [
             "event": type.rawValue,
