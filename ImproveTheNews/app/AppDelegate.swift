@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import BackgroundTasks
 import Firebase
+import SwiftUI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,20 +19,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        
+        // MARK: INCOMPLETE
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "FLI.Mindy-Long.fetchImproveTheNews",
+            using: nil) { (task) in
+                self.handleAppRefreshTask(task: task as! BGAppRefreshTask)
+        }
+        FirebaseApp.configure()      
+
+        Thread.sleep(forTimeInterval: 1.0)
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
         let newsAggregator = INITIAL_VC()
         let navController = UINavigationController(rootViewController: newsAggregator)
         window?.rootViewController = navController
-
-        // MARK: INCOMPLETE
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "FLI.Mindy-Long.fetchImproveTheNews",
-            using: nil) { (task) in
-                self.handleAppRefreshTask(task: task as! BGAppRefreshTask)
-        }
-
-        FirebaseApp.configure()        
+                
                 
         return true
     }
@@ -102,4 +106,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-
+/*
+extension UINavigationController {
+    
+    /*
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        print("=== update!")
+        return .lightContent
+    }
+    */
+    
+    open override var childForStatusBarStyle: UIViewController? {
+        return topViewController
+    }
+    
+}
+*/

@@ -365,6 +365,7 @@ class NewsBigViewController: UIViewController {
                                         y: ((UIScreen.main.bounds.height-dim)/2) - 88,
                                         width: dim, height: dim)
         self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        if(!DARKMODE()){ self.loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.25) }
         self.loadingView.isHidden = true
         self.loadingView.layer.cornerRadius = 15
     

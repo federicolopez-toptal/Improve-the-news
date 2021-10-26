@@ -138,11 +138,22 @@ class SectionsViewController: UIViewController {
     }
     */
     
+    /*
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    */
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.hidesBackButton = true
         //navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
-        navigationController?.navigationBar.barStyle = .default
+        //navigationController?.navigationBar.barStyle = .default
+        
+        //UPDATE_STATUSBAR(self.navigationController)
+        //self.setNeedsStatusBarAppearanceUpdate()
     }
+    
     
     @objc func customBackButtonTap(sender: UIBarButtonItem) {
         self.navigationController?.customPopViewController()
@@ -400,9 +411,6 @@ struct SectionsPreview: PreviewProvider {
     }
 }
 
-
-
-
 extension Bundle {
     var releaseVersionNumber: String? {
         return infoDictionary?["CFBundleShortVersionString"] as? String
@@ -411,3 +419,27 @@ extension Bundle {
         return infoDictionary?["CFBundleVersion"] as? String
     }
 }
+
+
+
+
+
+
+/*
+let NOTIFICATION_SHOW_ONBOARDING = Notification.Name("showOnboarding")
+class SectionsViewController: UIViewController {
+
+    override func viewDidAppear(_ animated: Bool) {
+        UPDATE_STATUSBAR(self.navigationController)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        //self.navigationItem.hidesBackButton = true
+        UPDATE_STATUSBAR(self.navigationController)
+    }
+
+}
+*/
+
+
+

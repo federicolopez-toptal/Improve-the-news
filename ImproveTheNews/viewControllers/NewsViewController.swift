@@ -101,7 +101,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
     
-        overrideUserInterfaceStyle = .dark
+        //overrideUserInterfaceStyle = .dark
                 
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
@@ -262,8 +262,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
+        
         //UINavigationBar.appearance().    = DARKMODE() ? .black : .default
         navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        //UPDATE_STATUSBAR(self.navigationController)
         
         self.setUpNavBar()
 
@@ -449,11 +451,13 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         // reload?
         print("GATO7 - reload")
         self.collectionView.reloadData()
+        /*
         if(self.collectionView.numberOfSections>0) {
             print("GATO7 - reload section 0")
             self.collectionView.reloadSections([0])
             self.collectionView.setNeedsDisplay()
         }
+        */
         
         self.hierarchy = ""
         self.hierarchy = newsParser.getHierarchy()
@@ -510,7 +514,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.loadingView.layer.cornerRadius = 15
     
         let loading = UIActivityIndicatorView(style: .medium)
-        if(!DARKMODE()){ loading.color = darkForBright }
+        if(DARKMODE()){ loading.color = .white }
+        else { loading.color = darkForBright }
         self.loadingView.addSubview(loading)
         loading.center = CGPoint(x: dim/2, y: dim/2)
         loading.startAnimating()
@@ -849,7 +854,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 
     @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
         //if(self.onBoard == nil) {
-            navigationController?.customPushViewController(SectionsViewController())
+        
+        navigationController?.customPushViewController(SectionsViewController())
         //}
     }
     
@@ -2337,6 +2343,8 @@ extension NewsViewController {
     }
     
     func updateDivider() {
+        print("%%% update divider")
+    
         vDivider.subviews.forEach({ $0.removeFromSuperview() })
         if(!mustSplit()) {
             vDivider.isHidden = true

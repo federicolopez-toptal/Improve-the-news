@@ -374,7 +374,7 @@ class OnBoardingView: UIView {
     // ---------------------------------------
     // ---------------------------------------
     // ---------------------------------------
-    static let showFlagAndStance = false
+    static let showFlagAndStance = true
     // ---------------------------------------
     
     static func headlinesType1_dynamic() -> UIView {
