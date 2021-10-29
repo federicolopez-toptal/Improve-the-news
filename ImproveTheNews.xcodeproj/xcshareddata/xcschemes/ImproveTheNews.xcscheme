@@ -92,7 +92,7 @@
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "App Store"
+      buildConfiguration = "Beta"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

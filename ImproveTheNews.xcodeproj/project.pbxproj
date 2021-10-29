@@ -20,23 +20,23 @@
 		A851345224838B0700D56C04 /* SectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A851345124838B0700D56C04 /* SectionsViewController.swift */; };
 		A87144EA24F43B3100A7E404 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87144E924F43B3100A7E404 /* SearchViewController.swift */; };
 		A89B803624AFAB8B009BB0F8 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89B803524AFAB8B009BB0F8 /* WebViewController.swift */; };
-		A8A7935A2482F61D009A55FE /* LBTATools in Frameworks */ = {isa = PBXBuildFile; productRef = A8A793592482F61D009A55FE /* LBTATools */; };
+		A8A7935A2482F61D009A55FE /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = A8A793592482F61D009A55FE /* SwiftPackageProductDependency */; };
 		A8A7935C2482F98C009A55FE /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A7935B2482F98C009A55FE /* TabBarController.swift */; };
 		A8B2F846249728F40069EF76 /* NewsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B2F845249728F40069EF76 /* NewsParser.swift */; };
-		A8B4D72324B1032C004EEE73 /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = A8B4D72224B1032C004EEE73 /* Cosmos */; };
+		A8B4D72324B1032C004EEE73 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = A8B4D72224B1032C004EEE73 /* SwiftPackageProductDependency */; };
 		A8B4D72524B103A4004EEE73 /* RatingsLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B4D72424B103A4004EEE73 /* RatingsLauncher.swift */; };
 		A8C5B9D424B67A0E0077E306 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C5B9D324B67A0E0077E306 /* Globals.swift */; };
 		A8CA063424EB3B0A00B91778 /* BiasSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CA063324EB3B0A00B91778 /* BiasSliders.swift */; };
-		A8D189ED24D4C6010075EFA2 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = A8D189EC24D4C6010075EFA2 /* Charts */; };
+		A8D189ED24D4C6010075EFA2 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = A8D189EC24D4C6010075EFA2 /* SwiftPackageProductDependency */; };
 		A8D61B3724F1656C00A0F8F5 /* Pages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D61B3624F1656C00A0F8F5 /* Pages.swift */; };
 		A8D61B3924F1A10000A0F8F5 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8D61B3824F1A10000A0F8F5 /* Launch Screen.storyboard */; };
 		A8E94A1524F08E9200936E07 /* SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E94A1424F08E9200936E07 /* SupplementaryViews.swift */; };
 		A8E94A1724F096B000936E07 /* ArticleLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E94A1624F096B000936E07 /* ArticleLayouts.swift */; };
 		A8FBAAA724B017610011225B /* SliderValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8FBAAA624B017610011225B /* SliderValues.swift */; };
-		B6AF872E2544658000227CCC /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B6AF872D2544658000227CCC /* SwiftyJSON */; };
+		B6AF872E2544658000227CCC /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = B6AF872D2544658000227CCC /* SwiftPackageProductDependency */; };
 		B6AF8732254465C900227CCC /* PlayfairDisplay-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A82A26F924F6134A0028272B /* PlayfairDisplay-SemiBold.ttf */; };
 		B6B87DA225626E9F00707A5C /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B87DA125626E9F00707A5C /* CustomSlider.swift */; };
-		B6FBE1682569298500424BF8 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = B6FBE1672569298500424BF8 /* SDWebImage */; };
+		B6FBE1682569298500424BF8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = B6FBE1672569298500424BF8 /* SwiftPackageProductDependency */; };
 		BD03C9B5264C5A1200F3BE1F /* NewsBigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD03C9B4264C5A1200F3BE1F /* NewsBigViewController.swift */; };
 		BD0D467D26E7EA5200C30642 /* onBoardingPrefsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0D467C26E7EA5200C30642 /* onBoardingPrefsButton.png */; };
 		BD0FED9F25D170330079A32B /* PTSerif-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD0FED9E25D170330079A32B /* PTSerif-Bold.ttf */; };
@@ -330,13 +330,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14F78899320DBC683DD84507 /* Pods-ImproveTheNewsTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNewsTests.app store.xcconfig"; path = "Target Support Files/Pods-ImproveTheNewsTests/Pods-ImproveTheNewsTests.app store.xcconfig"; sourceTree = "<group>"; };
 		322C932A0A7159A21E458FDB /* Pods-ImproveTheNewsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNewsTests.release.xcconfig"; path = "Target Support Files/Pods-ImproveTheNewsTests/Pods-ImproveTheNewsTests.release.xcconfig"; sourceTree = "<group>"; };
 		50C112DD8A13EAB09CABECC8 /* Pods_ImproveTheNews_ImproveTheNewsUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImproveTheNews_ImproveTheNewsUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51B91154A2307697AD0A1EF3 /* Pods_ImproveTheNewsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImproveTheNewsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C0A04F279C00E40BC0CBCD1 /* Pods-ImproveTheNews.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNews.app store.xcconfig"; path = "Target Support Files/Pods-ImproveTheNews/Pods-ImproveTheNews.app store.xcconfig"; sourceTree = "<group>"; };
 		6D40DE6D85DB7FEB79892932 /* Pods_ImproveTheNews.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImproveTheNews.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7385FA8CEDC4BF343F7886A3 /* Pods-ImproveTheNews-ImproveTheNewsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNews-ImproveTheNewsUITests.release.xcconfig"; path = "Target Support Files/Pods-ImproveTheNews-ImproveTheNewsUITests/Pods-ImproveTheNews-ImproveTheNewsUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7B775DFEB152E6A9F22AE379 /* Pods-ImproveTheNewsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNewsTests.debug.xcconfig"; path = "Target Support Files/Pods-ImproveTheNewsTests/Pods-ImproveTheNewsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7D9202F8B2FD921B4E6D8CCD /* Pods-ImproveTheNews.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNews.debug.xcconfig"; path = "Target Support Files/Pods-ImproveTheNews/Pods-ImproveTheNews.debug.xcconfig"; sourceTree = "<group>"; };
+		87965E90664D06CBA59268F1 /* Pods-ImproveTheNews.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNews.beta.xcconfig"; path = "Target Support Files/Pods-ImproveTheNews/Pods-ImproveTheNews.beta.xcconfig"; sourceTree = "<group>"; };
+		9D4E85B32C89988A6853797D /* Pods-ImproveTheNews-ImproveTheNewsUITests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNews-ImproveTheNewsUITests.app store.xcconfig"; path = "Target Support Files/Pods-ImproveTheNews-ImproveTheNewsUITests/Pods-ImproveTheNews-ImproveTheNewsUITests.app store.xcconfig"; sourceTree = "<group>"; };
+		A7EE9FF2F73DE0DFE91DEE99 /* Pods-ImproveTheNews-ImproveTheNewsUITests.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNews-ImproveTheNewsUITests.beta.xcconfig"; path = "Target Support Files/Pods-ImproveTheNews-ImproveTheNewsUITests/Pods-ImproveTheNews-ImproveTheNewsUITests.beta.xcconfig"; sourceTree = "<group>"; };
 		A81B3B1C2481E67200A52A97 /* ImproveTheNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImproveTheNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A81B3B1F2481E67200A52A97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A81B3B212481E67200A52A97 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -642,6 +647,7 @@
 		BDF37F78263B0B09003D910D /* FooterCellTextOnly.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FooterCellTextOnly.xib; sourceTree = "<group>"; };
 		BDF71B532677970A0026C615 /* NewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		BDF72F62269DC960006B095D /* CookiesAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookiesAlert.swift; sourceTree = "<group>"; };
+		DD83F5504225D8FCCC2492B4 /* Pods-ImproveTheNewsTests.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNewsTests.beta.xcconfig"; path = "Target Support Files/Pods-ImproveTheNewsTests/Pods-ImproveTheNewsTests.beta.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -649,11 +655,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8B4D72324B1032C004EEE73 /* Cosmos in Frameworks */,
-				A8A7935A2482F61D009A55FE /* LBTATools in Frameworks */,
-				B6AF872E2544658000227CCC /* SwiftyJSON in Frameworks */,
-				A8D189ED24D4C6010075EFA2 /* Charts in Frameworks */,
-				B6FBE1682569298500424BF8 /* SDWebImage in Frameworks */,
+				A8B4D72324B1032C004EEE73 /* BuildFile in Frameworks */,
+				A8A7935A2482F61D009A55FE /* BuildFile in Frameworks */,
+				B6AF872E2544658000227CCC /* BuildFile in Frameworks */,
+				A8D189ED24D4C6010075EFA2 /* BuildFile in Frameworks */,
+				B6FBE1682569298500424BF8 /* BuildFile in Frameworks */,
 				D8C1E0E4AAAC3176E6A67953 /* Pods_ImproveTheNews.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -686,6 +692,12 @@
 				7385FA8CEDC4BF343F7886A3 /* Pods-ImproveTheNews-ImproveTheNewsUITests.release.xcconfig */,
 				7B775DFEB152E6A9F22AE379 /* Pods-ImproveTheNewsTests.debug.xcconfig */,
 				322C932A0A7159A21E458FDB /* Pods-ImproveTheNewsTests.release.xcconfig */,
+				6C0A04F279C00E40BC0CBCD1 /* Pods-ImproveTheNews.app store.xcconfig */,
+				87965E90664D06CBA59268F1 /* Pods-ImproveTheNews.beta.xcconfig */,
+				9D4E85B32C89988A6853797D /* Pods-ImproveTheNews-ImproveTheNewsUITests.app store.xcconfig */,
+				A7EE9FF2F73DE0DFE91DEE99 /* Pods-ImproveTheNews-ImproveTheNewsUITests.beta.xcconfig */,
+				14F78899320DBC683DD84507 /* Pods-ImproveTheNewsTests.app store.xcconfig */,
+				DD83F5504225D8FCCC2492B4 /* Pods-ImproveTheNewsTests.beta.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1183,11 +1195,11 @@
 			);
 			name = ImproveTheNews;
 			packageProductDependencies = (
-				A8A793592482F61D009A55FE /* LBTATools */,
-				A8B4D72224B1032C004EEE73 /* Cosmos */,
-				A8D189EC24D4C6010075EFA2 /* Charts */,
-				B6AF872D2544658000227CCC /* SwiftyJSON */,
-				B6FBE1672569298500424BF8 /* SDWebImage */,
+				A8A793592482F61D009A55FE /* SwiftPackageProductDependency */,
+				A8B4D72224B1032C004EEE73 /* SwiftPackageProductDependency */,
+				A8D189EC24D4C6010075EFA2 /* SwiftPackageProductDependency */,
+				B6AF872D2544658000227CCC /* SwiftPackageProductDependency */,
+				B6FBE1672569298500424BF8 /* SwiftPackageProductDependency */,
 			);
 			productName = ImproveTheNews;
 			productReference = A81B3B1C2481E67200A52A97 /* ImproveTheNews.app */;
@@ -1265,11 +1277,11 @@
 			);
 			mainGroup = A81B3B132481E67200A52A97;
 			packageReferences = (
-				A8A793582482F61D009A55FE /* XCRemoteSwiftPackageReference "LBTATools" */,
-				A885CAEF24ABB81000FA7F26 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
-				A8B4D72124B1032C004EEE73 /* XCRemoteSwiftPackageReference "Cosmos" */,
-				A8D189EB24D4C6010075EFA2 /* XCRemoteSwiftPackageReference "Charts" */,
-				B6FBE1662569298500424BF8 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				A8A793582482F61D009A55FE /* RemoteSwiftPackageReference */,
+				A885CAEF24ABB81000FA7F26 /* RemoteSwiftPackageReference */,
+				A8B4D72124B1032C004EEE73 /* RemoteSwiftPackageReference */,
+				A8D189EB24D4C6010075EFA2 /* RemoteSwiftPackageReference */,
+				B6FBE1662569298500424BF8 /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = A81B3B1D2481E67200A52A97 /* Products */;
 			projectDirPath = "";
@@ -1819,7 +1831,7 @@
 			};
 			name = Debug;
 		};
-		A81B3B482481E67500A52A97 /* Release */ = {
+		A81B3B482481E67500A52A97 /* App Store */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1871,12 +1883,14 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = "App Store";
 		};
 		A81B3B4A2481E67500A52A97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7D9202F8B2FD921B4E6D8CCD /* Pods-ImproveTheNews.debug.xcconfig */;
 			buildSettings = {
+				API_BASE_URL = "https://www.improvethenews.org";
+				APP_DISPLAY_NAME = "ITN-Debug";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1892,18 +1906,21 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.3.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ITNFoundation.ITNaggregator;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ITNFoundation.ITN-beta";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
-		A81B3B4B2481E67500A52A97 /* Release */ = {
+		A81B3B4B2481E67500A52A97 /* App Store */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B10C65AB4C478E58D094B21B /* Pods-ImproveTheNews.release.xcconfig */;
+			baseConfigurationReference = 6C0A04F279C00E40BC0CBCD1 /* Pods-ImproveTheNews.app store.xcconfig */;
 			buildSettings = {
+				API_BASE_URL = "https://www.improvethenews.org";
+				APP_DISPLAY_NAME = ImproveTheNews;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1925,7 +1942,7 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Release;
+			name = "App Store";
 		};
 		A81B3B4D2481E67500A52A97 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1950,9 +1967,9 @@
 			};
 			name = Debug;
 		};
-		A81B3B4E2481E67500A52A97 /* Release */ = {
+		A81B3B4E2481E67500A52A97 /* App Store */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 322C932A0A7159A21E458FDB /* Pods-ImproveTheNewsTests.release.xcconfig */;
+			baseConfigurationReference = 14F78899320DBC683DD84507 /* Pods-ImproveTheNewsTests.app store.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1971,7 +1988,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImproveTheNews.app/ImproveTheNews";
 			};
-			name = Release;
+			name = "App Store";
 		};
 		A81B3B502481E67500A52A97 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1994,9 +2011,9 @@
 			};
 			name = Debug;
 		};
-		A81B3B512481E67500A52A97 /* Release */ = {
+		A81B3B512481E67500A52A97 /* App Store */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7385FA8CEDC4BF343F7886A3 /* Pods-ImproveTheNews-ImproveTheNewsUITests.release.xcconfig */;
+			baseConfigurationReference = 9D4E85B32C89988A6853797D /* Pods-ImproveTheNews-ImproveTheNewsUITests.app store.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2013,7 +2030,134 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ImproveTheNews;
 			};
-			name = Release;
+			name = "App Store";
+		};
+		BDA1F4322729A3EE00E8114F /* Beta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Beta;
+		};
+		BDA1F4332729A3EE00E8114F /* Beta */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87965E90664D06CBA59268F1 /* Pods-ImproveTheNews.beta.xcconfig */;
+			buildSettings = {
+				API_BASE_URL = "https://www.improvemynews.com";
+				APP_DISPLAY_NAME = "ITN-Beta";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Beta";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 11;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
+				DEVELOPMENT_TEAM = U7V2C7L759;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = ImproveTheNews/app/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.3.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ITNFoundation.ITN-beta";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Beta;
+		};
+		BDA1F4342729A3EE00E8114F /* Beta */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DD83F5504225D8FCCC2492B4 /* Pods-ImproveTheNewsTests.beta.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 275BA9MHBN;
+				INFOPLIST_FILE = ImproveTheNewsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Mindy-Long.ImproveTheNewsTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImproveTheNews.app/ImproveTheNews";
+			};
+			name = Beta;
+		};
+		BDA1F4352729A3EE00E8114F /* Beta */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7EE9FF2F73DE0DFE91DEE99 /* Pods-ImproveTheNews-ImproveTheNewsUITests.beta.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 275BA9MHBN;
+				INFOPLIST_FILE = ImproveTheNewsUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Mindy-Long.ImproveTheNewsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ImproveTheNews;
+			};
+			name = Beta;
 		};
 /* End XCBuildConfiguration section */
 
@@ -2022,42 +2166,46 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A81B3B472481E67500A52A97 /* Debug */,
-				A81B3B482481E67500A52A97 /* Release */,
+				A81B3B482481E67500A52A97 /* App Store */,
+				BDA1F4322729A3EE00E8114F /* Beta */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "App Store";
 		};
 		A81B3B492481E67500A52A97 /* Build configuration list for PBXNativeTarget "ImproveTheNews" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A81B3B4A2481E67500A52A97 /* Debug */,
-				A81B3B4B2481E67500A52A97 /* Release */,
+				A81B3B4B2481E67500A52A97 /* App Store */,
+				BDA1F4332729A3EE00E8114F /* Beta */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "App Store";
 		};
 		A81B3B4C2481E67500A52A97 /* Build configuration list for PBXNativeTarget "ImproveTheNewsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A81B3B4D2481E67500A52A97 /* Debug */,
-				A81B3B4E2481E67500A52A97 /* Release */,
+				A81B3B4E2481E67500A52A97 /* App Store */,
+				BDA1F4342729A3EE00E8114F /* Beta */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "App Store";
 		};
 		A81B3B4F2481E67500A52A97 /* Build configuration list for PBXNativeTarget "ImproveTheNewsUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A81B3B502481E67500A52A97 /* Debug */,
-				A81B3B512481E67500A52A97 /* Release */,
+				A81B3B512481E67500A52A97 /* App Store */,
+				BDA1F4352729A3EE00E8114F /* Beta */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "App Store";
 		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A885CAEF24ABB81000FA7F26 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+		A885CAEF24ABB81000FA7F26 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
 			requirement = {
@@ -2065,7 +2213,7 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		A8A793582482F61D009A55FE /* XCRemoteSwiftPackageReference "LBTATools" */ = {
+		A8A793582482F61D009A55FE /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/bhlvoong/LBTATools.git";
 			requirement = {
@@ -2073,7 +2221,7 @@
 				minimumVersion = 1.0.17;
 			};
 		};
-		A8B4D72124B1032C004EEE73 /* XCRemoteSwiftPackageReference "Cosmos" */ = {
+		A8B4D72124B1032C004EEE73 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/Cosmos.git";
 			requirement = {
@@ -2081,7 +2229,7 @@
 				minimumVersion = 22.1.0;
 			};
 		};
-		A8D189EB24D4C6010075EFA2 /* XCRemoteSwiftPackageReference "Charts" */ = {
+		A8D189EB24D4C6010075EFA2 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts.git";
 			requirement = {
@@ -2089,7 +2237,7 @@
 				minimumVersion = 3.5.0;
 			};
 		};
-		B6FBE1662569298500424BF8 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+		B6FBE1662569298500424BF8 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
 			requirement = {
@@ -2100,29 +2248,29 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A8A793592482F61D009A55FE /* LBTATools */ = {
+		A8A793592482F61D009A55FE /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A8A793582482F61D009A55FE /* XCRemoteSwiftPackageReference "LBTATools" */;
+			package = A8A793582482F61D009A55FE /* RemoteSwiftPackageReference */;
 			productName = LBTATools;
 		};
-		A8B4D72224B1032C004EEE73 /* Cosmos */ = {
+		A8B4D72224B1032C004EEE73 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A8B4D72124B1032C004EEE73 /* XCRemoteSwiftPackageReference "Cosmos" */;
+			package = A8B4D72124B1032C004EEE73 /* RemoteSwiftPackageReference */;
 			productName = Cosmos;
 		};
-		A8D189EC24D4C6010075EFA2 /* Charts */ = {
+		A8D189EC24D4C6010075EFA2 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A8D189EB24D4C6010075EFA2 /* XCRemoteSwiftPackageReference "Charts" */;
+			package = A8D189EB24D4C6010075EFA2 /* RemoteSwiftPackageReference */;
 			productName = Charts;
 		};
-		B6AF872D2544658000227CCC /* SwiftyJSON */ = {
+		B6AF872D2544658000227CCC /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A885CAEF24ABB81000FA7F26 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			package = A885CAEF24ABB81000FA7F26 /* RemoteSwiftPackageReference */;
 			productName = SwiftyJSON;
 		};
-		B6FBE1672569298500424BF8 /* SDWebImage */ = {
+		B6FBE1672569298500424BF8 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B6FBE1662569298500424BF8 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			package = B6FBE1662569298500424BF8 /* RemoteSwiftPackageReference */;
 			productName = SDWebImage;
 		};
 /* End XCSwiftPackageProductDependency section */

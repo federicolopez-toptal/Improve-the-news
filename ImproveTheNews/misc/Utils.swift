@@ -127,11 +127,18 @@ func SET_OB_PARAM(_ value: String) {
     UserDefaults.standard.synchronize()
 }
 
+func API_BASE_URL() -> String {
+    let dict = Bundle.main.infoDictionary!
+    return dict["API_BASE_URL"] as! String
+}
+
 func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
                 banners: String?, superSliders: String?) -> String {
 
-    var link = "https://www.improvethenews.org/appserver.php/?topic=" + topicCode
+    //var link = "https://www.improvethenews.org/appserver.php/?topic=" + topicCode
     //var link = "https://www.improvemynews.com/appserver.php/?topic=" + topicCode
+    
+    var link = API_BASE_URL() + "/appserver.php/?topic=" + topicCode
     
     link += ".A\(abs[0]).B\(abs[1]).S\(abs[2])"
     link += SliderValues.sharedInstance.getBiasPrefs()
