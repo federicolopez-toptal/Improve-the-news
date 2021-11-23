@@ -21,6 +21,8 @@ protocol ShadeDelegate {
 
 class SliderPopup: UIView {
     
+    var canDismiss = true
+    
     private var politicalStance = false
     private var establishmentStance = false
     
@@ -617,6 +619,8 @@ extension SliderPopup: UIGestureRecognizerDelegate {
     
     // cancel button
     @objc func handleDismiss() {
+        if(!canDismiss){ return }
+    
         self.status = "SL00"
         let screenSize = UIScreen.main.bounds.size
         UIView.animate(withDuration: 0.5, animations: {
@@ -628,6 +632,7 @@ extension SliderPopup: UIGestureRecognizerDelegate {
     
     // show all sliders
     @objc func handleShowMore() {
+        if(!canDismiss){ return }
         
         if !isShowingMore {
             isShowingMore = true
@@ -762,6 +767,34 @@ extension SliderPopup {
         
     }
     
+    
+    func disableSplitFromOutside() {
+        let index = UserDefaults.standard.integer(forKey: "userSplitPrefs")-1
+        
+        for miniView in stackView.subviews {
+            if(miniView.tag == 400+index) {
+                for component in miniView.subviews {
+                    if(component is UIButton) {
+                        let splitButton = component as! UIButton
+                        self.splitButtonTap(sender: splitButton)
+                    }
+                }
+            }
+        }
+    }
+    
+    func enableSplitForSharing() {
+        for miniView in stackView.subviews {
+            if(miniView.tag == 400) {
+                for component in miniView.subviews {
+                    if(component is UIButton) {
+                        let splitButton = component as! UIButton
+                        self.splitButtonTap(sender: splitButton)
+                    }
+                }
+            }
+        }
+    }
     
     
 }

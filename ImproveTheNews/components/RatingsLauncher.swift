@@ -140,6 +140,10 @@ extension RatingsLauncher {
         let elapsedTime = CFAbsoluteTimeGetCurrent() - WebViewController.startTime
         submitRatings(rating: RatingsLauncher.ratings, seconds: elapsedTime)
         
+        var url = self.sliderValues.getCurrentArticle()
+        let K = WebViewController.keyName(url)
+        UserDefaults.setBoolValue(true, forKey: K)
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             UIView.animate(withDuration: 0.3) {
                 //sender.backgroundColor = accentOrange

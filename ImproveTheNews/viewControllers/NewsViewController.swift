@@ -11,6 +11,7 @@ import LBTATools
 import SDWebImage
 import SafariServices
 import SwiftyJSON
+import SwiftUI
 
 class NewsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout,
     NewsDelegate {
@@ -25,6 +26,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var refresher: UIRefreshControl!        // pull to refresh
     let biasSliders = SliderPopup()         // Preferences (orange) panel
     let loadingView = UIView()              // loading with activityIndicator inside
+    
+    var shareSplitView: ShareSplitExplainPopup?
+    var shareActionsView: ShareSplitActionsPopup?
+    var biasMiniButton = UIView()
     
     // to populate CollectionView
     //changed home link from "http://www.improvethenews.org/itnserver.php/?topic=" to this one
@@ -62,9 +67,15 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         let button = UIButton(type: .custom)
         button.setBackgroundImage(UIImage(named: "prefsButton.png"), for: .normal)
         button.addTarget(self, action: #selector(showBiasSliders(_:)), for: .touchUpInside)
-        button.clipsToBounds = true
+        //button.clipsToBounds = true
         return button
     }()
+    var biasButtonState = 1         // 1: normal icon, 2: share-split icon
+    
+    
+
+    
+    
     
     var onBoard: OnBoardingView?
     
@@ -165,6 +176,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         setUpNavBar()
         configureBiasButton()
+        self.initBiasMiniButton()
         configureTopicButton() //!!!
         setUpRefresh()
         setUpActivityIndicator()
@@ -196,6 +208,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         if(splitValue != 0) {
             self.splitChangeFirstTime = false
             self.biasSliders.setSplitValue(splitValue-1)
+            if(self.uniqueID==1 && APP_CFG_SPLITSHARING){ Globals.isSliderOn = true }
+        } else {
         }
         
         /*
@@ -229,6 +243,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 }
             }
         }
+        
+        self.shareSplitView = ShareSplitExplainPopup(into: self.view)
+        self.shareActionsView = ShareSplitActionsPopup(into: self.view)
     }
     
     var lastTimeActive: Date?
@@ -484,7 +501,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 
         self.moreHeadLines.setTopics(self.newsParser.getAllTopics())
         
-        self.addParamsLabel()
+        //self.addParamsLabel()
         self.updateDivider()
         
         NotificationCenter.default.post(name: NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED, object: nil)
@@ -776,6 +793,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             homeButton.frame = CGRect(x: 0, y: 0,
                     width: 195 * f, height: 30 * f)
         }
+
         
         homeButton.addTarget(self, action: #selector(homeButtonTapped),
                             for: .touchUpInside)
@@ -989,6 +1007,9 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
             }
         }
         
+        
+        
+        
         //print( "ZOOM", isZoomed() )
         
         /*
@@ -1022,6 +1043,31 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         biasSliders.buildViews()
         self.biasSliders.status = "SL00"
         self.updateBiasButtonPosition()
+        
+        
+        /*
+        let subDim: CGFloat = 30.0
+        let subButton = UIButton(type: .system)
+        subButton.backgroundColor = .green
+        subButton.frame = CGRect(x: 0, y: 0, width: subDim, height: subDim)
+        subButton.addTarget(self, action: #selector(subButtonOnTap(sender:)), for: .touchUpInside)
+        
+        self.biasButton.clipsToBounds = false
+        self.biasButton.addSubview(subButton)
+        */
+        //showBiasSliders
+        
+        /*
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showBiasSliders(gesture: )))
+        self.biasButton.addGestureRecognizer(tapGesture)
+        */
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self,
+            action: #selector(biasButtonOnLongPress(gesture:)))
+        self.biasButton.addGestureRecognizer(longPressGesture)
+    }
+    @objc func subButtonOnTap(sender: UIButton) {
+        print(">>>>>>>")
     }
     
     func updateBiasButtonPosition() {
@@ -1061,6 +1107,9 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         
         mFrame.origin.y = posY
         self.biasButton.frame = mFrame
+        
+        self.biasMiniButtonUpdatePosition()
+        self.biasMiniButton.superview?.bringSubviewToFront(self.biasMiniButton)
     }
     
     func configureBiasSliders() {
@@ -1096,6 +1145,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
                 self.biasSliders.frame = mFrame
                 
                 self.updateBiasButtonPosition()
+                self.biasMiniButtonUpdatePosition()
                 
                 /*
                 self.biasSliders.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.biasSliders.frame.height)
@@ -1104,6 +1154,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
             }, completion: nil)
         
         self.biasButton.superview?.bringSubviewToFront(self.biasButton)
+        self.biasMiniButton.superview?.bringSubviewToFront(self.biasMiniButton)
     }
     
     // For ShadeDelegate protocol
@@ -1134,14 +1185,21 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
     
     
     @objc func showBiasSliders(_ sender:UIButton!) {
-        if !Globals.isSliderOn {
-            Globals.isSliderOn = true
-        }
-        
-        if(self.biasSliders.status == "SL00") {
-            configureBiasSliders()
+    //@objc func showBiasSliders(gesture: TapGesture)
+        // orange button click
+        if(self.biasButtonState==1){
+            if !Globals.isSliderOn {
+                Globals.isSliderOn = true
+            }
+            
+            if(self.biasSliders.status == "SL00") {
+                configureBiasSliders()
+                print("BIAS view")
+            } else {
+                self.biasSliders.handleDismiss()
+            }
         } else {
-            self.biasSliders.handleDismiss()
+            self.startSplitSharingWorkflow()
         }
     }
     
@@ -1372,7 +1430,6 @@ extension NewsViewController: BannerInfoDelegate {
             }
         }
     }
-    
 }
 
 extension NewsViewController {
@@ -1431,6 +1488,8 @@ extension NewsViewController {
         
             
             //cell.contentView.backgroundColor = .green
+            
+            print( ">> HEIGHT", cell.frame.size.height )
             
             return cell
     }
@@ -1686,6 +1745,8 @@ extension NewsViewController {
             }
         }
         
+        print("HEADER HEIGHT: ", h)
+        
         return CGSize(width: view.frame.width, height: h)
     }
     
@@ -1856,13 +1917,15 @@ extension NewsViewController {
         
         let index = start + indexPath.row
         
-        var link = ""
+        var link = newsParser.getURL(index: index)
+        /*
         if newsParser.getAMPStatus(index: index) == true {
             //link = newsParser.getAMPURL(index: index)
             link = newsParser.getURL(index: index)
         } else {
             link = newsParser.getURL(index: index)
         }
+        */
         
         let title = newsParser.getTitle(index: index)
         
@@ -2051,6 +2114,9 @@ extension NewsViewController {
                         seeMore.configure()
                         seeMore.configure2()
                         seeMore.shareDelegate = self
+                        
+                        
+                        print("ABOUT HEIGHT", seeMore.frame.size.height)
                         return seeMore
                     }
                 } else if indexPath.section == 0 {
@@ -2089,6 +2155,8 @@ extension NewsViewController {
                         seeMore.scrollView.contentOffset = mOffset
                         
                         //seeMore.backgroundColor = UIColor.green.withAlphaComponent(0.15)
+                        
+                        print(">> FOOTER ABOUT", seeMore.frame.size.height)
                         return seeMore
                     }
                 
@@ -2102,6 +2170,8 @@ extension NewsViewController {
                     seeMore.configure()
                     
                     //seeMore.backgroundColor = UIColor.green.withAlphaComponent(0.15)
+                    
+                    print(">> FOOTER HEIGHT", seeMore.frame.size.height)
                     return seeMore
                 }
             
@@ -2326,13 +2396,17 @@ extension NewsViewController {
         let h: CGFloat = UIScreen.main.bounds.height
         vDivider.frame = CGRect(x: x, y: 0, width: w, height: h)
         vDivider.backgroundColor = .clear //UIColor.red.withAlphaComponent(0.25)
+        vDivider.clipsToBounds = false
+        vDivider.isUserInteractionEnabled = false
         
+        /*
         let dirs: [UISwipeGestureRecognizer.Direction] = [.left, .right]
         for D in dirs {
             let gesture = UISwipeGestureRecognizer(target: self, action: #selector(vDividerOnGesture(gesture:)))
             gesture.direction = D
             vDivider.addGestureRecognizer(gesture)
         }
+        */
         
         self.collectionView.addSubview(vDivider)
         vDivider.isHidden = true
@@ -2343,20 +2417,31 @@ extension NewsViewController {
     }
     
     func updateDivider() {
-        print("%%% update divider")
-    
+    // Delete all subviews
         vDivider.subviews.forEach({ $0.removeFromSuperview() })
+        
+        
+    // Hide/Show component
         if(!mustSplit()) {
             vDivider.isHidden = true
             return
         }
-        
         vDivider.isHidden = false
         
+    // Draw lines
         var offsetY: CGFloat = 0
         let sections = self.numberOfSections(in: self.collectionView)
-        for sec in 0...sections-1 {
+        var topValue = sections-1
+        if(topValue<=0) {
+            return
+        }
+        
+        //topValue = -1 // this will provoke a crash
+        for sec in 0...topValue {
             let items = self.collectionView(self.collectionView, numberOfItemsInSection: sec)
+            if(items<=0) {
+                continue
+            }
             
             let margin: CGFloat = 8
             var Y: CGFloat = 51 + 45 // header
@@ -2368,7 +2453,7 @@ extension NewsViewController {
             let line = UIView(frame: CGRect(x: X, y: Y + offsetY + margin, width: W, height: H))
             
             line.backgroundColor = DARKMODE() ? .white : bgWhite_DARK
-            //line.alpha = DARKMODE() ? 1.0 : 0.2
+            line.alpha = DARKMODE() ? 1.0 : 0.2
             line.isUserInteractionEnabled = false
             vDivider.addSubview(line)
             
@@ -2386,7 +2471,7 @@ extension NewsViewController {
             }
             
             // show alpha line
-            if(sec == sections-1) {
+            if(sec == sections-1) { // last loop
                 var segment: CGFloat = 5.0
                 var posY: CGFloat = 0
                 H = line.frame.origin.y + line.frame.size.height
@@ -2403,24 +2488,26 @@ extension NewsViewController {
                     
                     posY += (segment * 2)
                 }
-                
-                /*
-                H = line.frame.origin.y + line.frame.size.height
-                let alphaLine = UIView(frame: CGRect(x: X, y: 0,
-                    width: W, height: H))
-                alphaLine.backgroundColor = line.backgroundColor
-                alphaLine.alpha = 0.05
-                alphaLine.isUserInteractionEnabled = false
-                vDivider.addSubview(alphaLine)
-                
-                var mFrame = vDivider.frame
-                mFrame.size.height = H
-                vDivider.frame = mFrame
-                */
             }
-            
         }
+        
+        
     }
+    
+    /*
+        H = line.frame.origin.y + line.frame.size.height
+        let alphaLine = UIView(frame: CGRect(x: X, y: 0,
+            width: W, height: H))
+        alphaLine.backgroundColor = line.backgroundColor
+        alphaLine.alpha = 0.05
+        alphaLine.isUserInteractionEnabled = false
+        vDivider.addSubview(alphaLine)
+        
+        var mFrame = vDivider.frame
+        mFrame.size.height = H
+        vDivider.frame = mFrame
+    */
+    
     
     func mustSplit() -> Bool {
         let stancevalues =  self.biasSliders.stanceValues()
@@ -2434,6 +2521,7 @@ extension NewsViewController {
     func splitValueChange() {
         if( mustSplit() ) {
             // SPLIT
+            self.biasButtonState = 2
             if(vDivider.isHidden) {
                 vDivider.alpha = 0
                 vDivider.isHidden = false
@@ -2443,6 +2531,7 @@ extension NewsViewController {
             }
         } else {
             // NORMAL
+            self.biasButtonState = 1
             if(!vDivider.isHidden) {
                 UIView.animate(withDuration: 0.25) {
                     self.vDivider.alpha = 0
@@ -2451,6 +2540,23 @@ extension NewsViewController {
                 }
             }
         }
+        
+        let iconImageView = self.biasMiniButton.viewWithTag(767) as! UIImageView
+        iconImageView.image = UIImage(named: "shareSplitButton.png")
+        
+        if(!APP_CFG_SPLITSHARING) {
+            self.biasButtonState = 1
+        }
+
+        self.biasSliders.canDismiss = true
+        var buttonIcon = UIImage(named: "prefsButton.png")
+        if(self.biasButtonState == 2) {
+            self.biasSliders.canDismiss = false
+            buttonIcon = UIImage(named: "shareSplitButton.png")
+            iconImageView.image = UIImage(named: "prefsButton.png")
+        }
+        self.biasButton.setBackgroundImage(buttonIcon, for: .normal)
+        self.biasMiniButton.superview?.bringSubviewToFront(self.biasMiniButton)
         
         // reload the news
         if(splitChangeFirstTime) {
@@ -2597,4 +2703,77 @@ extension NewsViewController: OnBoardingViewDelegate {
             self.configureBiasSliders()
         //}
     }
+}
+
+extension NewsViewController {
+
+    // biasMiniButton
+    func initBiasMiniButton() {
+        let dim: CGFloat = 45.0
+        
+        self.biasMiniButton.frame = CGRect(x: 0, y: 0, width: dim, height: dim)
+        self.biasMiniButton.backgroundColor = .clear
+        view.addSubview(self.biasMiniButton)
+        
+        let icon = UIImageView()
+        icon.image = UIImage(named: "shareSplitButton.png")
+        icon.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+        self.biasMiniButton.addSubview(icon)
+        icon.center = CGPoint(x: dim/2, y: dim/2)
+        icon.tag = 767
+        
+        let buttonArea = UIButton(type: .custom)
+        buttonArea.frame = CGRect(x: 0, y: 0, width: dim, height: dim)
+        buttonArea.backgroundColor = .clear
+        self.biasMiniButton.addSubview(buttonArea)
+        buttonArea.addTarget(self, action: #selector(biasMiniButtonOnTap(sender:)),
+            for: .touchUpInside)
+        
+        self.biasMiniButtonUpdatePosition()
+        self.biasMiniButton.isHidden = true
+    }
+    
+    func biasMiniButtonUpdatePosition() {
+        let offset: CGFloat = 20
+    
+        var mFrame = self.biasMiniButton.frame
+        mFrame.origin.x = self.biasButton.frame.origin.x - offset
+        mFrame.origin.y = self.biasButton.frame.origin.y - offset
+        self.biasMiniButton.frame = mFrame
+    }
+    
+    @objc func biasMiniButtonOnTap(sender: UIButton) {
+        if(self.biasButtonState == 1) {
+            // Normal "panel", go to share-split mode
+            self.biasSliders.enableSplitForSharing()
+        } else {
+            // Split, go to normal (panel) mode
+            self.biasSliders.disableSplitFromOutside()
+        }
+    }
+    
+    @objc func biasButtonOnLongPress(gesture: UILongPressGestureRecognizer) {
+        if(APP_CFG_SPLITSHARING) {
+            if(self.biasMiniButton.isHidden) {
+                self.biasMiniButton.alpha = 0.0
+                self.biasMiniButton.isHidden = false
+                
+                UIView.animate(withDuration: 0.4) {
+                    self.biasMiniButton.alpha = 1.0
+                } completion: { succeed in
+                }
+
+            }
+        }
+    }
+    
+    func startSplitSharingWorkflow() {
+        if(self.shareSplitView!.mustBeShown()) {
+            self.shareSplitView?.show()
+        } else {
+            shareActionsView?.show()    // continue from here
+        }
+    }
+
+
 }

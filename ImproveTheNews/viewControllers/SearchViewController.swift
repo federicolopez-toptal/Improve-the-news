@@ -29,7 +29,8 @@ class SearchViewController: UIViewController {
         sliderValues = SliderValues.sharedInstance
         
         filteredData = Globals.searchTopics
-        topicsTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        topicsTable.register(UITableViewCell.self,
+            forCellReuseIdentifier: "cell")
         setupTableView()
         
         setupNavBar()
@@ -145,12 +146,17 @@ extension SearchViewController: UISearchBarDelegate {
         
         //navigationController?.navigationBar.tintColor = DARKMODE() ? .white : .black
         
-        searchBar.showsCancelButton = true
+        searchBar.showsCancelButton = false
         navigationItem.titleView = true ? searchBar : nil
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         navigationController?.popViewController(animated: true)
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        //self.view.endEditing(true)
+        searchBar.endEditing(true)
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

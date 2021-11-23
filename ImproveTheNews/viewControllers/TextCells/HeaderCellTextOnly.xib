@@ -51,7 +51,7 @@
                 <outlet property="contentLabel" destination="uaZ-e5-F4L" id="naj-Gp-q1O"/>
                 <outlet property="hierarchyLabel" destination="lPJ-fP-ioB" id="pvl-ya-0fr"/>
             </connections>
-            <point key="canvasLocation" x="-1596" y="84"/>
+            <point key="canvasLocation" x="-1635" y="74"/>
         </tableViewCell>
     </objects>
 </document>

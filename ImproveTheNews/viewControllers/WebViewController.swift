@@ -151,9 +151,12 @@ class WebViewController: UIViewController, WKUIDelegate {
             ratingsMenu.frame = CGRect(x: 0, y: y,
                     width: view.frame.width, height: height)
             ratingsMenu.buildView()
-                    
             view.addSubview(ratingsMenu)
-            //ratingsMenu.isHidden = true
+            
+            if(self.articleWasRated(self.pageURL)) {
+                ratingsMenu.isHidden = true
+                self.webViewBottomConstraint?.constant = 0
+            }
         } else {
             self.webViewBottomConstraint?.constant = 0
         }
@@ -562,6 +565,29 @@ extension WebViewController: RatingsLauncherDelegate {
         
     }
     
+}
+
+
+extension WebViewController {
+
+    private func articleWasRated(_ url: String) -> Bool {
+        var result = false
+        let K = WebViewController.keyName(url)
+        if(UserDefaults.exists(key: K)) {
+            result = true
+        }
+        
+        return result
+    }
+
+    static func keyName(_ url: String) -> String {
+        var result = url
+        result = result.replacingOccurrences(of: ":", with: "")
+        result = result.replacingOccurrences(of: ".", with: "")
+        result = result.replacingOccurrences(of: "/", with: "")
+        result = result.replacingOccurrences(of: "-", with: "")
+        return result
+    }
 }
 
 func SAFE_AREA() -> UIEdgeInsets? {

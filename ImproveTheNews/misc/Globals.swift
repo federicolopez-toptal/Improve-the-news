@@ -40,6 +40,9 @@ let APP_CFG_SHOW_MARKUPS = false //
 let APP_CFG_INACTIVE_MINS: TimeInterval = 30.0
 let APP_CFG_MORE_PREFS = true
 
+
+let APP_CFG_SPLITSHARING = false
+
 // false/false for v1
 let APP_CFG_SHOW_PIE_CHART = false
 let APP_CFG_SHOW_SUPER_SLIDERS = false
