@@ -12,6 +12,7 @@ target 'ImproveTheNews' do
   pod 'LBTATools'
   pod 'SwiftyJSON'
   pod 'SDWebImage'
+  pod 'Branch'
 
   target 'ImproveTheNewsTests' do
     inherit! :search_paths

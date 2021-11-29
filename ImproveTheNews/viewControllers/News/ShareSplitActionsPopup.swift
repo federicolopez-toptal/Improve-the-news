@@ -8,15 +8,24 @@
 
 import UIKit
 
+
+protocol ShareSplitActionsPopupDelegate {
+    func shareSplitAction_exit()
+}
+
+
 class ShareSplitActionsPopup: UIView {
 
+    let blackCircle = UIView()
+    
     let textLabel: UILabel = UILabel()
     private var bottomConstraint: NSLayoutConstraint?
+    var delegate: ShareSplitActionsPopupDelegate?
 
     init(into container: UIView) {
         super.init(frame: CGRect.zero)
         
-        self.backgroundColor = UIColor(hex: 0xD3592D)
+        self.backgroundColor = accentOrange //UIColor(hex: 0xD3592D)
         self.bottomConstraint = self.bottomAnchor.constraint(equalTo: container.bottomAnchor,
             constant: 0)
             
@@ -25,7 +34,7 @@ class ShareSplitActionsPopup: UIView {
         NSLayoutConstraint.activate([
             self.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             self.widthAnchor.constraint(equalTo: container.widthAnchor),
-            self.heightAnchor.constraint(equalToConstant: 180),
+            self.heightAnchor.constraint(equalToConstant: 150),
             self.bottomConstraint!
         ])
         
@@ -35,19 +44,20 @@ class ShareSplitActionsPopup: UIView {
         
         let buttonsDim: CGFloat = 60.0
         
-        let button1 = UIImageView()
-        button1.image = UIImage(named: "shareSplit_button.png")
+        let button1 = UIButton(type: .custom)
+        button1.setImage(UIImage(named: "shareSplit_button.png"), for: .normal)
         self.addSubview(button1)
         button1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            button1.topAnchor.constraint(equalTo: self.topAnchor, constant: 35),
+            button1.topAnchor.constraint(equalTo: self.topAnchor, constant: 22),
             button1.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 30),
             button1.widthAnchor.constraint(equalToConstant: buttonsDim),
             button1.heightAnchor.constraint(equalToConstant: buttonsDim)
         ])
+        button1.addTarget(self, action: #selector(exitButtonOnTap(_:)), for: .touchUpInside)
         
-        let button2 = UIImageView()
-        button2.image = UIImage(named: "shareSplit_button.png")
+        let button2 = UIButton(type: .custom)
+        button2.setImage(UIImage(named: "shareSplit_button.png"), for: .normal)
         self.addSubview(button2)
         button2.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -56,6 +66,7 @@ class ShareSplitActionsPopup: UIView {
             button2.widthAnchor.constraint(equalToConstant: buttonsDim),
             button2.heightAnchor.constraint(equalToConstant: buttonsDim)
         ])
+        button2.addTarget(self, action: #selector(shareButtonOnTap(_:)), for: .touchUpInside)
         
         let button3 = UIImageView()
         button3.image = UIImage(named: "shareSplit_button.png")
@@ -109,11 +120,22 @@ class ShareSplitActionsPopup: UIView {
         NSLayoutConstraint.activate([
             self.textLabel.leadingAnchor.constraint(equalTo: button1.leadingAnchor),
             self.textLabel.trailingAnchor.constraint(equalTo: button3.trailingAnchor),
-            self.textLabel.topAnchor.constraint(equalTo: button1.bottomAnchor, constant: 25),
+            self.textLabel.topAnchor.constraint(equalTo: button1.bottomAnchor, constant: 19),
         ])
         
-        self.showText("Select any 2 articles")
+        self.addSubview(blackCircle)
+        blackCircle.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+        blackCircle.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            blackCircle.topAnchor.constraint(equalTo: button2.topAnchor),
+            blackCircle.leadingAnchor.constraint(equalTo: button2.leadingAnchor),
+            blackCircle.widthAnchor.constraint(equalToConstant: buttonsDim),
+            blackCircle.heightAnchor.constraint(equalToConstant: buttonsDim)
+        ])
+        blackCircle.layer.cornerRadius = buttonsDim/2
         
+        self.showText("Select any 2 articles")
+        self.setShareEnable(false)
         
         self.bottomConstraint?.constant = 100
         self.layoutIfNeeded()
@@ -138,11 +160,34 @@ class ShareSplitActionsPopup: UIView {
         } completion: { (succeed) in
             print("DONE!")
         }
-
+    }
+    
+    func hide() {
+        self.bottomConstraint!.constant = 100
+    
+        UIView.animate(withDuration: 0.4) {
+            self.superview!.layoutIfNeeded()
+            self.alpha = 0.0
+        } completion: { (succeed) in
+            self.isHidden = true
+        }
     }
     
     func showText(_ text: String) {
         self.textLabel.text = text
+    }
+    
+    func setShareEnable(_ state: Bool) {
+        self.blackCircle.isHidden = state
+    }
+    
+    // MARK: - Event(s)
+    @objc func exitButtonOnTap(_ sender: UIButton?) {
+        self.delegate?.shareSplitAction_exit()
+    }
+    
+    @objc func shareButtonOnTap(_ sender: UIButton?) {
+        print("SHARE!")
     }
 
 }

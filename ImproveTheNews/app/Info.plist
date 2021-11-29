@@ -95,6 +95,31 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ITNaggregator</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.ITNFoundation.ITN-beta</string>
+		</dict>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ITNaggregator</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.ITNFoundation.ITNaggregator</string>
+		</dict>
+	</array>
+	<key>branch_key</key>
+	<string>key_live_ceZzYfvtNmJQbHj1L7TZ1fgnsDdtj5G3</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

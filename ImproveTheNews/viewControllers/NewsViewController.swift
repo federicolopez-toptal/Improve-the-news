@@ -29,6 +29,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     var shareSplitView: ShareSplitExplainPopup?
     var shareActionsView: ShareSplitActionsPopup?
+    var shareArticles: ShareSplitArticles?
     var biasMiniButton = UIView()
     
     // to populate CollectionView
@@ -245,7 +246,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
         
         self.shareSplitView = ShareSplitExplainPopup(into: self.view)
+        self.shareSplitView?.delegate = self
         self.shareActionsView = ShareSplitActionsPopup(into: self.view)
+        self.shareActionsView?.delegate = self
+        self.shareArticles = ShareSplitArticles(into: self.view)
+        self.shareArticles?.delegate = self
     }
     
     var lastTimeActive: Date?
@@ -311,6 +316,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             }
         }
         
+        /*
+        DELAY(2.0) {
+            self.showBiasSliders(self.biasButton)
+        }
+        */
     }
     
     
@@ -328,8 +338,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 self.loadArticles()
                 self.reload()
                 self.updateTopicSliders()
+                
+                
                 if Globals.isSliderOn {
-                    self.configureBiasSliders()
+                    //self.configureBiasSliders()
                 }
                 
                 DELAY(2.0) {
@@ -1199,7 +1211,13 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
                 self.biasSliders.handleDismiss()
             }
         } else {
-            self.startSplitSharingWorkflow()
+            if(self.biasSliders.status == "SL00") {
+                configureBiasSliders()
+                print("BIAS view")
+            } else {
+                self.startSplitSharingWorkflow()
+            }
+            
         }
     }
     
@@ -2551,7 +2569,7 @@ extension NewsViewController {
         self.biasSliders.canDismiss = true
         var buttonIcon = UIImage(named: "prefsButton.png")
         if(self.biasButtonState == 2) {
-            self.biasSliders.canDismiss = false
+            //self.biasSliders.canDismiss = false
             buttonIcon = UIImage(named: "shareSplitButton.png")
             iconImageView.image = UIImage(named: "prefsButton.png")
         }
@@ -2768,12 +2786,47 @@ extension NewsViewController {
     }
     
     func startSplitSharingWorkflow() {
+        self.shareArticles?.start(parser: self.newsParser)
+        self.shareArticles?.isHidden = false
+    
         if(self.shareSplitView!.mustBeShown()) {
             self.shareSplitView?.show()
         } else {
-            shareActionsView?.show()    // continue from here
+            self.biasButton.isHidden = true
+            self.biasSliders.isHidden = true
+            self.shareActionsView?.show()
         }
     }
 
 
+}
+
+extension NewsViewController: ShareSplitActionsPopupDelegate {
+    func shareSplitAction_exit() {
+        self.biasButton.isHidden = false
+        self.biasSliders.isHidden = false
+        
+        self.shareArticles?.isHidden = true
+        self.shareActionsView?.hide()
+    }
+}
+
+extension NewsViewController: ShareSplitExplainPopupDelegate {
+    func onShareSplitExplaintPopupClose() {
+        self.biasButton.isHidden = true
+        self.biasSliders.isHidden = true
+        self.shareActionsView?.show()
+    }
+}
+
+extension NewsViewController: ShareSplitArticlesDelegate {
+    func articleWasSelected(totalCount: Int) {
+        if(totalCount==2) {
+            self.shareActionsView?.setShareEnable(true)
+            self.shareActionsView?.showText("Now tap the share button!")
+        } else {
+            self.shareActionsView?.setShareEnable(false)
+            self.shareActionsView?.showText("Select any 2 articles")
+        }
+    }
 }

@@ -71,6 +71,8 @@
 		BD47A398264C9BA5003D3F2F /* CellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD47A396264C9BA5003D3F2F /* CellBig.swift */; };
 		BD4A4FD725E5438200AB37DA /* prefsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD4A4FD625E5438200AB37DA /* prefsButton.png */; };
 		BD4D53E5260A546F00635C48 /* MiniSlidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */; };
+		BD6EEEF2274FC2FD002535A3 /* ShareSplitArticleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6EEEF0274FC2FD002535A3 /* ShareSplitArticleCell.swift */; };
+		BD6EEEF3274FC2FD002535A3 /* ShareSplitArticleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD6EEEF1274FC2FD002535A3 /* ShareSplitArticleCell.xib */; };
 		BD7881422686282F00824D1C /* SubtopicHeaderForSplit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD7881412686282F00824D1C /* SubtopicHeaderForSplit.swift */; };
 		BD817A6126D688A8007BE315 /* PrefCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD817A5F26D688A8007BE315 /* PrefCell.swift */; };
 		BD817A6226D688A8007BE315 /* PrefCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD817A6026D688A8007BE315 /* PrefCell.xib */; };
@@ -302,6 +304,7 @@
 		BDE8F4152658414200E3C018 /* ITN_logo_blackText.png in Resources */ = {isa = PBXBuildFile; fileRef = BDE8F4142658414200E3C018 /* ITN_logo_blackText.png */; };
 		BDEAF85625E55D2400588944 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEAF85525E55D2400588944 /* Utils.swift */; };
 		BDEB78682667296700BE3532 /* sources.csv in Resources */ = {isa = PBXBuildFile; fileRef = BDEB78672667296700BE3532 /* sources.csv */; };
+		BDEE62B5274EC518001E59B7 /* ShareSplitArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEE62B4274EC518001E59B7 /* ShareSplitArticles.swift */; };
 		BDEFE59C25D1B95700175C3C /* MoreHeadlinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */; };
 		BDF37F65263AE026003D910D /* HeaderCellTextOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF37F63263AE026003D910D /* HeaderCellTextOnly.swift */; };
 		BDF37F66263AE026003D910D /* HeaderCellTextOnly.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDF37F64263AE026003D910D /* HeaderCellTextOnly.xib */; };
@@ -417,6 +420,8 @@
 		BD47A396264C9BA5003D3F2F /* CellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellBig.swift; sourceTree = "<group>"; };
 		BD4A4FD625E5438200AB37DA /* prefsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prefsButton.png; sourceTree = "<group>"; };
 		BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSlidersView.swift; sourceTree = "<group>"; };
+		BD6EEEF0274FC2FD002535A3 /* ShareSplitArticleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSplitArticleCell.swift; sourceTree = "<group>"; };
+		BD6EEEF1274FC2FD002535A3 /* ShareSplitArticleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ShareSplitArticleCell.xib; sourceTree = "<group>"; };
 		BD7881412686282F00824D1C /* SubtopicHeaderForSplit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtopicHeaderForSplit.swift; sourceTree = "<group>"; };
 		BD817A5F26D688A8007BE315 /* PrefCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefCell.swift; sourceTree = "<group>"; };
 		BD817A6026D688A8007BE315 /* PrefCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefCell.xib; sourceTree = "<group>"; };
@@ -648,6 +653,7 @@
 		BDE8F4142658414200E3C018 /* ITN_logo_blackText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ITN_logo_blackText.png; sourceTree = "<group>"; };
 		BDEAF85525E55D2400588944 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		BDEB78672667296700BE3532 /* sources.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.csv; sourceTree = "<group>"; };
+		BDEE62B4274EC518001E59B7 /* ShareSplitArticles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSplitArticles.swift; sourceTree = "<group>"; };
 		BDEFE59B25D1B95700175C3C /* MoreHeadlinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreHeadlinesView.swift; sourceTree = "<group>"; };
 		BDF37F63263AE026003D910D /* HeaderCellTextOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCellTextOnly.swift; sourceTree = "<group>"; };
 		BDF37F64263AE026003D910D /* HeaderCellTextOnly.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderCellTextOnly.xib; sourceTree = "<group>"; };
@@ -935,6 +941,15 @@
 			path = SliderDocFiles;
 			sourceTree = "<group>";
 		};
+		BD6EEEEF274FC2E1002535A3 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				BD6EEEF0274FC2FD002535A3 /* ShareSplitArticleCell.swift */,
+				BD6EEEF1274FC2FD002535A3 /* ShareSplitArticleCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		BD817A5E26D68867007BE315 /* PrefCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -1198,6 +1213,8 @@
 			children = (
 				BDFA5876274289B20040C7AA /* ShareSplitExplainPopup.swift */,
 				BD2FEB3227468E2200CE5F07 /* ShareSplitActionsPopup.swift */,
+				BDEE62B4274EC518001E59B7 /* ShareSplitArticles.swift */,
+				BD6EEEEF274FC2E1002535A3 /* Cell */,
 				BDFA58782742E2800040C7AA /* shareSplit_button.png */,
 				BDFA587D2742EDB20040C7AA /* shareSplit_exitIcon.png */,
 				BDFA587C2742EDB20040C7AA /* shareSplit_randomIcon.png */,
@@ -1562,6 +1579,7 @@
 				BDDA45782612301100C9C3AF /* GIN64.png in Resources */,
 				BDDA45832612301100C9C3AF /* IRQ64.png in Resources */,
 				BDB1DF2126E6FB8000879C4B /* headlines02.png in Resources */,
+				BD6EEEF3274FC2FD002535A3 /* ShareSplitArticleCell.xib in Resources */,
 				BDDA45622612301100C9C3AF /* CHN64.png in Resources */,
 				BDDA45172612301100C9C3AF /* JOR64.png in Resources */,
 				BDDA44FF2612301100C9C3AF /* BRA64.png in Resources */,
@@ -1722,6 +1740,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */,
+				BDEE62B5274EC518001E59B7 /* ShareSplitArticles.swift in Sources */,
 				BD9D55C9264ABCAF00509722 /* FooterCellTextOnlyItem0.swift in Sources */,
 				A8E94A1524F08E9200936E07 /* SupplementaryViews.swift in Sources */,
 				BD2FEB3327468E2200CE5F07 /* ShareSplitActionsPopup.swift in Sources */,
@@ -1735,6 +1754,7 @@
 				BD3F58DA264CA5CC00B99522 /* FooterCellBig.swift in Sources */,
 				BDD15131268CFBDD00EE256F /* MarkupNotificationsViewController.swift in Sources */,
 				A81B3B202481E67200A52A97 /* AppDelegate.swift in Sources */,
+				BD6EEEF2274FC2FD002535A3 /* ShareSplitArticleCell.swift in Sources */,
 				BDFA5877274289B20040C7AA /* ShareSplitExplainPopup.swift in Sources */,
 				A82A270224F6A1420028272B /* TopicSliders.swift in Sources */,
 				BD7881422686282F00824D1C /* SubtopicHeaderForSplit.swift in Sources */,

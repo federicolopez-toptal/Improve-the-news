@@ -41,7 +41,10 @@ let APP_CFG_INACTIVE_MINS: TimeInterval = 30.0
 let APP_CFG_MORE_PREFS = true
 
 
-let APP_CFG_SPLITSHARING = false
+let APP_CFG_SPLITSHARING = true
+
+
+
 
 // false/false for v1
 let APP_CFG_SHOW_PIE_CHART = false

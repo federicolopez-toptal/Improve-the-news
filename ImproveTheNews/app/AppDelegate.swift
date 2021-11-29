@@ -11,6 +11,7 @@ import CoreData
 import BackgroundTasks
 import Firebase
 import SwiftUI
+import Branch
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -36,9 +37,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navController = UINavigationController(rootViewController: newsAggregator)
         window?.rootViewController = navController
                 
+        Branch.getInstance().initSession(launchOptions: launchOptions) { (params, error) in
+             print(params as? [String: AnyObject] ?? {})
+        }
+                
                 
         return true
     }
+    
+    func application(_ app: UIApplication, open url: URL,
+        options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        return Branch.getInstance().application(app, open: url, options: options)
+    }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    
+        return Branch.getInstance().continue(userActivity)
+    }
+    
+    func application(_ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+  
+        Branch.getInstance().handlePushNotification(userInfo)
+    }
+    
+    
+    
     
     // MARK: INCOMPLETE - Background Refresh
     func handleAppRefreshTask(task: BGAppRefreshTask) {
