@@ -2794,6 +2794,7 @@ extension NewsViewController {
         } else {
             self.biasButton.isHidden = true
             self.biasSliders.isHidden = true
+            self.biasMiniButton.isHidden = true
             self.shareActionsView?.show()
         }
     }

@@ -25,6 +25,8 @@ class ShareSplitArticles: UIView {
     var dataProvider1 = [(String, String, String, String, Bool)]()
     var dataProvider2 = [(String, String, String, String, Bool)]()
 
+    var scrollPositions = [CGFloat]()
+
 
     init(into container: UIView) {
         super.init(frame: CGRect.zero)
@@ -202,6 +204,13 @@ class ShareSplitArticles: UIView {
                 }
             }
         }
+        
+        var posY: CGFloat = 0.0
+        self.scrollPositions = [CGFloat]()
+        for _ in self.dataProvider1 {
+            self.scrollPositions.append(posY)
+            posY += 240.0
+        }
     }
     
 }
@@ -301,7 +310,48 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         }
     }
   
-  /*
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView,
+        willDecelerate decelerate: Bool) {
+        
+        if(!decelerate) {
+            self.fixListsScrollPosition(scrollView)
+        }
+    }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.fixListsScrollPosition(scrollView)
+    }
+    
+    private func fixListsScrollPosition(_ scrollView: UIScrollView) {
+        print("FIXING SCROLL!")
+        
+        var minorVal: (Int, CGFloat) = (0, 0.0)
+        let currentY = scrollView.contentOffset.y
+        for i in 0...self.scrollPositions.count-1 {
+            var difference = currentY - self.scrollPositions[i]
+            if(difference<0){ difference *= -1 }
+            
+            if(i==0){
+                minorVal = (0, difference)
+            } else {
+                if(difference<minorVal.1) {
+                    minorVal = (i, difference)
+                }
+            }
+            
+        }
+        
+        let destinationY = self.scrollPositions[minorVal.0]
+        scrollView.setContentOffset(CGPoint(x: 0, y: destinationY), animated: true)
+    }
+
+    
+}
+
+
+
+
+
+/*
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
         let list = self.column1
@@ -360,5 +410,58 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         }
     }
 */
+
+   /*
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView,
+        willDecelerate decelerate: Bool) {
+        
+        //if(!decelerate) {
+            //print(scrollView.tag)
+            //print("---")
+            //self.scrollViewDidEndDecelerating(scrollView)
+        //}
+        
+        //var list = self.column1
+        //if(scrollView.tag==102){ list = self.column2 }
+        
+        /*
+        let currentY = scrollView.contentOffset.y
+        for i in 0...self.scrollPositions.count-1 {
+            var difference = currentY - self.scrollPositions[i]
+            if(difference<0){ difference *= -1 }
+            
+            
+        }
+        */
+        
+        /*
+        let destinationY: CGFloat = 240.0
+        scrollView.setContentOffset(CGPoint(x: 0, y: destinationY), animated: true)
+        */
+        
+        //print( list.contentOffset.y )
+        
+        //if(!decelerate) {
+            self.fixListsScrollPosition(scrollView)
+        //}
+    }
+    */
     
-}
+    /*
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        /*
+        var list = self.column1
+        if(scrollView.tag==102){ list = self.column2 }
+        
+        
+        let point = CGPoint(x: list.contentOffset.x,
+            y: list.contentOffset.y + list.rowHeight/2)
+        
+        if let iPath = self.column1.indexPathForRow(at: point) {
+            list.scrollToRow(at: iPath, at: .top, animated: true)
+        }
+        */
+        
+        self.fixListsScrollPosition(scrollView)
+    }
+*/
