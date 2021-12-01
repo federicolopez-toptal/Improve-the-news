@@ -26,7 +26,12 @@ class ShareSplitArticles: UIView {
     var dataProvider2 = [(String, String, String, String, Bool)]()
 
     var scrollPositions = [CGFloat]()
-
+    var headerHeightConstraint: NSLayoutConstraint?
+    var headerTimer: Timer?
+    
+    let headerLabel1 = UILabel()
+    let headerLabel2 = UILabel()
+    
 
     init(into container: UIView) {
         super.init(frame: CGRect.zero)
@@ -47,16 +52,16 @@ class ShareSplitArticles: UIView {
         header.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
         self.addSubview(header)
         header.translatesAutoresizingMaskIntoConstraints = false
+        self.headerHeightConstraint = header.heightAnchor.constraint(equalToConstant: 60)
         NSLayoutConstraint.activate([
             header.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             header.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             header.topAnchor.constraint(equalTo: self.topAnchor),
-            header.heightAnchor.constraint(equalToConstant: 60)
+            self.headerHeightConstraint!
         ])
         
         let splitOption = UserDefaults.standard.integer(forKey: "userSplitPrefs")
         
-        let headerLabel1 = UILabel()
         headerLabel1.textAlignment = .center
         headerLabel1.font = UIFont(name: "PTSerif-Bold", size: 20)
         headerLabel1.textColor = .white
@@ -82,7 +87,6 @@ class ShareSplitArticles: UIView {
             upArrow1.bottomAnchor.constraint(equalTo: headerLabel1.topAnchor, constant: 0)
         ])
         
-        let headerLabel2 = UILabel()
         headerLabel2.textAlignment = .center
         headerLabel2.font = UIFont(name: "PTSerif-Bold", size: 20)
         headerLabel2.textColor = .white
@@ -154,7 +158,14 @@ class ShareSplitArticles: UIView {
     func start(parser: News) {
         self.parser = parser
         self.populateDataProviders()
+        self.headerHeightConstraint?.constant = 60.0
+        
         if(self.started) {
+            self.updateHeaderTexts()
+            self.column1.reloadData()
+            self.column2.reloadData()
+            self.column1.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+            self.column2.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
             return
         }
         self.started = true
@@ -173,6 +184,15 @@ class ShareSplitArticles: UIView {
         
         column1.tag = 101
         column2.tag = 102
+    }
+    
+    private func updateHeaderTexts() {
+        let splitOption = UserDefaults.standard.integer(forKey: "userSplitPrefs")
+        
+        headerLabel1.text = "LEFT"
+        if(splitOption==2){ headerLabel1.text = "CRITICAL" }
+        headerLabel2.text = "RIGHT"
+        if(splitOption==2){ headerLabel2.text = "PRO" }
     }
     
     func populateDataProviders() {
@@ -310,6 +330,20 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         }
     }
   
+    // scrollview
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if(self.headerHeightConstraint!.constant > 0.0) {
+            self.headerHeightConstraint?.constant = 0.0
+            UIView.animate(withDuration: 0.4) {
+                self.superview!.layoutIfNeeded()
+            } completion: { (succeed) in
+            }
+        }
+
+        if let _t = self.headerTimer {
+            _t.invalidate()
+        }
+    }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView,
         willDecelerate decelerate: Bool) {
         
@@ -342,6 +376,14 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         
         let destinationY = self.scrollPositions[minorVal.0]
         scrollView.setContentOffset(CGPoint(x: 0, y: destinationY), animated: true)
+        
+        self.headerTimer = Timer.scheduledTimer(withTimeInterval: 8.0, repeats: false) { timer in
+            self.headerHeightConstraint?.constant = 60.0
+            UIView.animate(withDuration: 0.4) {
+                self.superview!.layoutIfNeeded()
+            } completion: { (succeed) in
+            }
+        }
     }
 
     

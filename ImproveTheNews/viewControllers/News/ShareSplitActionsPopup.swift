@@ -124,7 +124,9 @@ class ShareSplitActionsPopup: UIView {
         ])
         
         self.addSubview(blackCircle)
-        blackCircle.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+        blackCircle.backgroundColor = accentOrange.withAlphaComponent(0.25)
+        //UIColor.black.withAlphaComponent(0.25)
+        
         blackCircle.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             blackCircle.topAnchor.constraint(equalTo: button2.topAnchor),
