@@ -11,6 +11,7 @@ import UIKit
 
 protocol ShareSplitActionsPopupDelegate {
     func shareSplitAction_exit()
+    func shareSplitAction_share()
 }
 
 
@@ -155,6 +156,8 @@ class ShareSplitActionsPopup: UIView {
         self.alpha = 0.0
         self.isHidden = false
         self.bottomConstraint!.constant = 0.0
+        self.setShareEnable(false)
+        self.showText("Select any 2 articles")
         
         UIView.animate(withDuration: 0.4) {
             self.alpha = 1.0
@@ -189,7 +192,7 @@ class ShareSplitActionsPopup: UIView {
     }
     
     @objc func shareButtonOnTap(_ sender: UIButton?) {
-        print("SHARE!")
+        self.delegate?.shareSplitAction_share()
     }
 
 }

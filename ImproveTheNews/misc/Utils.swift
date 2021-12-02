@@ -26,7 +26,8 @@ class Utils {
     var displayMode: DisplayMode = .bright
 
     // main navigatorController
-    var navController: UINavigationController?
+    //var navController: UINavigationController?
+    var navController: customNavigationController?
     
     var didLoadBanner: Bool = false
 }

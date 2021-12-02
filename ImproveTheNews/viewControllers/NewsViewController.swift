@@ -31,6 +31,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var shareActionsView: ShareSplitActionsPopup?
     var shareArticles: ShareSplitArticles?
     var biasMiniButton = UIView()
+    var miniButtonTimer: Timer?
     
     // to populate CollectionView
     //changed home link from "http://www.improvethenews.org/itnserver.php/?topic=" to this one
@@ -46,6 +47,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     // --------------------------------------------------------
     // horizontal menu
+    private var mustShowHorizontalMenu = false
     private var moreHeadLines = MoreHeadlinesView()
     private var seeMoreFooterSection: seeMoreFooterSection0?
     private var moreHeadLinesInCollectionPosY: CGFloat = 0
@@ -106,10 +108,16 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     override func viewWillDisappear(_ animated: Bool) {
         self.badgeView.removeFromSuperview()
     }
+    override func viewDidDisappear(_ animated: Bool) {
+        if(self.miniButtonTimer != nil) {
+            self.miniButtonTimer?.invalidate()
+        }
+        self.biasMiniButton.isHidden = true
+    }
     
     override func viewDidLoad() {
     
-        Utils.shared.navController = self.navigationController
+        Utils.shared.navController = self.navigationController as? customNavigationController
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
     
@@ -251,6 +259,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.shareActionsView?.delegate = self
         self.shareArticles = ShareSplitArticles(into: self.view)
         self.shareArticles?.delegate = self
+
     }
     
     var lastTimeActive: Date?
@@ -323,8 +332,6 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         */
     }
     
-    
-
     // MARK: - Data loading
     func loadData() {
         if(self.firstTime){
@@ -2779,8 +2786,20 @@ extension NewsViewController {
                 UIView.animate(withDuration: 0.4) {
                     self.biasMiniButton.alpha = 1.0
                 } completion: { succeed in
-                }
+                    if(self.miniButtonTimer != nil) {
+                        self.miniButtonTimer?.invalidate()
+                    }
+                    self.miniButtonTimer = Timer.scheduledTimer(withTimeInterval: 4.0,
+                        repeats: false) { timer in
 
+                        UIView.animate(withDuration: 0.4) {
+                            self.biasMiniButton.alpha = 0.0
+                        } completion: { (succeed) in
+                            self.biasMiniButton.isHidden = true
+                        }
+                    }
+                }
+                
             }
         }
     }
@@ -2788,6 +2807,8 @@ extension NewsViewController {
     func startSplitSharingWorkflow() {
         self.shareArticles?.start(parser: self.newsParser)
         self.shareArticles?.isHidden = false
+        self.mustShowHorizontalMenu = !self.moreHeadLines.isHidden
+        self.moreHeadLines.hide()
     
         if(self.shareSplitView!.mustBeShown()) {
             self.shareSplitView?.show()
@@ -2809,6 +2830,20 @@ extension NewsViewController: ShareSplitActionsPopupDelegate {
         
         self.shareArticles?.isHidden = true
         self.shareActionsView?.hide()
+        
+        if(self.mustShowHorizontalMenu) {
+            self.moreHeadLines.show()
+        }
+    }
+    
+    func shareSplitAction_share() {
+        
+        let vc = ShareSplitShareViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.articles = self.shareArticles?.getSelectedArticles()
+        
+        self.present(vc, animated: true) {
+        }
     }
 }
 

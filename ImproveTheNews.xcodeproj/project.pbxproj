@@ -81,6 +81,8 @@
 		BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */; };
 		BD962478261B425F009EC21D /* PieChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD962477261B425F009EC21D /* PieChartViewController.swift */; };
 		BD98C9F525D58021005106D2 /* ITN_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BD98C9F425D58021005106D2 /* ITN_logo.png */; };
+		BD9A59452757AC80006678F6 /* ShareSplitShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9A59442757AC80006678F6 /* ShareSplitShareViewController.swift */; };
+		BD9A59472757ADD2006678F6 /* customNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9A59462757ADD2006678F6 /* customNavigationController.swift */; };
 		BD9D55C9264ABCAF00509722 /* FooterCellTextOnlyItem0.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9D55C7264ABCAF00509722 /* FooterCellTextOnlyItem0.swift */; };
 		BD9D55CA264ABCAF00509722 /* FooterCellTextOnlyItem0.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD9D55C8264ABCAF00509722 /* FooterCellTextOnlyItem0.xib */; };
 		BD9D55D2264ACFDE00509722 /* HorizontalMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9D55D1264ACFDE00509722 /* HorizontalMenuView.swift */; };
@@ -430,6 +432,8 @@
 		BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueFromLeft.swift; sourceTree = "<group>"; };
 		BD962477261B425F009EC21D /* PieChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartViewController.swift; sourceTree = "<group>"; };
 		BD98C9F425D58021005106D2 /* ITN_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ITN_logo.png; sourceTree = "<group>"; };
+		BD9A59442757AC80006678F6 /* ShareSplitShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSplitShareViewController.swift; sourceTree = "<group>"; };
+		BD9A59462757ADD2006678F6 /* customNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customNavigationController.swift; sourceTree = "<group>"; };
 		BD9D55C7264ABCAF00509722 /* FooterCellTextOnlyItem0.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellTextOnlyItem0.swift; sourceTree = "<group>"; };
 		BD9D55C8264ABCAF00509722 /* FooterCellTextOnlyItem0.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellTextOnlyItem0.xib; sourceTree = "<group>"; };
 		BD9D55D1264ACFDE00509722 /* HorizontalMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalMenuView.swift; sourceTree = "<group>"; };
@@ -897,6 +901,7 @@
 				BD7881412686282F00824D1C /* SubtopicHeaderForSplit.swift */,
 				BDF72F62269DC960006B095D /* CookiesAlert.swift */,
 				BD26A82A26DD5E48001EC167 /* OrangeRoundedButton.swift */,
+				BD9A59462757ADD2006678F6 /* customNavigationController.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -1214,6 +1219,7 @@
 				BDFA5876274289B20040C7AA /* ShareSplitExplainPopup.swift */,
 				BD2FEB3227468E2200CE5F07 /* ShareSplitActionsPopup.swift */,
 				BDEE62B4274EC518001E59B7 /* ShareSplitArticles.swift */,
+				BD9A59442757AC80006678F6 /* ShareSplitShareViewController.swift */,
 				BD6EEEEF274FC2E1002535A3 /* Cell */,
 				BDFA58782742E2800040C7AA /* shareSplit_button.png */,
 				BDFA587D2742EDB20040C7AA /* shareSplit_exitIcon.png */,
@@ -1757,11 +1763,13 @@
 				BD6EEEF2274FC2FD002535A3 /* ShareSplitArticleCell.swift in Sources */,
 				BDFA5877274289B20040C7AA /* ShareSplitExplainPopup.swift in Sources */,
 				A82A270224F6A1420028272B /* TopicSliders.swift in Sources */,
+				BD9A59452757AC80006678F6 /* ShareSplitShareViewController.swift in Sources */,
 				BD7881422686282F00824D1C /* SubtopicHeaderForSplit.swift in Sources */,
 				BD47A398264C9BA5003D3F2F /* CellBig.swift in Sources */,
 				BDEFE59C25D1B95700175C3C /* MoreHeadlinesView.swift in Sources */,
 				A8B2F846249728F40069EF76 /* NewsParser.swift in Sources */,
 				BDC3A17125DC481A00F15C34 /* seeMoreFooterLast.swift in Sources */,
+				BD9A59472757ADD2006678F6 /* customNavigationController.swift in Sources */,
 				A8D61B3724F1656C00A0F8F5 /* Pages.swift in Sources */,
 				BDD1512D268CF13E00EE256F /* AuthViewController.swift in Sources */,
 				A8CA063424EB3B0A00B91778 /* BiasSliders.swift in Sources */,
@@ -1954,7 +1962,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -1965,7 +1973,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.3;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ITNFoundation.ITN-beta";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1984,7 +1992,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -1995,7 +2003,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.3;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ITNFoundation.ITNaggregator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2155,7 +2163,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Beta";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2166,7 +2174,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.3;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ITNFoundation.ITN-beta";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

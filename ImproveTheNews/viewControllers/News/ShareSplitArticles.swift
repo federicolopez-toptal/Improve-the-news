@@ -233,6 +233,26 @@ class ShareSplitArticles: UIView {
         }
     }
     
+    func getSelectedArticles() -> [(String, String, String, String, Bool)] {
+        var result = [(String, String, String, String, Bool)]()
+    
+        for _d in self.dataProvider1 {
+            if(_d.4) {
+                result.append(_d)
+                break
+            }
+        }
+        
+        for _d in self.dataProvider2 {
+            if(_d.4) {
+                result.append(_d)
+                break
+            }
+        }
+        
+        return result
+    }
+    
 }
 
 extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
@@ -375,8 +395,20 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         }
         
         let destinationY = self.scrollPositions[minorVal.0]
+        //print("destinY", destinationY)
         scrollView.setContentOffset(CGPoint(x: 0, y: destinationY), animated: true)
         
+        
+        /*
+        var list = self.column1
+        if(scrollView.tag == 102) { list = self.column2 }
+        let iPath = IndexPath(row: minorVal.0+1, section: 0)
+        list.scrollToRow(at: iPath, at: .middle, animated: true)
+        */
+        
+        
+        
+        /*
         self.headerTimer = Timer.scheduledTimer(withTimeInterval: 8.0, repeats: false) { timer in
             self.headerHeightConstraint?.constant = 60.0
             UIView.animate(withDuration: 0.4) {
@@ -384,6 +416,7 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
             } completion: { (succeed) in
             }
         }
+        */
     }
 
     

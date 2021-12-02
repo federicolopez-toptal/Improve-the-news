@@ -34,7 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         let newsAggregator = INITIAL_VC()
-        let navController = UINavigationController(rootViewController: newsAggregator)
+        //let navController = UINavigationController(rootViewController: newsAggregator)
+        let navController = customNavigationController(rootViewController: newsAggregator)
         window?.rootViewController = navController
                 
         Branch.getInstance().initSession(launchOptions: launchOptions) { (params, error) in
