@@ -363,6 +363,9 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         if let _t = self.headerTimer {
             _t.invalidate()
         }
+        
+        print("!", self.column1.frame )
+        print("!", self.column1.contentSize )
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView,
         willDecelerate decelerate: Bool) {
@@ -378,6 +381,13 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
     private func fixListsScrollPosition(_ scrollView: UIScrollView) {
         print("FIXING SCROLL!")
         
+        var list = self.column1
+        if(scrollView.tag == 102) { list = self.column2 }
+
+        let iPath = list.indexPathForRow(at: CGPoint(x: list.bounds.midX, y: list.bounds.midY))!
+        list.scrollToRow(at: iPath, at: .middle, animated: true)
+
+        /*
         var minorVal: (Int, CGFloat) = (0, 0.0)
         let currentY = scrollView.contentOffset.y
         for i in 0...self.scrollPositions.count-1 {
@@ -397,6 +407,10 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         let destinationY = self.scrollPositions[minorVal.0]
         //print("destinY", destinationY)
         scrollView.setContentOffset(CGPoint(x: 0, y: destinationY), animated: true)
+        */
+        
+        
+        
         
         
         /*

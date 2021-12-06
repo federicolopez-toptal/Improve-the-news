@@ -37,10 +37,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //let navController = UINavigationController(rootViewController: newsAggregator)
         let navController = customNavigationController(rootViewController: newsAggregator)
         window?.rootViewController = navController
-                
+          
+        /*
         Branch.getInstance().initSession(launchOptions: launchOptions) { (params, error) in
              print(params as? [String: AnyObject] ?? {})
         }
+        */
                 
                 
         return true

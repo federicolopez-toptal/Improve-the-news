@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 
 protocol ShareSplitActionsPopupDelegate {
@@ -23,6 +24,12 @@ class ShareSplitActionsPopup: UIView {
     private var bottomConstraint: NSLayoutConstraint?
     var delegate: ShareSplitActionsPopupDelegate?
 
+    let button1 = UIButton(type: .custom)
+    let button2 = UIButton(type: .custom)
+    let button3 = UIButton(type: .custom)
+    var currentAnimButton: UIButton?
+    let buttonBehind = UIImageView()
+    
     init(into container: UIView) {
         super.init(frame: CGRect.zero)
         
@@ -45,9 +52,9 @@ class ShareSplitActionsPopup: UIView {
         
         let buttonsDim: CGFloat = 60.0
         
-        let button1 = UIButton(type: .custom)
         button1.setImage(UIImage(named: "shareSplit_button.png"), for: .normal)
         self.addSubview(button1)
+        //button1.frame = CGRect(x: 30, y: 22, width: buttonsDim, height: buttonsDim)
         button1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             button1.topAnchor.constraint(equalTo: self.topAnchor, constant: 22),
@@ -57,7 +64,6 @@ class ShareSplitActionsPopup: UIView {
         ])
         button1.addTarget(self, action: #selector(exitButtonOnTap(_:)), for: .touchUpInside)
         
-        let button2 = UIButton(type: .custom)
         button2.setImage(UIImage(named: "shareSplit_button.png"), for: .normal)
         self.addSubview(button2)
         button2.translatesAutoresizingMaskIntoConstraints = false
@@ -69,8 +75,7 @@ class ShareSplitActionsPopup: UIView {
         ])
         button2.addTarget(self, action: #selector(shareButtonOnTap(_:)), for: .touchUpInside)
         
-        let button3 = UIImageView()
-        button3.image = UIImage(named: "shareSplit_button.png")
+        button3.setImage(UIImage(named: "shareSplit_button.png"), for: .normal)
         self.addSubview(button3)
         button3.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -79,6 +84,11 @@ class ShareSplitActionsPopup: UIView {
             button3.widthAnchor.constraint(equalToConstant: buttonsDim),
             button3.heightAnchor.constraint(equalToConstant: buttonsDim)
         ])
+        button3.addTarget(self, action: #selector(randomizeButtonOnTap(_:)), for: .touchUpInside)
+        
+        
+        buttonBehind.image = UIImage(named: "shareSplit_button.png")
+        self.addSubview(buttonBehind)
         
         let icon1 = UIImageView()
         icon1.image = UIImage(named: "shareSplit_exitIcon.png")
@@ -163,7 +173,11 @@ class ShareSplitActionsPopup: UIView {
             self.alpha = 1.0
             self.superview!.layoutIfNeeded()
         } completion: { (succeed) in
-            print("DONE!")
+            
+            DELAY(1.0) {
+                self.startAnimation(button: self.button1)
+            }
+            
         }
     }
     
@@ -192,7 +206,58 @@ class ShareSplitActionsPopup: UIView {
     }
     
     @objc func shareButtonOnTap(_ sender: UIButton?) {
-        self.delegate?.shareSplitAction_share()
+        //self.delegate?.shareSplitAction_share()
+        self.startAnimation(button: self.button1)
+    }
+    
+    @objc func randomizeButtonOnTap(_ sender: UIButton?) {
+        self.stopAnimations()
+    }
+    
+    // MARK: - Animation
+    func stopAnimations() {
+        if(self.currentAnimButton != nil) {
+            self.currentAnimButton?.layer.removeAllAnimations()
+        }
+        self.buttonBehind.layer.removeAllAnimations()
+        self.buttonBehind.isHidden = true
+        
+        self.currentAnimButton = nil
+    }
+    
+    func startAnimation(button: UIButton) {
+        self.currentAnimButton = button
+        
+        let _scaleTo: CGFloat = 1.1
+        let _scaleToBig: CGFloat = 1.7
+        
+        self.buttonBehind.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.buttonBehind.topAnchor.constraint(equalTo: button.topAnchor),
+            self.buttonBehind.leadingAnchor.constraint(equalTo: button.leadingAnchor),
+            self.buttonBehind.widthAnchor.constraint(equalTo: button.widthAnchor),
+            self.buttonBehind.heightAnchor.constraint(equalTo: button.heightAnchor)
+        ])
+        self.buttonBehind.transform = CGAffineTransform.identity
+        self.buttonBehind.isHidden = false
+        self.buttonBehind.alpha = 0.7
+        
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseOut) {
+            button.transform = CGAffineTransform(scaleX: _scaleTo, y: _scaleTo)
+            self.buttonBehind.transform = CGAffineTransform(scaleX: _scaleToBig, y: _scaleToBig)
+            self.buttonBehind.alpha = 0.0
+        } completion: { _ in
+            if let _button = self.currentAnimButton {
+                UIView.animate(withDuration: 0.6, delay: 0.0, options: .curveEaseOut) {
+                    _button.transform = CGAffineTransform.identity
+                } completion: { _ in
+                    if(self.currentAnimButton != nil) {
+                        self.startAnimation(button: self.currentAnimButton!)
+                    }
+                }
+            }
+        }
+
     }
 
 }
