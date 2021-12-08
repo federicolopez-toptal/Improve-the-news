@@ -9,6 +9,7 @@
 import UIKit
 import SDWebImage
 
+let NOTIFICATION_CLOSE_SPLITSHARE = Notification.Name("closeSplitShare")
 
 class ShareSplitShareViewController: UIViewController {
 
@@ -264,6 +265,8 @@ class ShareSplitShareViewController: UIViewController {
     }
     
     @objc func closeButtonOnTap(sender: UIButton?) {
+        NotificationCenter.default.post(name: NOTIFICATION_CLOSE_SPLITSHARE, object: nil)
+        
         self.dismiss(animated: true) {
         }
     }

@@ -2758,9 +2758,7 @@ extension NewsViewController {
         self.biasMiniButton.isHidden = true
     }
     
-    func biasMiniButtonUpdatePosition() {
-        let offset: CGFloat = 20
-    
+    func biasMiniButtonUpdatePosition(offset: CGFloat = 20) {
         var mFrame = self.biasMiniButton.frame
         mFrame.origin.x = self.biasButton.frame.origin.x - offset
         mFrame.origin.y = self.biasButton.frame.origin.y - offset
@@ -2780,11 +2778,14 @@ extension NewsViewController {
     @objc func biasButtonOnLongPress(gesture: UILongPressGestureRecognizer) {
         if(APP_CFG_SPLITSHARING) {
             if(self.biasMiniButton.isHidden) {
-                self.biasMiniButton.alpha = 0.0
+                self.biasMiniButtonUpdatePosition(offset: 0)
+                self.biasMiniButton.alpha = 1.0
                 self.biasMiniButton.isHidden = false
+                self.biasButton.superview?.bringSubviewToFront(self.biasButton)
                 
                 UIView.animate(withDuration: 0.4) {
                     self.biasMiniButton.alpha = 1.0
+                    self.biasMiniButtonUpdatePosition()
                 } completion: { succeed in
                     if(self.miniButtonTimer != nil) {
                         self.miniButtonTimer?.invalidate()
@@ -2793,7 +2794,8 @@ extension NewsViewController {
                         repeats: false) { timer in
 
                         UIView.animate(withDuration: 0.4) {
-                            self.biasMiniButton.alpha = 0.0
+                            self.biasMiniButton.alpha = 1.0
+                            self.biasMiniButtonUpdatePosition(offset: 0)
                         } completion: { (succeed) in
                             self.biasMiniButton.isHidden = true
                         }
@@ -2839,7 +2841,7 @@ extension NewsViewController: ShareSplitActionsPopupDelegate {
     func shareSplitAction_share() {
         
         let vc = ShareSplitShareViewController()
-        vc.modalPresentationStyle = .fullScreen
+        //vc.modalPresentationStyle = .fullScreen
         vc.articles = self.shareArticles?.getSelectedArticles()
         
         self.present(vc, animated: true) {
@@ -2859,10 +2861,12 @@ extension NewsViewController: ShareSplitArticlesDelegate {
     func articleWasSelected(totalCount: Int) {
         if(totalCount==2) {
             self.shareActionsView?.setShareEnable(true)
-            self.shareActionsView?.showText("Now tap the share button!")
+            //self.shareActionsView?.showText("Now tap the share button!")
+            self.shareActionsView?.startAnims()
         } else {
             self.shareActionsView?.setShareEnable(false)
             self.shareActionsView?.showText("Select any 2 articles")
+            //self.shareActionsView?.stopAnimations()
         }
     }
 }

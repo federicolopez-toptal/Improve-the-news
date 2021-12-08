@@ -20,6 +20,7 @@ class ShareSplitArticles: UIView {
     let column1 = UITableView()
     let column2 = UITableView()
     private var started = false
+    private var offsetFixed = false
 
     private var parser: News?
     var dataProvider1 = [(String, String, String, String, Bool)]()
@@ -156,6 +157,7 @@ class ShareSplitArticles: UIView {
     }
     
     func start(parser: News) {
+        self.offsetFixed = false
         self.parser = parser
         self.populateDataProviders()
         self.headerHeightConstraint?.constant = 60.0
@@ -364,8 +366,15 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
             _t.invalidate()
         }
         
-        print("!", self.column1.frame )
-        print("!", self.column1.contentSize )
+        if(!self.offsetFixed) {
+            var list = self.column1
+            if(scrollView.tag==101){ list = self.column2 } // the OTHER list
+            
+            let iPath = list.indexPathForRow(at: CGPoint(x: list.bounds.midX, y: list.bounds.midY))!
+            list.scrollToRow(at: iPath, at: .middle, animated: true)
+            
+            self.offsetFixed = true
+        }
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView,
         willDecelerate decelerate: Bool) {
