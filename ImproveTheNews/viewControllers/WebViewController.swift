@@ -83,6 +83,14 @@ class WebViewController: UIViewController, WKUIDelegate {
         fatalError()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return DARKMODE() ? .lightContent : .darkContent
+    }
+    
+    override var childForStatusBarStyle: UIViewController? {
+        return self.children.first
+    }
+    
     lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
         let webview = WKWebView(frame: .zero, configuration: webConfiguration)

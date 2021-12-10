@@ -94,6 +94,11 @@
 		BDA9163026DE623E00AE38F0 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDA9162F26DE623E00AE38F0 /* Roboto-Medium.ttf */; };
 		BDA9163626DEB47000AE38F0 /* headlines01.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA9163526DEB47000AE38F0 /* headlines01.png */; };
 		BDA9163826DEB60300AE38F0 /* Merriweather-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDA9163726DEB60300AE38F0 /* Merriweather-Bold.ttf */; };
+		BDAC5A6C27623BBA00927195 /* tw_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BDAC5A6A27623BB900927195 /* tw_logo.png */; };
+		BDAC5A6D27623BBA00927195 /* re_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BDAC5A6B27623BBA00927195 /* re_logo.png */; };
+		BDAC5A7027623BC200927195 /* fb_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BDAC5A6E27623BC200927195 /* fb_logo.png */; };
+		BDAC5A7127623BC200927195 /* in_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BDAC5A6F27623BC200927195 /* in_logo.png */; };
+		BDAF71DB2763AF62008383C9 /* notes_b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BDAF71DA2763AF62008383C9 /* notes_b.txt */; };
 		BDB1DF1E26E6E67B00879C4B /* onboardingCheckOFF.png in Resources */ = {isa = PBXBuildFile; fileRef = BDB1DF1C26E6E67B00879C4B /* onboardingCheckOFF.png */; };
 		BDB1DF1F26E6E67B00879C4B /* onboardingCheckON.png in Resources */ = {isa = PBXBuildFile; fileRef = BDB1DF1D26E6E67B00879C4B /* onboardingCheckON.png */; };
 		BDB1DF2126E6FB8000879C4B /* headlines02.png in Resources */ = {isa = PBXBuildFile; fileRef = BDB1DF2026E6FB8000879C4B /* headlines02.png */; };
@@ -446,6 +451,11 @@
 		BDA9162F26DE623E00AE38F0 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		BDA9163526DEB47000AE38F0 /* headlines01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headlines01.png; sourceTree = "<group>"; };
 		BDA9163726DEB60300AE38F0 /* Merriweather-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Merriweather-Bold.ttf"; sourceTree = "<group>"; };
+		BDAC5A6A27623BB900927195 /* tw_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tw_logo.png; sourceTree = "<group>"; };
+		BDAC5A6B27623BBA00927195 /* re_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = re_logo.png; sourceTree = "<group>"; };
+		BDAC5A6E27623BC200927195 /* fb_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_logo.png; sourceTree = "<group>"; };
+		BDAC5A6F27623BC200927195 /* in_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = in_logo.png; sourceTree = "<group>"; };
+		BDAF71DA2763AF62008383C9 /* notes_b.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes_b.txt; sourceTree = "<group>"; };
 		BDB1DF1C26E6E67B00879C4B /* onboardingCheckOFF.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingCheckOFF.png; sourceTree = "<group>"; };
 		BDB1DF1D26E6E67B00879C4B /* onboardingCheckON.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingCheckON.png; sourceTree = "<group>"; };
 		BDB1DF2026E6FB8000879C4B /* headlines02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headlines02.png; sourceTree = "<group>"; };
@@ -1221,6 +1231,7 @@
 				BDFA5876274289B20040C7AA /* ShareSplitExplainPopup.swift */,
 				BD2FEB3227468E2200CE5F07 /* ShareSplitActionsPopup.swift */,
 				BDEE62B4274EC518001E59B7 /* ShareSplitArticles.swift */,
+				BDAF71DA2763AF62008383C9 /* notes_b.txt */,
 				BD9A59442757AC80006678F6 /* ShareSplitShareViewController.swift */,
 				BD51B8E62761160F001A465C /* PulseButton.swift */,
 				BD6EEEEF274FC2E1002535A3 /* Cell */,
@@ -1228,6 +1239,10 @@
 				BDFA587D2742EDB20040C7AA /* shareSplit_exitIcon.png */,
 				BDFA587C2742EDB20040C7AA /* shareSplit_randomIcon.png */,
 				BDFA587E2742EDB30040C7AA /* shareSplit_shareIcon.png */,
+				BDAC5A6B27623BBA00927195 /* re_logo.png */,
+				BDAC5A6A27623BB900927195 /* tw_logo.png */,
+				BDAC5A6E27623BC200927195 /* fb_logo.png */,
+				BDAC5A6F27623BC200927195 /* in_logo.png */,
 				BDFA587A2742E9550040C7AA /* tmpTest.xib */,
 			);
 			path = News;
@@ -1360,6 +1375,7 @@
 				BDDA44FD2612301100C9C3AF /* AZE64.png in Resources */,
 				BD9D862825D2D41C002E2065 /* OpenSans-Bold.ttf in Resources */,
 				BDDA45532612301100C9C3AF /* LAO64.png in Resources */,
+				BDAF71DB2763AF62008383C9 /* notes_b.txt in Resources */,
 				BDC68ED5264C983C0072BDF9 /* HeaderCellBig.xib in Resources */,
 				BDDA45262612301100C9C3AF /* ARG64.png in Resources */,
 				BDE8F4152658414200E3C018 /* ITN_logo_blackText.png in Resources */,
@@ -1397,6 +1413,7 @@
 				BDDA45882612301100C9C3AF /* USA64.png in Resources */,
 				BDDA44E32612301100C9C3AF /* AGO64.png in Resources */,
 				BDDA452C2612301100C9C3AF /* GAB64.png in Resources */,
+				BDAC5A7027623BC200927195 /* fb_logo.png in Resources */,
 				BDDA45372612301100C9C3AF /* PRK64.png in Resources */,
 				BDDA45632612301100C9C3AF /* CUB64.png in Resources */,
 				BDDA453B2612301100C9C3AF /* ALB64.png in Resources */,
@@ -1409,6 +1426,7 @@
 				BDDA456C2612301100C9C3AF /* MWI64.png in Resources */,
 				BDDA45902612301100C9C3AF /* SYR64.png in Resources */,
 				BDDA45892612301100C9C3AF /* IDN64.png in Resources */,
+				BDAC5A7127623BC200927195 /* in_logo.png in Resources */,
 				BDDA451D2612301100C9C3AF /* WSM64.png in Resources */,
 				BDDA44EA2612301100C9C3AF /* LBR64.png in Resources */,
 				BDEB78682667296700BE3532 /* sources.csv in Resources */,
@@ -1574,6 +1592,7 @@
 				BDDA45A22612301100C9C3AF /* NAM64.png in Resources */,
 				BDDA450A2612301100C9C3AF /* DNK64.png in Resources */,
 				BDDA45142612301100C9C3AF /* COK64.png in Resources */,
+				BDAC5A6C27623BBA00927195 /* tw_logo.png in Resources */,
 				BDDA45842612301100C9C3AF /* BHR64.png in Resources */,
 				BDDA44E42612301100C9C3AF /* GGY64.png in Resources */,
 				BDDA44ED2612301100C9C3AF /* MLI64.png in Resources */,
@@ -1586,6 +1605,7 @@
 				BDDA45852612301100C9C3AF /* NIU64.png in Resources */,
 				BDDA45152612301100C9C3AF /* TON64.png in Resources */,
 				BDDA45782612301100C9C3AF /* GIN64.png in Resources */,
+				BDAC5A6D27623BBA00927195 /* re_logo.png in Resources */,
 				BDDA45832612301100C9C3AF /* IRQ64.png in Resources */,
 				BDB1DF2126E6FB8000879C4B /* headlines02.png in Resources */,
 				BD6EEEF3274FC2FD002535A3 /* ShareSplitArticleCell.xib in Resources */,

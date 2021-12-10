@@ -18,4 +18,11 @@ class customNavigationController: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return DARKMODE() ? .lightContent : .darkContent
+    }
+    
+    override var childForStatusBarStyle: UIViewController? {
+        return self.visibleViewController
+    }
 }

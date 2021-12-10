@@ -13,6 +13,7 @@ import SwiftUI
 protocol ShareSplitActionsPopupDelegate {
     func shareSplitAction_exit()
     func shareSplitAction_share()
+    func shareSplitAction_randomize()
 }
 
 
@@ -142,10 +143,18 @@ class ShareSplitActionsPopup: UIView {
         if(self.currentAnim == 2) {
             self.button2?.startAnimation()
             self.showText("Now tap the share button!")
-        } else if(self.currentAnim == 3) {
+        }
+        
+        /*
+         else if(self.currentAnim == 3) {
             self.button3?.startAnimation()
             self.showText("Tap to randomise, or manually scroll each column.")
         }
+        */
+    }
+    
+    func randomize() {
+        
     }
     
 }
@@ -158,9 +167,25 @@ extension ShareSplitActionsPopup: PulseButtonDelegate {
         } else if(index==2) { // SHARE
             self.button2?.stopAnimation()
             self.delegate?.shareSplitAction_share()
-            self.currentAnim = 3
+            
+            DELAY(1.0) {
+                self.currentAnim = -1
+                self.button3?.startAnimation()
+                self.showText("Tap to randomise, or manually scroll each column.")
+            }
+            
+            
         } else if(index==3) { // RANDOMIZE
-            print("RANDOMIZE!")
+            self.showText("Like what we found? Tap ‘Share’, or\ntap the randomise button again!")
+            self.button2?.stopAnimation()
+            self.button3?.stopAnimation()
+            
+            DELAY(1.0) {
+                self.button2?.startAnimation()
+            }
+        
+            self.setShareEnable(true)
+            self.delegate?.shareSplitAction_randomize()
         }
     }
 

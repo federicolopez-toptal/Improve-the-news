@@ -32,6 +32,8 @@ class ShareSplitArticles: UIView {
     
     let headerLabel1 = UILabel()
     let headerLabel2 = UILabel()
+    var showBorders = false
+    let hOrangeLine = UIView()
     
 
     init(into container: UIView) {
@@ -66,6 +68,7 @@ class ShareSplitArticles: UIView {
         headerLabel1.textAlignment = .center
         headerLabel1.font = UIFont(name: "PTSerif-Bold", size: 20)
         headerLabel1.textColor = .white
+        if(!DARKMODE()){ headerLabel1.textColor = textBlackAlpha }
         headerLabel1.text = "LEFT"
         if(splitOption==2){ headerLabel1.text = "CRITICAL" }
         header.addSubview(headerLabel1)
@@ -91,6 +94,7 @@ class ShareSplitArticles: UIView {
         headerLabel2.textAlignment = .center
         headerLabel2.font = UIFont(name: "PTSerif-Bold", size: 20)
         headerLabel2.textColor = .white
+        if(!DARKMODE()){ headerLabel2.textColor = textBlackAlpha }
         headerLabel2.text = "RIGHT"
         if(splitOption==2){ headerLabel2.text = "PRO" }
         header.addSubview(headerLabel2)
@@ -140,6 +144,7 @@ class ShareSplitArticles: UIView {
         
         let line = UIView()
         line.backgroundColor = .white
+        if(!DARKMODE()){ line.backgroundColor = bgWhite_DARK }        
         self.addSubview(line)
         line.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -148,6 +153,17 @@ class ShareSplitArticles: UIView {
             line.widthAnchor.constraint(equalToConstant: 4),
             line.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
+        
+        hOrangeLine.backgroundColor = UIColor(hex: 0xF0914F)
+        self.addSubview(hOrangeLine)
+        hOrangeLine.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            hOrangeLine.centerYAnchor.constraint(equalTo: self.column1.centerYAnchor, constant: -60),
+            hOrangeLine.heightAnchor.constraint(equalToConstant: 4),
+            hOrangeLine.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            hOrangeLine.widthAnchor.constraint(equalToConstant: 24)
+        ])
+        hOrangeLine.isHidden = true
         
         self.isHidden = true
     }
@@ -161,6 +177,7 @@ class ShareSplitArticles: UIView {
         self.parser = parser
         self.populateDataProviders()
         self.headerHeightConstraint?.constant = 60.0
+        self.hOrangeLine.isHidden = true
         
         if(self.started) {
             self.updateHeaderTexts()
@@ -287,7 +304,8 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         } else {
             info = self.dataProvider2[index]
         }
-                
+        
+        cell.showBorders = self.showBorders
         cell.update(img: info.0, text: info.1, countryID: info.2, source: info.3, state: info.4)
         cell.delegate = self
         cell.setList(tableView.tag-100)
@@ -309,6 +327,7 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
             listComponent = self.column2
         }
         
+        // edit dataProviders (for cell updating)
         if(!state) {
             self.editDataProvider(list, index, value: state)
         } else {
@@ -322,6 +341,24 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
             }
         }
         
+        // manual tap, disable the randomize borders
+        self.showBorders = false
+        for (i, _d) in self.dataProvider1.enumerated() {
+            if(_d.4) {
+                self.column1.reloadRows(at: [IndexPath(item: i, section: 0)], with: .none)
+                break
+                
+            }
+        }
+        for (i, _d) in self.dataProvider2.enumerated() {
+            if(_d.4) {
+                self.column2.reloadRows(at: [IndexPath(item: i, section: 0)], with: .none)
+                break
+            }
+        }
+        self.hOrangeLine.isHidden = true
+        
+        // Total selection count
         var count = 0
         for _d in self.dataProvider1 {
             if(_d.4){
@@ -335,8 +372,8 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
                 break
             }
         }
+
         self.delegate?.articleWasSelected(totalCount: count)
-        
         listComponent.reloadData()
     }
     
@@ -354,6 +391,7 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
   
     // scrollview
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        // headers dissapearing
         if(self.headerHeightConstraint!.constant > 0.0) {
             self.headerHeightConstraint?.constant = 0.0
             UIView.animate(withDuration: 0.4) {
@@ -362,10 +400,12 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
             }
         }
 
+        // unused
         if let _t = self.headerTimer {
             _t.invalidate()
         }
         
+        // scrolling offset fix
         if(!self.offsetFixed) {
             var list = self.column1
             if(scrollView.tag==101){ list = self.column2 } // the OTHER list
@@ -375,6 +415,24 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
             
             self.offsetFixed = true
         }
+        
+        // removing borders (from randomize)
+        self.showBorders = false
+        for (i, _d) in self.dataProvider1.enumerated() {
+            if(_d.4) {
+                self.column1.reloadRows(at: [IndexPath(item: i, section: 0)], with: .none)
+                break
+                
+            }
+        }
+        for (i, _d) in self.dataProvider2.enumerated() {
+            if(_d.4) {
+                self.column2.reloadRows(at: [IndexPath(item: i, section: 0)], with: .none)
+                break
+                
+            }
+        }
+        self.hOrangeLine.isHidden = true
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView,
         willDecelerate decelerate: Bool) {
@@ -395,171 +453,97 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
 
         let iPath = list.indexPathForRow(at: CGPoint(x: list.bounds.midX, y: list.bounds.midY))!
         list.scrollToRow(at: iPath, at: .middle, animated: true)
-
-        /*
-        var minorVal: (Int, CGFloat) = (0, 0.0)
-        let currentY = scrollView.contentOffset.y
-        for i in 0...self.scrollPositions.count-1 {
-            var difference = currentY - self.scrollPositions[i]
-            if(difference<0){ difference *= -1 }
-            
-            if(i==0){
-                minorVal = (0, difference)
-            } else {
-                if(difference<minorVal.1) {
-                    minorVal = (i, difference)
-                }
-            }
-            
-        }
-        
-        let destinationY = self.scrollPositions[minorVal.0]
-        //print("destinY", destinationY)
-        scrollView.setContentOffset(CGPoint(x: 0, y: destinationY), animated: true)
-        */
-        
-        
-        
-        
-        
-        /*
-        var list = self.column1
-        if(scrollView.tag == 102) { list = self.column2 }
-        let iPath = IndexPath(row: minorVal.0+1, section: 0)
-        list.scrollToRow(at: iPath, at: .middle, animated: true)
-        */
-        
-        
-        
-        /*
-        self.headerTimer = Timer.scheduledTimer(withTimeInterval: 8.0, repeats: false) { timer in
-            self.headerHeightConstraint?.constant = 60.0
-            UIView.animate(withDuration: 0.4) {
-                self.superview!.layoutIfNeeded()
-            } completion: { (succeed) in
-            }
-        }
-        */
     }
 
     
 }
 
 
-
-
-
-/*
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        
-        let list = self.column1
-        let verticalOffset = CGFloat( Int(targetContentOffset.pointee.y) % Int(list.rowHeight) )
-        
-        if(velocity.y < 0) {
-            targetContentOffset.pointee.y -= verticalOffset
-        } else if(velocity.y > 0) {
-            targetContentOffset.pointee.y += list.rowHeight - verticalOffset
+extension ShareSplitArticles {
+    
+    func randomize() {
+    
+        if(headerHeightConstraint!.constant > 0) {
+            self.headerHeightConstraint?.constant = 0.0
+            UIView.animate(withDuration: 0.4) {
+                self.superview!.layoutIfNeeded()
+            } completion: { (succeed) in
+                self.randomize_step2()
+            }
         } else {
-            if(verticalOffset < list.rowHeight/2) {
-                targetContentOffset.pointee.y -= verticalOffset
-            } else {
-                targetContentOffset.pointee.y += list.rowHeight - verticalOffset
+            self.randomize_step2()
+        }
+    }
+    
+    func randomize_step2() {
+        self.showBorders = true
+        self.hOrangeLine.isHidden = true
+    
+        let count1 = self.dataProvider1.count
+        let count2 = self.dataProvider2.count
+        
+        var row1 = RND(range: 0...count1-1)
+        var row2 = RND(range: 0...count2-1)
+        if(row1==0){ row1 = 1 }
+        if(row1==count1-1){ row1 = count1-2 }
+        if(row2==count2-1){ row2 = count2-2 }
+        if(row2==0){ row2 = 1 }
+        
+            for (i, _d) in self.dataProvider1.enumerated() {
+                if(_d.4 && i==row1) {
+                    self.column1.reloadRows(at: [IndexPath(item: i, section: 0)], with: .none)
+                    break
+                }
+            }
+            for (i, _d) in self.dataProvider2.enumerated() {
+                if(_d.4 && i==row2) {
+                    self.column2.reloadRows(at: [IndexPath(item: i, section: 0)], with: .none)
+                    break
+                }
+            }
+        
+        let iPath1 = IndexPath(row: row1, section: 0)
+        let iPath2 = IndexPath(row: row2, section: 0)
+        
+        //print("RANDOM: \(row1)/\(count1), \(row2)/\(count2)")
+        self.column1.scrollToRow(at: iPath1, at: .middle, animated: true)
+        self.column2.scrollToRow(at: iPath2, at: .middle, animated: true)
+        
+        //////
+        if let cell1 = self.tableView(self.column1, cellForRowAt: iPath1) as? ShareSplitArticleCell {
+            if(!cell1.checked) {
+                let total = self.tableView(self.column1, numberOfRowsInSection: 0)
+                for i in 0...total-1 {
+                    if(i==row1) {
+                        self.editDataProvider(1, i, value: true)
+                    } else {
+                        self.editDataProvider(1, i, value: false)
+                    }
+                }
+                self.column1.reloadData()
+            }
+        }
+        if let cell2 = self.tableView(self.column2, cellForRowAt: iPath2) as? ShareSplitArticleCell {
+            if(!cell2.checked) {
+                let total = self.tableView(self.column2, numberOfRowsInSection: 0)
+                for i in 0...total-1 {
+                    if(i==row2) {
+                        self.editDataProvider(2, i, value: true)
+                    } else {
+                        self.editDataProvider(2, i, value: false)
+                    }
+                }
+                self.column2.reloadData()
             }
         }
         
-        print("###")
-    }
-    */
-    
-/*
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        
-        let list = self.column1
-        
-        let posY = Int(targetContentOffset.pointee.y)
-        let toMove = posY % Int(list.rowHeight)
-        let limit = Int(list.rowHeight/2)
-        
-        if(toMove < limit) {
-            targetContentOffset.pointee.y -= CGFloat(toMove)
-        } else {
-            targetContentOffset.pointee.y += list.rowHeight - CGFloat(toMove)
+        DELAY(0.4) {
+            self.hOrangeLine.alpha = 0.0
+            self.hOrangeLine.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.hOrangeLine.alpha = 1.0
+            }
         }
+        
     }
-*/
-    
-    
-/*
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView,
-        willDecelerate decelerate: Bool) {
-        
-        if(!decelerate) {
-            self.scrollViewDidEndDecelerating(scrollView)
-        }
-    }
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        
-        let list = self.column1
-        let point = CGPoint(x: list.contentOffset.x,
-            y: list.contentOffset.y + list.rowHeight/2)
-        
-        if let iPath = self.column1.indexPathForRow(at: point) {
-            list.scrollToRow(at: iPath, at: .top, animated: true)
-        }
-    }
-*/
-
-   /*
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView,
-        willDecelerate decelerate: Bool) {
-        
-        //if(!decelerate) {
-            //print(scrollView.tag)
-            //print("---")
-            //self.scrollViewDidEndDecelerating(scrollView)
-        //}
-        
-        //var list = self.column1
-        //if(scrollView.tag==102){ list = self.column2 }
-        
-        /*
-        let currentY = scrollView.contentOffset.y
-        for i in 0...self.scrollPositions.count-1 {
-            var difference = currentY - self.scrollPositions[i]
-            if(difference<0){ difference *= -1 }
-            
-            
-        }
-        */
-        
-        /*
-        let destinationY: CGFloat = 240.0
-        scrollView.setContentOffset(CGPoint(x: 0, y: destinationY), animated: true)
-        */
-        
-        //print( list.contentOffset.y )
-        
-        //if(!decelerate) {
-            self.fixListsScrollPosition(scrollView)
-        //}
-    }
-    */
-    
-    /*
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        /*
-        var list = self.column1
-        if(scrollView.tag==102){ list = self.column2 }
-        
-        
-        let point = CGPoint(x: list.contentOffset.x,
-            y: list.contentOffset.y + list.rowHeight/2)
-        
-        if let iPath = self.column1.indexPathForRow(at: point) {
-            list.scrollToRow(at: iPath, at: .top, animated: true)
-        }
-        */
-        
-        self.fixListsScrollPosition(scrollView)
-    }
-*/
+}

@@ -280,17 +280,6 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.lastTimeActive = Date()
     }
     
-    
-    
-    
-    /*
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        //return DARKMODE() ? .lightContent : .darkContent
-        
-        return .darkContent
-    }
-    */
-    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
         
@@ -330,6 +319,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             self.showBiasSliders(self.biasButton)
         }
         */
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return DARKMODE() ? .lightContent : .darkContent
+    }
+    
+    override var childForStatusBarStyle: UIViewController? {
+        return self.children.first
     }
     
     // MARK: - Data loading
@@ -1472,7 +1469,7 @@ extension NewsViewController {
             DispatchQueue.global().async {
                 //guard let data = try? Data(contentsOf: imgURL) else { return }
                 DispatchQueue.main.async {
-                    print("loading cell images")
+                    //print("loading cell images")
 //                        let img = UIImage(data: data)
 //                        let width = self.view.frame.width - 40
 //                        let rescaled = img?.scalePreservingAspectRatio(targetSize: CGSize(width: width, height: width * 7 / 12))
@@ -2839,13 +2836,16 @@ extension NewsViewController: ShareSplitActionsPopupDelegate {
     }
     
     func shareSplitAction_share() {
-        
         let vc = ShareSplitShareViewController()
-        //vc.modalPresentationStyle = .fullScreen
+        vc.modalPresentationStyle = .fullScreen
         vc.articles = self.shareArticles?.getSelectedArticles()
         
         self.present(vc, animated: true) {
         }
+    }
+    
+    func shareSplitAction_randomize() {
+        self.shareArticles?.randomize()
     }
 }
 

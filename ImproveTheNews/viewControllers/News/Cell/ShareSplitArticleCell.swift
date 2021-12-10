@@ -22,14 +22,16 @@ class ShareSplitArticleCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var flag: UIImageView!
     @IBOutlet weak var sourceLabel: UILabel!
+    @IBOutlet weak var orangeBorders: UIView!
     
     private var index: Int = -1
     private var list: Int = -1
     
-    private var checked = false
+    var showBorders = false
+    var checked = false
     @IBOutlet weak var checkButton: UIButton!
     
-    
+    let customOrange = UIColor(hex: 0xF0914F)
     
     
     func setIndex(_ index: Int) {
@@ -44,11 +46,18 @@ class ShareSplitArticleCell: UITableViewCell {
         self.selectionStyle = .none
         self.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
     
+        self.orangeBorders.layer.borderColor = customOrange.cgColor
+        self.orangeBorders.layer.borderWidth = 3.0
+        self.orangeBorders.layer.cornerRadius = 10.0
+        self.orangeBorders.backgroundColor = .clear
+        self.orangeBorders.isUserInteractionEnabled = false
+    
         self.thumbImageView.backgroundColor = .darkGray
         self.thumbImageView.layer.cornerRadius = 15
         self.thumbImageView.clipsToBounds = true
         self.thumbImageView.contentMode = .scaleAspectFill
         self.thumbImageView.sd_setImage(with: URL(string: img), placeholderImage: nil)
+        
         
         self.titleLabel.text = text
         self.titleLabel.backgroundColor = self.backgroundColor
@@ -64,6 +73,15 @@ class ShareSplitArticleCell: UITableViewCell {
         
         self.checked = state
         self.updateCheck()
+        
+        self.orangeBorders.superview?.bringSubviewToFront(self.orangeBorders)
+        self.orangeBorders.isHidden = true
+        
+        if(self.checked && self.showBorders) {
+            self.orangeBorders.isHidden = false
+        }
+        
+        //self.orangeBorders.isHidden = true
     }
     
     func updateCheck() {
@@ -71,8 +89,10 @@ class ShareSplitArticleCell: UITableViewCell {
         self.checkButton.layer.cornerRadius = 10.0
         
         var img = UIImage(systemName: "checkmark.square")
-        self.checkButton.tintColor = .orange
+        self.checkButton.tintColor = customOrange
+        //self.orangeBorders.isHidden = false
         if(!self.checked) {
+            //self.orangeBorders.isHidden = true
             img = UIImage(systemName: "square")
             self.checkButton.tintColor = .white
         }
@@ -91,7 +111,29 @@ class ShareSplitArticleCell: UITableViewCell {
         self.delegate?.cellWasChecked(list: self.list, index: self.index, state: !self.checked)
     }
     
+    /*
+    func showBorders(_ state: Bool) {
+        print("BORDER!")
     
+        self.orangeBorders.isHidden = true
+    
+        self.orangeBorders.setNeedsDisplay()
+        self.setNeedsDisplay()
+    
+        //self.thumbImageView.layer.borderColor = UIColor.yellow.cgColor
+        //self.thumbImageView.layer.borderWidth = 3.0
+        
+        
+        
+        /*
+        if(state) {
+            
+        } else {
+            self.thumbImageView.layer.borderWidth = 2.0self.orangeBorders.isHidden = true
+        }
+        */
+    }
+    */
     
     
     

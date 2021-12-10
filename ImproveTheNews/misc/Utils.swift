@@ -295,5 +295,9 @@ func IS_ZOOMED() -> Bool {
    
 }
 
+func RND(range: ClosedRange<Int>) -> Int {
+    return Int.random(in: range)
+}
+
 
 

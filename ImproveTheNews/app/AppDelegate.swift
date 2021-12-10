@@ -135,19 +135,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-/*
-extension UINavigationController {
-    
-    /*
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        print("=== update!")
-        return .lightContent
-    }
-    */
-    
-    open override var childForStatusBarStyle: UIViewController? {
-        return topViewController
-    }
-    
-}
-*/
+

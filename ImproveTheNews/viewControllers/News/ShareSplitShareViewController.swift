@@ -18,6 +18,10 @@ class ShareSplitShareViewController: UIViewController {
     private var article2: (String, String, String, String, Bool)?
     let blueContainer = UIView()
 
+    let scrollview = UIScrollView()
+    let contentView = UIView()
+    var scrollviewBottomConstraint: NSLayoutConstraint?
+
     override func viewDidLoad() {
         self.view.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
 
@@ -26,12 +30,25 @@ class ShareSplitShareViewController: UIViewController {
             self.article2 = _arts[1]
         }
         
-        let valY = SAFE_AREA()!.top
+        let valY: CGFloat = SAFE_AREA()!.top
         
+        self.scrollview.backgroundColor = self.view.backgroundColor
+        self.view.addSubview(self.scrollview)
+        self.scrollview.translatesAutoresizingMaskIntoConstraints = false
+        self.scrollviewBottomConstraint = self.scrollview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        
+        NSLayoutConstraint.activate([
+            self.scrollview.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.scrollview.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.scrollview.topAnchor.constraint(equalTo: self.view.topAnchor, constant: valY),
+            self.scrollviewBottomConstraint!
+        ])
+            
         let closeButton = UIButton(type: .custom)
         closeButton.backgroundColor = .clear
         closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
         closeButton.tintColor = .white
+        if(!DARKMODE()){ closeButton.tintColor = UIColor.black.withAlphaComponent(0.5) }
         self.view.addSubview(closeButton)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -42,26 +59,46 @@ class ShareSplitShareViewController: UIViewController {
         ])
         closeButton.addTarget(self, action: #selector(closeButtonOnTap(sender:)),
             for: .touchUpInside)
-            
+        
+        let contentHeight: CGFloat = 800
+        self.contentView.backgroundColor = self.view.backgroundColor
+        self.scrollview.addSubview(self.contentView)
+        self.contentView.frame = CGRect(x: 0, y: 0,
+            width: UIScreen.main.bounds.size.width, height: contentHeight)
+        /*
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.contentView.leadingAnchor.constraint(equalTo: self.scrollview.leadingAnchor),
+            self.contentView.trailingAnchor.constraint(equalTo: self.scrollview.trailingAnchor),
+            self.contentView.topAnchor.constraint(equalTo: self.scrollview.topAnchor),
+            self.contentView.bottomAnchor.constraint(equalTo: self.scrollview.bottomAnchor),
+            //self.contentView.heightAnchor.constraint(equalToConstant: contentHeight),
+        ])
+        */
+        self.scrollview.contentSize = self.contentView.frame.size
+        
+        
+        
         let titleLabel = UILabel()
         titleLabel.numberOfLines = 2
         titleLabel.textAlignment = .left
         titleLabel.text = "Share the split &\nimprove the news!"
         titleLabel.textColor = .white
+        if(!DARKMODE()){ titleLabel.textColor = UIColor.black.withAlphaComponent(0.25) }
         titleLabel.font = UIFont(name: "Merriweather-Bold", size: 22)
-        self.view.addSubview(titleLabel)
+        self.contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            titleLabel.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: -10),
+            titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
         ])
         
         blueContainer.backgroundColor = UIColor(hex: 0x283E60)
-        self.view.addSubview(blueContainer)
+        self.contentView.addSubview(blueContainer)
         blueContainer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            blueContainer.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            blueContainer.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+            blueContainer.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            blueContainer.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor,
                 constant: -20),
             blueContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             blueContainer.heightAnchor.constraint(equalToConstant: 400)
@@ -227,6 +264,103 @@ class ShareSplitShareViewController: UIViewController {
         
         drawVerticalLine()
         drawHorizontalLine()
+        
+        let title2Label = UILabel()
+        title2Label.numberOfLines = 2
+        title2Label.textAlignment = .left
+        title2Label.text = "Your thoughts on these news outlets\nreporting of this topic?"
+        title2Label.textColor = titleLabel.textColor
+        title2Label.font = UIFont(name: "Merriweather-Bold", size: 16)
+        self.contentView.addSubview(title2Label)
+        title2Label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            title2Label.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            title2Label.topAnchor.constraint(equalTo: blueContainer.bottomAnchor, constant: 20),
+        ])
+        
+        let textInput = UITextView()
+        textInput.textColor = titleLabel.textColor
+        textInput.backgroundColor = self.view.backgroundColor
+        self.contentView.addSubview(textInput)
+        textInput.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            textInput.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            textInput.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            textInput.topAnchor.constraint(equalTo: title2Label.bottomAnchor, constant: 20),
+            textInput.heightAnchor.constraint(equalToConstant: 75.0),
+        ])
+        textInput.font = UIFont.systemFont(ofSize: 15.0)
+        textInput.layer.borderWidth = 1.0
+        textInput.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        if(!DARKMODE()){ textInput.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor }
+        textInput.text = ""
+        textInput.delegate = self
+        
+        let iconsGroup = UIStackView()
+        iconsGroup.axis = .horizontal
+        iconsGroup.alignment = .center
+        iconsGroup.spacing = 20
+        iconsGroup.backgroundColor = self.view.backgroundColor
+        self.contentView.addSubview(iconsGroup)
+        iconsGroup.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            iconsGroup.topAnchor.constraint(equalTo: textInput.bottomAnchor, constant: 20),
+            iconsGroup.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
+        ])
+        
+        let fb_icon = UIButton(type: .custom)
+        fb_icon.setImage(UIImage(named: "fb_logo.png"), for: .normal)
+        iconsGroup.addArrangedSubview(fb_icon)
+        fb_icon.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            fb_icon.widthAnchor.constraint(equalToConstant: 32),
+            fb_icon.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        
+        let in_icon = UIButton(type: .custom)
+        in_icon.setImage(UIImage(named: "in_logo.png"), for: .normal)
+        iconsGroup.addArrangedSubview(in_icon)
+        in_icon.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            in_icon.widthAnchor.constraint(equalToConstant: 32),
+            in_icon.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        
+        let tw_icon = UIButton(type: .custom)
+        tw_icon.setImage(UIImage(named: "tw_logo.png"), for: .normal)
+        iconsGroup.addArrangedSubview(tw_icon)
+        tw_icon.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tw_icon.widthAnchor.constraint(equalToConstant: 32),
+            tw_icon.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        
+        let re_icon = UIButton(type: .custom)
+        re_icon.setImage(UIImage(named: "re_logo.png"), for: .normal)
+        iconsGroup.addArrangedSubview(re_icon)
+        re_icon.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            re_icon.widthAnchor.constraint(equalToConstant: 32),
+            re_icon.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        
+        let shareButton = UIButton(type: .custom)
+        shareButton.backgroundColor = accentOrange
+        shareButton.setTitleColor(.white, for: .normal)
+        shareButton.setTitle("SHARE NOW!", for: .normal)
+        shareButton.titleLabel?.font = UIFont(name: "Roboto-Bold", size: 14)
+        self.contentView.addSubview(shareButton)
+        shareButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            shareButton.heightAnchor.constraint(equalToConstant: 50),
+            shareButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            shareButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            shareButton.topAnchor.constraint(equalTo: iconsGroup.bottomAnchor, constant: 25),
+        ])
+        shareButton.layer.cornerRadius = 25.0
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(viewOnTap(sender:)))
+        contentView.addGestureRecognizer(gesture)
     }
     
     private func drawVerticalLine() {
@@ -261,41 +395,71 @@ class ShareSplitShareViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        super.viewWillAppear(animated)
+        self.addKeyboardObservers()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.removeKeyboardObservers()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return DARKMODE() ? .lightContent : .darkContent
+    }
+    
+    // MARK: - Keyboard stuff
+    func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardEvent(n:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardEvent(n:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    func removeKeyboardObservers() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardEvent(n: Notification) {
+        let H = getKeyboardHeight(fromNotification: n)
+        
+        if(n.name==UIResponder.keyboardWillShowNotification){
+            self.scrollviewBottomConstraint!.constant = -H
+        } else if(n.name==UIResponder.keyboardWillHideNotification) {
+            self.scrollviewBottomConstraint!.constant = 0
+        }
+        
+        view.layoutIfNeeded()
+    }
+    func getKeyboardHeight(fromNotification notification: Notification) -> CGFloat {
+        if let H = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+            return H
+        } else {
+            return 300
+        }
+    }
+    
+    // MARK: - Some taps
     @objc func closeButtonOnTap(sender: UIButton?) {
         NotificationCenter.default.post(name: NOTIFICATION_CLOSE_SPLITSHARE, object: nil)
         
         self.dismiss(animated: true) {
         }
     }
-
-/*
-    init(into container: UIView) {
-        super.init(frame: CGRect.zero)
-        
-        self.backgroundColor = .green
-        container.addSubview(self)
-        self.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            /*
-            self.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            self.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            self.topAnchor.constraint(equalTo: container.topAnchor),
-            self.bottomAnchor.constraint(equalTo: container.bottomAnchor)
-            */
-            
-            self.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.topAnchor.constraint(equalTo: self.topAnchor),
-            self.widthAnchor.constraint(equalToConstant: 100),
-            self.heightAnchor.constraint(equalToConstant: 100)
-        ])
-    }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    @objc func viewOnTap(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
     }
-*/
+
+}
+
+extension ShareSplitShareViewController: UITextViewDelegate {
+
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange,
+        replacementText text: String) -> Bool {
+    
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
 
 }
