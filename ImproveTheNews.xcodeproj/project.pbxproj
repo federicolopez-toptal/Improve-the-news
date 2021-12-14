@@ -98,6 +98,7 @@
 		BDAC5A6D27623BBA00927195 /* re_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BDAC5A6B27623BBA00927195 /* re_logo.png */; };
 		BDAC5A7027623BC200927195 /* fb_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BDAC5A6E27623BC200927195 /* fb_logo.png */; };
 		BDAC5A7127623BC200927195 /* in_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BDAC5A6F27623BC200927195 /* in_logo.png */; };
+		BDADB58627678234001820D8 /* ShareSplitAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDADB58527678234001820D8 /* ShareSplitAPI.swift */; };
 		BDAF71DB2763AF62008383C9 /* notes_b.txt in Resources */ = {isa = PBXBuildFile; fileRef = BDAF71DA2763AF62008383C9 /* notes_b.txt */; };
 		BDB1DF1E26E6E67B00879C4B /* onboardingCheckOFF.png in Resources */ = {isa = PBXBuildFile; fileRef = BDB1DF1C26E6E67B00879C4B /* onboardingCheckOFF.png */; };
 		BDB1DF1F26E6E67B00879C4B /* onboardingCheckON.png in Resources */ = {isa = PBXBuildFile; fileRef = BDB1DF1D26E6E67B00879C4B /* onboardingCheckON.png */; };
@@ -455,6 +456,7 @@
 		BDAC5A6B27623BBA00927195 /* re_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = re_logo.png; sourceTree = "<group>"; };
 		BDAC5A6E27623BC200927195 /* fb_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_logo.png; sourceTree = "<group>"; };
 		BDAC5A6F27623BC200927195 /* in_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = in_logo.png; sourceTree = "<group>"; };
+		BDADB58527678234001820D8 /* ShareSplitAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSplitAPI.swift; sourceTree = "<group>"; };
 		BDAF71DA2763AF62008383C9 /* notes_b.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes_b.txt; sourceTree = "<group>"; };
 		BDB1DF1C26E6E67B00879C4B /* onboardingCheckOFF.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingCheckOFF.png; sourceTree = "<group>"; };
 		BDB1DF1D26E6E67B00879C4B /* onboardingCheckON.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingCheckON.png; sourceTree = "<group>"; };
@@ -1244,6 +1246,7 @@
 				BDAC5A6E27623BC200927195 /* fb_logo.png */,
 				BDAC5A6F27623BC200927195 /* in_logo.png */,
 				BDFA587A2742E9550040C7AA /* tmpTest.xib */,
+				BDADB58527678234001820D8 /* ShareSplitAPI.swift */,
 			);
 			path = News;
 			sourceTree = "<group>";
@@ -1822,6 +1825,7 @@
 				BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */,
 				A8C5B9D424B67A0E0077E306 /* Globals.swift in Sources */,
 				BDEAF85625E55D2400588944 /* Utils.swift in Sources */,
+				BDADB58627678234001820D8 /* ShareSplitAPI.swift in Sources */,
 				A851345224838B0700D56C04 /* SectionsViewController.swift in Sources */,
 				A81B3B222481E67200A52A97 /* SceneDelegate.swift in Sources */,
 				BD817A6126D688A8007BE315 /* PrefCell.swift in Sources */,

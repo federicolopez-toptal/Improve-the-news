@@ -65,16 +65,6 @@ class ShareSplitShareViewController: UIViewController {
         self.scrollview.addSubview(self.contentView)
         self.contentView.frame = CGRect(x: 0, y: 0,
             width: UIScreen.main.bounds.size.width, height: contentHeight)
-        /*
-        self.contentView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.contentView.leadingAnchor.constraint(equalTo: self.scrollview.leadingAnchor),
-            self.contentView.trailingAnchor.constraint(equalTo: self.scrollview.trailingAnchor),
-            self.contentView.topAnchor.constraint(equalTo: self.scrollview.topAnchor),
-            self.contentView.bottomAnchor.constraint(equalTo: self.scrollview.bottomAnchor),
-            //self.contentView.heightAnchor.constraint(equalToConstant: contentHeight),
-        ])
-        */
         self.scrollview.contentSize = self.contentView.frame.size
         
         
@@ -358,6 +348,7 @@ class ShareSplitShareViewController: UIViewController {
             shareButton.topAnchor.constraint(equalTo: iconsGroup.bottomAnchor, constant: 25),
         ])
         shareButton.layer.cornerRadius = 25.0
+        shareButton.addTarget(self, action: #selector(shareOnTap(_:)), for: .touchUpInside)
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(viewOnTap(sender:)))
         contentView.addGestureRecognizer(gesture)
@@ -446,6 +437,19 @@ class ShareSplitShareViewController: UIViewController {
     
     @objc func viewOnTap(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
+    }
+    
+    @objc func shareOnTap(_ sender: UIButton?) {
+        
+        let api = ShareSplitAPI()
+        api.generateImage(self.article1!, self.article2!) { (error, imageUrl) in
+            if let _error = error {
+                print("ERROR", _error)
+            } else if let _img = imageUrl {
+                print("IMG", _img)
+            }
+        }
+        
     }
 
 }
