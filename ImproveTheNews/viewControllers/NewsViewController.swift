@@ -32,6 +32,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var shareArticles: ShareSplitArticles?
     var biasMiniButton = UIView()
     var miniButtonTimer: Timer?
+    var enableSplitSharingAfterLoading = false
     
     // to populate CollectionView
     //changed home link from "http://www.improvethenews.org/itnserver.php/?topic=" to this one
@@ -528,6 +529,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             })
         }
         self.scrollToTopOnLoad = true
+        
+        if(enableSplitSharingAfterLoading) {
+            self.enableSplitSharingAfterLoading = false
+            self.startSplitSharingWorkflow()
+        }
+        
     }
     
     func resendRequest() {
@@ -1216,8 +1223,11 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
             }
         } else {
             if(self.biasSliders.status == "SL00") {
-                configureBiasSliders()
-                print("BIAS view")
+                //configureBiasSliders()
+                //print("BIAS view")
+                //DELAY(0.25) {
+                    self.startSplitSharingWorkflow()
+                //}
             } else {
                 self.startSplitSharingWorkflow()
             }
@@ -1510,8 +1520,7 @@ extension NewsViewController {
         
             
             //cell.contentView.backgroundColor = .green
-            
-            print( ">> HEIGHT", cell.frame.size.height )
+            //print( ">> HEIGHT", cell.frame.size.height )
             
             return cell
     }
@@ -2765,11 +2774,23 @@ extension NewsViewController {
     @objc func biasMiniButtonOnTap(sender: UIButton) {
         if(self.biasButtonState == 1) {
             // Normal "panel", go to share-split mode
-            self.biasSliders.enableSplitForSharing()
+            if(!mustSplit()) {
+                self.enableSplitSharingAfterLoading = true
+                self.biasSliders.enableSplitForSharing()
+            } else { self.startSplitSharingWorkflow() }
         } else {
             // Split, go to normal (panel) mode
-            self.biasSliders.disableSplitFromOutside()
+                //self.biasSliders.disableSplitFromOutside()
+            
+            self.biasButtonState = 1
+            let iconImageView = self.biasMiniButton.viewWithTag(767) as! UIImageView
+            iconImageView.image = UIImage(named: "shareSplitButton.png")
+            let buttonIcon = UIImage(named: "prefsButton.png")
+            self.biasButton.setBackgroundImage(buttonIcon, for: .normal)
         }
+        
+        self.miniButtonTimer?.invalidate()
+        self.biasMiniButton.isHidden = true
     }
     
     @objc func biasButtonOnLongPress(gesture: UILongPressGestureRecognizer) {
@@ -2790,6 +2811,7 @@ extension NewsViewController {
                     self.miniButtonTimer = Timer.scheduledTimer(withTimeInterval: 4.0,
                         repeats: false) { timer in
 
+                        self.biasButton.superview?.bringSubviewToFront(self.biasButton)
                         UIView.animate(withDuration: 0.4) {
                             self.biasMiniButton.alpha = 1.0
                             self.biasMiniButtonUpdatePosition(offset: 0)
@@ -2804,6 +2826,17 @@ extension NewsViewController {
     }
     
     func startSplitSharingWorkflow() {
+        self.miniButtonTimer?.invalidate()
+        self.biasMiniButton.isHidden = true
+        
+        self.biasButtonState = 2
+        let iconImageView = self.biasMiniButton.viewWithTag(767) as! UIImageView
+        iconImageView.image = UIImage(named: "prefsButton.png")
+        let buttonIcon = UIImage(named: "shareSplitButton.png")
+        self.biasButton.setBackgroundImage(buttonIcon, for: .normal)
+    
+    
+    
         self.shareArticles?.start(parser: self.newsParser)
         self.shareArticles?.isHidden = false
         self.mustShowHorizontalMenu = !self.moreHeadLines.isHidden
@@ -2828,6 +2861,7 @@ extension NewsViewController: ShareSplitActionsPopupDelegate {
         self.biasSliders.isHidden = false
         
         self.shareArticles?.isHidden = true
+        self.shareArticles?.unloadStuff()
         self.shareActionsView?.hide()
         
         if(self.mustShowHorizontalMenu) {

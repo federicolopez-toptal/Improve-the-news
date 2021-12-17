@@ -21,6 +21,10 @@ class ShareSplitShareViewController: UIViewController {
     let scrollview = UIScrollView()
     let contentView = UIView()
     var scrollviewBottomConstraint: NSLayoutConstraint?
+    let textInput = UITextView()
+
+    let loadingView = UIView()
+
 
     override func viewDidLoad() {
         self.view.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
@@ -268,7 +272,6 @@ class ShareSplitShareViewController: UIViewController {
             title2Label.topAnchor.constraint(equalTo: blueContainer.bottomAnchor, constant: 20),
         ])
         
-        let textInput = UITextView()
         textInput.textColor = titleLabel.textColor
         textInput.backgroundColor = self.view.backgroundColor
         self.contentView.addSubview(textInput)
@@ -352,6 +355,24 @@ class ShareSplitShareViewController: UIViewController {
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(viewOnTap(sender:)))
         contentView.addGestureRecognizer(gesture)
+        
+        // loading
+        let dim: CGFloat = 65
+        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
+        self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        if(!DARKMODE()){ self.loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.25) }
+        self.loadingView.isHidden = true
+        self.loadingView.layer.cornerRadius = 15
+    
+        let loading = UIActivityIndicatorView(style: .medium)
+        if(DARKMODE()){ loading.color = .white }
+        else { loading.color = darkForBright }
+        self.loadingView.addSubview(loading)
+        loading.center = CGPoint(x: dim/2, y: dim/2)
+        loading.startAnimating()
+        self.view.addSubview(self.loadingView)
     }
     
     private func drawVerticalLine() {
@@ -441,14 +462,32 @@ class ShareSplitShareViewController: UIViewController {
     
     @objc func shareOnTap(_ sender: UIButton?) {
         
+        self.loadingView.isHidden = false
+        
         let api = ShareSplitAPI()
         api.generateImage(self.article1!, self.article2!) { (error, imageUrl) in
+            DispatchQueue.main.async {
+                self.loadingView.isHidden = true
+            }
+            
             if let _error = error {
                 print("ERROR", _error)
             } else if let _img = imageUrl {
-                print("IMG", _img)
+                //print("IMG", _img)
+                DispatchQueue.main.async {
+                    UIApplication.shared.open(URL(string: _img)!)
+                }
             }
         }
+        
+        /*
+        let img = "http://ec2-3-16-162-167.us-east-2.compute.amazonaws.com/php/api/image-generator/images/u2jKupucLCkMcmcizdoB.jpg"
+        
+        let api = ShareSplitAPI()
+        api.share(imgUrl: img, comment: self.textInput.text,
+            art1: self.article1!, art2: self.article2!) {
+        }
+        */
         
     }
 

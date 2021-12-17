@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 protocol ShareSplitArticlesDelegate {
     func articleWasSelected(totalCount: Int)
@@ -23,8 +24,15 @@ class ShareSplitArticles: UIView {
     private var offsetFixed = false
 
     private var parser: News?
+    var dp1top = 0
+    var dp1Bottom = 0
+    var dp2top = 0
+    var dp2Bottom = 0
+    var dp1 = [(String, String, String, String, Bool)]()
+    var dp2 = [(String, String, String, String, Bool)]()
     var dataProvider1 = [(String, String, String, String, Bool)]()
     var dataProvider2 = [(String, String, String, String, Bool)]()
+    let ARTICLES_TO_ADD = 15
 
     var scrollPositions = [CGFloat]()
     var headerHeightConstraint: NSLayoutConstraint?
@@ -166,10 +174,21 @@ class ShareSplitArticles: UIView {
         hOrangeLine.isHidden = true
         
         self.isHidden = true
+        //self.addGestures()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addGestures() {
+        let panGesture1 = UIPanGestureRecognizer(target: self, action: #selector(columnOnPan(_:)))
+        //panGesture1.minimumNumberOfTouches = 1
+        //let panGesture2 = UIPanGestureRecognizer(target: self, action: #selector(columnOnPan(_:)))
+        //panGesture2.minimumNumberOfTouches = 1
+        
+        self.column1.addGestureRecognizer(panGesture1)
+        //self.column2.addGestureRecognizer(panGesture2)
     }
     
     func start(parser: News) {
@@ -185,6 +204,30 @@ class ShareSplitArticles: UIView {
             self.column2.reloadData()
             self.column1.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
             self.column2.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+            
+            self.headerHeightConstraint?.constant = 0.0
+            /*
+            DELAY(1.0) {
+                
+                self.addItemsAtTop(1)
+                self.addItemsAtTop(1)
+                self.addItemsAtTop(1)
+                
+                
+                /*
+                self.addItemsAtBottom(2)
+                self.addItemsAtBottom(2)
+                */
+                
+            }
+            */
+            
+            /*
+            DELAY(2.0) {
+                self.startScrollingTimer()
+            }
+            */
+            
             return
         }
         self.started = true
@@ -217,6 +260,9 @@ class ShareSplitArticles: UIView {
     func populateDataProviders() {
         var index = 0
         var side = 1
+        
+        self.dp1 = [(String, String, String, String, Bool)]()
+        self.dp2 = [(String, String, String, String, Bool)]()
         self.dataProvider1 = [(String, String, String, String, Bool)]()
         self.dataProvider2 = [(String, String, String, String, Bool)]()
         
@@ -231,18 +277,27 @@ class ShareSplitArticles: UIView {
                         
                         let newItem = (img, title, flag, source, false)
                         if(side==1){
+                            self.dp1.append(newItem)
                             self.dataProvider1.append(newItem)
                             side = 2
                         } else {
+                            self.dp2.append(newItem)
                             self.dataProvider2.append(newItem)
                             side = 1
                         }
 
                         index += 1
+                        //if(self.dp1.count>=5 && self.dp2.count>=5){ break } //!!!
                     }
                 }
+                //if(self.dp1.count>=5 && self.dp2.count>=5){ break } //!!!
             }
         }
+        
+        dp1Bottom = 0
+        dp2Bottom = 0
+        dp1top = self.dp1.count-1
+        dp2top = self.dp2.count-1
         
         var posY: CGFloat = 0.0
         self.scrollPositions = [CGFloat]()
@@ -442,17 +497,59 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         }
     }
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        self.fixListsScrollPosition(scrollView)
+        
+        print(scrollView.frame.size.height - (240 * 5))
+        //print("Y", scrollView.contentOffset.y )
+        
+        var list = 1
+        if(scrollView == self.column2){ list = 2 }
+        
+        // TOP
+        if(scrollView.contentOffset.y == 0.0) {
+            self.addItemsAtTop(list)
+        }
+        
+        var limit: CGFloat = 0
+        if(list==1){ limit = 240.0 * CGFloat(self.dataProvider1.count) }
+        else if(list==2){ limit = 240.0 * CGFloat(self.dataProvider2.count) }
+        limit -= self.column1.frame.size.height
+        
+        // BOTTOM
+        if(scrollView.contentOffset.y == limit) {
+            self.addItemsAtBottom(list)
+        }
+        
+        DELAY(0.1) {
+            self.fixListsScrollPosition(scrollView)
+        }
     }
     
+    
+    
     private func fixListsScrollPosition(_ scrollView: UIScrollView) {
-        print("FIXING SCROLL!")
-        
         var list = self.column1
         if(scrollView.tag == 102) { list = self.column2 }
 
         let iPath = list.indexPathForRow(at: CGPoint(x: list.bounds.midX, y: list.bounds.midY))!
         list.scrollToRow(at: iPath, at: .middle, animated: true)
+    }
+    
+    @objc func columnOnPan(_ gesture: UIPanGestureRecognizer?) {
+        /*
+        if(gesture?.numberOfTouches==1 && gesture?.state == .changed) {
+            print("asdadas")
+
+            
+            /*
+            var list = self.column1
+            if(gesture?.view == self.column2){ list = column2 }
+            
+            if(list==self.column1){ print("1") }
+            else{ print("2") }
+            */
+            
+        }
+        */
     }
 
     
@@ -546,4 +643,92 @@ extension ShareSplitArticles {
         }
         
     }
+}
+
+extension ShareSplitArticles {
+    
+    private func addItemsAtTop(_ index: Int) {
+        var offset = self.column1.contentOffset
+        if(index==2){ offset = self.column2.contentOffset }
+        offset.y += (240 * CGFloat(self.ARTICLES_TO_ADD))
+        
+        var toAdd = [(String, String, String, String, Bool)]()
+        var j = dp1top
+        if(index==2){ j = dp2top }
+        for _ in 1...self.ARTICLES_TO_ADD {
+            if(index==1) {
+                toAdd.append(self.dp1[j])
+            } else if(index==2) {
+                toAdd.append(self.dp2[j])
+            }
+            
+            j -= 1
+            if(index==1 && j == -1) { j=self.dp1.count-1 }
+            else if(index==2 && j == -1) { j=self.dp2.count-2 }
+            
+            if(index==1){ dp1top = j }
+            else if(index==2){ dp2top = j }
+        }
+        toAdd = toAdd.reversed()
+        
+        if(index==1) {
+            self.dataProvider1 = toAdd + self.dataProvider1
+            self.column1.reloadData()
+            self.column1.setContentOffset(offset, animated: false)
+        } else if(index==2) {
+            self.dataProvider2 = toAdd + self.dataProvider2
+            self.column2.reloadData()
+            self.column2.setContentOffset(offset, animated: false)
+        }
+        
+        print("ADDED at TOP!")
+    }
+    
+    private func addItemsAtBottom(_ index: Int) {
+        var offset = self.column1.contentOffset
+        if(index==2){ offset = self.column2.contentOffset }
+        offset.y -= (240 * CGFloat(self.ARTICLES_TO_ADD))
+        
+        var toAdd = [(String, String, String, String, Bool)]()
+        var j = dp1Bottom
+        if(index==2){ j = dp2Bottom }
+        for _ in 1...self.ARTICLES_TO_ADD {
+            if(index==1) {
+                toAdd.append(self.dp1[j])
+            } else if(index==2) {
+                toAdd.append(self.dp2[j])
+            }
+            
+            j += 1
+            if(index==1 && j==dp1.count) { j=0 }
+            else if(index==2 && j==dp2.count) { j=0 }
+            
+            if(index==1){ dp1Bottom = j }
+            else if(index==2){ dp2Bottom = j }
+        }
+        
+        if(index==1) {
+            self.dataProvider1 = self.dataProvider1 + toAdd
+            self.column1.reloadData()
+            self.column1.setContentOffset(offset, animated: false)
+        } else if(index==2) {
+            self.dataProvider2 = self.dataProvider2 + toAdd
+            self.column2.reloadData()
+            self.column2.setContentOffset(offset, animated: false)
+        }
+        
+        print("ADDED at BOTTOM!")
+    }
+     
+    func unloadStuff() {
+        /*
+        self.dp1 = [(String, String, String, String, Bool)]()
+        self.dp2 = [(String, String, String, String, Bool)]()
+        self.dataProvider1 = [(String, String, String, String, Bool)]()
+        self.dataProvider2 = [(String, String, String, String, Bool)]()
+        self.column1.reloadData()
+        self.column2.reloadData()
+        */
+    }
+    
 }

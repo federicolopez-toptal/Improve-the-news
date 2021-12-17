@@ -30,6 +30,7 @@ class Utils {
     var navController: customNavigationController?
     
     var didLoadBanner: Bool = false
+    var lastApiCall: String = ""
 }
 
 func DARKMODE() -> Bool {
@@ -207,6 +208,7 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
     link += "&v=I" + Bundle.main.releaseVersionNumber!
     link += "&dev=" + UIDevice.current.modelName.replacingOccurrences(of: " ", with: "_")
     
+    Utils.shared.lastApiCall = link
     return link
 }
 

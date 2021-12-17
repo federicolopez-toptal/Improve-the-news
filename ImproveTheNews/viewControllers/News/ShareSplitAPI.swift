@@ -10,86 +10,33 @@ import UIKit
 
 class ShareSplitAPI {
 
-    private func request(reqUrl: String) -> URLRequest {
-        let bearer = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MzgyNzg4ODUsImp0aSI6InZWbXN4WHhwRTRWaTVxN25UN3VtTVE9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTYzODI3ODg4NSwiZXhwIjoyOTUzMDI3Njg1LCJkYXRhIjp7InVzcmlkIjoiMjUwOTAwMjUzNzUzNjA1MiJ9fQ.dX7XCCAypg0J8JJGj5FE8gzkGtX-Kbij4G__olkB8lG5gFaCPwIAv44VBbnGfzZ2MmLKLkDPWas5Gr_22XOGvA"
+    let BASE_URL = "http://ec2-3-16-162-167.us-east-2.compute.amazonaws.com/php/api/"
+
+    func share(imgUrl: String, comment: String,
+        art1: (String, String, String, String, Bool),
+        art2: (String, String, String, String, Bool),
+        callback: @escaping () ->() ) {
+        // 0: img, 1: title, 2: country, 3: source, 4: state
         
-        var request = URLRequest(url: URL(string: reqUrl)!)
-        request.httpMethod = "POST"
-        request.setValue("*/*", forHTTPHeaderField: "Accept")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(bearer, forHTTPHeaderField: "Authorization")
-        return request
+        let url = BASE_URL + "split-share/"
+        
+        let body = self.bodyForShare(img: imgUrl, text: comment, source1: art1.3, source2: art2.3)
+        var request = self.request(reqUrl: url)
     }
-    private func body(item1: (String, String, String), item2: (String, String, String)) -> Data {
 
-        var img1 = item1.0
-        img1 = img1.replacingOccurrences(of: "http://", with: "")
-        img1 = img1.replacingOccurrences(of: "https://", with: "")
-        
-        var img2 = item2.0
-        img2 = img2.replacingOccurrences(of: "http://", with: "")
-        img2 = img2.replacingOccurrences(of: "https://", with: "")
-
-        var source1 = item1.2
-        if(source1.contains("#")) {
-            source1 = source1.components(separatedBy: " #")[0]
-        } else {
-            source1 = source1.components(separatedBy: " - ")[0]
-        }
-        
-        var source2 = item2.2
-        if(source2.contains("#")) {
-            source2 = source2.components(separatedBy: " #")[0]
-        } else {
-            source2 = source2.components(separatedBy: " - ")[0]
-        }
-
-        print("SOURCE1", source1)
-        print("SOURCE2", source2)
-
-        let json: [String: String] = [
-            "img1": img1,
-            "img2": img2,
-            "title1": item1.1,
-            "title2": item2.1,
-            "source1": source1,
-            "source2": source2
-        ]
-        
-        let jsonData = try? JSONSerialization.data(withJSONObject: json)
-        return jsonData!
-    }
-    private func json(fromData data: Data?) -> [String: Any]? {
-        if let _data = data {
-            do{
-                let json = try JSONSerialization.jsonObject(with: _data,
-                                options: []) as? [String : Any]
-                return json
-            }catch {
-                return nil
-            }
-        } else {
-            return nil
-        }
-    }
-    
-    
 
     func generateImage(_ art1: (String, String, String, String, Bool),
                         _ art2: (String, String, String, String, Bool),
                         callback: @escaping (String?, String?) -> () ) {
                         // 0: img, 1: title, 2: country, 3: source, 4: state
         
-        let url = "http://ec2-3-16-162-167.us-east-2.compute.amazonaws.com/php/api/image-generator/"
+        let url = BASE_URL + "image-generator/"
         
-        let body = self.body(item1: (art1.0, art1.1, art1.3), item2: (art2.0, art2.1, art2.3))
+        let body = self.bodyForImg(item1: (art1.0, art1.1, art1.3), item2: (art2.0, art2.1, art2.3))
         let bodySize = String(body.count)
         var request = self.request(reqUrl: url)
         request.setValue(bodySize, forHTTPHeaderField: "Content-Length")
         request.httpBody = body
-        
-        
-        
         
         let task = URLSession.shared.dataTask(with: request) { data, resp, error in
             if let _error = error {
@@ -112,6 +59,98 @@ class ShareSplitAPI {
         }
         
         task.resume()
+    }
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+extension ShareSplitAPI {
+
+    private func request(reqUrl: String) -> URLRequest {
+        let bearer = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MzgyNzg4ODUsImp0aSI6InZWbXN4WHhwRTRWaTVxN25UN3VtTVE9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTYzODI3ODg4NSwiZXhwIjoyOTUzMDI3Njg1LCJkYXRhIjp7InVzcmlkIjoiMjUwOTAwMjUzNzUzNjA1MiJ9fQ.dX7XCCAypg0J8JJGj5FE8gzkGtX-Kbij4G__olkB8lG5gFaCPwIAv44VBbnGfzZ2MmLKLkDPWas5Gr_22XOGvA"
+        
+        var request = URLRequest(url: URL(string: reqUrl)!)
+        request.httpMethod = "POST"
+        request.setValue("*/*", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(bearer, forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
+    private func bodyForImg(item1: (String, String, String), item2: (String, String, String)) -> Data {
+
+        let img1 = self.clearImgUrl(item1.0)
+        let img2 = self.clearImgUrl(item2.0)
+        let source1 = self.clearImgUrl(item1.2)
+        let source2 = self.clearImgUrl(item2.2)
+
+        let json: [String: String] = [
+            "img1": img1,
+            "img2": img2,
+            "title1": item1.1,
+            "title2": item2.1,
+            "source1": source1,
+            "source2": source2
+        ]
+        
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        return jsonData!
+    }
+    
+    private func bodyForShare(img: String, text: String, source1: String, source2: String) -> Data {
+        
+        let _source1 = self.clearSource(source1)
+        let _source2 = self.clearSource(source2)
+        
+        let sliders = self.extractParam("sliders", from: Utils.shared.lastApiCall)
+        let json: [String: Any] = [
+            "image": img,
+            "comment": text,
+            "source1": _source1,
+            "source2": _source2,
+            "slidercookies": sliders,
+            "userId": USER_ID()
+        ]
+        
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        return jsonData!
+    }
+    
+    private func clearImgUrl(_ url: String) -> String {
+        var result = url.replacingOccurrences(of: "http://", with: "")
+        result = result.replacingOccurrences(of: "https://", with: "")
+        return result
+    }
+    
+    private func clearSource(_ source: String) -> String {
+        var result = ""
+        if(source.contains("#")) {
+            result = source.components(separatedBy: " #")[0]
+        } else {
+            result = source.components(separatedBy: " - ")[0]
+        }
+        
+        return result
+    }
+    
+    private func extractParam(_ param: String, from: String) -> String? {
+        let url = URL(string: from)
+        return url?.params()[param] as? String
+    }
+    
+    private func json(fromData data: Data?) -> [String: Any]? {
+        if let _data = data {
+            do{
+                let json = try JSONSerialization.jsonObject(with: _data,
+                                options: []) as? [String : Any]
+                return json
+            }catch {
+                return nil
+            }
+        } else {
+            return nil
+        }
     }
 
 }
