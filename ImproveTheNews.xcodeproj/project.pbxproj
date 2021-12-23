@@ -67,6 +67,7 @@
 		BD3F58DA264CA5CC00B99522 /* FooterCellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3F58D8264CA5CC00B99522 /* FooterCellBig.swift */; };
 		BD4158EE27206B49002F3A20 /* onboardingCheckOFF_bright.png in Resources */ = {isa = PBXBuildFile; fileRef = BD4158EC27206B48002F3A20 /* onboardingCheckOFF_bright.png */; };
 		BD4158EF27206B49002F3A20 /* onboardingCheckON_bright.png in Resources */ = {isa = PBXBuildFile; fileRef = BD4158ED27206B49002F3A20 /* onboardingCheckON_bright.png */; };
+		BD43FA862774D5D10037D304 /* Easing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD43FA852774D5D10037D304 /* Easing.swift */; };
 		BD4652A3260E68EC00FFFB11 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */; };
 		BD47A397264C9BA5003D3F2F /* CellBig.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD47A395264C9BA5003D3F2F /* CellBig.xib */; };
 		BD47A398264C9BA5003D3F2F /* CellBig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD47A396264C9BA5003D3F2F /* CellBig.swift */; };
@@ -427,6 +428,7 @@
 		BD3F58D8264CA5CC00B99522 /* FooterCellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellBig.swift; sourceTree = "<group>"; };
 		BD4158EC27206B48002F3A20 /* onboardingCheckOFF_bright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingCheckOFF_bright.png; sourceTree = "<group>"; };
 		BD4158ED27206B49002F3A20 /* onboardingCheckON_bright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingCheckON_bright.png; sourceTree = "<group>"; };
+		BD43FA852774D5D10037D304 /* Easing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Easing.swift; sourceTree = "<group>"; };
 		BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		BD47A395264C9BA5003D3F2F /* CellBig.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellBig.xib; sourceTree = "<group>"; };
 		BD47A396264C9BA5003D3F2F /* CellBig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellBig.swift; sourceTree = "<group>"; };
@@ -939,6 +941,7 @@
 				BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */,
 				BD1B39CD262F270000CDC9F0 /* UIDeviceExtension.swift */,
 				BD1C4020276927EB007C258B /* URLExtension.swift */,
+				BD43FA852774D5D10037D304 /* Easing.swift */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -1792,6 +1795,7 @@
 				A89B803624AFAB8B009BB0F8 /* WebViewController.swift in Sources */,
 				A87144EA24F43B3100A7E404 /* SearchViewController.swift in Sources */,
 				BD3F58DA264CA5CC00B99522 /* FooterCellBig.swift in Sources */,
+				BD43FA862774D5D10037D304 /* Easing.swift in Sources */,
 				BDD15131268CFBDD00EE256F /* MarkupNotificationsViewController.swift in Sources */,
 				A81B3B202481E67200A52A97 /* AppDelegate.swift in Sources */,
 				BD6EEEF2274FC2FD002535A3 /* ShareSplitArticleCell.swift in Sources */,
@@ -1998,7 +2002,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2028,7 +2032,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2199,7 +2203,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Beta";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;

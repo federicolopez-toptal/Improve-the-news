@@ -94,6 +94,19 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     var vDivider = UIView()
     
+    var hapticType = 0
+    
+    func testHaptic() {
+        DELAY(2.0) {
+            self.hapticType += 1
+            if(self.hapticType>9){ self.hapticType = 1 }
+            
+            HAPTIC(type: self.hapticType)
+            self.testHaptic()
+        }
+    }
+    
+    
 
     // MARK: - Initialization
     init(topic: String) {
@@ -320,6 +333,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             self.showBiasSliders(self.biasButton)
         }
         */
+        
+        //self.testHaptic()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -1210,6 +1225,8 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
     @objc func showBiasSliders(_ sender:UIButton!) {
     //@objc func showBiasSliders(gesture: TapGesture)
         // orange button click
+        HAPTIC_CLICK()
+        
         if(self.biasButtonState==1){
             if !Globals.isSliderOn {
                 Globals.isSliderOn = true
@@ -2772,6 +2789,8 @@ extension NewsViewController {
     }
     
     @objc func biasMiniButtonOnTap(sender: UIButton) {
+        HAPTIC_CLICK()
+        
         if(self.biasButtonState == 1) {
             // Normal "panel", go to share-split mode
             if(!mustSplit()) {
@@ -2794,7 +2813,11 @@ extension NewsViewController {
     }
     
     @objc func biasButtonOnLongPress(gesture: UILongPressGestureRecognizer) {
+        if(gesture.state != .began){ return }
+        
         if(APP_CFG_SPLITSHARING) {
+            HAPTIC_LONGPRESS()
+        
             if(self.biasMiniButton.isHidden) {
                 self.biasMiniButtonUpdatePosition(offset: 0)
                 self.biasMiniButton.alpha = 1.0

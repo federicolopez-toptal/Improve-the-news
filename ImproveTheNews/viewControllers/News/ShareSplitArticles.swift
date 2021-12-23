@@ -43,6 +43,8 @@ class ShareSplitArticles: UIView {
     var showBorders = false
     let hOrangeLine = UIView()
     
+    var randomizeAnim_targetY: CGFloat = 0.0
+
 
     init(into container: UIView) {
         super.init(frame: CGRect.zero)
@@ -492,14 +494,16 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
     func scrollViewDidEndDragging(_ scrollView: UIScrollView,
         willDecelerate decelerate: Bool) {
         
+        print("LIST SCROLL OFFSET", self.column1.contentOffset.y)
+        
         if(!decelerate) {
             self.fixListsScrollPosition(scrollView)
         }
     }
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
-        print(scrollView.frame.size.height - (240 * 5))
-        //print("Y", scrollView.contentOffset.y )
+        //print(scrollView.frame.size.height - (240 * 5))
+        print("Y", scrollView.contentOffset.y )
         
         var list = 1
         if(scrollView == self.column2){ list = 2 }
@@ -603,8 +607,10 @@ extension ShareSplitArticles {
         let iPath2 = IndexPath(row: row2, section: 0)
         
         //print("RANDOM: \(row1)/\(count1), \(row2)/\(count2)")
-        self.column1.scrollToRow(at: iPath1, at: .middle, animated: true)
-        self.column2.scrollToRow(at: iPath2, at: .middle, animated: true)
+        //self.column1.scrollToRow(at: iPath1, at: .middle, animated: true)
+        self.manualScrollTo(column: 1, row: row1)
+        self.manualScrollTo(column: 2, row: row2)
+        //self.column2.scrollToRow(at: iPath2, at: .middle, animated: true)
         
         //////
         if let cell1 = self.tableView(self.column1, cellForRowAt: iPath1) as? ShareSplitArticleCell {
@@ -634,6 +640,7 @@ extension ShareSplitArticles {
             }
         }
         
+        /*
         DELAY(0.4) {
             self.hOrangeLine.alpha = 0.0
             self.hOrangeLine.isHidden = false
@@ -641,13 +648,64 @@ extension ShareSplitArticles {
                 self.hOrangeLine.alpha = 1.0
             }
         }
+        */
         
     }
+    
+    func manualScrollTo(column: Int, row: Int) {
+        
+        let itemHeight: CGFloat = 240.0
+        
+        var list = self.column1
+        if(column==2){ list = self.column2 }
+        
+        let start_Y = list.contentOffset.y
+        let target_Y = (itemHeight * CGFloat(row)) - (list.frame.size.height-itemHeight)/2
+        var values = [CGFloat]()
+        
+        let total = 45
+        for i in 0...total-1 {
+            let t = (1.0/Double(total-1)) * Double(i)
+            let value = self.easeOut(time: t,
+                start: start_Y,
+                change: target_Y-start_Y,
+                duration: 1.0)
+                
+            values.append(value)
+        }
+        
+        var i = 0
+        let tmr = Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { (tmr) in
+            list.setContentOffset(CGPoint(x: 0, y: values[i]), animated: false)
+        
+            i += 1
+            if(i == total) {
+                tmr.invalidate()
+                list.setContentOffset(CGPoint(x: 0, y: target_Y), animated: false)
+                self.hOrangeLine.isHidden = false
+            }
+        }
+
+    }
+    
+    // https://spicyyoghurt.com/tools/easing-functions
+    // t, b, c, d (time, beginning, change, duration)
+    func linear(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
+        return change * time / duration + start
+    }
+    func easeIn(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
+        return change * (time / duration) * time + start
+    }
+    func easeOut(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
+        return -change * (time / duration) * (time-2) + start
+    }
+    
 }
 
 extension ShareSplitArticles {
     
     private func addItemsAtTop(_ index: Int) {
+
         var offset = self.column1.contentOffset
         if(index==2){ offset = self.column2.contentOffset }
         offset.y += (240 * CGFloat(self.ARTICLES_TO_ADD))

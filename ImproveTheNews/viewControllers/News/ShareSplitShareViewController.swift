@@ -419,6 +419,14 @@ class ShareSplitShareViewController: UIViewController {
         return DARKMODE() ? .lightContent : .darkContent
     }
     
+    func scrollToTextView() {
+        DELAY(0.5) {
+            let targetRect = CGRect(x: 10, y: self.textInput.frame.origin.y, width: 100, height: 200)
+            self.scrollview.scrollRectToVisible(targetRect, animated: true)
+        }
+        
+    }
+    
     // MARK: - Keyboard stuff
     func addKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardEvent(n:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -434,6 +442,7 @@ class ShareSplitShareViewController: UIViewController {
         
         if(n.name==UIResponder.keyboardWillShowNotification){
             self.scrollviewBottomConstraint!.constant = -H
+            self.scrollToTextView()
         } else if(n.name==UIResponder.keyboardWillHideNotification) {
             self.scrollviewBottomConstraint!.constant = 0
         }

@@ -162,6 +162,8 @@ class ShareSplitActionsPopup: UIView {
 extension ShareSplitActionsPopup: PulseButtonDelegate {
 
     func pulseButtonOnTap(index: Int) {
+        HAPTIC_CLICK()
+    
         if(index==1) { // EXIT
             self.delegate?.shareSplitAction_exit()
         } else if(index==2) { // SHARE
@@ -176,6 +178,8 @@ extension ShareSplitActionsPopup: PulseButtonDelegate {
             
             
         } else if(index==3) { // RANDOMIZE
+            
+            self.button3?.setEnabled(false)
             self.showText("Like what we found? Tap ‘Share’, or\ntap the randomise button again!")
             self.button2?.stopAnimation()
             self.button3?.stopAnimation()
@@ -186,6 +190,10 @@ extension ShareSplitActionsPopup: PulseButtonDelegate {
         
             self.setShareEnable(true)
             self.delegate?.shareSplitAction_randomize()
+            
+            DELAY(1.3) {
+                self.button3?.setEnabled(true)
+            }
         }
     }
 

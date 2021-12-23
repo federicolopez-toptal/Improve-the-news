@@ -302,4 +302,33 @@ func RND(range: ClosedRange<Int>) -> Int {
 }
 
 
+func HAPTIC_CLICK() {
+    HAPTIC(type: 4)
+}
+func HAPTIC_LONGPRESS() {
+    HAPTIC(type: 2)
+}
 
+func HAPTIC(type: Int) {
+    //print("Haptic", type)
+
+    if(type<4) {
+        var _type: UINotificationFeedbackGenerator.FeedbackType = .success
+        if(type==2){ _type = .error }
+        else if(type==3){ _type = .warning }
+        
+        UINotificationFeedbackGenerator().notificationOccurred(_type)
+    } else if(type<8) {
+        var _type: UIImpactFeedbackGenerator.FeedbackStyle = .light
+        if(type==4){ _type = .medium }
+        else if(type==5){ _type = .heavy }
+        else if(type==6){ _type = .rigid }
+        else if(type==7){ _type = .soft }
+        
+        UIImpactFeedbackGenerator(style: _type).impactOccurred()
+    } else {
+        UISelectionFeedbackGenerator().selectionChanged()
+    }
+    
+    
+}

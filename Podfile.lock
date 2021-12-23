@@ -37,6 +37,7 @@ PODS:
     - GoogleUtilities/Environment
   - GoogleUtilities/UserDefaults (7.2.2):
     - GoogleUtilities/Logger
+  - Interpolate (1.3.1)
   - LBTATools (1.0.12)
   - nanopb (2.30907.0):
     - nanopb/decode (= 2.30907.0)
@@ -54,6 +55,7 @@ DEPENDENCIES:
   - Charts
   - Cosmos
   - Firebase/Crashlytics
+  - Interpolate (~> 1.3.0)
   - LBTATools
   - SDWebImage
   - SwiftyJSON
@@ -70,6 +72,7 @@ SPEC REPOS:
     - FirebaseInstallations
     - GoogleDataTransport
     - GoogleUtilities
+    - Interpolate
     - LBTATools
     - nanopb
     - PromisesObjC
@@ -87,12 +90,13 @@ SPEC CHECKSUMS:
   FirebaseInstallations: a46ae59915f0931e18814164849cd0354bea24ed
   GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
   GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
+  Interpolate: 490b5a7bdaeb00f86c69b61aa87cab59f6f8d703
   LBTATools: 389a901a01b9a56bea5682c40cd6e23530f40015
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
 
-PODFILE CHECKSUM: 1321b1281a8bf4a46abec3abeb391cca7c3dad6e
+PODFILE CHECKSUM: 2a33b5b9bfc7bf87726ab275b4a90edb6312656f
 
 COCOAPODS: 1.11.2

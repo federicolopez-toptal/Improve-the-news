@@ -13,6 +13,7 @@ target 'ImproveTheNews' do
   pod 'SwiftyJSON'
   pod 'SDWebImage'
   pod 'Branch'
+  pod 'Interpolate', '~> 1.3.0'
 
   target 'ImproveTheNewsTests' do
     inherit! :search_paths
