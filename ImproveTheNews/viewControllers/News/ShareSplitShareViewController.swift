@@ -420,10 +420,10 @@ class ShareSplitShareViewController: UIViewController {
     }
     
     func scrollToTextView() {
-        DELAY(0.5) {
+        //DELAY(0.5) {
             let targetRect = CGRect(x: 10, y: self.textInput.frame.origin.y, width: 100, height: 200)
             self.scrollview.scrollRectToVisible(targetRect, animated: true)
-        }
+        //}
         
     }
     

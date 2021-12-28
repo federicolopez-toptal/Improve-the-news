@@ -34,7 +34,6 @@ class ShareSplitArticles: UIView {
     var dataProvider2 = [(String, String, String, String, Bool)]()
     let ARTICLES_TO_ADD = 15
 
-    var scrollPositions = [CGFloat]()
     var headerHeightConstraint: NSLayoutConstraint?
     var headerTimer: Timer?
     
@@ -44,6 +43,9 @@ class ShareSplitArticles: UIView {
     let hOrangeLine = UIView()
     
     var randomizeAnim_targetY: CGFloat = 0.0
+    var centered1: Int = 0
+    var centered2: Int = 0
+    var randomizeCount = 0
 
 
     init(into container: UIView) {
@@ -194,6 +196,7 @@ class ShareSplitArticles: UIView {
     }
     
     func start(parser: News) {
+        self.randomizeCount = 0
         self.offsetFixed = false
         self.parser = parser
         self.populateDataProviders()
@@ -248,6 +251,11 @@ class ShareSplitArticles: UIView {
         
         column1.tag = 101
         column2.tag = 102
+        
+        DELAY(0.5) {
+            self.centered1 = self.getCenteredRow(index: 1)
+            self.centered2 = self.getCenteredRow(index: 2)
+        }
     }
     
     private func updateHeaderTexts() {
@@ -300,13 +308,6 @@ class ShareSplitArticles: UIView {
         dp2Bottom = 0
         dp1top = self.dp1.count-1
         dp2top = self.dp2.count-1
-        
-        var posY: CGFloat = 0.0
-        self.scrollPositions = [CGFloat]()
-        for _ in self.dataProvider1 {
-            self.scrollPositions.append(posY)
-            posY += 240.0
-        }
     }
     
     func getSelectedArticles() -> [(String, String, String, String, Bool)] {
@@ -350,10 +351,10 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
     
     func tableView(_ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier:
-            "ShareSplitArticleCell") as! ShareSplitArticleCell
                 
+        let  cell = tableView.dequeueReusableCell(withIdentifier:
+            "ShareSplitArticleCell") as! ShareSplitArticleCell
+           
         var info = ("", "", "", "", false)
         let index = indexPath.row
         if(tableView.tag == 101) {
@@ -494,8 +495,7 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
     func scrollViewDidEndDragging(_ scrollView: UIScrollView,
         willDecelerate decelerate: Bool) {
         
-        print("LIST SCROLL OFFSET", self.column1.contentOffset.y)
-        
+        //print("LIST SCROLL OFFSET", self.column1.contentOffset.y)
         if(!decelerate) {
             self.fixListsScrollPosition(scrollView)
         }
@@ -536,6 +536,9 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
 
         let iPath = list.indexPathForRow(at: CGPoint(x: list.bounds.midX, y: list.bounds.midY))!
         list.scrollToRow(at: iPath, at: .middle, animated: true)
+        
+        self.centered1 = self.getCenteredRow(index: 1)
+        self.centered2 = self.getCenteredRow(index: 2)
     }
     
     @objc func columnOnPan(_ gesture: UIPanGestureRecognizer?) {
@@ -576,19 +579,58 @@ extension ShareSplitArticles {
         }
     }
     
+    func random(current: Int, min: Int, max: Int) -> Int {
+        var variation = 5
+        variation += self.randomizeCount-1
+        if(variation>15){ variation = 15 }
+        
+        var limMin = current - variation
+        if(limMin<min){ limMin = min }
+        
+        var limMax = current + variation
+        if(limMax>max){ limMax = max }
+        
+        var value = RND(range: limMin...limMax)
+        //while(value == current) {
+        
+        while(abs(value-current)<2) {
+            value = RND(range: limMin...limMax)
+        }
+        
+        return value
+    }
+    
     func randomize_step2() {
+        self.randomizeCount += 1
+    
         self.showBorders = true
         self.hOrangeLine.isHidden = true
     
         let count1 = self.dataProvider1.count
         let count2 = self.dataProvider2.count
         
+        let row1 = self.random(current: self.centered1, min: 1, max: count1-2)
+        self.centered1 = row1
+        
+        let row2 = self.random(current: self.centered2, min: 1, max: count2-2)
+        self.centered2 = row2
+        
+/*
+        let row1 = self.random(currentValue: self.centered1, minValue: 1, maxValue: count1-2)
+        let row2 = self.random(currentValue: self.centered2, minValue: 1, maxValue: count2-2)
+        
+        self.centered1 = row1
+        self.centered2 = row2
+*/
+
+        /*
         var row1 = RND(range: 0...count1-1)
         var row2 = RND(range: 0...count2-1)
         if(row1==0){ row1 = 1 }
         if(row1==count1-1){ row1 = count1-2 }
         if(row2==count2-1){ row2 = count2-2 }
         if(row2==0){ row2 = 1 }
+        */
         
             for (i, _d) in self.dataProvider1.enumerated() {
                 if(_d.4 && i==row1) {
@@ -649,8 +691,21 @@ extension ShareSplitArticles {
             }
         }
         */
-        
     }
+    
+    func getCenteredRow(index: Int) -> Int {
+        var list = self.column1
+        if(index==2){ list = self.column2 }
+        
+        let valY = list.contentOffset.y + (list.frame.size.height/2)
+        let iPath = list.indexPathForRow(at: CGPoint(x: 20, y: valY))
+        if(iPath == nil) {
+            return -1
+        } else {
+            return iPath!.row
+        }
+    }
+    
     
     func manualScrollTo(column: Int, row: Int) {
         
@@ -663,19 +718,20 @@ extension ShareSplitArticles {
         let target_Y = (itemHeight * CGFloat(row)) - (list.frame.size.height-itemHeight)/2
         var values = [CGFloat]()
         
-        let total = 45
+        let total = 55
+        let totalTime: Double = 1.0
         for i in 0...total-1 {
-            let t = (1.0/Double(total-1)) * Double(i)
-            let value = self.easeOut(time: t,
+            let t = (totalTime/Double(total-1)) * Double(i)
+            let value = self.easeOutElastic(time: t,
                 start: start_Y,
                 change: target_Y-start_Y,
-                duration: 1.0)
+                duration: totalTime)
                 
             values.append(value)
         }
         
         var i = 0
-        let tmr = Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { (tmr) in
+        let tmr = Timer.scheduledTimer(withTimeInterval: 0.025, repeats: true) { (tmr) in
             list.setContentOffset(CGPoint(x: 0, y: values[i]), animated: false)
         
             i += 1
@@ -683,6 +739,8 @@ extension ShareSplitArticles {
                 tmr.invalidate()
                 list.setContentOffset(CGPoint(x: 0, y: target_Y), animated: false)
                 self.hOrangeLine.isHidden = false
+                
+                //self.reloadAllItemsForAnimation()
             }
         }
 
@@ -693,18 +751,66 @@ extension ShareSplitArticles {
     func linear(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
         return change * time / duration + start
     }
-    func easeIn(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
+    
+    func easeInQuad(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
         return change * (time / duration) * time + start
     }
-    func easeOut(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
+    
+    func easeOutQuad(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
         return -change * (time / duration) * (time-2) + start
     }
+    func easeOutSin(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
+        return change * sin(time / duration * (Double.pi / 2)) + start
+    }
+    func easeOutCirc(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
+        let t2 = time / duration - 1
+        return change * sqrt(1 - t2 * t2) + start
+    }
     
+    func easeInElastic(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
+        var s: Double = 1.70158
+        //s = s/5.0
+        
+        
+        var p: Double = duration * 0.3
+        var a: Double = change
+        
+        if(time==0){ return start }
+        if(time/duration == 1){ return start + change }
+        
+        if(a < abs(change)) {
+            a = change
+            s = p / 4
+        } else {
+            s = p / (2 * Double.pi) * asin(change / a)
+        }
+        
+        return -(a * pow(2, 10 * (time-1)) * sin((time * duration - s) * (2 * Double.pi) / p)) + start
+    }
+    
+    func easeOutElastic(time: CGFloat, start: CGFloat, change: CGFloat, duration: CGFloat) -> CGFloat {
+        var s: Double = 1.70158// / 20.0
+        var p: Double = duration * 0.3
+        var a: Double = change
+        
+        if(time==0){ return start }
+        if(time/duration == 1){ return start + change }
+        
+        if(a < abs(change)) {
+            a = change
+            s = p / 4
+        } else {
+            s = p / (2 * Double.pi) * asin(change / a)
+        }
+        
+        return a * pow(2, -10 * time) * sin((time * duration - s) * (2 * Double.pi) / p) + change + start
+    }
 }
 
 extension ShareSplitArticles {
     
     private func addItemsAtTop(_ index: Int) {
+        return
 
         var offset = self.column1.contentOffset
         if(index==2){ offset = self.column2.contentOffset }
@@ -743,6 +849,8 @@ extension ShareSplitArticles {
     }
     
     private func addItemsAtBottom(_ index: Int) {
+        return
+    
         var offset = self.column1.contentOffset
         if(index==2){ offset = self.column2.contentOffset }
         offset.y -= (240 * CGFloat(self.ARTICLES_TO_ADD))
