@@ -24,7 +24,7 @@ class ShareSplitShareViewController: UIViewController {
     let textInput = UITextView()
 
     let loadingView = UIView()
-
+    var scrollViewHeight: CGFloat = 0.0
 
     override func viewDidLoad() {
         self.view.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
@@ -415,16 +415,24 @@ class ShareSplitShareViewController: UIViewController {
         self.removeKeyboardObservers()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.scrollViewHeight = scrollview.bounds.size.height
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return DARKMODE() ? .lightContent : .darkContent
     }
     
-    func scrollToTextView() {
-        //DELAY(0.5) {
-            let targetRect = CGRect(x: 10, y: self.textInput.frame.origin.y, width: 100, height: 200)
-            self.scrollview.scrollRectToVisible(targetRect, animated: true)
-        //}
+    func scrollToTextView(keyboardHeight: CGFloat) {
         
+        var mOffset = self.scrollview.contentOffset
+        let H: CGFloat = self.scrollViewHeight - keyboardHeight
+        
+        mOffset.y = scrollview.contentSize.height - H
+        mOffset.y -= 150 // bottom margin (fixed)
+        
+        self.scrollview.setContentOffset(mOffset, animated: false)
     }
     
     // MARK: - Keyboard stuff
@@ -442,7 +450,7 @@ class ShareSplitShareViewController: UIViewController {
         
         if(n.name==UIResponder.keyboardWillShowNotification){
             self.scrollviewBottomConstraint!.constant = -H
-            self.scrollToTextView()
+            self.scrollToTextView(keyboardHeight: H)
         } else if(n.name==UIResponder.keyboardWillHideNotification) {
             self.scrollviewBottomConstraint!.constant = 0
         }
@@ -470,7 +478,12 @@ class ShareSplitShareViewController: UIViewController {
     }
     
     @objc func shareOnTap(_ sender: UIButton?) {
+        //print(self.scrollview.frame.size.height)
         
+        self.scrollToTextView(keyboardHeight: 20.0)
+    }
+    
+    @objc func shareOnTap2(_ sender: UIButton?) {
         self.loadingView.isHidden = false
         
         let api = ShareSplitAPI()

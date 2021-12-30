@@ -614,14 +614,7 @@ extension ShareSplitArticles {
         
         let row2 = self.random(current: self.centered2, min: 1, max: count2-2)
         self.centered2 = row2
-        
-/*
-        let row1 = self.random(currentValue: self.centered1, minValue: 1, maxValue: count1-2)
-        let row2 = self.random(currentValue: self.centered2, minValue: 1, maxValue: count2-2)
-        
-        self.centered1 = row1
-        self.centered2 = row2
-*/
+    
 
         /*
         var row1 = RND(range: 0...count1-1)
@@ -739,8 +732,6 @@ extension ShareSplitArticles {
                 tmr.invalidate()
                 list.setContentOffset(CGPoint(x: 0, y: target_Y), animated: false)
                 self.hOrangeLine.isHidden = false
-                
-                //self.reloadAllItemsForAnimation()
             }
         }
 

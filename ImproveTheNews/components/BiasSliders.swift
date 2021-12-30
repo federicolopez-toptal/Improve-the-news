@@ -392,6 +392,7 @@ extension SliderPopup {
     }
     
     @objc func splitButtonTap(sender: UIButton) {
+        HAPTIC_CLICK()
         self.splitButtonTap_b(sender: sender, callDelegateUpdate: true)
     }
         

@@ -2816,7 +2816,8 @@ extension NewsViewController {
         if(gesture.state != .began){ return }
         
         if(APP_CFG_SPLITSHARING) {
-            HAPTIC_LONGPRESS()
+            //HAPTIC_LONGPRESS()
+            HAPTIC_CLICK()
         
             if(self.biasMiniButton.isHidden) {
                 self.biasMiniButtonUpdatePosition(offset: 0)

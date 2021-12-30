@@ -517,6 +517,8 @@ class NewsBigViewController: UIViewController {
     }
     
     @objc func showBiasSliders(_ sender:UIButton!) {
+        HAPTIC_CLICK()
+    
         if !Globals.isSliderOn {
             Globals.isSliderOn = true
         }
