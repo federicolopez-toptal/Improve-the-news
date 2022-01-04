@@ -94,6 +94,10 @@ class MorePrefsViewController: UIViewController {
         list.separatorStyle = .none
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
+    }
+    
     private func loadPrefs() {
         
         self.prefsDataSource.append(

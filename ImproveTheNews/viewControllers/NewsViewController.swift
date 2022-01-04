@@ -295,10 +295,19 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        // icons tint
         navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
+        self.updateStatusBar()
+        
+        
+        //print(Utils.shared.navController)
+        //STATUS_BAR_UPDATE()
         
         //UINavigationBar.appearance().    = DARKMODE() ? .black : .default
-        navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        
+        //navigationController?.navigationBar
+        
+        //navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
         //UPDATE_STATUSBAR(self.navigationController)
         
         self.setUpNavBar()
@@ -338,11 +347,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return DARKMODE() ? .lightContent : .darkContent
-    }
-    
-    override var childForStatusBarStyle: UIViewController? {
-        return self.children.first
+        return STATUS_BAR_STYLE()
     }
     
     // MARK: - Data loading
@@ -2926,5 +2931,14 @@ extension NewsViewController: ShareSplitArticlesDelegate {
             self.shareActionsView?.showText("Select any 2 articles")
             //self.shareActionsView?.stopAnimations()
         }
+    }
+}
+
+extension UIViewController {
+    func updateStatusBar() {
+        /*
+        self.navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        self.navigationController?.setNeedsStatusBarAppearanceUpdate()
+        */
     }
 }

@@ -146,7 +146,7 @@ class NewsTextViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
-        navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        //navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
         self.setUpNavBar()
     
         self.tableView.delaysContentTouches = false
@@ -811,6 +811,7 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
             if(!type.contains("prediction")){ showMarkup = true }
         }
         cell.exclamationImageView.isHidden = !showMarkup
+        cell.updateFlagVisible()
         
         return cell
     }

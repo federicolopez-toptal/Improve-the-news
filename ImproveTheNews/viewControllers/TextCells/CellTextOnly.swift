@@ -15,6 +15,8 @@ class CellTextOnly: UITableViewCell {
     @IBOutlet weak var sourceLabel: UILabel!
     @IBOutlet weak var exclamationImageView: UIImageView!
     
+    @IBOutlet weak var sourceLeadingConstraint: NSLayoutConstraint!
+    
     
     // MARK: - Init
     override func awakeFromNib() {
@@ -38,6 +40,16 @@ class CellTextOnly: UITableViewCell {
         
         if(IS_ZOOMED()) {
             self.sourceLabel.font = UIFont(name: "Poppins-SemiBold", size: 11.5)
+        }
+    }
+    
+    func updateFlagVisible() {
+        self.flagImageView.isHidden = !MorePrefsViewController.showFlags()
+        
+        if(self.flagImageView.isHidden) {
+            self.sourceLeadingConstraint.constant = 16.0
+        } else {
+            self.sourceLeadingConstraint.constant = 42.0
         }
     }
     

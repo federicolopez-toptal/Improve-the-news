@@ -147,7 +147,7 @@ class NewsBigViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
-        navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
+        //navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
         self.setUpNavBar()
         
         self.tableView.delaysContentTouches = false

@@ -57,6 +57,10 @@ class SliderDoc: UIViewController {
         self.configureView()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         self.refreshSliders()
     }

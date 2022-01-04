@@ -212,22 +212,6 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
     return link
 }
 
-func UPDATE_STATUSBAR(_ navController: UINavigationController?) {
-    navController?.navigationBar.barStyle = .black
-    //navController?.navigationBar.overrideUserInterfaceStyle = .dark
-    
-    //UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
-    
-    //UIApplication.shared.stat
-    
-    /*
-    if let scene = UIApplication.shared.keyWindow?.windowScene {
-        //scene.statusBarManager
-    }
-    */
-}
-
-
 func USER_ID() -> String {
     var result = "3"
     let limit = 19
@@ -332,3 +316,19 @@ func HAPTIC(type: Int) {
     
     
 }
+
+func STATUS_BAR_STYLE() -> UIStatusBarStyle {
+    return DARKMODE() ? .lightContent : .darkContent
+}
+
+func STATUS_BAR_STYLE_opposite() -> UIStatusBarStyle {
+    return DARKMODE() ? .darkContent : .lightContent
+}
+
+/*
+func STATUS_BAR_UPDATE() {
+    if let nav = Utils.shared.navController {
+        nav.navigationBar.barStyle = DARKMODE() ? .black : .default
+    }
+}
+*/

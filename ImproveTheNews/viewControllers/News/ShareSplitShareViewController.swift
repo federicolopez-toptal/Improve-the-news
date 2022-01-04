@@ -421,7 +421,7 @@ class ShareSplitShareViewController: UIViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return DARKMODE() ? .lightContent : .darkContent
+        return STATUS_BAR_STYLE()
     }
     
     func scrollToTextView(keyboardHeight: CGFloat) {
@@ -478,12 +478,7 @@ class ShareSplitShareViewController: UIViewController {
     }
     
     @objc func shareOnTap(_ sender: UIButton?) {
-        //print(self.scrollview.frame.size.height)
-        
-        self.scrollToTextView(keyboardHeight: 20.0)
-    }
-    
-    @objc func shareOnTap2(_ sender: UIButton?) {
+
         self.loadingView.isHidden = false
         
         let api = ShareSplitAPI()

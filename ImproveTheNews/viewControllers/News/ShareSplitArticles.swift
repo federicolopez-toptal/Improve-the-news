@@ -801,8 +801,7 @@ extension ShareSplitArticles {
 extension ShareSplitArticles {
     
     private func addItemsAtTop(_ index: Int) {
-        return
-
+    
         var offset = self.column1.contentOffset
         if(index==2){ offset = self.column2.contentOffset }
         offset.y += (240 * CGFloat(self.ARTICLES_TO_ADD))
@@ -840,8 +839,7 @@ extension ShareSplitArticles {
     }
     
     private func addItemsAtBottom(_ index: Int) {
-        return
-    
+        
         var offset = self.column1.contentOffset
         if(index==2){ offset = self.column2.contentOffset }
         offset.y -= (240 * CGFloat(self.ARTICLES_TO_ADD))

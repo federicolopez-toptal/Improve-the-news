@@ -150,6 +150,10 @@ extension SearchViewController: UISearchBarDelegate {
         navigationItem.titleView = true ? searchBar : nil
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
+    }
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         navigationController?.popViewController(animated: true)
     }

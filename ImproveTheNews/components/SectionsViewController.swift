@@ -79,6 +79,16 @@ class SectionsViewController: UIViewController {
         self.tableView.backgroundColor = self.view.backgroundColor
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
+    }
+    
+    /*
+    override var childForStatusBarStyle: UIViewController? {
+        return self.presentedViewController
+    }
+    */
+    
     func setupTableView() {
         view.addSubview(tableView)
         
@@ -141,6 +151,7 @@ class SectionsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.hidesBackButton = true
+        self.updateStatusBar()
         //navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
         //navigationController?.navigationBar.barStyle = .default
         
@@ -190,9 +201,11 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
         switch indexPath.row {
             case 0:
                 let FAQ = FAQPage()
+                FAQ.modalPresentationCapturesStatusBarAppearance = true
                 present(FAQ, animated: true, completion: nil)
             case 1:
                 let sliders = SliderDoc()
+                sliders.modalPresentationCapturesStatusBarAppearance = true
                 present(sliders, animated: true, completion: nil)
             case 2:
                 let url = URL(string: feedbackForm)!
@@ -205,9 +218,11 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 present(vc, animated: true, completion: nil)
             case 3:
                 let privacy = PrivacyPolicy()
+                privacy.modalPresentationCapturesStatusBarAppearance = true
                 present(privacy, animated: true, completion: nil)
             case 4:
                 let contact = ContactPage()
+                contact.modalPresentationCapturesStatusBarAppearance = true
                 present(contact, animated: true, completion: nil)
             case 5:
                 self.selectLayout()

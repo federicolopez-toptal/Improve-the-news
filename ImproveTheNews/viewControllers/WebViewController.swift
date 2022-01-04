@@ -84,11 +84,7 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return DARKMODE() ? .lightContent : .darkContent
-    }
-    
-    override var childForStatusBarStyle: UIViewController? {
-        return self.children.first
+        return STATUS_BAR_STYLE()
     }
     
     lazy var webView: WKWebView = {
@@ -184,6 +180,7 @@ class WebViewController: UIViewController, WKUIDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.updateStatusBar()
         setupWebNavBar()
         initControls()
     }

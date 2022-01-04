@@ -117,6 +117,10 @@ class SourcesViewController: UIViewController {
         self.list.reloadData()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
+    }
+    
     private func loadPreferences() {
     
         let delete = false

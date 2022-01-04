@@ -141,6 +141,7 @@ class News {
     private func readJSONFile(forName name: String) {
             
         let url = Foundation.URL(string: name)
+        // URL(string: name)
         var jsonData: Data?
         
         let task = URLSession.shared.dataTask(with: url!) { data, response, error in

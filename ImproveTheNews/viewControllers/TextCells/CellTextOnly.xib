@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -65,8 +65,8 @@
                     <constraint firstAttribute="trailing" secondItem="cCT-T9-yJf" secondAttribute="trailing" constant="12" id="8wx-xW-V5r"/>
                     <constraint firstItem="W5p-WT-r38" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="9r6-TE-3JB"/>
                     <constraint firstAttribute="bottom" secondItem="ozq-bf-zy4" secondAttribute="bottom" id="LQ9-6T-pwJ"/>
-                    <constraint firstItem="ZLF-TR-Zx0" firstAttribute="leading" secondItem="hyN-n0-pnn" secondAttribute="trailing" constant="8" symbolic="YES" id="OFg-Za-Kme"/>
                     <constraint firstAttribute="bottom" secondItem="cCT-T9-yJf" secondAttribute="bottom" constant="12" id="WUr-ZA-eAE"/>
+                    <constraint firstItem="ZLF-TR-Zx0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="42" id="cUK-ks-f9R"/>
                     <constraint firstItem="ZLF-TR-Zx0" firstAttribute="top" secondItem="hyN-n0-pnn" secondAttribute="top" id="d7W-y0-6R1"/>
                     <constraint firstAttribute="trailing" secondItem="W5p-WT-r38" secondAttribute="trailing" constant="16" id="geO-pp-9H5"/>
                     <constraint firstItem="ozq-bf-zy4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="jw5-52-4iP"/>
@@ -80,8 +80,9 @@
                 <outlet property="exclamationImageView" destination="cCT-T9-yJf" id="RQ2-Ty-caa"/>
                 <outlet property="flagImageView" destination="hyN-n0-pnn" id="Qgm-N2-7r2"/>
                 <outlet property="sourceLabel" destination="ZLF-TR-Zx0" id="fiV-pu-OMb"/>
+                <outlet property="sourceLeadingConstraint" destination="cUK-ks-f9R" id="Kw7-dk-KXo"/>
             </connections>
-            <point key="canvasLocation" x="-888.40579710144937" y="118.52678571428571"/>
+            <point key="canvasLocation" x="-1042" y="124"/>
         </tableViewCell>
     </objects>
     <resources>

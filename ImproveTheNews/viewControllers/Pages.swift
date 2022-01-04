@@ -56,6 +56,10 @@ This is work in progress, and as you can easily tell, there’s lots of room for
         configureView()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
+    }
+    
     func configureView() {
         
         if(!DARKMODE()){
@@ -367,6 +371,10 @@ We are not part of a regulated industry.
         configureView()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
+    }
+    
     func configureView() {
         
         if(!DARKMODE()) {
@@ -442,6 +450,10 @@ If you have feature requests, bug reports or any other feedback on this app, we 
         overrideUserInterfaceStyle = .dark
         view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
         configureView()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
     }
     
     func configureView() {
