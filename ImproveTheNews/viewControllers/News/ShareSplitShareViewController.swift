@@ -88,6 +88,7 @@ class ShareSplitShareViewController: UIViewController {
         ])
         
         blueContainer.backgroundColor = UIColor(hex: 0x283E60)
+        if(!DARKMODE()){ blueContainer.backgroundColor = UIColor(hex: 0x283E60).withAlphaComponent(0.75) }
         self.contentView.addSubview(blueContainer)
         blueContainer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -129,6 +130,9 @@ class ShareSplitShareViewController: UIViewController {
             header2.widthAnchor.constraint(equalToConstant: half)
         ])
         
+        // 150 x 95
+        let H: CGFloat = (95 * (half-20)) / 150
+        
         let image1 = UIImageView()
         image1.backgroundColor = .gray
         image1.clipsToBounds = true
@@ -136,10 +140,10 @@ class ShareSplitShareViewController: UIViewController {
         blueContainer.addSubview(image1)
         image1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            image1.widthAnchor.constraint(equalToConstant: 150),
+            image1.leadingAnchor.constraint(equalTo: blueContainer.leadingAnchor, constant: 10),
+            image1.widthAnchor.constraint(equalToConstant: half-20),
             image1.heightAnchor.constraint(equalToConstant: 95),
-            image1.topAnchor.constraint(equalTo: header1.bottomAnchor, constant: 10),
-            image1.centerXAnchor.constraint(equalTo: header1.centerXAnchor)
+            image1.topAnchor.constraint(equalTo: header1.bottomAnchor, constant: 10)
         ])
         
         let image2 = UIImageView()
@@ -264,6 +268,7 @@ class ShareSplitShareViewController: UIViewController {
         title2Label.textAlignment = .left
         title2Label.text = "Your thoughts on these news outlets\nreporting of this topic?"
         title2Label.textColor = titleLabel.textColor
+        if(!DARKMODE()){ title2Label.textColor = UIColor.black.withAlphaComponent(0.4) }
         title2Label.font = UIFont(name: "Merriweather-Bold", size: 16)
         self.contentView.addSubview(title2Label)
         title2Label.translatesAutoresizingMaskIntoConstraints = false
