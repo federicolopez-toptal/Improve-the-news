@@ -2001,7 +2001,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7D9202F8B2FD921B4E6D8CCD /* Pods-ImproveTheNews.debug.xcconfig */;
 			buildSettings = {
-				API_BASE_URL = "https://www.improvethenews.org";
+				API_BASE_URL = "https://www.improvemynews.com";
 				APP_DISPLAY_NAME = "ITN-Debug";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";

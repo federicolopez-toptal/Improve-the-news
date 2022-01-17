@@ -120,6 +120,10 @@ class NewsBigViewController: UIViewController {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
+    }
+    
     var lastTimeActive: Date?
     @objc func applicationDidBecomeActive() {
         if let _lastTimeActive = self.lastTimeActive {
