@@ -43,7 +43,7 @@ let APP_CFG_MORE_PREFS = true
 
 let APP_CFG_SPLITSHARING = true
 
-
+let STORIES_HEIGHT = 500
 
 
 // false/false for v1

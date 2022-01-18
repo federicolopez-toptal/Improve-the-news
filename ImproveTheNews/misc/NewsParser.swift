@@ -23,11 +23,16 @@ struct Markups {
     let type, description, link: String
 }
 
+struct Story {
+    let sources: [String]
+}
+
 struct NewsData {
     let source, subtopic, date, title, URL, imgURL, ampStatus, ampURL: String
     let LR, PE: Int
     let countryID: String
     let markups: [Markups]
+    let story: Story?
 }
 
 
@@ -360,7 +365,8 @@ class News {
                                     LR: article[8].intValue,
                                     PE: article[9].intValue,
                                     countryID: article[10].stringValue,
-                                    markups: m
+                                    markups: m,
+                                    story: self.buildStory(from: article)
                                 )
                                 
                                 self.data.append(news)
@@ -382,8 +388,6 @@ class News {
             }
             */
         
-        
-        
             DispatchQueue.main.async{
                 self.newsDelegate!.didFinishLoadData(finished: true)
             }
@@ -396,6 +400,20 @@ class News {
         
         
     }
+    
+    func buildStory(from json: JSON) -> Story? {
+    
+        let storyValue = json[11].stringValue
+        if(storyValue.isEmpty){ return nil }
+        
+        var _sources = [String]()
+        for value in json[12].arrayValue {
+            _sources.append(value.stringValue)
+        }
+    
+        return Story(sources: _sources)
+    }
+    
     
     func getJSONContents(jsonName: String) {
         readJSONFile(forName: jsonName)
@@ -482,6 +500,14 @@ class News {
             return self.data[index].title
         } else {
             return defaultStrValue
+        }
+    }
+    
+    func getStory(index: Int) -> Story? {
+        if(validateDataIndex(index)){
+            return self.data[index].story
+        } else {
+            return nil
         }
     }
     

@@ -171,11 +171,38 @@ class NewsBigViewController: UIViewController {
     }
     
     // MARK: - UI
+    private func itemsHeight(section: Int) -> CGFloat {
+        var sum = 0
+        
+        var start = 0
+        for n in 0..<section {
+            start += newsParser.getArticleCountInSection(section: n)
+        }
+        let total = newsParser.getArticleCountInSection(section: section)
+        if(total==0){ return 0.0 }
+        
+        for n in 0...total-1 {
+            let index = n + start
+            
+            var height = 0
+            if(self.newsParser.getStory(index: index) != nil) {
+                height = STORIES_HEIGHT
+            } else {
+                height += 360
+            }
+
+            sum += height
+        }
+        
+        return CGFloat(sum)
+    }
+    
     private func setUpHorizontalMenu() {
         self.view.addSubview(self.horizontalMenu)
         
         let margin: CGFloat = 0
-        self.horizontalMenu.offset_y = CGFloat(80 + (360 * self.param_A)) + margin
+        //self.horizontalMenu.offset_y = CGFloat(80 + (360 * self.param_A)) + margin
+        self.horizontalMenu.offset_y = CGFloat(80 + self.itemsHeight(section: 0)) + margin
         self.horizontalMenu.moveTo(y: 0)
         self.horizontalMenu.isHidden = true
         self.horizontalMenu.customDelegate = self
@@ -742,6 +769,10 @@ extension NewsBigViewController: NewsDelegate {
             self.horizontalMenu.isHidden = false
         }
         
+        let margin: CGFloat = 0.0
+        self.horizontalMenu.offset_y = CGFloat(80 + self.itemsHeight(section: 0) + margin)
+        self.horizontalMenu.moveTo(y: 0)
+        
         self.addParamsLabel()
         NotificationCenter.default.post(name: NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED, object: nil)
     }
@@ -804,7 +835,26 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return 360
+        // added for stories
+        var isStory = false
+        var start = 0
+        for n in 0..<indexPath.section {
+            start += newsParser.getArticleCountInSection(section: n)
+        }
+        let index = indexPath.row + start
+        if index < newsParser.getLength() {
+            if let _story = self.newsParser.getStory(index: index) {
+                isStory = true
+            }
+        }
+        
+        if(!isStory) {
+            return 360
+        } else {
+            return CGFloat(STORIES_HEIGHT)
+        }
+        
+        //return 360
     }
     
     func tableView(_ tableView: UITableView,
@@ -1010,7 +1060,8 @@ extension NewsBigViewController: HorizontalMenuViewDelegate {
         for i in 1...atSection {
             if(i==1){
                 let h = self.horizontalMenu.frame.size.height
-                offset_y += 80 + (360*4) + 115 - h
+                //offset_y += 80 + (360*4) + 115 - h
+                offset_y += 80 + self.itemsHeight(section: i-1) + 115 - h
                 
                 if(self.mustShowBanner() && self.bannerView?.superview != nil) {
                     let code = BannerInfo.shared!.adCode
@@ -1019,7 +1070,8 @@ extension NewsBigViewController: HorizontalMenuViewDelegate {
                 
                 
             } else {
-                offset_y += 80 + (360*4) + 70
+                //offset_y += 80 + (360*4) + 70
+                offset_y += 80 + self.itemsHeight(section: i-1) + 70
             }
         }
         

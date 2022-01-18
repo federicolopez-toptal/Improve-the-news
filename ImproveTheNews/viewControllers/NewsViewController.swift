@@ -1540,6 +1540,22 @@ extension NewsViewController {
             cell.miniSlidersView?.viewController = self
             self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
         
+            /*
+            if(cell.frame.height == CGFloat(self.storyHeight)) {
+                cell.backgroundColor = .green
+            } else {
+                cell.backgroundColor = .red
+            }
+            */
+        
+            /*
+            if(self.newsParser.getStory(index: index) == nil) {
+                cell.contentView.backgroundColor = .red
+            } else {
+                cell.backgroundColor = .black
+            }
+            */
+        
             
             //cell.contentView.backgroundColor = .green
             //print( ">> HEIGHT", cell.frame.size.height )
@@ -1860,10 +1876,28 @@ extension NewsViewController {
             + flowLayout.sectionInset.right
             //+ (flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1))
 
-        let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(cellsPerRow))
-
-        //let w: CGFloat = (UIScreen.main.bounds.width)/2
-        return CGSize(width: size, height: 240)
+        
+    
+        // added for stories
+        var isStory = false
+        var start = 0
+        for n in 0..<indexPath.section {
+            start += newsParser.getArticleCountInSection(section: n)
+        }
+        let index = indexPath.row + start
+        if index < newsParser.getLength() {
+            if let _story = self.newsParser.getStory(index: index) {
+                isStory = true
+            }
+        }
+        
+        if(!isStory) {
+            let W = Int((collectionView.bounds.width - totalSpace) / CGFloat(cellsPerRow))
+            return CGSize(width: W, height: 240)
+        } else {
+            let W = Int(collectionView.bounds.width)
+            return CGSize(width: W, height: STORIES_HEIGHT)
+        }
         
         
         /*
@@ -2239,6 +2273,39 @@ extension NewsViewController {
 extension NewsViewController: MoreHeadlinesViewDelegate {
     
     // MARK: - Horizontal menu
+    private func itemsHeight(section: Int) -> CGFloat {
+        var sum = 0
+        
+        var start = 0
+        for n in 0..<section {
+            start += newsParser.getArticleCountInSection(section: n)
+        }
+        var cols = 0
+        let total = newsParser.getArticleCountInSection(section: section)
+        for n in 0...total-1 {
+            let index = n + start
+            
+            var height = 0
+            if(self.newsParser.getStory(index: index) != nil) {
+                height = STORIES_HEIGHT
+            } else {
+                cols += 1
+                if(cols == 2) {
+                    cols = 0
+                    height += 240
+                }
+                
+                if(cols==1 && n==total-1) { // Last loop and just 1 col
+                    height = 240
+                }
+            }
+
+            sum += height
+        }
+        
+        return CGFloat(sum)
+    }
+    
     func scrollTheNewsTo(_ index: Int) {
         //let indexPath = IndexPath(item: 0, section: 0)
         /*if let cell = self.collectionView.cellForItem(at: indexPath) {
@@ -2247,9 +2314,12 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
         */
         
         var offsetY: CGFloat = 0
-        var firstItemHeight: CGFloat = 51+(240*2)+8+115 // header + 2rows + margins + bigFooter(0)
+        
+        //var firstItemHeight: CGFloat = 51+(240*2)+8+115 // header + 2rows + margins + bigFooter(0)
+        var firstItemHeight: CGFloat = 51+(self.itemsHeight(section: 0))+8+115 // header + 2rows + margins + bigFooter(0)
         if(mustSplit()) {
-            firstItemHeight = 96+(240*2)+8+115
+            // firstItemHeight = 96+(240*2)+8+115
+            firstItemHeight = 96+(self.itemsHeight(section: 0))+8+115
         }
 
         if let info = BannerInfo.shared {
@@ -2259,27 +2329,32 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
             }
         }
         
+        /*
         var otherItemsHeight: CGFloat = 51+(240*2)+8+70 // header + 2rows + margins + footer
         //let slidersHeight: CGFloat = 29
         if(mustSplit()) {
             otherItemsHeight = 96+(240*2)+8+70
         }
+        */
         
         if(index>0) {
             offsetY += firstItemHeight
 
-            let i = CGFloat(index-1)
+            for n in 1...index {
+                if(n==index){ break }
+            
+                if(!mustSplit()) {
+                    offsetY += 51+(self.itemsHeight(section: n))+8+70 // header + 2rows + margins + footer
+                } else {
+                    offsetY += 96+(self.itemsHeight(section: n))+8+70
+                }
+            }
 
             /*
-            if(self.topic=="news") { // No sliders in header
-                offsetY += otherItemsHeight * i
-            } else {
-                offsetY += 49
-                offsetY += (otherItemsHeight+slidersHeight) * i
-            }
+            let i = CGFloat(index-1)
+            offsetY += otherItemsHeight * i
             */
             
-            offsetY += otherItemsHeight * i
             offsetY += -40 // margin (for the horizontal menu fixed at top)
         }
         
@@ -2470,19 +2545,17 @@ extension NewsViewController {
     }
     
     func updateDivider() {
-    // Delete all subviews
+        // Delete all subviews
         vDivider.subviews.forEach({ $0.removeFromSuperview() })
         
-        
-    // Hide/Show component
+        // Hide/Show component
         if(!mustSplit()) {
             vDivider.isHidden = true
             return
         }
         vDivider.isHidden = false
         
-    // Draw lines
-        var offsetY: CGFloat = 0
+        // Draw lines
         let sections = self.numberOfSections(in: self.collectionView)
         var topValue = sections-1
         if(topValue<=0) {
@@ -2490,12 +2563,74 @@ extension NewsViewController {
         }
         
         //topValue = -1 // this will provoke a crash
+        let W: CGFloat = 4
+        let X: CGFloat = (vDivider.frame.size.width - W)/2
+        
+        var index = 0
+        var offsetY: CGFloat = 0
+        
         for sec in 0...topValue {
+            
             let items = self.collectionView(self.collectionView, numberOfItemsInSection: sec)
             if(items<=0) {
                 continue
             }
             
+            var cols = 0
+            offsetY += 51 + 53 // header(s)
+            for i in 0...items-1 {
+            
+                var height: CGFloat = 0.0
+                if(self.newsParser.getStory(index: index) != nil) {
+                    // this is a story, don't draw the line
+                    offsetY += CGFloat(STORIES_HEIGHT)
+                    index += 1
+                    continue
+                } else {
+                    // normal article
+                    cols += 1
+                    if(cols == 1) {
+                        height = 240.0
+                    }
+                    
+                    if(cols==2){
+                        cols = 0
+                    }
+                }
+                 
+                // draw line
+                if(height>0) {
+                    let line = UIView(frame: CGRect(x: X, y: offsetY, width: W, height: height))
+                    line.backgroundColor = DARKMODE() ? .white : bgWhite_DARK
+                    line.alpha = DARKMODE() ? 1.0 : 0.2
+                    line.isUserInteractionEnabled = false
+                    vDivider.addSubview(line)
+                }
+                
+                // Footer(s)
+                if(i==items-1) {
+                    if(sec==0) {
+                        offsetY += 115
+                        // banner
+                        if let info = BannerInfo.shared {
+                            if(self.uniqueID==1 && info.active) {
+                                offsetY += BannerView.getHeightForBannerCode(info.adCode)
+                            }
+                        }
+                    } else {
+                        offsetY += 70
+                    }
+                }
+                
+                offsetY += height
+                index += 1
+                
+            }
+            
+            
+            
+            
+            /*
             let margin: CGFloat = 8
             var Y: CGFloat = 51 + 45 // header
             let rows = items/2
@@ -2522,17 +2657,23 @@ extension NewsViewController {
             } else {
                 offsetY += 70
             }
+            */
+            
+            
+            
+            
             
             // show alpha line
             if(sec == sections-1) { // last loop
                 var segment: CGFloat = 5.0
                 var posY: CGFloat = 0
-                H = line.frame.origin.y + line.frame.size.height
+                let limit = offsetY + 50
+                //line.frame.origin.y + line.frame.size.height
                 
-                while(posY<H) {
+                while(posY < limit) {
                     let alphaLine = UIView(frame: CGRect(x: X, y: posY,
                         width: W, height: segment))
-                    alphaLine.backgroundColor = line.backgroundColor
+                    alphaLine.backgroundColor =  DARKMODE() ? .white : bgWhite_DARK
                     
                     //line.backgroundColor
                     alphaLine.alpha = DARKMODE() ? 0.06 : 0.4
@@ -2542,6 +2683,8 @@ extension NewsViewController {
                     posY += (segment * 2)
                 }
             }
+            
+
         }
         
         
