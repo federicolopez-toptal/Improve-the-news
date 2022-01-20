@@ -190,6 +190,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.collectionView.register(ArticleCellHalf.self, forCellWithReuseIdentifier: ArticleCellHalf.cellId)
         self.collectionView.register(HeadlineCell.self, forCellWithReuseIdentifier: HeadlineCell.cellId)
         self.collectionView.register(ArticleCellAlt.self, forCellWithReuseIdentifier: ArticleCellAlt.cellId)
+        self.collectionView.register(StoryCollectionViewCell.self, forCellWithReuseIdentifier: StoryCollectionViewCell.cellId)
         
         
         // intialize some anchors !!!
@@ -1488,6 +1489,26 @@ extension NewsViewController: BannerInfoDelegate {
 
 extension NewsViewController {
 
+    // StoryCollectionViewCell - Story cell
+    func storyCell(indexPath: IndexPath, index: Int) -> StoryCollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.cellId, for: indexPath) as! StoryCollectionViewCell
+        
+        cell.setupViews(sources: self.newsParser.getStory(index: index)!.sources)
+        
+        cell.updated.text = "Last updated " + newsParser.getDate(index: index)
+        cell.titleLabel.text = self.newsParser.getTitle(index: index)
+        
+        let imageURL = newsParser.getIMG(index: index)
+        DispatchQueue.global().async {
+            DispatchQueue.main.async {
+                cell.imageView.contentMode = .scaleAspectFill
+                cell.imageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
+            }
+        }
+        
+        return cell
+    }
+
     // MARK: - HeadlineCell (4 items on top)
     func newsItemFor(indexPath: IndexPath, index: Int) -> HeadlineCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeadlineCell.cellId, for: indexPath) as! HeadlineCell
@@ -1573,175 +1594,29 @@ extension NewsViewController {
         for n in 0..<indexPath.section {
             start += newsParser.getArticleCountInSection(section: n)
         }
-        
         let index = indexPath.row + start
         
-        if index < newsParser.getLength() {
-            //print("section: \(indexPath.section) row \(indexPath.row): \(newsParser.getTitle(index: indexPath.row+start))")
+        if(index < newsParser.getLength()) {
             
-            if indexPath.section == 0 {
-                return self.newsItemFor(indexPath: indexPath, index: index)
-            }
-            else if indexPath.row == 0 || indexPath.row == 1 {
-                  
-                return self.newsItemFor(indexPath: indexPath, index: index)
-                  
-                /*
-                // text on left
-                if indexPath.section % 2 == 0 {
-                    
-                
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ArticleCell.cellId, for: indexPath) as! ArticleCell
-                    
-                    cell.setupViews()
-                    
-                    cell.headline.text = newsParser.getTitle(index: indexPath.row+start)
-                    cell.pubDate.text = newsParser.getDate(index: indexPath.row+start)
-                    let imageURL = newsParser.getIMG(index: indexPath.row+start)
-//                    let imgURL = URL(string: imageURL)!
-                    DispatchQueue.global().async {
-                        //guard let data = try? Data(contentsOf: imgURL) else { return }
-                        DispatchQueue.main.async {
-                            print("loading cell images")
-//                            let img = UIImage(data: data)
-//                            let rescaled = img?.scalePreservingAspectRatio(targetSize: CGSize(width: 190, height: 120))
-                            cell.imageView.contentMode = .scaleAspectFill
-                            cell.imageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
-//                            cell.imageView.image = rescaled
-                        }
-                    }
-                    
-                    let i = indexPath.row+start
-                    cell.source.lineBreakMode = .byWordWrapping
-                    cell.source.text = newsParser.getSource(index: i) + " - " + newsParser.getDate(index: i)
-                    cell.source.numberOfLines = 2
-                    //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
-                    cell.pubDate.text = " "
-                    //cell.source.text = newsParser.getSource(index: indexPath.row+start)
-                    
-                    if newsParser.getMarkups(index: index).count > 0 {
-                        cell.markupView.isHidden = false
-                    }
-                    
-                    cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
-                                                val2: newsParser.getPE(index: index),
-                                                source: newsParser.getSource(index: index),
-                                                countryID: newsParser.getCountryID(index: index))
-                                                
-                    cell.miniSlidersView?.viewController = self
-                    self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
-                    return cell
-                }
-                // text on right
-                else {
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ArticleCellAlt.cellId, for: indexPath) as! ArticleCellAlt
-                    
-                    
-                    cell.setupViews()
-                    
-                    cell.headline.text = newsParser.getTitle(index: indexPath.row+start)
-                    cell.pubDate.text = newsParser.getDate(index: indexPath.row+start)
-                    cell.imageView.image = nil
-                    let imageURL = newsParser.getIMG(index: indexPath.row+start)
-                    //let imgURL = URL(string: imageURL)!
-                    DispatchQueue.global().async {
-                        //guard let data = try? Data(contentsOf: imgURL) else { return }
-                        DispatchQueue.main.async {
-                            print("loading cell images")
-//                            let img = UIImage(data: data)
-//                            let rescaled = img?.scalePreservingAspectRatio(targetSize: CGSize(width: 190, height: 120))
-                            cell.imageView.contentMode = .scaleAspectFill
-                            cell.imageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
-                            //cell.imageView.image = rescaled
-                        }
-                    }
-                    
-                    let i = indexPath.row+start
-                    cell.source.lineBreakMode = .byWordWrapping
-                    cell.source.text = newsParser.getSource(index: i) + " - " + newsParser.getDate(index: i)
-                    cell.source.numberOfLines = 2
-                    //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
-                    cell.pubDate.text = " "
-                    //cell.source.text = newsParser.getSource(index: i)
-                    
-                    if newsParser.getMarkups(index: index).count > 0 {
-                        cell.markupView.isHidden = false
-                    }
-                    
-                    cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
-                                                val2: newsParser.getPE(index: index),
-                                                source: newsParser.getSource(index: index),
-                                                countryID: newsParser.getCountryID(index: index))
-                                        
-                    cell.miniSlidersView?.viewController = self
-                    self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
-                    return cell
-                }
-                */
-               
-            }
-            // 2 column cells
-            else {
-                return self.newsItemFor(indexPath: indexPath, index: index)
+            if(self.newsParser.getStory(index: index) != nil ) {
             
-                /*
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ArticleCellHalf.cellId, for: indexPath) as! ArticleCellHalf
-
-                cell.setupViews()
+                //print( "SOURCES", self.newsParser.getStory(index: index)?.sources )
                 
-                cell.headline.text = newsParser.getTitle(index: indexPath.row+start)
-                cell.pubDate.text = newsParser.getDate(index: indexPath.row+start)
-                 
-                let imageURL = newsParser.getIMG(index: indexPath.row+start)
-               // let imgURL = URL(string: imageURL)!
-                DispatchQueue.global().async {
-                    //guard let data = try? Data(contentsOf: imgURL) else { return }
-                    DispatchQueue.main.async {
-                        print("loading cell images")
-//                        let img = UIImage(data: data)
-//                        let rescaled = img?.scalePreservingAspectRatio(targetSize: CGSize(width: 190, height: 120))
-                        cell.imageView.contentMode = .scaleAspectFill
-                        cell.imageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
-//                        cell.imageView.image = rescaled
-                    }
+                return self.storyCell(indexPath: indexPath, index: index)
+            } else {
+                if(indexPath.section == 0) {
+                    return self.newsItemFor(indexPath: indexPath, index: index)
                 }
-                
-                let i = indexPath.row+start
-                cell.source.lineBreakMode = .byWordWrapping
-                cell.source.text = newsParser.getSource(index: i) + " - " + newsParser.getDate(index: i)
-                cell.source.numberOfLines = 2
-                //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
-                cell.pubDate.text = " "
-                
-                
-                
-                //cell.source.text = newsParser.getSource(index: indexPath.row+start)
-                
-                
-                if newsParser.getMarkups(index: index).count > 0 {
-                    cell.markupView.isHidden = false
+                else if (indexPath.row == 0 || indexPath.row == 1) {
+                    return self.newsItemFor(indexPath: indexPath, index: index)
                 }
-                
-                cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
-                                                val2: newsParser.getPE(index: index),
-                                                source: newsParser.getSource(index: index),
-                                                countryID: newsParser.getCountryID(index: index))
-                         
-                cell.miniSlidersView?.viewController = self
-                self.setFlag(imageView: cell.flag, ID: newsParser.getCountryID(index: index))
-                cell.adjust()
-                
-                //cell.headline.backgroundColor = UIColor.red.withAlphaComponent(0.5)
-                //cell.flag.backgroundColor = UIColor.red.withAlphaComponent(0.5)
-                //cell.source.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
-                
-                cell.contentView.backgroundColor = .orange
-                
-                return cell
-                */
+                else { // 2 column cells
+                    return self.newsItemFor(indexPath: indexPath, index: index)
+                }
             }
             
         }
+        
         return collectionView.dequeueReusableCell(withReuseIdentifier: ArticleCell.cellId, for: indexPath) as! ArticleCell
     }
     
