@@ -1,21 +1,21 @@
 //
-//  StoryCollectionViewCell.swift
+//  StoryViewCell.swift
 //  ImproveTheNews
 //
-//  Created by Federico Lopez on 19/01/2022.
+//  Created by Federico Lopez on 25/01/2022.
 //  Copyright © 2022 Mindy Long. All rights reserved.
 //
 
 import UIKit
 
-class StoryCollectionViewCell: UICollectionViewCell {
-    
-    static let cellId = "StoryCollectionViewCell"
-    
+class StoryViewCell: UITableViewCell {
+
+    static let cellId = "StoryViewCell"
+
     private let ICON_SIZE: CGFloat = 17.0
     private let ICON_SEP: CGFloat = 5.0
     
-    let imageView = UIImageView(backgroundColor: .clear)
+    let mainImageView = UIImageView(backgroundColor: .clear)
     let gradient = UIImageView(image: UIImage(named: "gradient_dark.png"))
     var icons = [UIImageView]()
     let updated = UILabel()
@@ -39,15 +39,15 @@ class StoryCollectionViewCell: UICollectionViewCell {
         
     private func setupViews_step2() {
         // Image
-        addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(mainImageView)
+        mainImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
-            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
-            imageView.heightAnchor.constraint(equalToConstant: 250)
+            mainImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
+            mainImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
+            mainImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
+            mainImageView.heightAnchor.constraint(equalToConstant: 250)
         ])
-        imageView.clipsToBounds = true
+        mainImageView.clipsToBounds = true
         
         // Gradient
         addSubview(gradient)
@@ -55,9 +55,9 @@ class StoryCollectionViewCell: UICollectionViewCell {
         gradient.alpha = 0.98
         gradient.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            gradient.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
-            gradient.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
-            gradient.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
+            gradient.leadingAnchor.constraint(equalTo: mainImageView.leadingAnchor),
+            gradient.trailingAnchor.constraint(equalTo: mainImageView.trailingAnchor),
+            gradient.bottomAnchor.constraint(equalTo: mainImageView.bottomAnchor),
             gradient.heightAnchor.constraint(equalToConstant: 175)
         ])
 
@@ -79,7 +79,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
             _icon.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 _icon.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: posX),
-                _icon.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -17),
+                _icon.bottomAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: -17),
                 _icon.heightAnchor.constraint(equalToConstant: ICON_SIZE),
                 _icon.widthAnchor.constraint(equalToConstant: ICON_SIZE)
             ])
@@ -108,7 +108,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
         updated.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             updated.leadingAnchor.constraint(equalTo: self.icons.last!.trailingAnchor, constant: 10),
-            updated.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -17),
+            updated.bottomAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: -17),
         ])
         
         // orange arrow
@@ -157,6 +157,8 @@ class StoryCollectionViewCell: UICollectionViewCell {
         storySign.layer.cornerRadius = 11.0
         storySign.layer.masksToBounds = true
         
+        self.contentView.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
+        self.selectionStyle = .none
     }
-    
+
 }

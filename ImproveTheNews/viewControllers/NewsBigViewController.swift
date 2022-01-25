@@ -372,6 +372,8 @@ class NewsBigViewController: UIViewController {
         self.tableView.register(footerItem0Nib,
             forHeaderFooterViewReuseIdentifier: "FooterCellBigItem0")
         
+        self.tableView.register(StoryViewCell.self, forCellReuseIdentifier: StoryViewCell.cellId)
+        
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
@@ -866,15 +868,51 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier:
-            "CellBig") as! CellBig
-            
         var start = 0
         for n in 0..<indexPath.section {
             start += newsParser.getArticleCountInSection(section: n)
         }
         let index = indexPath.row + start
+
+        if(self.newsParser.getStory(index: index) != nil ) {    // Story
+            let cell = self.storyCell(index: index)
+            return cell
+        } else {
+            let cell = self.regularCell(index: index)
+            return cell
+        }
+        
+        
+        
+        
+    }
+    
+    // story cell
+    private func storyCell(index: Int) -> StoryViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier:
+            StoryViewCell.cellId) as! StoryViewCell
             
+        cell.setupViews(sources: self.newsParser.getStory(index: index)!.sources)
+        
+        cell.updated.text = "Last updated " + newsParser.getDate(index: index)
+        cell.titleLabel.text = self.newsParser.getTitle(index: index)
+        
+        let imageURL = newsParser.getIMG(index: index)
+        DispatchQueue.global().async {
+            DispatchQueue.main.async {
+                cell.mainImageView.contentMode = .scaleAspectFill
+                cell.mainImageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
+            }
+        }
+            
+        return cell
+    }
+    
+    // regular cell
+    private func regularCell(index: Int) -> CellBig {
+        let cell = tableView.dequeueReusableCell(withIdentifier:
+            "CellBig") as! CellBig
+                
         cell.contentLabel.text = self.newsParser.getTitle(index: index)
         self.setFlag(imageView: cell.flagImageView, ID: newsParser.getCountryID(index: index))
         cell.sourceLabel.text = newsParser.getSource(index: index) + " - " + newsParser.getDate(index: index)

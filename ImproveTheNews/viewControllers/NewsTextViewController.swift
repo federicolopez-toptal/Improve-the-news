@@ -372,6 +372,10 @@ class NewsTextViewController: UIViewController {
         let footerItem0Nib = UINib(nibName: "FooterCellTextOnlyItem0", bundle: nil)
         self.tableView.register(footerItem0Nib,
             forHeaderFooterViewReuseIdentifier: "FooterCellTextOnlyItem0")
+            
+        
+        self.tableView.register(StoryViewCell.self, forCellReuseIdentifier: StoryViewCell.cellId)
+        
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -840,25 +844,53 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier:
-            "CellTextOnly") as! CellTextOnly
-            
         var start = 0
         for n in 0..<indexPath.section {
             start += newsParser.getArticleCountInSection(section: n)
         }
         let index = indexPath.row + start
+        
+        //if(index < newsParser.getLength()) {
+        if(self.newsParser.getStory(index: index) != nil ) {    // Story
+            let cell = self.storyCell(index: index)
+            return cell
+        } else {
+            let cell = self.regularCell(index: index)
+            return cell
+        }
+        //}
+    }
+    
+    // story cell
+    private func storyCell(index: Int) -> StoryViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier:
+            StoryViewCell.cellId) as! StoryViewCell
+            
+        cell.setupViews(sources: self.newsParser.getStory(index: index)!.sources)
+        
+        cell.updated.text = "Last updated " + newsParser.getDate(index: index)
+        cell.titleLabel.text = self.newsParser.getTitle(index: index)
+        
+        let imageURL = newsParser.getIMG(index: index)
+        DispatchQueue.global().async {
+            DispatchQueue.main.async {
+                cell.mainImageView.contentMode = .scaleAspectFill
+                cell.mainImageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
+            }
+        }
+            
+        return cell
+    }
+    
+    // regular cell
+    private func regularCell(index: Int) -> CellTextOnly {
+        let cell = tableView.dequeueReusableCell(withIdentifier:
+            "CellTextOnly") as! CellTextOnly
             
         cell.contentLabel.text = self.newsParser.getTitle(index: index)
         
-        /*
-        cell.contentLabel.text = "Yes, the latest jobs data may look disappointing, but leisure and transportation sectors give reason for cheer"
-        */
-        
         self.setFlag(imageView: cell.flagImageView, ID: newsParser.getCountryID(index: index))
         cell.sourceLabel.text = newsParser.getSource(index: index) + " - " + newsParser.getDate(index: index)
-        
-        //cell.sourceLabel.text = "The Conversation #1 - 39 minutes ago"
         
         var showMarkup = false
         cell.exclamationImageView.isHidden = true
@@ -868,7 +900,7 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         }
         cell.exclamationImageView.isHidden = !showMarkup
         cell.updateFlagVisible()
-                
+        
         return cell
     }
     

@@ -11,6 +11,17 @@
 		1F0CDCCC2799CC2800368282 /* StorySourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CDCCB2799CC2800368282 /* StorySourceManager.swift */; };
 		1F0CDCD22799E10D00368282 /* gradient_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CDCD12799E10D00368282 /* gradient_light.png */; };
 		1F0CDCD42799E23300368282 /* gradient_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CDCD32799E23300368282 /* gradient_dark.png */; };
+		1F5B144327A0308900F743FB /* aljazeera.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B143A27A0308800F743FB /* aljazeera.png */; };
+		1F5B144427A0308900F743FB /* cbs.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B143B27A0308800F743FB /* cbs.png */; };
+		1F5B144527A0308900F743FB /* slate.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B143C27A0308900F743FB /* slate.png */; };
+		1F5B144627A0308900F743FB /* wsj.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B143D27A0308900F743FB /* wsj.png */; };
+		1F5B144727A0308900F743FB /* breitbart.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B143E27A0308900F743FB /* breitbart.png */; };
+		1F5B144827A0308900F743FB /* reuters.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B143F27A0308900F743FB /* reuters.png */; };
+		1F5B144927A0308900F743FB /* guardian.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B144027A0308900F743FB /* guardian.png */; };
+		1F5B144A27A0308900F743FB /* propublica.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B144127A0308900F743FB /* propublica.png */; };
+		1F5B144B27A0308900F743FB /* wapo.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B144227A0308900F743FB /* wapo.png */; };
+		1F5B144D27A03CF100F743FB /* StoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B144C27A03CF100F743FB /* StoryViewCell.swift */; };
+		1F827C4A279E2B7C0077FB26 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */; };
 		1F8BFDFB2783BC76004632F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F8BFDFA2783BC76004632F3 /* Main.storyboard */; };
 		1FD319AB279898AD00BD65D5 /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1FD319AA279898AD00BD65D5 /* notes.txt */; };
 		1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */; };
@@ -365,6 +376,17 @@
 		1F0CDCCB2799CC2800368282 /* StorySourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorySourceManager.swift; sourceTree = "<group>"; };
 		1F0CDCD12799E10D00368282 /* gradient_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_light.png; sourceTree = "<group>"; };
 		1F0CDCD32799E23300368282 /* gradient_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_dark.png; sourceTree = "<group>"; };
+		1F5B143A27A0308800F743FB /* aljazeera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aljazeera.png; sourceTree = "<group>"; };
+		1F5B143B27A0308800F743FB /* cbs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cbs.png; sourceTree = "<group>"; };
+		1F5B143C27A0308900F743FB /* slate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slate.png; sourceTree = "<group>"; };
+		1F5B143D27A0308900F743FB /* wsj.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wsj.png; sourceTree = "<group>"; };
+		1F5B143E27A0308900F743FB /* breitbart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = breitbart.png; sourceTree = "<group>"; };
+		1F5B143F27A0308900F743FB /* reuters.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reuters.png; sourceTree = "<group>"; };
+		1F5B144027A0308900F743FB /* guardian.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guardian.png; sourceTree = "<group>"; };
+		1F5B144127A0308900F743FB /* propublica.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = propublica.png; sourceTree = "<group>"; };
+		1F5B144227A0308900F743FB /* wapo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wapo.png; sourceTree = "<group>"; };
+		1F5B144C27A03CF100F743FB /* StoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryViewCell.swift; sourceTree = "<group>"; };
+		1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		1F8BFDFA2783BC76004632F3 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		1FD319AA279898AD00BD65D5 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -743,6 +765,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F5B143927A0307800F743FB /* sourcersSVGs */ = {
+			isa = PBXGroup;
+			children = (
+				1F5B143A27A0308800F743FB /* aljazeera.png */,
+				1F5B143E27A0308900F743FB /* breitbart.png */,
+				1F5B143B27A0308800F743FB /* cbs.png */,
+				1F5B144027A0308900F743FB /* guardian.png */,
+				1F5B144127A0308900F743FB /* propublica.png */,
+				1F5B143F27A0308900F743FB /* reuters.png */,
+				1F5B143C27A0308900F743FB /* slate.png */,
+				1F5B144227A0308900F743FB /* wapo.png */,
+				1F5B143D27A0308900F743FB /* wsj.png */,
+			);
+			path = sourcersSVGs;
+			sourceTree = "<group>";
+		};
 		71E182D38B4DB1DEDBE4490C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -874,6 +912,7 @@
 		BD0FEDC625D17A8B0079A32B /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				1F5B143927A0307800F743FB /* sourcersSVGs */,
 				BDDA441D2612301000C9C3AF /* flags */,
 				BD4A4FD625E5438200AB37DA /* prefsButton.png */,
 				BD6C6FA5276BC81500D8C759 /* shareSplitButton.png */,
@@ -944,6 +983,7 @@
 				BD9A59462757ADD2006678F6 /* customNavigationController.swift */,
 				1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */,
 				1F0CDCCB2799CC2800368282 /* StorySourceManager.swift */,
+				1F5B144C27A03CF100F743FB /* StoryViewCell.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -963,6 +1003,7 @@
 				BD1B39CD262F270000CDC9F0 /* UIDeviceExtension.swift */,
 				BD1C4020276927EB007C258B /* URLExtension.swift */,
 				BD43FA852774D5D10037D304 /* Easing.swift */,
+				1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -1448,6 +1489,7 @@
 				BDDA452C2612301100C9C3AF /* GAB64.png in Resources */,
 				BDAC5A7027623BC200927195 /* fb_logo.png in Resources */,
 				BDDA45372612301100C9C3AF /* PRK64.png in Resources */,
+				1F5B144727A0308900F743FB /* breitbart.png in Resources */,
 				BDDA45632612301100C9C3AF /* CUB64.png in Resources */,
 				BDDA453B2612301100C9C3AF /* ALB64.png in Resources */,
 				BDDA45082612301100C9C3AF /* IMN64.png in Resources */,
@@ -1475,6 +1517,7 @@
 				BDDA45972612301100C9C3AF /* YEM64.png in Resources */,
 				BDDA45552612301100C9C3AF /* CHL64.png in Resources */,
 				BDDA45252612301100C9C3AF /* GUY64.png in Resources */,
+				1F5B144327A0308900F743FB /* aljazeera.png in Resources */,
 				BDDA45052612301100C9C3AF /* PHL64.png in Resources */,
 				BDDA45232612301100C9C3AF /* AUT64.png in Resources */,
 				BDDA45092612301100C9C3AF /* BFA64.png in Resources */,
@@ -1507,6 +1550,7 @@
 				BDDA457A2612301100C9C3AF /* MUS64.png in Resources */,
 				BDDA452F2612301100C9C3AF /* PRT64.png in Resources */,
 				BDDA45452612301100C9C3AF /* ZMB64.png in Resources */,
+				1F5B144A27A0308900F743FB /* propublica.png in Resources */,
 				1FD319AB279898AD00BD65D5 /* notes.txt in Resources */,
 				BDDA45732612301100C9C3AF /* MSR64.png in Resources */,
 				BD25253B261CCF2A0090D04A /* text2b.txt in Resources */,
@@ -1518,6 +1562,7 @@
 				1F0CDCCA2799BBDF00368282 /* updatedIcon.png in Resources */,
 				BDDA452E2612301100C9C3AF /* AFG64.png in Resources */,
 				BD4158EE27206B49002F3A20 /* onboardingCheckOFF_bright.png in Resources */,
+				1F5B144927A0308900F743FB /* guardian.png in Resources */,
 				BDDA44E62612301100C9C3AF /* NZL64.png in Resources */,
 				BDDA45302612301100C9C3AF /* EGY64.png in Resources */,
 				BDDA45652612301100C9C3AF /* TJK64.png in Resources */,
@@ -1598,6 +1643,8 @@
 				BDDA45062612301100C9C3AF /* CYM64.png in Resources */,
 				BDDA455D2612301100C9C3AF /* SAU64.png in Resources */,
 				BDDA455F2612301100C9C3AF /* HRV64.png in Resources */,
+				1F5B144B27A0308900F743FB /* wapo.png in Resources */,
+				1F5B144427A0308900F743FB /* cbs.png in Resources */,
 				BD252539261CCF2A0090D04A /* text1b.txt in Resources */,
 				BD9D55CA264ABCAF00509722 /* FooterCellTextOnlyItem0.xib in Resources */,
 				BDDA457E2612301100C9C3AF /* UGA64.png in Resources */,
@@ -1620,11 +1667,13 @@
 				BDDA44EE2612301100C9C3AF /* KOR64.png in Resources */,
 				BDDA45922612301100C9C3AF /* SOM64.png in Resources */,
 				BDDA452B2612301100C9C3AF /* BMU64.png in Resources */,
+				1F5B144527A0308900F743FB /* slate.png in Resources */,
 				BDDA45752612301100C9C3AF /* MNE64.png in Resources */,
 				A81B3B292481E67500A52A97 /* Assets.xcassets in Resources */,
 				BDC0586827453EFF00C15F7E /* shareSplitButton2.png in Resources */,
 				BDDA45402612301100C9C3AF /* LUX64.png in Resources */,
 				BDDA45472612301100C9C3AF /* GTM64.png in Resources */,
+				1F5B144827A0308900F743FB /* reuters.png in Resources */,
 				BDDA45762612301100C9C3AF /* BTN64.png in Resources */,
 				BDDA45A22612301100C9C3AF /* NAM64.png in Resources */,
 				BDDA450A2612301100C9C3AF /* DNK64.png in Resources */,
@@ -1652,6 +1701,7 @@
 				BDDA45172612301100C9C3AF /* JOR64.png in Resources */,
 				BDDA44FF2612301100C9C3AF /* BRA64.png in Resources */,
 				BDDA45212612301100C9C3AF /* THA64.png in Resources */,
+				1F5B144627A0308900F743FB /* wsj.png in Resources */,
 				BDDA45322612301100C9C3AF /* UZB64.png in Resources */,
 				BD28140225F6BDCD00A91E38 /* text3.txt in Resources */,
 				BDDA458F2612301100C9C3AF /* GHA64.png in Resources */,
@@ -1807,6 +1857,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5B144D27A03CF100F743FB /* StoryViewCell.swift in Sources */,
 				1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */,
 				BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */,
 				1F0CDCCC2799CC2800368282 /* StorySourceManager.swift in Sources */,
@@ -1857,6 +1908,7 @@
 				BDF72F63269DC960006B095D /* CookiesAlert.swift in Sources */,
 				BD24A51526E071A500251999 /* OnBoardingView3.swift in Sources */,
 				A8E94A1724F096B000936E07 /* ArticleLayouts.swift in Sources */,
+				1F827C4A279E2B7C0077FB26 /* UIImageViewExtension.swift in Sources */,
 				BD17DB0D266693A700AEFF9A /* SourceCell.swift in Sources */,
 				BDF37F79263B0B09003D910D /* FooterCellTextOnly.swift in Sources */,
 				BDD1512F268CF96300EE256F /* MarkupUser.swift in Sources */,

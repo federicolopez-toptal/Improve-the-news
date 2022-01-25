@@ -1599,9 +1599,6 @@ extension NewsViewController {
         if(index < newsParser.getLength()) {
             
             if(self.newsParser.getStory(index: index) != nil ) {
-            
-                //print( "SOURCES", self.newsParser.getStory(index: index)?.sources )
-                
                 return self.storyCell(indexPath: indexPath, index: index)
             } else {
                 if(indexPath.section == 0) {
