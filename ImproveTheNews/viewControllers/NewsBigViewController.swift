@@ -1036,8 +1036,15 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
         let title = newsParser.getTitle(index: index)
         let markups = newsParser.getMarkups(index: index)
         
-        let vc = WebViewController(url: link, title: title, annotations: markups)
-        navigationController?.pushViewController(vc, animated: true)
+        if(self.newsParser.getStory(index: index) == nil ) {
+            // regular item
+            let vc = WebViewController(url: link, title: title, annotations: markups)
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            // story
+            let vc = PlainWebViewController(url: link, title: title)
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

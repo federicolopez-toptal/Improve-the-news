@@ -91,8 +91,6 @@ class StoryViewCell: UITableViewCell {
             } else {
                 let filename = self.validSources[i-1] + ".png"
                 _icon.image = UIImage(named: filename)
-                
-                print("ICON", filename)
             }
             
             

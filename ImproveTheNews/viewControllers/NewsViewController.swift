@@ -1873,7 +1873,6 @@ extension NewsViewController {
         for n in 0..<indexPath.section {
             start += newsParser.getArticleCountInSection(section: n)
         }
-        
         let index = start + indexPath.row
         
         var link = newsParser.getURL(index: index)
@@ -1887,14 +1886,22 @@ extension NewsViewController {
         */
         
         let title = newsParser.getTitle(index: index)
-        
         let markups = newsParser.getMarkups(index: index)
         //let markups = [ Markups(type: "T", description: "abc", link: "http://www.google.com") ]
        
         
+        if(self.newsParser.getStory(index: index) == nil ) {
+            // regular item
+            let vc = WebViewController(url: link, title: title, annotations: markups)
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            // story
+            let vc = PlainWebViewController(url: link, title: title)
+            navigationController?.pushViewController(vc, animated: true)
+        }
         
-        let vc = WebViewController(url: link, title: title, annotations: markups)
-        navigationController?.pushViewController(vc, animated: true)
+        
+        
         
         /*
         let config = SFSafariViewController.Configuration()

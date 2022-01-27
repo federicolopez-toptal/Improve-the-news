@@ -21,6 +21,7 @@
 		1F5B144A27A0308900F743FB /* propublica.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B144127A0308900F743FB /* propublica.png */; };
 		1F5B144B27A0308900F743FB /* wapo.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B144227A0308900F743FB /* wapo.png */; };
 		1F5B144D27A03CF100F743FB /* StoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B144C27A03CF100F743FB /* StoryViewCell.swift */; };
+		1F5B144F27A0850100F743FB /* PlainWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B144E27A0850100F743FB /* PlainWebViewController.swift */; };
 		1F827C4A279E2B7C0077FB26 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */; };
 		1F8BFDFB2783BC76004632F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F8BFDFA2783BC76004632F3 /* Main.storyboard */; };
 		1FD319AB279898AD00BD65D5 /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1FD319AA279898AD00BD65D5 /* notes.txt */; };
@@ -386,6 +387,7 @@
 		1F5B144127A0308900F743FB /* propublica.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = propublica.png; sourceTree = "<group>"; };
 		1F5B144227A0308900F743FB /* wapo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wapo.png; sourceTree = "<group>"; };
 		1F5B144C27A03CF100F743FB /* StoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryViewCell.swift; sourceTree = "<group>"; };
+		1F5B144E27A0850100F743FB /* PlainWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainWebViewController.swift; sourceTree = "<group>"; };
 		1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		1F8BFDFA2783BC76004632F3 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		1FD319AA279898AD00BD65D5 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
@@ -936,6 +938,7 @@
 		BD0FEDD925D17B130079A32B /* viewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				1F5B144E27A0850100F743FB /* PlainWebViewController.swift */,
 				A89B803524AFAB8B009BB0F8 /* WebViewController.swift */,
 				A87144E924F43B3100A7E404 /* SearchViewController.swift */,
 				A8D61B3624F1656C00A0F8F5 /* Pages.swift */,
@@ -1913,6 +1916,7 @@
 				BDF37F79263B0B09003D910D /* FooterCellTextOnly.swift in Sources */,
 				BDD1512F268CF96300EE256F /* MarkupUser.swift in Sources */,
 				BDF71B542677970A0026C615 /* NewsViewController.swift in Sources */,
+				1F5B144F27A0850100F743FB /* PlainWebViewController.swift in Sources */,
 				BD9FBD71269F4FA700E52197 /* MorePrefsViewController.swift in Sources */,
 				BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */,
 				A8C5B9D424B67A0E0077E306 /* Globals.swift in Sources */,
@@ -2082,7 +2086,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2093,7 +2097,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ITNFoundation.ITN-beta";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2112,7 +2116,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2123,7 +2127,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ITNFoundation.ITNaggregator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2283,7 +2287,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Beta";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2294,7 +2298,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ITNFoundation.ITN-beta";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
