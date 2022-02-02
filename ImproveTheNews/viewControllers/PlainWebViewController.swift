@@ -21,6 +21,7 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
         let webConfiguration = WKWebViewConfiguration()
         let webview = WKWebView(frame: .zero, configuration: webConfiguration)
         webview.uiDelegate = self
+        webview.navigationDelegate = self
         webview.translatesAutoresizingMaskIntoConstraints = false
 
         return webview
@@ -58,10 +59,7 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
         super.viewDidLoad()
         
         let backBarButton = UIBarButtonItem(image: UIImage(named: "chevron-backward")!, style: .plain, target: self, action: #selector(goBack(_:)))
-        let shareBarButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up")!, style: .plain, target: self, action: #selector(sharePressed(_:)))
-        shareBarButton.tintColor = DARKMODE() ? accentOrange : textBlack
         
-        //navigationItem.setRightBarButton(shareBarButton, animated: true)
         navigationItem.setLeftBarButton(backBarButton, animated: true)
         
         setupUI()
@@ -99,6 +97,7 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
 
 // MARK: UI setup
 extension PlainWebViewController {
+
     func setupWebNavBar() {
         navigationController?.navigationBar.tintColor = DARKMODE() ? .white : textBlack
     }
@@ -108,47 +107,38 @@ extension PlainWebViewController {
           let contentController = WKUserContentController()
           configuration.userContentController = contentController
     }
-    
-    /*
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            progressView.progress = Float(webView.estimatedProgress)
-        }
-    }
-    
-    @objc func redirect(_ sender: UIButton!) {
-        let link = self.contestedclaims[sender.tag].link
-        let vc = WebViewController(url: link, title: "Context", annotations: [])
-        self.navigationController?.pushViewController(vc, animated: false)
-    }
-    */
 
 }
 
-// MARK: User responses
+// MARK: User interaction(s)
 extension PlainWebViewController {
     
     @objc func goBack(_ sender:UIBarButtonItem!) {
           self.navigationController?.popViewController(animated: true)
     }
-      
-    @objc func handleDismiss() {
-        
-        self.webViewTopConstraint!.constant = 0
-        self.webView.layoutIfNeeded()
-        
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+    
+}
 
-            self.view.layoutIfNeeded()
-
-        }, completion: nil)
+// MARK:
+extension PlainWebViewController: WKNavigationDelegate {
+    // Ref: https://www.hackingwithswift.com/articles/112/the-ultimate-guide-to-wkwebview
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
+    decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
-    }
-      
-    @objc func sharePressed(_ sender: UIBarButtonItem!) {
-          let link = [pageURL]
-          let ac = UIActivityViewController(activityItems: link, applicationActivities: nil)
-          present(ac, animated: true)
+        if let rUrl = navigationAction.request.url?.absoluteString {
+            if(rUrl == "https://www.improvethenews.org/") {
+                decisionHandler(.cancel)
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                decisionHandler(.allow)
+            }
+        } else {
+            decisionHandler(.allow)
+        }
+        
+        //print( "NAVIGATION", navigationAction.request.url )
+        //decisionHandler(.allow)
     }
     
 }

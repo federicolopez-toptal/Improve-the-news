@@ -123,11 +123,13 @@ class SourcesViewController: UIViewController {
     
     private func loadPreferences() {
     
+        /*
         let delete = false
         if(delete) {
             UserDefaults.standard.removeObject(forKey: KEY_SOURCES_PREFS)
             UserDefaults.standard.synchronize()
         }
+        */
     
         self.preferences = []
         if let value = UserDefaults.standard.string(forKey: KEY_SOURCES_PREFS) {
@@ -151,9 +153,19 @@ class SourcesViewController: UIViewController {
         */
         
         for P in self.preferences {
+            if(P.count >= 2 ) {
+                let p = String(P[0...1])
+                let index = self.getSourceIndexFor(code: p)
+                if(index != -1) {
+                    self.sources[index].state = false //!P.contains("00")
+                }
+            }
+        
+            /*
             let p = String(P.prefix(2))
             let index = self.getSourceIndexFor(code: p)
             self.sources[index].state = false //!P.contains("00")
+            */
         }
     }
     
