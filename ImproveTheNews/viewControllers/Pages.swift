@@ -315,7 +315,7 @@ The shelf-life slider ranges from fast-expiring topics such as celebrity gossip 
 
 
 
-class PrivacyPolicy: UIViewController {
+class PrivacyPolicy: UIViewController, UITextViewDelegate {
     
     let dismiss = UIButton(title: "Back", titleColor: .label, font: UIFont(name: "OpenSans-Bold", size: 17)!)
     let pagetitle = UILabel(text: "Privacy Policy", font: UIFont(name: "PTSerif-Bold", size: 40), textColor: accentOrange, textAlignment: .left, numberOfLines: 1)
@@ -360,8 +360,10 @@ Industry regulatory disclosure requirements
 We are not part of a regulated industry.
 """
     let bold = ["What personal data we collect and why we collect it","Embedded and linked content from other websites", "Cookies", "Analytics", "Who we share your data with", "How long we retain your data", "What rights you have over your data", "Data breach procedures we have in place", "Additional information", "Third parties we receive data from", "Automated decision making and/or profiling we do with user data", "Industry regulatory disclosure requirements"] as [NSString]
-    let paths = ["https://www.allsides.com/media-bias/media-bias-ratings"]
-    let linked = ["here"]
+    
+    let paths = ["https://www.allsides.com/media-bias/media-bias-ratings", "https://docs.google.com/forms/d/e/1FAIpQLSfoGi4VkL99kV4nESvK71k4NgzcVuIo4o-JDrlmBqArLR_IYA/viewform",
+                "https://docs.google.com/forms/d/e/1FAIpQLSfoGi4VkL99kV4nESvK71k4NgzcVuIo4o-JDrlmBqArLR_IYA/viewform", "https://docs.google.com/forms/d/e/1FAIpQLSfoGi4VkL99kV4nESvK71k4NgzcVuIo4o-JDrlmBqArLR_IYA/viewform"]
+    let linked = ["here", "feedback form,", "feedback form ", "feedback form."]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -414,10 +416,33 @@ We are not part of a regulated industry.
             textView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             textView.topAnchor.constraint(equalTo: self.pagetitle.bottomAnchor, constant: 5),
         ])
+        textView.delegate = self
     }
     
     @objc func handleDismiss() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - UITextViewDelegate
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        
+        if(URL.absoluteString == paths[1]) {
+            self.callContactForm()
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    private func callContactForm() {
+        let url = URL(string: paths[1])!
+        let config = SFSafariViewController.Configuration()
+        config.entersReaderIfAvailable = true
+
+        let vc = SFSafariViewController(url: url, configuration: config)
+        vc.preferredBarTintColor = .black
+        vc.preferredControlTintColor = accentOrange
+        present(vc, animated: true, completion: nil)
     }
 }
 
