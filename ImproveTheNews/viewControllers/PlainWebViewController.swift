@@ -126,6 +126,7 @@ extension PlainWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
+        /*
         if let rUrl = navigationAction.request.url?.absoluteString {
             if(rUrl == "https://www.improvethenews.org/") {
                 decisionHandler(.cancel)
@@ -136,9 +137,10 @@ extension PlainWebViewController: WKNavigationDelegate {
         } else {
             decisionHandler(.allow)
         }
+        */
         
         //print( "NAVIGATION", navigationAction.request.url )
-        //decisionHandler(.allow)
+        decisionHandler(.allow)
     }
     
 }

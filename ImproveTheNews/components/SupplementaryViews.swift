@@ -637,6 +637,8 @@ class FAQFooter: UICollectionReusableView {
     let view = UIView()
     let titleImage = UIImageView(image: UIImage(named: "ITN_logo.png"))
     
+    let noMoreLabel = UILabel(text: "No more news on this topic", font: UIFont(name: "PTSerif-Bold", size: 18), textColor: accentOrange, textAlignment: .center, numberOfLines: 1)
+    
     let title = UILabel(text: "Improve the News", font: .boldSystemFont(ofSize: 20), textColor: .label, textAlignment: .center, numberOfLines: 1)
     let about = UILabel()
     /*
@@ -655,7 +657,9 @@ class FAQFooter: UICollectionReusableView {
     
     public func configure() {
         
-        backgroundColor = bgBlue_LIGHT
+        backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
+        //bgBlue_LIGHT
+        
         
         addSubview(view)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -666,19 +670,30 @@ class FAQFooter: UICollectionReusableView {
             view.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
         view.addSubview(title)
-        view.backgroundColor = bgBlue
+        //view.backgroundColor = bgBlue
+        
+        let label_y_offset: CGFloat = 16
+        
+        view.addSubview(noMoreLabel)
+        noMoreLabel.backgroundColor = .clear
+        noMoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            noMoreLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: -label_y_offset),
+            noMoreLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            noMoreLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15)
+        ])
         
         view.addSubview(titleImage)
         titleImage.backgroundColor = .clear
         titleImage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 15),
+            titleImage.topAnchor.constraint(equalTo: noMoreLabel.bottomAnchor, constant: 35+label_y_offset),
             titleImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             titleImage.widthAnchor.constraint(equalToConstant: 195),
             titleImage.heightAnchor.constraint(equalToConstant: 30)
         ])
         
-        let line = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
+        let line = UIView(frame: CGRect(x: 0, y: 35, width: UIScreen.main.bounds.width, height: 1))
         line.backgroundColor = articleSourceColor
         view.addSubview(line)
         

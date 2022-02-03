@@ -24,6 +24,10 @@
 		1F5B144F27A0850100F743FB /* PlainWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B144E27A0850100F743FB /* PlainWebViewController.swift */; };
 		1F827C4A279E2B7C0077FB26 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */; };
 		1F8BFDFB2783BC76004632F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F8BFDFA2783BC76004632F3 /* Main.storyboard */; };
+		1F92D8F727AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F92D8F527AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.swift */; };
+		1F92D8F827AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F92D8F627AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib */; };
+		1F92D8FB27AC648000AA58B4 /* FooterCellBig1Topic.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F92D8F927AC648000AA58B4 /* FooterCellBig1Topic.xib */; };
+		1F92D8FC27AC648000AA58B4 /* FooterCellBig1Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F92D8FA27AC648000AA58B4 /* FooterCellBig1Topic.swift */; };
 		1FD319AB279898AD00BD65D5 /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1FD319AA279898AD00BD65D5 /* notes.txt */; };
 		1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */; };
 		4569BF5FB6241C56DB7867D0 /* Pods_ImproveTheNewsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51B91154A2307697AD0A1EF3 /* Pods_ImproveTheNewsTests.framework */; };
@@ -390,6 +394,10 @@
 		1F5B144E27A0850100F743FB /* PlainWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainWebViewController.swift; sourceTree = "<group>"; };
 		1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		1F8BFDFA2783BC76004632F3 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		1F92D8F527AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellTextOnly1Topic.swift; sourceTree = "<group>"; };
+		1F92D8F627AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellTextOnly1Topic.xib; sourceTree = "<group>"; };
+		1F92D8F927AC648000AA58B4 /* FooterCellBig1Topic.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellBig1Topic.xib; sourceTree = "<group>"; };
+		1F92D8FA27AC648000AA58B4 /* FooterCellBig1Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellBig1Topic.swift; sourceTree = "<group>"; };
 		1FD319AA279898AD00BD65D5 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		322C932A0A7159A21E458FDB /* Pods-ImproveTheNewsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNewsTests.release.xcconfig"; path = "Target Support Files/Pods-ImproveTheNewsTests/Pods-ImproveTheNewsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1079,6 +1087,8 @@
 				BD3F58D7264CA5CC00B99522 /* FooterCellBig.xib */,
 				BD88FD50264CA93C00F8BCCB /* FooterCellBigItem0.swift */,
 				BD88FD4F264CA93C00F8BCCB /* FooterCellBigItem0.xib */,
+				1F92D8FA27AC648000AA58B4 /* FooterCellBig1Topic.swift */,
+				1F92D8F927AC648000AA58B4 /* FooterCellBig1Topic.xib */,
 			);
 			path = BigCells;
 			sourceTree = "<group>";
@@ -1094,6 +1104,8 @@
 				BDF37F77263B0B09003D910D /* FooterCellTextOnly.swift */,
 				BD9D55C8264ABCAF00509722 /* FooterCellTextOnlyItem0.xib */,
 				BD9D55C7264ABCAF00509722 /* FooterCellTextOnlyItem0.swift */,
+				1F92D8F527AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.swift */,
+				1F92D8F627AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib */,
 			);
 			path = TextCells;
 			sourceTree = "<group>";
@@ -1600,6 +1612,7 @@
 				BDDA44FB2612301100C9C3AF /* AUS64.png in Resources */,
 				BD0FED9F25D170330079A32B /* PTSerif-Bold.ttf in Resources */,
 				BDF37F6D263AE2E5003D910D /* CellTextOnly.xib in Resources */,
+				1F92D8F827AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib in Resources */,
 				BDDA45602612301100C9C3AF /* DEU64.png in Resources */,
 				BDDA45592612301100C9C3AF /* ARM64.png in Resources */,
 				BDDA457D2612301100C9C3AF /* AIA64.png in Resources */,
@@ -1618,6 +1631,7 @@
 				BDDA45612612301100C9C3AF /* GEO64.png in Resources */,
 				BDDA44F12612301100C9C3AF /* XKX64.png in Resources */,
 				BDDA450F2612301100C9C3AF /* ZWE64.png in Resources */,
+				1F92D8FB27AC648000AA58B4 /* FooterCellBig1Topic.xib in Resources */,
 				BDDA44E52612301100C9C3AF /* TGO64.png in Resources */,
 				BDDA450E2612301100C9C3AF /* GNQ64.png in Resources */,
 				BDDA458B2612301100C9C3AF /* GUM64.png in Resources */,
@@ -1861,6 +1875,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F5B144D27A03CF100F743FB /* StoryViewCell.swift in Sources */,
+				1F92D8FC27AC648000AA58B4 /* FooterCellBig1Topic.swift in Sources */,
 				1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */,
 				BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */,
 				1F0CDCCC2799CC2800368282 /* StorySourceManager.swift in Sources */,
@@ -1921,6 +1936,7 @@
 				BD94151625FFD231002DEDF7 /* SegueFromLeft.swift in Sources */,
 				A8C5B9D424B67A0E0077E306 /* Globals.swift in Sources */,
 				BDEAF85625E55D2400588944 /* Utils.swift in Sources */,
+				1F92D8F727AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.swift in Sources */,
 				BDADB58627678234001820D8 /* ShareSplitAPI.swift in Sources */,
 				A851345224838B0700D56C04 /* SectionsViewController.swift in Sources */,
 				A81B3B222481E67200A52A97 /* SceneDelegate.swift in Sources */,

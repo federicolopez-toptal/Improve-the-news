@@ -372,6 +372,10 @@ class NewsBigViewController: UIViewController {
         self.tableView.register(footerItem0Nib,
             forHeaderFooterViewReuseIdentifier: "FooterCellBigItem0")
         
+        let footer1topicNib = UINib(nibName: "FooterCellBig1Topic", bundle: nil)
+        self.tableView.register(footer1topicNib,
+            forHeaderFooterViewReuseIdentifier: "FooterCellBig1Topic")
+        
         self.tableView.register(StoryViewCell.self, forCellReuseIdentifier: StoryViewCell.cellId)
         
         self.tableView.delegate = self
@@ -785,7 +789,7 @@ extension NewsBigViewController: NewsDelegate {
 // MARK: - All tableView related
 extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
     HeaderCellBigDelegate, FooterCellBigDelegate,
-    FooterCellBigItem0Delegate {
+    FooterCellBigItem0Delegate, FooterCellBig1TopicDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.newsParser.getNumOfSections()
@@ -829,6 +833,14 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
     
     // Tap on share
     func shareTapped(sender: FooterCellBig) {
+        self.share()
+    }
+    
+    func share1TopicTapped(sender: FooterCellBig1Topic) {
+        self.share()
+    }
+
+    func share() {
         let ac = UIActivityViewController(activityItems: ["http://www.improvethenews.org/"], applicationActivities: nil)
         self.present(ac, animated: true)
     }
@@ -956,6 +968,10 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
         
         let count = self.numberOfSections(in: self.tableView)
         if(section==0){
+            if(self.param_A == 40) {
+                return 310
+            }
+        
             var h: CGFloat = 115
             if(self.mustShowBanner() && BannerInfo.shared != nil) {
                 let code = BannerInfo.shared!.adCode
@@ -974,7 +990,10 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
         
         if(self.param_A == 40) {
             // only 1 topic
-            return nil
+            let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellBig1Topic" ) as! FooterCellBig1Topic
+            cell.delegate = self
+
+            return cell
         }
         
         if(section==0) {

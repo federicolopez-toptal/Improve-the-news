@@ -373,6 +373,10 @@ class NewsTextViewController: UIViewController {
         self.tableView.register(footerItem0Nib,
             forHeaderFooterViewReuseIdentifier: "FooterCellTextOnlyItem0")
             
+        let footer1topicNib = UINib(nibName: "FooterCellTextOnly1Topic", bundle: nil)
+        self.tableView.register(footer1topicNib,
+            forHeaderFooterViewReuseIdentifier: "FooterCellTextOnly1Topic")
+            
         
         self.tableView.register(StoryViewCell.self, forCellReuseIdentifier: StoryViewCell.cellId)
         
@@ -759,7 +763,7 @@ extension NewsTextViewController: NewsDelegate {
 // MARK: - All tableView related
 extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     HeaderCellTextOnlyDelegate, FooterCellTextOnlyDelegate,
-    FooterCellTextOnlyItem0Delegate {
+    FooterCellTextOnlyItem0Delegate, FooterCellTextOnly1TopicDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.newsParser.getNumOfSections()
@@ -803,6 +807,14 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     
     // Tap on share
     func shareTapped(sender: FooterCellTextOnly) {
+        self.share()
+    }
+    
+    func share1TopicTapped(sender: FooterCellTextOnly1Topic) {
+        self.share()
+    }
+    
+    func share() {
         let ac = UIActivityViewController(activityItems: ["http://www.improvethenews.org/"], applicationActivities: nil)
         self.present(ac, animated: true)
     }
@@ -825,10 +837,10 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         }
         
         if(!isStory) {
-            print("STORIES test", indexPath.section, index, 100)
+            //print("STORIES test", indexPath.section, index, 100)
             return 100.0
         } else {
-            print("STORIES test", indexPath.section, index, STORIES_HEIGHT)
+            //print("STORIES test", indexPath.section, index, STORIES_HEIGHT)
             return CGFloat(STORIES_HEIGHT)
         }
         
@@ -910,6 +922,10 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         
         let count = self.numberOfSections(in: self.tableView)
         if(section==0){
+            if(self.param_A == 40) {
+                return 310
+            }
+        
             var h: CGFloat = 115
             if(self.mustShowBanner() && BannerInfo.shared != nil) {
                 let code = BannerInfo.shared!.adCode
@@ -928,7 +944,10 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
         
         if(self.param_A == 40) {
             // only 1 topic
-            return nil
+            let cell = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterCellTextOnly1Topic" ) as! FooterCellTextOnly1Topic
+            cell.delegate = self
+
+            return cell
         }
         
         if(section==0) {

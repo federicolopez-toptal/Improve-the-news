@@ -2072,6 +2072,9 @@ extension NewsViewController {
                         let pageFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: FAQFooter.footerId, for: indexPath) as! FAQFooter
                         pageFooter.shareDelegate = self
                         pageFooter.configure()
+                        
+                        print("> FOOTER FAQFooter", indexPath.row)
+                        
                         return pageFooter
                     } else {
                         let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterLast.footerId, for: indexPath) as! seeMoreFooterLast
@@ -2081,6 +2084,7 @@ extension NewsViewController {
                         seeMore.configure2()
                         seeMore.shareDelegate = self
                         
+                        print("> FOOTER seeMoreFooterLast", newsParser.getTopic(index: indexPath.section))
                         
                         print("ABOUT HEIGHT", seeMore.frame.size.height)
                         return seeMore
@@ -2094,6 +2098,8 @@ extension NewsViewController {
                         seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                         seeMore.configure()
                         
+                        print("> FOOTER seeMoreFooter", newsParser.getTopic(index: indexPath.section))
+                        
                         return seeMore
                     } else {
                         let seeMore = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: seeMoreFooterSection0.footerId, for: indexPath) as! seeMoreFooterSection0
@@ -2104,6 +2110,7 @@ extension NewsViewController {
                         seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                         seeMore.configure()
                         
+                        print("> FOOTER seeMoreFooterSection 000", newsParser.getTopic(index: indexPath.section))
                         
                         //let count = self.navigationController!.viewControllers.count
                         if(self.uniqueID==1 && BannerInfo.shared != nil){
@@ -2122,7 +2129,7 @@ extension NewsViewController {
                         
                         //seeMore.backgroundColor = UIColor.green.withAlphaComponent(0.15)
                         
-                        print(">> FOOTER ABOUT", seeMore.frame.size.height)
+                        //print(">> FOOTER ABOUT", seeMore.frame.size.height)
                         return seeMore
                     }
                 
@@ -2136,8 +2143,10 @@ extension NewsViewController {
                     seeMore.configure()
                     
                     //seeMore.backgroundColor = UIColor.green.withAlphaComponent(0.15)
+                    print("> FOOTER seeMoreFooter BBB", newsParser.getTopic(index: indexPath.section))
                     
-                    print(">> FOOTER HEIGHT", seeMore.frame.size.height)
+                    
+                    //print(">> FOOTER HEIGHT", seeMore.frame.size.height)
                     return seeMore
                 }
             
