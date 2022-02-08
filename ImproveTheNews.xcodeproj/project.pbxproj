@@ -28,6 +28,7 @@
 		1F92D8F827AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F92D8F627AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib */; };
 		1F92D8FB27AC648000AA58B4 /* FooterCellBig1Topic.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F92D8F927AC648000AA58B4 /* FooterCellBig1Topic.xib */; };
 		1F92D8FC27AC648000AA58B4 /* FooterCellBig1Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F92D8FA27AC648000AA58B4 /* FooterCellBig1Topic.swift */; };
+		1FC188FF27B1A75C00CF7CEA /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = 1FC188FE27B1A75B00CF7CEA /* test.html */; };
 		1FD319AB279898AD00BD65D5 /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1FD319AA279898AD00BD65D5 /* notes.txt */; };
 		1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */; };
 		4569BF5FB6241C56DB7867D0 /* Pods_ImproveTheNewsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51B91154A2307697AD0A1EF3 /* Pods_ImproveTheNewsTests.framework */; };
@@ -398,6 +399,7 @@
 		1F92D8F627AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellTextOnly1Topic.xib; sourceTree = "<group>"; };
 		1F92D8F927AC648000AA58B4 /* FooterCellBig1Topic.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellBig1Topic.xib; sourceTree = "<group>"; };
 		1F92D8FA27AC648000AA58B4 /* FooterCellBig1Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellBig1Topic.swift; sourceTree = "<group>"; };
+		1FC188FE27B1A75B00CF7CEA /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
 		1FD319AA279898AD00BD65D5 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		322C932A0A7159A21E458FDB /* Pods-ImproveTheNewsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNewsTests.release.xcconfig"; path = "Target Support Files/Pods-ImproveTheNewsTests/Pods-ImproveTheNewsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -922,6 +924,7 @@
 		BD0FEDC625D17A8B0079A32B /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				1FC188FE27B1A75B00CF7CEA /* test.html */,
 				1F5B143927A0307800F743FB /* sourcersSVGs */,
 				BDDA441D2612301000C9C3AF /* flags */,
 				BD4A4FD625E5438200AB37DA /* prefsButton.png */,
@@ -1469,6 +1472,7 @@
 				BDDA45262612301100C9C3AF /* ARG64.png in Resources */,
 				BDE8F4152658414200E3C018 /* ITN_logo_blackText.png in Resources */,
 				BDDA44E72612301100C9C3AF /* CYP64.png in Resources */,
+				1FC188FF27B1A75C00CF7CEA /* test.html in Resources */,
 				BDDA451B2612301100C9C3AF /* SLV64.png in Resources */,
 				BDA9163026DE623E00AE38F0 /* Roboto-Medium.ttf in Resources */,
 				BDDA451A2612301100C9C3AF /* LTU64.png in Resources */,
@@ -2102,7 +2106,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 21;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2132,7 +2136,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 21;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2303,7 +2307,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Beta";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 21;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;

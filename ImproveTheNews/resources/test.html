@@ -1,0 +1,20 @@
+<html>  
+   <head>     
+      <script type = "text/javascript">  
+            function testFunc() {
+               //document.getElementById("output").innerHTML = "sarasa";
+               var features = "location=yes,height=570,width=520,scrollbars=yes,status=yes";
+               window.open("http://www.google.com", "_blank", features);
+            }  
+      </script>       
+   </head>  
+     
+   <body>  
+      <p><h1>Demo page</h1></p>
+      <p id="output"><h1><a href="http://www.google.com" target="_blank">LINK!</a></h1></p>
+      
+      <form>
+         <input type="button" value ="Click me" onclick="testFunc();" style="height:300px;width:200px" />
+      </form>       
+   </body>  
+</html>

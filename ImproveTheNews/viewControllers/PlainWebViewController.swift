@@ -13,13 +13,29 @@ import WebKit
 
 class PlainWebViewController: UIViewController, WKUIDelegate {
 
-    var pageURL = ""
     var safeArea: UILayoutGuide!
     let shade = UIView()
     
     lazy var webView: WKWebView = {
-        let webConfiguration = WKWebViewConfiguration()
-        let webview = WKWebView(frame: .zero, configuration: webConfiguration)
+        let cfg = WKWebViewConfiguration()
+        
+        /*
+        if #available(iOS 14.0, *) {
+            let prefs = WKWebpagePreferences()
+            prefs.allowsContentJavaScript = true
+            prefs.defaultWebpagePreferences = prefs
+        } else {
+            let prefs = WKPreferences()
+            prefs.javaScriptEnabled = true
+            cfg.preferences = prefs
+        }
+        */
+        
+        let prefs = WKPreferences()
+        prefs.javaScriptEnabled = true
+        cfg.preferences = prefs
+        
+        let webview = WKWebView(frame: .zero, configuration: cfg)
         webview.uiDelegate = self
         webview.navigationDelegate = self
         webview.translatesAutoresizingMaskIntoConstraints = false
@@ -35,10 +51,27 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
     init(url: String, title: String) {
         super.init(nibName: nil, bundle: nil)
 
-        self.pageURL = url
+        let url = URL(string: url)!   //!!!
+        //let url = Bundle.main.url(forResource: "test.html", withExtension: nil)!
+        //let url = URL(string: "https://www.javatpoint.com/oprweb/test.jsp?filename=javascript-alert1")!
         
-        let url = URL(string: url)!
-        let request = URLRequest(url: url)
+        let cookie = HTTPCookie(properties: [
+            .domain: url.host!,
+            .path: "/",
+            .name: "brightdark",
+            .value: DARKMODE() ? "00" : "01",
+            .secure: "true",
+            .expires: NSDate(timeIntervalSinceNow: 60 * 60)
+        ])
+        
+        var request = URLRequest(url: url)
+        
+        if let _cookie = cookie {
+            let values = HTTPCookie.requestHeaderFields(with: [_cookie])
+            request.allHTTPHeaderFields = values
+            //self.webview.configuration.websiteDataStore.httpCookieStore.setCookie(_cookie)
+        }
+
         self.webView.load(request)
         
         navigationItem.largeTitleDisplayMode = .never
@@ -126,21 +159,36 @@ extension PlainWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
-        /*
-        if let rUrl = navigationAction.request.url?.absoluteString {
-            if(rUrl == "https://www.improvethenews.org/") {
-                decisionHandler(.cancel)
-                self.navigationController?.popViewController(animated: true)
-            } else {
-                decisionHandler(.allow)
-            }
+        var domain = navigationAction.request.url!.host!
+        
+        var goToUrl = navigationAction.request.url!.absoluteString
+        goToUrl = goToUrl.replacingOccurrences(of: "http://", with: "")
+        goToUrl = goToUrl.replacingOccurrences(of: "https://", with: "")
+        goToUrl = goToUrl.replacingOccurrences(of: "/", with: "")
+        
+        if(goToUrl == domain) {
+            // Back to headlines
+            decisionHandler(.cancel)
+            self.navigationController?.popViewController(animated: true)
         } else {
             decisionHandler(.allow)
         }
-        */
         
-        //print( "NAVIGATION", navigationAction.request.url )
-        decisionHandler(.allow)
+        //decisionHandler(.allow)
+    }
+    
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
+        for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        
+        if let frame = navigationAction.targetFrame,
+            frame.isMainFrame {
+            return nil
+        }
+        
+        //webView.load(navigationAction.request)
+        UIApplication.shared.openURL(navigationAction.request.url!)
+        
+        return nil
     }
     
 }

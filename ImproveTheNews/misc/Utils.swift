@@ -167,6 +167,12 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
         link += "LA2" + displayMode
     }
     
+    if(MorePrefsViewController.showStories()) { // Stories
+        link += "ST01"
+    } else {
+        link += "ST00"
+    }
+    
     if let _B = banners {
         link += _B
     }

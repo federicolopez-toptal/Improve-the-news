@@ -115,6 +115,10 @@ class MorePrefsViewController: UIViewController {
         self.prefsDataSource.append(
             Preference(text: "Star ratings for articles", key: "appCfg_starRatings")
         )
+        
+        self.prefsDataSource.append(
+            Preference(text: "Show stories", key: "appCfg_showStories")
+        )
 
     }
     
@@ -226,6 +230,18 @@ extension MorePrefsViewController {
     
     public static func showStarRating() -> Bool {
         let key = "appCfg_starRatings"
+        
+        if let _value = UserDefaults.standard.value(forKey: key) as? Bool {
+            return _value
+        } else {
+            UserDefaults.standard.setValue(true, forKey: key)
+            UserDefaults.standard.synchronize()
+            return true
+        }
+    }
+    
+    public static func showStories() -> Bool {
+        let key = "appCfg_showStories"
         
         if let _value = UserDefaults.standard.value(forKey: key) as? Bool {
             return _value

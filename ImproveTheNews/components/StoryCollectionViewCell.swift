@@ -69,32 +69,50 @@ class StoryCollectionViewCell: UICollectionViewCell {
             icons = [UIImageView]()
         }
         
-        let iconsCountToShow = self.validSources.count
+        var iconsCountToShow = self.validSources.count
         var posX: CGFloat = 16.0
-        for i in 1...iconsCountToShow {
+        
+        if(iconsCountToShow>6){ iconsCountToShow = 6 }
+        if(iconsCountToShow > 0) {
+            for i in 1...iconsCountToShow {
+                let _icon = UIImageView()
+                _icon.backgroundColor = .white
+                
+                addSubview(_icon)
+                _icon.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    _icon.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: posX),
+                    _icon.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -17),
+                    _icon.heightAnchor.constraint(equalToConstant: ICON_SIZE),
+                    _icon.widthAnchor.constraint(equalToConstant: ICON_SIZE)
+                ])
+                
+                let iconURL = StorySourceManager.shared.getIconForSource(self.validSources[i-1])
+                
+                if(!iconURL.contains(".svg")) {
+                    _icon.sd_setImage(with: URL(string: iconURL), placeholderImage: nil)
+                } else {
+                    let filename = self.validSources[i-1] + ".png"
+                    _icon.image = UIImage(named: filename)
+                }
+                
+                
+                posX += ICON_SIZE + ICON_SEP
+                icons.append(_icon)
+            }
+        } else {
             let _icon = UIImageView()
-            _icon.backgroundColor = .white
-            
+            _icon.backgroundColor = .clear
+                
             addSubview(_icon)
             _icon.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 _icon.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: posX),
                 _icon.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -17),
                 _icon.heightAnchor.constraint(equalToConstant: ICON_SIZE),
-                _icon.widthAnchor.constraint(equalToConstant: ICON_SIZE)
+                _icon.widthAnchor.constraint(equalToConstant: 1.0)
             ])
-            
-            let iconURL = StorySourceManager.shared.getIconForSource(self.validSources[i-1])
-            
-            if(!iconURL.contains(".svg")) {
-                _icon.sd_setImage(with: URL(string: iconURL), placeholderImage: nil)
-            } else {
-                let filename = self.validSources[i-1] + ".png"
-                _icon.image = UIImage(named: filename)
-            }
-            
-            
-            posX += ICON_SIZE + ICON_SEP
+                
             icons.append(_icon)
         }
         
@@ -104,8 +122,9 @@ class StoryCollectionViewCell: UICollectionViewCell {
         updated.text = "Last updated 30 min ago"
         updated.font = UIFont(name: "Roboto-Regular", size: 12)
         updated.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            updated.leadingAnchor.constraint(equalTo: self.icons.last!.trailingAnchor, constant: 10),
+            updated.leadingAnchor.constraint(equalTo: icons.last!.trailingAnchor, constant: 10),
             updated.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -17),
         ])
         
