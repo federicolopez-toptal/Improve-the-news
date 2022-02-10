@@ -45,7 +45,7 @@ class NewsTextViewController: UIViewController {
 
     var onBoard: OnBoardingView?
 
-
+    let STORIES_HEIGHT_2 = 150
 
 
 
@@ -185,7 +185,7 @@ class NewsTextViewController: UIViewController {
             
             var height = 0
             if(self.newsParser.getStory(index: index) != nil) {
-                height = STORIES_HEIGHT
+                height = STORIES_HEIGHT_2
             } else {
                 height += 100
             }
@@ -378,7 +378,7 @@ class NewsTextViewController: UIViewController {
             forHeaderFooterViewReuseIdentifier: "FooterCellTextOnly1Topic")
             
         
-        self.tableView.register(StoryViewCell.self, forCellReuseIdentifier: StoryViewCell.cellId)
+        self.tableView.register(StoryViewCellTextOnly.self, forCellReuseIdentifier: StoryViewCellTextOnly.cellId)
         
         
         self.tableView.delegate = self
@@ -755,6 +755,8 @@ extension NewsTextViewController: NewsDelegate {
         
         self.addParamsLabel()
         NotificationCenter.default.post(name: NOTIFICATION_FOR_ONBOARDING_NEWS_LOADED, object: nil)
+        
+        //self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
     
 }
@@ -841,7 +843,7 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
             return 100.0
         } else {
             //print("STORIES test", indexPath.section, index, STORIES_HEIGHT)
-            return CGFloat(STORIES_HEIGHT)
+            return CGFloat(STORIES_HEIGHT_2)
         }
         
         //return 100
@@ -874,22 +876,14 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     }
     
     // story cell
-    private func storyCell(index: Int) -> StoryViewCell {
+    private func storyCell(index: Int) -> StoryViewCellTextOnly {
         let cell = tableView.dequeueReusableCell(withIdentifier:
-            StoryViewCell.cellId) as! StoryViewCell
+            StoryViewCellTextOnly.cellId) as! StoryViewCellTextOnly
             
         cell.setupViews(sources: self.newsParser.getStory(index: index)!.sources)
         
         cell.updated.text = "Last updated " + newsParser.getDate(index: index)
         cell.titleLabel.text = self.newsParser.getTitle(index: index)
-        
-        let imageURL = newsParser.getIMG(index: index)
-        DispatchQueue.global().async {
-            DispatchQueue.main.async {
-                cell.mainImageView.contentMode = .scaleAspectFill
-                cell.mainImageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
-            }
-        }
             
         return cell
     }

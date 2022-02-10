@@ -560,6 +560,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                             }
                         }
             
+                        offset_y -= 45
                         self.collectionView.contentOffset.y = offset_y
                     })
                 }
@@ -961,6 +962,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     @objc func reloadAll() {
         self.firstTime = true
+        self.scrollAfterEnableSplit = false
         self.loadData()
     }
     
@@ -2592,6 +2594,7 @@ extension NewsViewController {
             
             
             // show alpha line
+            /*
             if(sec == sections-1) { // last loop
                 var segment: CGFloat = 5.0
                 var posY: CGFloat = 0
@@ -2611,6 +2614,7 @@ extension NewsViewController {
                     posY += (segment * 2)
                 }
             }
+            */
             
 
         }
