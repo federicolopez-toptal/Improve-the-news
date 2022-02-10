@@ -24,8 +24,12 @@ class StoryCollectionViewCell: UICollectionViewCell {
     let titleLabel = UILabel()
     let storySign = UILabel()
     
-    private var validSources = [String]()
+    let labelSplit1 = UILabel()
+    let labelSplit2 = UILabel()
     
+    private var validSources = [String]()
+    private var showHeaders = false
+    private var stanceValues = (false, false)
     
     func setupViews(sources: [String]) {
         StorySourceManager.shared.loadSources { (error) in
@@ -82,7 +86,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
                 _icon.translatesAutoresizingMaskIntoConstraints = false
                 NSLayoutConstraint.activate([
                     _icon.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: posX),
-                    _icon.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -17),
+                    _icon.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT)-ICON_SIZE-15-17),
                     _icon.heightAnchor.constraint(equalToConstant: ICON_SIZE),
                     _icon.widthAnchor.constraint(equalToConstant: ICON_SIZE)
                 ])
@@ -125,7 +129,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate([
             updated.leadingAnchor.constraint(equalTo: icons.last!.trailingAnchor, constant: 10),
-            updated.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -17),
+            updated.topAnchor.constraint(equalTo: icons.last!.topAnchor, constant: 2),
         ])
         
         // orange arrow
@@ -152,7 +156,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -60)
+            titleLabel.bottomAnchor.constraint(equalTo: icons.last!.topAnchor, constant: -10)
         ])
         
         // Story sign
@@ -174,6 +178,63 @@ class StoryCollectionViewCell: UICollectionViewCell {
         storySign.layer.cornerRadius = 11.0
         storySign.layer.masksToBounds = true
         
+        // split 1
+        addSubview(labelSplit1)
+        labelSplit1.textColor = .white
+        if(!DARKMODE()){ labelSplit1.textColor = textBlackAlpha }
+        labelSplit1.font = UIFont(name: "PTSerif-Bold", size: 20)
+        labelSplit1.numberOfLines = 1
+        labelSplit1.textAlignment = .center
+        labelSplit1.text = "ABC"
+        labelSplit1.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            labelSplit1.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
+            labelSplit1.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width/2),
+            labelSplit1.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT))
+        ])
+        
+        // split 2
+        addSubview(labelSplit2)
+        labelSplit2.textColor = .white
+        if(!DARKMODE()){ labelSplit2.textColor = textBlackAlpha }
+        labelSplit2.font = UIFont(name: "PTSerif-Bold", size: 20)
+        labelSplit2.numberOfLines = 1
+        labelSplit2.textAlignment = .center
+        labelSplit2.text = "ABC"
+        labelSplit2.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            labelSplit2.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: UIScreen.main.bounds.width/2),
+            labelSplit2.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width/2),
+            labelSplit2.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT))
+        ])
+        
+        if(!self.showHeaders) {
+            labelSplit1.textColor = .clear
+            labelSplit2.textColor = .clear
+        } else {
+            labelSplit1.textColor = .white
+            if(!DARKMODE()){ labelSplit1.textColor = textBlackAlpha }
+            labelSplit2.textColor = labelSplit1.textColor
+        
+            if(stanceValues.0) {
+                // POLITICAL
+                labelSplit1.text = "LEFT"
+                labelSplit2.text = "RIGHT"
+            } else {
+                // ESTABLISHMENT
+                labelSplit1.text = "CRITICAL"
+                labelSplit2.text = "PRO"
+            }
+        }
+    }
+    
+    func hideHeaders() {
+        self.showHeaders = false
+    }
+    
+    func showHeaders(_ stanceValues: (Bool, Bool)) {
+        self.showHeaders = true
+        self.stanceValues = stanceValues
     }
     
 }

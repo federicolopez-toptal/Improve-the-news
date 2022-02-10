@@ -163,6 +163,10 @@ class SubtopicHeaderForSplit: UICollectionReusableView {
             NSLayoutConstraint.activate([
                 labelSplit.widthAnchor.constraint(equalToConstant: labelWidth),
             ])
+            
+            if(MorePrefsViewController.showStories()) {
+                labelSplit.textColor = .clear
+            }
         }
         
         

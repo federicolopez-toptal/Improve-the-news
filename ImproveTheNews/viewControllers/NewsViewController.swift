@@ -33,6 +33,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     var biasMiniButton = UIView()
     var miniButtonTimer: Timer?
     var enableSplitSharingAfterLoading = false
+    var scrollAfterEnableSplit = false
     
     // to populate CollectionView
     //changed home link from "http://www.improvethenews.org/itnserver.php/?topic=" to this one
@@ -63,7 +64,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         var navBarFrame = CGRect.zero
     // -----------
     var firstTime = true
-    var scrollToTopOnLoad = true
+    var scrollToTopOnLoad = false
     let pieChartVC = PieChartViewController()
     
     let shadeView = UIView()
@@ -274,7 +275,6 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.shareActionsView?.delegate = self
         self.shareArticles = ShareSplitArticles(into: self.view)
         self.shareArticles?.delegate = self
-
     }
     
     var lastTimeActive: Date?
@@ -547,6 +547,22 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         if(self.scrollToTopOnLoad) {
             UIView.animate(withDuration: 0.5, animations: {
                 self.collectionView.contentOffset.y = 0
+                
+                if(MorePrefsViewController.showStories() && self.mustSplit() && self.scrollAfterEnableSplit) {
+                    UIView.animate(withDuration: 0.5, animations: {
+                        var offset_y: CGFloat = 100
+                        let count = self.newsParser.getArticleCountInSection(section: 0)
+                        for i in 0...count {
+                            if let _story = self.newsParser.getStory(index: i) {
+                                offset_y += CGFloat(STORIES_HEIGHT)
+                            } else {
+                                break
+                            }
+                        }
+            
+                        self.collectionView.contentOffset.y = offset_y
+                    })
+                }
             })
         }
         self.scrollToTopOnLoad = true
@@ -554,6 +570,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         if(enableSplitSharingAfterLoading) {
             self.enableSplitSharingAfterLoading = false
             self.startSplitSharingWorkflow()
+        }
+        
+        DELAY(2.0) {
+            self.scrollAfterEnableSplit = true
         }
         
     }
@@ -1490,8 +1510,14 @@ extension NewsViewController: BannerInfoDelegate {
 extension NewsViewController {
 
     // StoryCollectionViewCell - Story cell
-    func storyCell(indexPath: IndexPath, index: Int) -> StoryCollectionViewCell {
+    func storyCell(indexPath: IndexPath, index: Int, showHeaders: Bool) -> StoryCollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.cellId, for: indexPath) as! StoryCollectionViewCell
+        
+        if(showHeaders) {
+            cell.showHeaders(biasSliders.stanceValues())
+        } else {
+            cell.hideHeaders()
+        }
         
         cell.setupViews(sources: self.newsParser.getStory(index: index)!.sources)
         
@@ -1599,7 +1625,14 @@ extension NewsViewController {
         if(index < newsParser.getLength()) {
             
             if(self.newsParser.getStory(index: index) != nil ) {
-                return self.storyCell(indexPath: indexPath, index: index)
+                var showHeadersAtBottom = false
+                if(mustSplit()) {
+                    if(self.newsParser.getStory(index: index+1) == nil) {
+                        showHeadersAtBottom = true
+                    }
+                }
+                
+                return self.storyCell(indexPath: indexPath, index: index, showHeaders: showHeadersAtBottom)
             } else {
                 if(indexPath.section == 0) {
                     return self.newsItemFor(indexPath: indexPath, index: index)
@@ -1631,7 +1664,9 @@ extension NewsViewController {
         // SubtopicHeader
         var h: CGFloat = 120
         if(mustSplit()){
-            h += 45
+            if(!MorePrefsViewController.showStories()) {
+                h += 45
+            }
         }
         /*
         let iPath = IndexPath(item: 0, section: section)
@@ -1768,7 +1803,12 @@ extension NewsViewController {
             return CGSize(width: W, height: 240)
         } else {
             let W = Int(collectionView.bounds.width)
-            return CGSize(width: W, height: STORIES_HEIGHT)
+            var H = STORIES_HEIGHT
+            if(self.newsParser.getStory(index: index+1)==nil && mustSplit()) {
+                H += 45
+            }
+            
+            return CGSize(width: W, height: H)
         }
         
         
