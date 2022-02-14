@@ -2532,7 +2532,7 @@ extension NewsViewController {
                 if(height>0) {
                     let line = UIView(frame: CGRect(x: X, y: offsetY, width: W, height: height))
                     line.backgroundColor = DARKMODE() ? .white : bgWhite_DARK
-                    line.alpha = DARKMODE() ? 1.0 : 0.2
+                    line.alpha = DARKMODE() ? 1.0 : 0.5
                     line.isUserInteractionEnabled = false
                     vDivider.addSubview(line)
                 }

@@ -118,7 +118,7 @@ class StoryViewCell: UITableViewCell {
         addSubview(updated)
         updated.textColor = UIColor(hex: 0x93A0B4)
         if(!DARKMODE()){ updated.textColor = UIColor(hex: 0x1D242F) }
-        updated.text = "Last updated 30 min ago"
+        //updated.text = "Last updated 30 min ago"
         updated.font = UIFont(name: "Roboto-Regular", size: 12)
         updated.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
