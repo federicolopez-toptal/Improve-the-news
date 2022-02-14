@@ -107,6 +107,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
     }
     
+    var articleSide = 0
+    
     
 
     // MARK: - Initialization
@@ -1540,8 +1542,21 @@ extension NewsViewController {
     // MARK: - HeadlineCell (4 items on top)
     func newsItemFor(indexPath: IndexPath, index: Int) -> HeadlineCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeadlineCell.cellId, for: indexPath) as! HeadlineCell
+              
+            var side = 0
                 
-            cell.setupViews()
+            var startIndex = 0
+            for n in 0..<indexPath.section {
+                startIndex += newsParser.getArticleCountInSection(section: n)
+            }
+            for i in startIndex...index {
+                if self.newsParser.getStory(index: i)==nil {
+                    side += 1
+                    if(side>2){ side = 1 }
+                }
+            }
+            
+            cell.setupViews(split: self.mustSplit(), side: side, section: indexPath.section)
                 
             cell.headline.text = newsParser.getTitle(index: index)
             cell.pubDate.text = newsParser.getDate(index: index)
@@ -2449,6 +2464,8 @@ extension NewsViewController {
 extension NewsViewController {
 
     func initDivider() {
+        return //!!!
+    
         let w: CGFloat = 60
         let x: CGFloat = (UIScreen.main.bounds.width-w)/2
         let h: CGFloat = UIScreen.main.bounds.height
@@ -2475,6 +2492,8 @@ extension NewsViewController {
     }
     
     func updateDivider() {
+        return //!!!
+    
         // Delete all subviews
         vDivider.subviews.forEach({ $0.removeFromSuperview() })
         

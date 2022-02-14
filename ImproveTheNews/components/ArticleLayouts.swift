@@ -39,7 +39,9 @@ class HeadlineCell: UICollectionViewCell {
     let markupView = UIImageView()
     let flag = UIImageView()
     var sourceLeadingConstraint: NSLayoutConstraint?
-      
+    
+    let dividerLine1 = UIView()
+    let dividerLine2 = UIView()
       
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -56,7 +58,7 @@ class HeadlineCell: UICollectionViewCell {
     }
     */
       
-    func setupViews() {
+    func setupViews(split: Bool, side: Int, section: Int) {
         
         addSubview(imageView)
         
@@ -181,6 +183,47 @@ class HeadlineCell: UICollectionViewCell {
         pubDate.font = UIFont(name: "OpenSans-Bold", size: 11)
         //markupView.isHidden = true
     
+        addSubview(dividerLine1)
+        dividerLine1.backgroundColor = DARKMODE() ? .white : bgWhite_DARK
+        dividerLine1.alpha = DARKMODE() ? 1.0 : 0.5
+        dividerLine1.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dividerLine1.widthAnchor.constraint(equalToConstant: 1.5),
+            dividerLine1.topAnchor.constraint(equalTo: self.topAnchor),
+            dividerLine1.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            dividerLine1.leadingAnchor.constraint(equalTo: self.leadingAnchor)
+        ])
+        
+        var divider_x_offset: CGFloat = 1.5
+        if(section>0){ divider_x_offset = 1.0 }
+        
+        addSubview(dividerLine2)
+        dividerLine2.backgroundColor = dividerLine1.backgroundColor
+        dividerLine2.alpha = dividerLine1.alpha
+        dividerLine2.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dividerLine2.widthAnchor.constraint(equalToConstant: 1.5),
+            dividerLine2.topAnchor.constraint(equalTo: self.topAnchor),
+            dividerLine2.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            dividerLine2.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: divider_x_offset)
+        ])
+        
+        if(split) {
+            self.dividerLine1.isHidden = false
+            self.dividerLine2.isHidden = false
+            
+            if(side==1) {
+                self.dividerLine2.isHidden = false
+                self.dividerLine1.isHidden = true
+            } else {
+                self.dividerLine2.isHidden = true
+                self.dividerLine1.isHidden = false
+            }
+        } else {
+            self.dividerLine1.isHidden = true
+            self.dividerLine2.isHidden = true
+        }
+
         self.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
     }
     
