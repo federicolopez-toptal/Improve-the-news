@@ -57,7 +57,7 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
         //let url = Bundle.main.url(forResource: "test.html", withExtension: nil)!
         //let url = URL(string: "https://www.javatpoint.com/oprweb/test.jsp?filename=javascript-alert1")!
         
-        let cookie = HTTPCookie(properties: [
+        let cookieDisplayMode = HTTPCookie(properties: [
             .domain: url.host!,
             .path: "/",
             .name: "brightdark",
@@ -66,10 +66,50 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
             .expires: NSDate(timeIntervalSinceNow: 60 * 60)
         ])
         
+        // Sliders
+        var slidersValue = SliderValues.sharedInstance.getBiasPrefs()
+        
+            // Banner
+            var banner: String?
+            for bannerID in BannerView.bannerHeights.keys {
+                let key = "banner_apiParam_" + bannerID
+                if let value = UserDefaults.standard.string(forKey: key) {
+                    banner = value
+                }
+            }
+            if(banner == nil){ banner = "" }
+            banner! += NewsViewController.get_vParams() // Some preferences
+            slidersValue += banner!
+        
+            // split on/off + Prefs panel status
+            slidersValue += NewsViewController.biasStatusForCookie
+            
+            // Display mode + Current layout
+            var displayMode = "0"
+            if(!DARKMODE()){ displayMode = "1" }
+            if(Utils.shared.currentLayout == .denseIntense) {
+                slidersValue += "LA0" + displayMode
+            } else if(Utils.shared.currentLayout == .textOnly) {
+                slidersValue += "LA1" + displayMode
+            } else {
+                slidersValue += "LA2" + displayMode
+            }
+            
+        slidersValue = slidersValue.replacingOccurrences(of: "&sliders=", with: "")
+        let cookieSliders = HTTPCookie(properties: [
+            .domain: url.host!,
+            .path: "/",
+            .name: "slidercookies",
+            .value: slidersValue,
+            .secure: "true",
+            .expires: NSDate(timeIntervalSinceNow: 60 * 60)
+        ])
+        print("SLIDERS", slidersValue)
+        
         var request = URLRequest(url: url)
         
-        if let _cookie = cookie {
-            let values = HTTPCookie.requestHeaderFields(with: [_cookie])
+        if let _cookieDisplayMode = cookieDisplayMode, let _cookieSliders = cookieSliders {
+            let values = HTTPCookie.requestHeaderFields(with: [_cookieDisplayMode, _cookieSliders])
             request.allHTTPHeaderFields = values
             //self.webview.configuration.websiteDataStore.httpCookieStore.setCookie(_cookie)
         }

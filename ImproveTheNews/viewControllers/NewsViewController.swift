@@ -76,14 +76,9 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         return button
     }()
     var biasButtonState = 1         // 1: normal icon, 2: share-split icon
-    
-    
-
-    
-    
-    
     var onBoard: OnBoardingView?
     
+    static var biasStatusForCookie = ""
     
     
     // DELETE LATER (!!!)
@@ -446,6 +441,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         bStatus = String(bStatus.prefix(2)) + stanceValue + String(bStatus.suffix(1))
         bStatus = bStatus.replacingOccurrences(of: "SL", with: "SS")
         
+        NewsViewController.biasStatusForCookie = bStatus
         let link = API_CALL(topicCode: T, abs: ABS,
                             biasStatus: bStatus,
                             banners: banner, superSliders: superSlider)
