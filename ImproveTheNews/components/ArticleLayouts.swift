@@ -9,7 +9,14 @@
 import Foundation
 import UIKit
 
-let CELL_HEIGHT: CGFloat = 110
+func CELL_HEIGHT() -> CGFloat {
+    if(IS_iPAD()) {
+        return 210
+    } else {
+        return 110
+    }
+    
+}
 
 struct Section {
     let sectionImage, sectionDescription: String
@@ -67,7 +74,7 @@ class HeadlineCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
             imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12),
             imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            imageView.heightAnchor.constraint(equalToConstant: CELL_HEIGHT)
+            imageView.heightAnchor.constraint(equalToConstant: CELL_HEIGHT())
             //imageView.heightAnchor.constraint(equalToConstant: self.frame.width * 7 / 12)
         ])
         imageView.layer.cornerRadius = 15
@@ -92,6 +99,9 @@ class HeadlineCell: UICollectionViewCell {
         miniSlidersView?.isHidden = !MorePrefsViewController.showStanceInsets()
         
         addSubview(headline)
+        if(IS_iPAD()) {
+            headline.font = UIFont(name: "Poppins-SemiBold", size: 15)
+        }
         headline.translatesAutoresizingMaskIntoConstraints = false
         headline.numberOfLines = 5
         headline.textAlignment = .left // .center
@@ -182,6 +192,10 @@ class HeadlineCell: UICollectionViewCell {
         
         pubDate.font = UIFont(name: "OpenSans-Bold", size: 11)
         //markupView.isHidden = true
+    
+        if(IS_iPAD()) {
+            pubDate.font = UIFont(name: "Poppins-SemiBold", size: 15)
+        }
     
         addSubview(dividerLine1)
         dividerLine1.backgroundColor = DARKMODE() ? .white : bgWhite_DARK
@@ -317,7 +331,7 @@ class ArticleCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: headline.trailingAnchor, constant: 24),
             imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12),
             imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
-            imageView.heightAnchor.constraint(equalToConstant: CELL_HEIGHT)
+            imageView.heightAnchor.constraint(equalToConstant: CELL_HEIGHT())
         ])
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
@@ -404,7 +418,7 @@ class ArticleCellAlt: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
             imageView.widthAnchor.constraint(equalToConstant: imgWidth),
             imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 3),
-            imageView.heightAnchor.constraint(equalToConstant: CELL_HEIGHT)
+            imageView.heightAnchor.constraint(equalToConstant: CELL_HEIGHT())
         ])
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
@@ -511,7 +525,7 @@ class ArticleCellHalf: UICollectionViewCell {
     
         imageView.frame = CGRect(x: 12, y: 5,
             width: self.frame.width-24,
-            height: CELL_HEIGHT)
+            height: CELL_HEIGHT())
             //height: self.frame.height / 3 + 10)
         
         headline.frame = CGRect(x: 12, y: imageView.frame.maxY+3, width: imageView.frame.width, height: 90)

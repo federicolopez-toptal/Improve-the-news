@@ -338,3 +338,50 @@ func STATUS_BAR_UPDATE() {
     }
 }
 */
+
+
+
+func IS_iPAD() -> Bool {
+    let idiom = UIScreen.main.traitCollection.userInterfaceIdiom
+    
+    switch(idiom) {
+        case .pad:
+            return true
+        default:
+            return false
+    }
+}
+
+func IS_iPHONE() -> Bool {
+    let idiom = UIScreen.main.traitCollection.userInterfaceIdiom
+    
+    switch(idiom) {
+        case .phone:
+            return true
+        default:
+            return false
+    }
+}
+
+func STORIES_HEIGHT() -> Int {
+    if(IS_iPAD()) {
+        return 400
+    } else {
+        return 265
+    }
+}
+
+func ARTICLE_CELL_HEIGHT() -> Int {
+    if(IS_iPAD()) {
+        return 340
+    } else {
+        return 240
+    }
+}
+func BIGARTICLE_CELL_HEIGHT() -> Int {
+    if(IS_iPAD()) {
+        return STORIES_HEIGHT()
+    } else {
+        return 360
+    }
+}

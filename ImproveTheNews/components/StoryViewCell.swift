@@ -45,7 +45,7 @@ class StoryViewCell: UITableViewCell {
             mainImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
             mainImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
             mainImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
-            mainImageView.heightAnchor.constraint(equalToConstant: 250)
+            mainImageView.heightAnchor.constraint(equalToConstant: CGFloat(STORIES_HEIGHT()-15))
         ])
         mainImageView.clipsToBounds = true
         

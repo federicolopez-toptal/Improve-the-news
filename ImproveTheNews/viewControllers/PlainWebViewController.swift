@@ -16,6 +16,8 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
     var safeArea: UILayoutGuide!
     let shade = UIView()
     
+    var loadCount = 0
+    
     lazy var webView: WKWebView = {
         let cfg = WKWebViewConfiguration()
         
@@ -158,23 +160,34 @@ extension PlainWebViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+
+        self.loadCount += 1
         
-        var domain = navigationAction.request.url!.host!
-        
-        var goToUrl = navigationAction.request.url!.absoluteString
-        goToUrl = goToUrl.replacingOccurrences(of: "http://", with: "")
-        goToUrl = goToUrl.replacingOccurrences(of: "https://", with: "")
-        goToUrl = goToUrl.replacingOccurrences(of: "/", with: "")
-        
-        if(goToUrl == domain) {
-            // Back to headlines
-            decisionHandler(.cancel)
-            self.navigationController?.popViewController(animated: true)
+        if let domain = navigationAction.request.url?.host {
+            var goToUrl = navigationAction.request.url!.absoluteString
+            goToUrl = goToUrl.replacingOccurrences(of: "http://", with: "")
+            goToUrl = goToUrl.replacingOccurrences(of: "https://", with: "")
+            goToUrl = goToUrl.replacingOccurrences(of: "/", with: "")
+            
+            if(goToUrl == domain) {
+                // Back to headlines
+                decisionHandler(.cancel)
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                if(IS_iPAD()) {
+                    if(self.loadCount>1) {
+                        UIApplication.shared.openURL(navigationAction.request.url!)
+                        decisionHandler(.cancel)
+                    } else {
+                        decisionHandler(.allow)
+                    }
+                } else {
+                    decisionHandler(.allow)
+                }
+            }
         } else {
-            decisionHandler(.allow)
+            decisionHandler(.cancel)
         }
-        
-        //decisionHandler(.allow)
     }
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,

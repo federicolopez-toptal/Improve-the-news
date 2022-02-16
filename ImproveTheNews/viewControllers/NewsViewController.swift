@@ -556,7 +556,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                         let count = self.newsParser.getArticleCountInSection(section: 0)
                         for i in 0...count {
                             if let _story = self.newsParser.getStory(index: i) {
-                                offset_y += CGFloat(STORIES_HEIGHT)
+                                offset_y += CGFloat(STORIES_HEIGHT())
                             } else {
                                 break
                             }
@@ -1817,10 +1817,10 @@ extension NewsViewController {
         
         if(!isStory) {
             let W = Int((collectionView.bounds.width - totalSpace) / CGFloat(cellsPerRow))
-            return CGSize(width: W, height: 240)
+            return CGSize(width: W, height: ARTICLE_CELL_HEIGHT())
         } else {
             let W = Int(collectionView.bounds.width)
-            var H = STORIES_HEIGHT
+            var H = STORIES_HEIGHT()
             if(self.newsParser.getStory(index: index+1)==nil && mustSplit()) {
                 H += 45
             }
@@ -2232,16 +2232,16 @@ extension NewsViewController: MoreHeadlinesViewDelegate {
             
             var height = 0
             if(self.newsParser.getStory(index: index) != nil) {
-                height = STORIES_HEIGHT
+                height = STORIES_HEIGHT()
             } else {
                 cols += 1
                 if(cols == 2) {
                     cols = 0
-                    height += 240
+                    height += ARTICLE_CELL_HEIGHT()
                 }
                 
                 if(cols==1 && n==total-1) { // Last loop and just 1 col
-                    height = 240
+                    height = ARTICLE_CELL_HEIGHT()
                 }
             }
 
@@ -2532,14 +2532,14 @@ extension NewsViewController {
                 var height: CGFloat = 0.0
                 if(self.newsParser.getStory(index: index) != nil) {
                     // this is a story, don't draw the line
-                    offsetY += CGFloat(STORIES_HEIGHT)
+                    offsetY += CGFloat(STORIES_HEIGHT())
                     index += 1
                     continue
                 } else {
                     // normal article
                     cols += 1
                     if(cols == 1) {
-                        height = 240.0
+                        height = CGFloat(ARTICLE_CELL_HEIGHT())
                     }
                     
                     if(cols==2){

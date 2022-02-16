@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -88,11 +88,12 @@
                 <outlet property="contentLabel" destination="W5p-WT-r38" id="gHR-lU-Bw2"/>
                 <outlet property="exclamationImageView" destination="cCT-T9-yJf" id="RQ2-Ty-caa"/>
                 <outlet property="flagImageView" destination="hyN-n0-pnn" id="Qgm-N2-7r2"/>
+                <outlet property="imageViewHeight" destination="CVU-D9-CDU" id="aY2-ak-aam"/>
                 <outlet property="mainPic" destination="8E0-oa-WMB" id="Omo-3F-n8y"/>
                 <outlet property="sourceLabel" destination="ZLF-TR-Zx0" id="fiV-pu-OMb"/>
                 <outlet property="sourceLeadingConstraint" destination="OFg-Za-Kme" id="RIQ-Qp-Swk"/>
             </connections>
-            <point key="canvasLocation" x="-1559.4202898550725" y="176.11607142857142"/>
+            <point key="canvasLocation" x="-2091" y="192"/>
         </tableViewCell>
     </objects>
     <resources>

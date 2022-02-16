@@ -126,6 +126,11 @@ class SliderDoc: UIViewController {
         self.place(scrollView, below: mainTitle, yOffset: 5)
         self.resize(scrollView, width: screenSize.width,
                     height: self.view.frame.size.height - scrollView.frame.origin.y - 88 - 40)
+        if(IS_iPAD()) {
+            self.resize(scrollView, width: screenSize.width,
+                    height: self.view.frame.size.height - scrollView.frame.origin.y - 88 - 40 - 40)
+        }
+
 
 // CONTENT view
         scrollView.addSubview(contentView)

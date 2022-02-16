@@ -17,6 +17,7 @@ class CellBig: UITableViewCell {
     @IBOutlet weak var mainPic: UIImageView!
     @IBOutlet weak var sourceLeadingConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var imageViewHeight: NSLayoutConstraint!
     
     var miniSlidersView: MiniSlidersView?
     
@@ -55,6 +56,10 @@ class CellBig: UITableViewCell {
         
         if(IS_ZOOMED()) {
             self.sourceLabel.font = UIFont(name: "Poppins-SemiBold", size: 13)
+        }
+        
+        if(IS_iPAD()) {
+            self.imageViewHeight.constant = 265
         }
     }
     

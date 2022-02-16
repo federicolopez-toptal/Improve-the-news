@@ -315,6 +315,14 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
         }
         actionSheet.addAction(cancel)
         
+        if(IS_iPAD()) {
+            if let popoverController = actionSheet.popoverPresentationController {
+                popoverController.sourceView = self.view
+                popoverController.sourceRect = CGRect(x: self.view.bounds.midX,
+                    y: self.view.bounds.height - 40, width: 0, height: 0)
+            }
+        }
+        
         self.present(actionSheet, animated: true) {
         }
     }

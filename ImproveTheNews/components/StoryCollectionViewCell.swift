@@ -49,7 +49,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
             imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
             imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
-            imageView.heightAnchor.constraint(equalToConstant: 250)
+            imageView.heightAnchor.constraint(equalToConstant: CGFloat(STORIES_HEIGHT()-15))
         ])
         imageView.clipsToBounds = true
         
@@ -86,7 +86,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
                 _icon.translatesAutoresizingMaskIntoConstraints = false
                 NSLayoutConstraint.activate([
                     _icon.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: posX),
-                    _icon.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT)-ICON_SIZE-15-17),
+                    _icon.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT())-ICON_SIZE-15-17),
                     _icon.heightAnchor.constraint(equalToConstant: ICON_SIZE),
                     _icon.widthAnchor.constraint(equalToConstant: ICON_SIZE)
                 ])
@@ -190,7 +190,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             labelSplit1.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
             labelSplit1.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width/2),
-            labelSplit1.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT))
+            labelSplit1.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT()))
         ])
         
         // split 2
@@ -205,7 +205,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             labelSplit2.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: UIScreen.main.bounds.width/2),
             labelSplit2.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width/2),
-            labelSplit2.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT))
+            labelSplit2.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT()))
         ])
         
         if(!self.showHeaders) {

@@ -186,9 +186,9 @@ class NewsBigViewController: UIViewController {
             
             var height = 0
             if(self.newsParser.getStory(index: index) != nil) {
-                height = STORIES_HEIGHT
+                height = STORIES_HEIGHT()
             } else {
-                height += 360
+                height += BIGARTICLE_CELL_HEIGHT()
             }
 
             sum += height
@@ -863,9 +863,9 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
         }
         
         if(!isStory) {
-            return 360
+            return CGFloat(BIGARTICLE_CELL_HEIGHT())
         } else {
-            return CGFloat(STORIES_HEIGHT)
+            return CGFloat(STORIES_HEIGHT())
         }
         
         //return 360
