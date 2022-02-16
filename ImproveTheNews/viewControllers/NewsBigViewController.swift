@@ -118,6 +118,13 @@ class NewsBigViewController: UIViewController {
                 }
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showSlidersInfo),
+            name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+    }
+    @objc func showSlidersInfo() {
+        let sliders = SliderDoc()
+        self.present(sliders, animated: true, completion: nil)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

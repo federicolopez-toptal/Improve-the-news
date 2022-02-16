@@ -119,6 +119,13 @@ class NewsTextViewController: UIViewController {
                 }
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showSlidersInfo),
+            name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+    }
+    @objc func showSlidersInfo() {
+        let sliders = SliderDoc()
+        self.present(sliders, animated: true, completion: nil)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -905,7 +912,13 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
             if(!type.contains("prediction")){ showMarkup = true }
         }
         cell.exclamationImageView.isHidden = !showMarkup
-        cell.updateFlagVisible()
+        cell.updateIconsVisible()
+        
+        cell.miniSlidersView?.setValues(val1: newsParser.getLR(index: index),
+                                            val2: newsParser.getPE(index: index),
+                                            source: newsParser.getSource(index: index),
+                                            countryID: newsParser.getCountryID(index: index))
+        cell.miniSlidersView?.viewController = self
         
         return cell
     }

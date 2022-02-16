@@ -216,7 +216,10 @@ class MiniSlidersView: UIView {
             alert.preferredAction = okAction
 
             if let vc = self.viewController {
-                vc.present(alert, animated: true, completion: nil)
+                vc.present(alert, animated: true) {
+                    //vc.setNeedsStatusBarAppearanceUpdate()
+                    //UIApplication.shared.statusBarStyle = .darkContent
+                }
             }
         }
     }
