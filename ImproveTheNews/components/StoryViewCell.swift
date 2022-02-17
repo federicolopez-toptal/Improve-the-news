@@ -28,6 +28,9 @@ class StoryViewCell: UITableViewCell {
     
     
     func setupViews(sources: [String]) {
+        self.contentView.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
+        self.selectionStyle = .none
+    
         StorySourceManager.shared.loadSources { (error) in
             self.validSources = StorySourceManager.shared.filterSources(toFilter: sources)
             
@@ -171,9 +174,6 @@ class StoryViewCell: UITableViewCell {
         ])
         storySign.layer.cornerRadius = 11.0
         storySign.layer.masksToBounds = true
-        
-        self.contentView.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
-        self.selectionStyle = .none
     }
 
 }

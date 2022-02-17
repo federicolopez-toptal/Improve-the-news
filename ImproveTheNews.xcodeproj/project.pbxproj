@@ -997,8 +997,8 @@
 				BDF72F62269DC960006B095D /* CookiesAlert.swift */,
 				BD26A82A26DD5E48001EC167 /* OrangeRoundedButton.swift */,
 				BD9A59462757ADD2006678F6 /* customNavigationController.swift */,
-				1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */,
 				1F0CDCCB2799CC2800368282 /* StorySourceManager.swift */,
+				1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */,
 				1F5B144C27A03CF100F743FB /* StoryViewCell.swift */,
 				1F2147D627B54F650004F832 /* StoryViewCellTextOnly.swift */,
 			);

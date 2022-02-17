@@ -32,6 +32,8 @@ class StoryCollectionViewCell: UICollectionViewCell {
     private var stanceValues = (false, false)
     
     func setupViews(sources: [String]) {
+        self.backgroundColor = DARKMODE() ? bgBlue : bgWhite_LIGHT
+    
         StorySourceManager.shared.loadSources { (error) in
             self.validSources = StorySourceManager.shared.filterSources(toFilter: sources)
             
