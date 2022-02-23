@@ -12,8 +12,10 @@ import SafariServices
 
 class SliderDoc: UIViewController {
 
+    private var firstTime = true
+
     private let sliderViewHeight: CGFloat = 70
-    private let screenSize = UIScreen.main.bounds
+    private var screenSize = UIScreen.main.bounds
     private let sliderTAGbase = 99
 
     let mainTitle = UILabel(text: "How the sliders work",
@@ -54,7 +56,12 @@ class SliderDoc: UIViewController {
         
         overrideUserInterfaceStyle = .dark
         view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
-        self.configureView()
+        
+        if(DARKMODE()) {
+            self.view.layer.borderWidth = 2.0
+            self.view.layer.borderColor = UIColor.white.withAlphaComponent(0.15).cgColor
+            self.view.layer.cornerRadius = 10.0
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -62,7 +69,11 @@ class SliderDoc: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.refreshSliders()
+        if(self.firstTime) {
+            self.configureView()
+            self.refreshSliders()
+        }
+        self.firstTime = false
     }
 
     // ----------------------------------
@@ -99,6 +110,16 @@ class SliderDoc: UIViewController {
 
     private func configureView() {
         
+        
+        
+        
+        self.screenSize = self.view.frame
+        
+        /*
+        print("IPAD", UIScreen.main.bounds.width)
+        print("IPAD", self.view.frame.size.width)
+        */
+        
         if(!DARKMODE()){
             dismiss.setTitleColor(textBlack, for: .normal)
         }
@@ -106,6 +127,9 @@ class SliderDoc: UIViewController {
     
 // MAIN title
         self.view.addSubview(mainTitle)
+        if(IS_iPAD()) {
+            mainTitle.font = UIFont(name: "PTSerif-Bold", size: 35)
+        }
         mainTitle.sizeToFit()
         if(IS_ZOOMED()) {
             self.move(mainTitle, x: 15, y: 30)
@@ -113,11 +137,12 @@ class SliderDoc: UIViewController {
             self.move(mainTitle, x: 15, y: 5)
         }
         
-// RESET button
+// BACK button
         dismiss.titleLabel?.textColor = accentOrange
         view.addSubview(dismiss)
         dismiss.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
         self.resize(dismiss, width: 65, height: 20)
+        dismiss.backgroundColor = .green
         self.move(dismiss, x: -10, y: 7)
 
 // SCROLLVIEW
@@ -128,7 +153,7 @@ class SliderDoc: UIViewController {
                     height: self.view.frame.size.height - scrollView.frame.origin.y - 88 - 40)
         if(IS_iPAD()) {
             self.resize(scrollView, width: screenSize.width,
-                    height: self.view.frame.size.height - scrollView.frame.origin.y - 88 - 40 - 40)
+                    height: self.view.frame.size.height - scrollView.frame.origin.y - 60)
         }
 
 
@@ -148,7 +173,11 @@ class SliderDoc: UIViewController {
         
         self.resize(resetButton, width: 300, height: 35)
         self.move(resetButton, x: 0, y: 0)
-        self.place(resetButton, below: scrollView, yOffset: 5)
+        if(IS_iPHONE()) {
+            self.place(resetButton, below: scrollView, yOffset: 5)
+        } else {
+            self.place(resetButton, below: scrollView, yOffset: 5)
+        }
         self.centerHorizontally(resetButton)
         
 // TEXTVIEW(s)

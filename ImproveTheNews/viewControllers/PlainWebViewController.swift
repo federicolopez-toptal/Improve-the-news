@@ -104,12 +104,22 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
             .secure: "true",
             .expires: NSDate(timeIntervalSinceNow: 60 * 60)
         ])
-        print("SLIDERS", slidersValue)
+        
+        let cookieUserId = HTTPCookie(properties: [
+            .domain: url.host!,
+            .path: "/",
+            .name: "usrid",
+            .value: USER_ID(),
+            .secure: "true",
+            .expires: NSDate(timeIntervalSinceNow: 60 * 60)
+        ])
+        
+        
         
         var request = URLRequest(url: url)
         
-        if let _cookieDisplayMode = cookieDisplayMode, let _cookieSliders = cookieSliders {
-            let values = HTTPCookie.requestHeaderFields(with: [_cookieDisplayMode, _cookieSliders])
+        if let A = cookieDisplayMode, let B = cookieSliders, let C = cookieUserId {
+            let values = HTTPCookie.requestHeaderFields(with: [A, B, C])
             request.allHTTPHeaderFields = values
             //self.webview.configuration.websiteDataStore.httpCookieStore.setCookie(_cookie)
         }

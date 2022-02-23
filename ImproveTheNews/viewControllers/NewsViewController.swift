@@ -1473,6 +1473,22 @@ extension NewsViewController: shareDelegate {
     
     func openSharing(items: [String]) {
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        if(IS_iPAD()) {
+            /*
+            print("SHARE", self.collectionView.contentSize.height)
+            print("SHARE", self.collectionView.contentOffset.y)
+            print("SHARE", self.collectionView.frame.size.height)
+            */
+            
+            let offsetMax = self.collectionView.contentSize.height - self.collectionView.frame.size.height
+            let diff = offsetMax - self.collectionView.contentOffset.y
+            
+            ac.popoverPresentationController?.sourceView = self.view
+            ac.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX,
+                y: self.view.bounds.height - 100 + diff, width: 0, height: 0)
+        }
+        
         present(ac, animated: true)
     }
 

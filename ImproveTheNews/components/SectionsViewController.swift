@@ -206,6 +206,7 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
             case 1:
                 let sliders = SliderDoc()
                 sliders.modalPresentationCapturesStatusBarAppearance = true
+                //sliders.modalPresentationStyle = .fullScreen
                 present(sliders, animated: true, completion: nil)
             case 2:
                 let url = URL(string: feedbackForm)!

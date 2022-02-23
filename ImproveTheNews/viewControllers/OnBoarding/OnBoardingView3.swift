@@ -51,7 +51,7 @@ class OnBoardingView3: UIView {
     
     let texts = [
         "Stories on your usual news feed come from a variety of sources which you can’t control.",
-        "We put YOU in the drivers seat and you choose what to read based on your views.",
+        "We put YOU in the driver's seat and you choose what to read based on your views.",
         "Use the sliders to decide what news you see.",
         "Sometimes you want to see both sides, we call it the 'split'.\nGo ahead and give it a try!",
         "Now you can see what is really going on in the world!\n ",

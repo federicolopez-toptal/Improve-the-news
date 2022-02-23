@@ -456,7 +456,7 @@ class ContactPage: UIViewController, UITextViewDelegate {
     
     let textView = UITextView()
     let text = """
-This Improve the News app is published by the non-profit Improve the News Foundation, which is lead by MIT professor Max Tegmark.
+This Improve the News app is published by the non-profit Improve the News Foundation, which is led by MIT professor Max Tegmark.
 Contact: contact@improvethenews.org
 
 If you have feature requests, bug reports or any other feedback on this app, we recommend that you instead send it to us using our feedback form, which makes it easier for us to respond to it.
