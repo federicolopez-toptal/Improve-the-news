@@ -57,7 +57,7 @@ class SliderDoc: UIViewController {
         overrideUserInterfaceStyle = .dark
         view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
         
-        if(DARKMODE()) {
+        if(DARKMODE() && IS_iPAD()) {
             self.view.layer.borderWidth = 2.0
             self.view.layer.borderColor = UIColor.white.withAlphaComponent(0.15).cgColor
             self.view.layer.cornerRadius = 10.0
@@ -150,7 +150,7 @@ class SliderDoc: UIViewController {
         self.move(scrollView, x: 0, y: 0, bgColor: self.view.backgroundColor!)
         self.place(scrollView, below: mainTitle, yOffset: 5)
         self.resize(scrollView, width: screenSize.width,
-                    height: self.view.frame.size.height - scrollView.frame.origin.y - 88 - 40)
+                    height: self.view.frame.size.height - scrollView.frame.origin.y - 75)
         if(IS_iPAD()) {
             self.resize(scrollView, width: screenSize.width,
                     height: self.view.frame.size.height - scrollView.frame.origin.y - 60)
@@ -174,10 +174,11 @@ class SliderDoc: UIViewController {
         self.resize(resetButton, width: 300, height: 35)
         self.move(resetButton, x: 0, y: 0)
         if(IS_iPHONE()) {
-            self.place(resetButton, below: scrollView, yOffset: 5)
+            self.place(resetButton, below: scrollView, yOffset: 10)
         } else {
             self.place(resetButton, below: scrollView, yOffset: 5)
         }
+        
         self.centerHorizontally(resetButton)
         
 // TEXTVIEW(s)
