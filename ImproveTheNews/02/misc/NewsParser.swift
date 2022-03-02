@@ -35,6 +35,7 @@ struct NewsData {
     let story: Story?
 }
 
+let NOTIFICATION_JSON_PARSE_ERROR = Notification.Name("jsonParseError")
 
 class News {
     
@@ -213,6 +214,11 @@ class News {
         self.hierarchy = ""
 
         //print(">>>", BannerInfo.shared)
+
+        /*
+        let testText = ""
+        let jsonData2 = testText.data(using: .utf8)!
+        */
 
         do {
             let decodedData = try JSON(data: jsonData)
@@ -395,6 +401,10 @@ class News {
             print("decoding error")
             print(String(decoding: jsonData, as: UTF8.self))
             print(jsonErr)
+            
+            DispatchQueue.main.async{
+                NotificationCenter.default.post(name: NOTIFICATION_JSON_PARSE_ERROR, object: nil)
+            }
         }
         
         

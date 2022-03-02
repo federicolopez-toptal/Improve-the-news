@@ -125,6 +125,26 @@ class NewsBigViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(showSlidersInfo),
             name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+            
+        NotificationCenter.default.addObserver(self, selector: #selector(onJsonParseError),
+            name: NOTIFICATION_JSON_PARSE_ERROR,
+            object: nil)
+    }
+    
+    @objc func onJsonParseError() {
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { action in
+        }
+        let tryAgain = UIAlertAction(title: "Try again", style: .default) { action in
+            self.firstTime = true
+            self.loadData()
+        }
+        
+        let alert = UIAlertController(title: "Improve the news", message: "There was an error loading your news", preferredStyle: .alert)
+        alert.addAction(cancel)
+        alert.addAction(tryAgain)
+        
+        self.present(alert, animated: true) {
+        }
     }
     
     @objc func onDeviceOrientationChanged() {

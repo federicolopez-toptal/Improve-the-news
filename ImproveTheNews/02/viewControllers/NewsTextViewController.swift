@@ -109,6 +109,10 @@ class NewsTextViewController: UIViewController {
             name: UIDevice.orientationDidChangeNotification,
             object: nil)
             
+        NotificationCenter.default.addObserver(self, selector: #selector(onJsonParseError),
+            name: NOTIFICATION_JSON_PARSE_ERROR,
+            object: nil)
+            
         if(SHOW_ONBOARD() && self.uniqueID==1) {
             self.onBoard = OnBoardingView(container: self.view,
                 parser: self.newsParser, topic: self.topic,
@@ -126,6 +130,22 @@ class NewsTextViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(showSlidersInfo),
             name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+    }
+    
+    @objc func onJsonParseError() {
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { action in
+        }
+        let tryAgain = UIAlertAction(title: "Try again", style: .default) { action in
+            self.firstTime = true
+            self.loadData()
+        }
+        
+        let alert = UIAlertController(title: "Improve the news", message: "There was an error loading your news", preferredStyle: .alert)
+        alert.addAction(cancel)
+        alert.addAction(tryAgain)
+        
+        self.present(alert, animated: true) {
+        }
     }
     
     @objc func onDeviceOrientationChanged() {

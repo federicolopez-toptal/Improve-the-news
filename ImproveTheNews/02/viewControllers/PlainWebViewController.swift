@@ -17,6 +17,7 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
     let shade = UIView()
     
     var loadCount = 0
+    let loadingView = UIView()
     
     lazy var webView: WKWebView = {
         let cfg = WKWebViewConfiguration()
@@ -52,6 +53,9 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
     // MARK: - Init
     init(url: String, title: String) {
         super.init(nibName: nil, bundle: nil)
+
+        self.setUpLoading()
+        self.loadingView.isHidden = false
 
         let url = URL(string: url)!   //!!!
         //let url = Bundle.main.url(forResource: "test.html", withExtension: nil)!
@@ -132,6 +136,24 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
         hidesBottomBarWhenPushed = true
     }
     
+    func setUpLoading() {
+        let dim: CGFloat = 65
+        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
+        self.loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+        self.loadingView.isHidden = true
+        self.loadingView.layer.cornerRadius = 15
+    
+        let loading = UIActivityIndicatorView(style: .medium)
+        loading.color = .white
+        self.loadingView.addSubview(loading)
+        loading.center = CGPoint(x: dim/2, y: dim/2)
+        loading.startAnimating()
+
+        self.view.addSubview(self.loadingView)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -148,6 +170,17 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
         navigationItem.setLeftBarButton(backBarButton, animated: true)
         
         setupUI()
+        NotificationCenter.default.addObserver(self, selector: #selector(onDeviceOrientationChanged),
+            name: UIDevice.orientationDidChangeNotification,
+            object: nil)
+    }
+    
+    @objc func onDeviceOrientationChanged() {
+            // loading
+            let dim: CGFloat = 65
+            self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
     }
     
     func setupUI() {
@@ -252,6 +285,10 @@ extension PlainWebViewController: WKNavigationDelegate {
         UIApplication.shared.openURL(navigationAction.request.url!)
         
         return nil
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        self.loadingView.isHidden = true
     }
     
 }

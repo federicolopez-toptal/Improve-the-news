@@ -175,6 +175,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         NotificationCenter.default.addObserver(self, selector: #selector(onDeviceOrientationChanged),
             name: UIDevice.orientationDidChangeNotification,
             object: nil)
+            
+        NotificationCenter.default.addObserver(self, selector: #selector(onJsonParseError),
+            name: NOTIFICATION_JSON_PARSE_ERROR,
+            object: nil)
        
         // collectionView, register cells
         self.collectionView.register(SubtopicHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SubtopicHeader.headerId)
@@ -274,6 +278,22 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.shareActionsView?.delegate = self
         self.shareArticles = ShareSplitArticles(into: self.view)
         self.shareArticles?.delegate = self
+    }
+    
+    @objc func onJsonParseError() {
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { action in
+        }
+        let tryAgain = UIAlertAction(title: "Try again", style: .default) { action in
+            self.firstTime = true
+            self.loadData()
+        }
+        
+        let alert = UIAlertController(title: "Improve the news", message: "There was an error loading your news", preferredStyle: .alert)
+        alert.addAction(cancel)
+        alert.addAction(tryAgain)
+        
+        self.present(alert, animated: true) {
+        }
     }
     
     @objc func onDeviceOrientationChanged() {
@@ -601,7 +621,6 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         DELAY(2.0) {
             self.scrollAfterEnableSplit = true
         }
-        
     }
     
     func resendRequest() {
