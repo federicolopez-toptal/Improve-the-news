@@ -24,8 +24,11 @@ class StoryCollectionViewCell: UICollectionViewCell {
     let titleLabel = UILabel()
     let storySign = UILabel()
     
+    let splitStack = UIStackView()
     let labelSplit1 = UILabel()
     let labelSplit2 = UILabel()
+    var labelSplit1WidthConstraint: NSLayoutConstraint? = nil
+    var labelSplit2WidthConstraint: NSLayoutConstraint? = nil
     
     private var validSources = [String]()
     private var showHeaders = false
@@ -191,8 +194,8 @@ class StoryCollectionViewCell: UICollectionViewCell {
         labelSplit1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             labelSplit1.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0),
-            labelSplit1.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width/2),
-            labelSplit1.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT()))
+            labelSplit1.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT())),
+            labelSplit1.widthAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 0.5)
         ])
         
         // split 2
@@ -204,10 +207,11 @@ class StoryCollectionViewCell: UICollectionViewCell {
         labelSplit2.textAlignment = .center
         labelSplit2.text = "ABC"
         labelSplit2.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            labelSplit2.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: UIScreen.main.bounds.width/2),
-            labelSplit2.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width/2),
-            labelSplit2.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT()))
+            labelSplit2.leadingAnchor.constraint(equalTo: labelSplit1.trailingAnchor),
+            labelSplit2.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(STORIES_HEIGHT())),
+            labelSplit2.widthAnchor.constraint(equalTo: labelSplit1.widthAnchor)
         ])
         
         if(!self.showHeaders) {
@@ -228,6 +232,11 @@ class StoryCollectionViewCell: UICollectionViewCell {
                 labelSplit2.text = "PRO"
             }
         }
+        
+        /*
+        labelSplit1.backgroundColor = .green
+        labelSplit2.backgroundColor = .red.withAlphaComponent(0.5)
+        */
     }
     
     func hideHeaders() {
@@ -239,4 +248,9 @@ class StoryCollectionViewCell: UICollectionViewCell {
         self.stanceValues = stanceValues
     }
     
+    func updateLayoutDetails() {
+        let W = UIScreen.main.bounds.width/2
+        self.labelSplit1WidthConstraint?.constant = W
+        self.labelSplit2WidthConstraint?.constant = W
+    }
 }

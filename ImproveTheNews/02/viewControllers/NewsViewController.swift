@@ -104,8 +104,6 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     var articleSide = 0
     
-    
-
     // MARK: - Initialization
     init(topic: String) {
         let layout = UICollectionViewFlowLayout.init()
@@ -129,7 +127,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidLoad() {
     
-        Utils.shared.navController = self.navigationController as? customNavigationController
+        Utils.shared.navController = self.navigationController as? CustomNavigationController
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
     
@@ -172,6 +170,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
        
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAll),
             name: NOTIFICATION_FORCE_RELOAD_NEWS,
+            object: nil)
+       
+        NotificationCenter.default.addObserver(self, selector: #selector(onDeviceOrientationChanged),
+            name: UIDevice.orientationDidChangeNotification,
             object: nil)
        
         // collectionView, register cells
@@ -274,6 +276,29 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.shareArticles?.delegate = self
     }
     
+    @objc func onDeviceOrientationChanged() {
+        if(!self.firstTime) {
+            print("CHANGE ORIENTATION")
+            
+            self.collectionView.collectionViewLayout.invalidateLayout()
+            
+            // horizontal menu
+            self.scrollViewDidScroll(self.collectionView)
+            self.moreHeadLines.changeWidthTo(UIScreen.main.bounds.width)
+            
+            // loading
+            let dim: CGFloat = 65
+            self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
+                                        
+            self.updateBiasButtonPosition()
+            self.biasSliders.adaptToScreen()
+        }
+    }
+    
+    
+    
     var lastTimeActive: Date?
     @objc func applicationDidBecomeActive() {
         if let _lastTimeActive = self.lastTimeActive {
@@ -342,6 +367,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         */
         
         //self.testHaptic()
+        
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -1138,6 +1165,8 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         var mFrame = self.biasButton.frame
         let screenSize = UIScreen.main.bounds
         
+        
+        let posX = screenSize.width - mFrame.size.width - 5
         var posY = screenSize.height - mFrame.size.height
         /*if let nav = navigationController {
             if(!nav.navigationBar.isTranslucent) {
@@ -1170,6 +1199,7 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         //posY -= margin
         
         mFrame.origin.y = posY
+        mFrame.origin.x = posX
         self.biasButton.frame = mFrame
         
         self.biasMiniButtonUpdatePosition()
@@ -1475,12 +1505,6 @@ extension NewsViewController: shareDelegate {
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         if(IS_iPAD()) {
-            /*
-            print("SHARE", self.collectionView.contentSize.height)
-            print("SHARE", self.collectionView.contentOffset.y)
-            print("SHARE", self.collectionView.frame.size.height)
-            */
-            
             let offsetMax = self.collectionView.contentSize.height - self.collectionView.frame.size.height
             let diff = offsetMax - self.collectionView.contentOffset.y
             
@@ -1547,6 +1571,8 @@ extension NewsViewController {
                 cell.imageView.sd_setImage(with: URL(string: imageURL), placeholderImage: nil)
             }
         }
+        
+        cell.updateLayoutDetails()
         
         return cell
     }
@@ -1768,7 +1794,7 @@ extension NewsViewController {
             }*/
             
             // more link + about ITN
-            return CGSize(width: view.frame.width, height: 260)
+            return CGSize(width: UIScreen.main.bounds.width, height: 260)
         }
         else {
             if section == 0 {
@@ -1799,6 +1825,9 @@ extension NewsViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+//        print("SIZING", UIScreen.main.bounds.width)
+        
         
         // one topic on page
         if newsParser.getNumOfSections() == 1 && indexPath.section == 1 {
@@ -2166,7 +2195,7 @@ extension NewsViewController {
                         // oMore
                         seeMore.setFooterText(subtopic: newsParser.getTopic(index: indexPath.section))
                         seeMore.configure()
-                        
+
                         print("> FOOTER seeMoreFooter", newsParser.getTopic(index: indexPath.section))
                         
                         return seeMore
@@ -2678,6 +2707,26 @@ extension NewsViewController {
     }
     
     func splitValueChange() {
+    
+        if(Utils.shared.currentLayout == .textOnly && !mustSplit()) {
+            Utils.shared.newsViewController_ID = 0
+            let vc = NewsTextViewController(topic: self.topic)
+            vc.param_A = self.param_A
+            self.navigationController?.viewControllers = [vc]
+            
+            return
+        }
+        if(Utils.shared.currentLayout == .bigBeautiful && !mustSplit()) {
+            Utils.shared.newsViewController_ID = 0
+            let vc = NewsBigViewController(topic: self.topic)
+            vc.param_A = self.param_A
+            self.navigationController?.viewControllers = [vc]
+            
+            return
+        }
+    
+    
+    
         if( mustSplit() ) {
             // SPLIT
             self.biasButtonState = 2

@@ -88,4 +88,14 @@ class HorizontalMenuView: UIScrollView {
         self.setContentOffset(CGPoint.zero, animated: false)
     }
     
+    func changeWidthTo(_ newWidth: CGFloat) {
+        var mFrame = self.frame
+        mFrame.size.width = newWidth
+        self.frame = mFrame
+        
+        mFrame = self.frame
+        mFrame.size.width = newWidth
+        self.frame = mFrame
+    }
+    
 }

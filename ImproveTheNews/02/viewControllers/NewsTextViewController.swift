@@ -64,7 +64,7 @@ class NewsTextViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        Utils.shared.navController = self.navigationController as? customNavigationController
+        Utils.shared.navController = self.navigationController as? CustomNavigationController
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
     
@@ -105,6 +105,10 @@ class NewsTextViewController: UIViewController {
             selector: #selector(applicationDidEnterBackground),
             name: UIApplication.didEnterBackgroundNotification, object: nil)
             
+        NotificationCenter.default.addObserver(self, selector: #selector(onDeviceOrientationChanged),
+            name: UIDevice.orientationDidChangeNotification,
+            object: nil)
+            
         if(SHOW_ONBOARD() && self.uniqueID==1) {
             self.onBoard = OnBoardingView(container: self.view,
                 parser: self.newsParser, topic: self.topic,
@@ -123,6 +127,20 @@ class NewsTextViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(showSlidersInfo),
             name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
     }
+    
+    @objc func onDeviceOrientationChanged() {
+        if(!self.firstTime) {
+            self.scrollViewDidScroll(self.tableView)
+            self.horizontalMenu.changeWidthTo(UIScreen.main.bounds.width)
+            
+            // loading
+            let dim: CGFloat = 65
+            self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                            y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                            width: dim, height: dim)
+        }
+    }
+    
     @objc func showSlidersInfo() {
         let sliders = SliderDoc()
         self.present(sliders, animated: true, completion: nil)
@@ -825,6 +843,16 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
     
     func share() {
         let ac = UIActivityViewController(activityItems: ["http://www.improvethenews.org/"], applicationActivities: nil)
+        
+        if(IS_iPAD()) {
+            let offsetMax = self.tableView.contentSize.height - self.tableView.frame.size.height
+            let diff = offsetMax - self.tableView.contentOffset.y
+            
+            ac.popoverPresentationController?.sourceView = self.view
+            ac.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX,
+                y: self.view.bounds.height - 100 + diff, width: 0, height: 0)
+        }
+        
         self.present(ac, animated: true)
     }
 
@@ -1035,6 +1063,32 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
 extension NewsTextViewController: BiasSliderDelegate, ShadeDelegate {
 
     // BiasSliderDelegate
+    func splitValueChange() {
+        if(!self.mustSplit()) {
+            self.firstTime = true
+            self.loadData()
+            
+            let offset = CGPoint(x: 0, y: 0)
+            self.tableView.setContentOffset(offset, animated: true)
+            self.horizontalMenu.backToZero()
+        } else {
+            DELAY(0.3) {
+                Utils.shared.newsViewController_ID = 0
+                let vc = NewsViewController(topic: self.topic)
+                vc.param_A = self.param_A
+                self.navigationController?.viewControllers = [vc]
+            }
+        }
+    }
+    private func mustSplit() -> Bool {
+        let stancevalues =  self.biasSliders.stanceValues()
+        if(stancevalues.0 || stancevalues.1) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func biasSliderDidChange(sliderId: Int) {
     
         let dict = ["id": self.uniqueID]

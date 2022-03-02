@@ -20,14 +20,14 @@ class Utils {
     var newsViewController_ID = 0
     
     // Current layout
-    var currentLayout = layoutType.denseIntense
+    var currentLayout = LayoutType.denseIntense
     
     // Current display mode
     var displayMode: DisplayMode = .bright
 
     // main navigatorController
     //var navController: UINavigationController?
-    var navController: customNavigationController?
+    var navController: CustomNavigationController?
     
     var didLoadBanner: Bool = false
     var lastApiCall: String = ""
@@ -83,9 +83,9 @@ func INITIAL_VC() -> UIViewController {
     }
     Utils.shared.displayMode = displayMode!
     
-    var layout: layoutType?
+    var layout: LayoutType?
     if let userLayout = UserDefaults.standard.string(forKey: LOCAL_KEY_LAYOUT) {
-        layout = layoutType(rawValue: userLayout)
+        layout = LayoutType(rawValue: userLayout)
     } else {
         layout = .denseIntense
     }
@@ -98,6 +98,8 @@ func INITIAL_VC() -> UIViewController {
     
 
     Utils.shared.currentLayout = layout!
+    AppData.shared.layout = layout!
+    
     if(layout == .denseIntense) {
         return NewsViewController(topic: topic)
     } else if(layout == .textOnly) {

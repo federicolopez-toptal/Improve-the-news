@@ -42,9 +42,9 @@ class SectionsViewController: UIViewController {
     let tableView = UITableView()
     var safeArea: UILayoutGuide!
     
-    private let appLayouts = [layoutType.denseIntense,
-                                layoutType.textOnly,
-                                layoutType.bigBeautiful]
+    private let appLayouts = [LayoutType.denseIntense,
+                                LayoutType.textOnly,
+                                LayoutType.bigBeautiful]
     // layoutType.bigBeautiful,
     
     override func loadView() {
@@ -328,7 +328,8 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    private func selectLayout(_ layout: layoutType) {
+    private func selectLayout(_ layout: LayoutType) {
+            AppData.shared.layout = layout
             Utils.shared.currentLayout = layout
             
             UserDefaults.standard.set(layout.rawValue, forKey: LOCAL_KEY_LAYOUT)
@@ -379,9 +380,11 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                     vc = NewsViewController(topic: topicToLoad)
                     (vc as! NewsViewController).param_A = param_A
                 } else if(layout == .textOnly) {
+                    self.disableSplit()
                     vc = NewsTextViewController(topic: topicToLoad)
                     (vc as! NewsTextViewController).param_A = param_A
                 } else if(layout == .bigBeautiful) {
+                    self.disableSplit()
                     vc = NewsBigViewController(topic: topicToLoad)
                     (vc as! NewsBigViewController).param_A = param_A
                 }
@@ -391,6 +394,11 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 }
             }
             self.navigationController?.customPopViewController()
+    }
+    
+    private func disableSplit() {
+        UserDefaults.standard.setValue(0, forKey: "userSplitPrefs")
+        UserDefaults.standard.synchronize()
     }
     
     private func showAlert(_ text: String) {

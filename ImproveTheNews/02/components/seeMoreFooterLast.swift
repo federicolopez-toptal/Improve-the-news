@@ -21,6 +21,7 @@ class seeMoreFooterLast: UICollectionReusableView {
     // ------------------------------------------
     // ITN Footer
     let view = UIView()
+    var middle = UIView()
     
     var shareDelegate: shareDelegate?
     let titleImage = UIImageView(image: UIImage(named: "ITN_logo.png"))
@@ -67,6 +68,17 @@ class seeMoreFooterLast: UICollectionReusableView {
         let line = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
         line.backgroundColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         view.addSubview(line)
+        
+        line.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            line.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            line.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            line.topAnchor.constraint(equalTo: view.topAnchor),
+            line.heightAnchor.constraint(equalToConstant: 1.0)
+        ])
+        
+        
+        
         
         about.textAlignment = .left
         about.text = str
@@ -127,20 +139,46 @@ class seeMoreFooterLast: UICollectionReusableView {
     
     
     public func configure() {
+        middle.backgroundColor = .clear
+        addSubview(middle)
+        middle.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            middle.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            middle.topAnchor.constraint(equalTo: self.topAnchor, constant: 20 + 4),
+            middle.widthAnchor.constraint(equalToConstant: 10),
+            middle.heightAnchor.constraint(equalToConstant: 20)
+        ])
         
-        label.text = "More "
+        label.text = "More"
         label.font = UIFont(name: "PTSerif-Bold", size: 18)
         label.textColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         label.sizeToFit()
         label.backgroundColor = .clear
+        /*
             var mFrame = label.frame
             mFrame.origin.x = (UIScreen.main.bounds.width/2) - mFrame.size.width
             mFrame.origin.y = 20 + 4
             label.frame = mFrame
         addSubview(label)
+        */
+        addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.trailingAnchor.constraint(equalTo: middle.leadingAnchor),
+            label.topAnchor.constraint(equalTo: middle.topAnchor)
+        ])
         
         button.sizeToFit()
         button.backgroundColor = .clear
+        
+        addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: middle.trailingAnchor),
+            button.topAnchor.constraint(equalTo: middle.topAnchor, constant: -6)
+        ])
+        
+        /*
             mFrame = button.frame
             mFrame.origin.x = (UIScreen.main.bounds.width/2)
             mFrame.origin.y = 13 + 5
@@ -158,6 +196,7 @@ class seeMoreFooterLast: UICollectionReusableView {
             mFrame = button.frame
             mFrame.origin.x += diffX
             button.frame = mFrame
+        */
 
         addTopBorder()
         self.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
@@ -166,13 +205,24 @@ class seeMoreFooterLast: UICollectionReusableView {
     func addTopBorder() {
         let border = UIView(frame: CGRect(x: 10, y: 5,
                             width: self.frame.width - 20, height: 1))
+        
+                            
         border.backgroundColor = DARKMODE() ? articleSourceColor : textBlackAlpha
         addSubview(border)
+        
+        border.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            border.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+            border.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
+            border.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
+            border.heightAnchor.constraint(equalToConstant: 1.0)
+        ])
     }
     
     func addBottomBorder() {
         let border = UIView(frame: CGRect(x: 10, y: self.frame.height - 5,
                             width: self.frame.width - 20, height: 2))
+                            
         border.backgroundColor = UIColor.white.withAlphaComponent(0.15)
         addSubview(border)
     }

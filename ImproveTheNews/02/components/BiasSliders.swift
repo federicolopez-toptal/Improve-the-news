@@ -224,7 +224,8 @@ extension SliderPopup {
                 stackView.addArrangedSubview(separatorView)
             }
             
-            if(i<2 && Utils.shared.currentLayout == .denseIntense) {
+           //if(i<2 && Utils.shared.currentLayout == .denseIntense) {
+            if(i<2) {
                 let w: CGFloat = 80
                 let x: CGFloat = slider.frame.origin.x + slider.frame.size.width - 10
                 let splitLabel = UILabel(frame: CGRect(x: x, y: 3, width: w, height: 25))
@@ -797,7 +798,19 @@ extension SliderPopup {
         }
     }
     
-    
+    func adaptToScreen() {
+        var mFrame = self.frame
+        mFrame.size.width = UIScreen.main.bounds.width
+        self.frame = mFrame
+        
+        /*
+        
+        ancho del panel
+        ancho de los items con sliders
+        ubicacion en pantalla (dependiendo del estado)
+        
+        */
+    }
 }
 
 

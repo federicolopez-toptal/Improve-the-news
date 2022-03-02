@@ -53,16 +53,9 @@ let ONBOARDING_VERSION = "v1"
 let ONBOARDING_ID = "onboarding " + ONBOARDING_VERSION
     
     
-enum layoutType: String {
-    case denseIntense = "Dense & intense"
-    case bigBeautiful = "Big & beautiful"
-    case textOnly = "Text only"
-}
 
-enum DisplayMode: String {
-    case dark = "darkMode"
-    case bright = "brightMode"
-}
+
+
     
     
     

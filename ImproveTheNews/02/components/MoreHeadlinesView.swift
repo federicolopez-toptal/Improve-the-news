@@ -136,6 +136,16 @@ class MoreHeadlinesView: UIView, UIScrollViewDelegate {
         }
     }
     
+    func changeWidthTo(_ newWidth: CGFloat) {
+        var mFrame = self.frame
+        mFrame.size.width = newWidth
+        self.frame = mFrame
+        
+        mFrame = self.scrollView.frame
+        mFrame.size.width = newWidth
+        self.scrollView.frame = mFrame
+    }
+    
     func setTopics(_ topics: [String]) {
         
         var x = 0
