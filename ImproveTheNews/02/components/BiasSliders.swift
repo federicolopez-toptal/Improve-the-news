@@ -118,14 +118,21 @@ extension SliderPopup {
         let h: CGFloat = 35
         let valx = (UIScreen.main.bounds.width-w)/2
         let lineView = UIView(frame: CGRect(x: valx, y: h-8-10, width: w, height: 8))
+        lineContainer.addSubview(lineView)
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            lineView.centerXAnchor.constraint(equalTo: lineContainer.centerXAnchor),
+            lineView.centerYAnchor.constraint(equalTo: lineContainer.centerYAnchor),
+            lineView.widthAnchor.constraint(equalToConstant: w),
+            lineView.heightAnchor.constraint(equalToConstant: 8),
+        ])
         lineView.layer.cornerRadius = 4
         lineView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         
-        lineContainer.addSubview(lineView)
+        
         stackView.addArrangedSubview(lineContainer)
         lineContainer.translatesAutoresizingMaskIntoConstraints = false
         lineContainer.heightAnchor.constraint(equalToConstant: h).isActive = true
-        lineContainer.backgroundColor = .clear
         
         /*
         draggableLine.translatesAutoresizingMaskIntoConstraints = false
@@ -173,11 +180,23 @@ extension SliderPopup {
             let minLabel = createLabel(name: descriptions[i][0])
             let maxLabel = createLabel(name: descriptions[i][1])
             
+            let sliderX = (UIScreen.main.bounds.width-(stackView.frame.width - 210))/2
+            let sliderY = name.frame.maxY+3
             let slider = UISlider(backgroundColor: .clear)
-            slider.frame = CGRect(x:(UIScreen.main.bounds.width-(stackView.frame.width - 210))/2,
-                y: name.frame.maxY+3,
+            slider.frame = CGRect(x: sliderX, y: sliderY,
                 width: stackView.frame.width - 210,
                 height: 20)
+                
+            miniview.addSubview(slider)
+            slider.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                slider.leadingAnchor.constraint(equalTo: miniview.leadingAnchor, constant: sliderX),
+                slider.topAnchor.constraint(equalTo: miniview.topAnchor, constant: sliderY),
+                slider.trailingAnchor.constraint(equalTo: miniview.trailingAnchor, constant: -sliderX),
+                slider.heightAnchor.constraint(equalToConstant: 20)
+            ])
+                
+                
             slider.minimumValue = 0
             slider.maximumValue = 99
             //slider.tintColor = .white
@@ -194,6 +213,16 @@ extension SliderPopup {
             //minLabel.backgroundColor = UIColor.black.withAlphaComponent(0.25)
             maxLabel.textAlignment = .right
             //maxLabel.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+            
+            //maxLabel.backgroundColor = .red
+            miniview.addSubview(maxLabel)
+            maxLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                maxLabel.topAnchor.constraint(equalTo: miniview.topAnchor, constant: sliderY),
+                maxLabel.trailingAnchor.constraint(equalTo: miniview.trailingAnchor, constant: -margin),
+                maxLabel.widthAnchor.constraint(equalToConstant: 95),
+                maxLabel.heightAnchor.constraint(equalToConstant: 20)
+            ])
             
             var v = Float(0)
             let k = keys[i]
@@ -212,9 +241,7 @@ extension SliderPopup {
     
             slider.setValue(v, animated: false)
             miniview.addSubview(name)
-            miniview.addSubview(slider)
             miniview.addSubview(minLabel)
-            miniview.addSubview(maxLabel)
             miniview.tag = 400 + i
             
             if(i==1) {
@@ -229,11 +256,20 @@ extension SliderPopup {
                 let w: CGFloat = 80
                 let x: CGFloat = slider.frame.origin.x + slider.frame.size.width - 10
                 let splitLabel = UILabel(frame: CGRect(x: x, y: 3, width: w, height: 25))
-                splitLabel.backgroundColor = .clear
+                //splitLabel.backgroundColor = .red
                 splitLabel.text = "Split"
                 splitLabel.textColor = .black
                 splitLabel.textAlignment = .right
                 splitLabel.font = UIFont(name: "Poppins-SemiBold", size: 15)
+
+                miniview.addSubview(splitLabel)
+                splitLabel.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    splitLabel.topAnchor.constraint(equalTo: miniview.topAnchor, constant: 3),
+                    splitLabel.widthAnchor.constraint(equalToConstant: w),
+                    splitLabel.heightAnchor.constraint(equalToConstant: 25),
+                    splitLabel.trailingAnchor.constraint(equalTo: miniview.trailingAnchor, constant: -38)
+                ])
 
                 let splitButton = UIButton(type: .custom)
                 splitButton.frame = CGRect(x: x+20, y: 4, width: 60, height: 22)
@@ -243,12 +279,22 @@ extension SliderPopup {
                 splitButton.setImage(UIImage(systemName: "square"), for: .normal)
                 splitButton.addTarget(self, action: #selector(splitButtonTap(sender:)),
                     for: .touchUpInside)
-                splitButton.backgroundColor = .clear
+                //splitButton.backgroundColor = .yellow.withAlphaComponent(0.5)
+                
+                miniview.addSubview(splitButton)
+                splitButton.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    splitButton.topAnchor.constraint(equalTo: miniview.topAnchor, constant: 4),
+                    splitButton.widthAnchor.constraint(equalToConstant: 60),
+                    splitButton.heightAnchor.constraint(equalToConstant: 22),
+                    splitButton.trailingAnchor.constraint(equalTo: miniview.trailingAnchor, constant: -38)
+                ])
                 
                 var mFrame = slider.frame
                 mFrame.origin.y -= 5
                 mFrame.size.height += 10
                 let splitSliderView = UIView(frame: mFrame)
+                splitSliderView.backgroundColor = .green
                 splitSliderView.backgroundColor = accentOrange
                 
                     let H: CGFloat = 4.5
@@ -256,29 +302,59 @@ extension SliderPopup {
                     let X: CGFloat = (mFrame.size.width-W)/2
                     let Y: CGFloat = (mFrame.size.height - H)/2
                     
-                    let sliderLine = UIView(frame: CGRect(x: X, y: Y,
-                                            width: W, height: H))
-                    sliderLine.layer.cornerRadius = H/2
-                    sliderLine.backgroundColor = .orange
-                    splitSliderView.addSubview(sliderLine)
-                    
-                    let grayHalf = UIView(frame: CGRect(x: X + (W/2), y: Y,
-                                            width: W/2, height: H))
-                    grayHalf.layer.cornerRadius = H/2
-                    grayHalf.backgroundColor = .lightGray
-                    splitSliderView.addSubview(grayHalf)
-                    
+                    // divider
                     let vline = UIView(frame: CGRect(x: X + (W/2),
                     y: (mFrame.size.height-20)/2, width: 4.5, height: 20))
                     vline.layer.cornerRadius = 2.25
                     vline.backgroundColor = .white
                     splitSliderView.addSubview(vline)
+                    vline.translatesAutoresizingMaskIntoConstraints = false
+                    NSLayoutConstraint.activate([
+                        vline.centerXAnchor.constraint(equalTo: splitSliderView.centerXAnchor),
+                        vline.centerYAnchor.constraint(equalTo: splitSliderView.centerYAnchor),
+                        vline.widthAnchor.constraint(equalToConstant: 4.5),
+                        vline.heightAnchor.constraint(equalToConstant: 20)
+                    ])
+
+                    // Orange half
+                    let sliderLine = UIView(frame: CGRect(x: X, y: Y,
+                                            width: W, height: H))
+                    sliderLine.layer.cornerRadius = H/2
+                    sliderLine.backgroundColor = .orange
+                    splitSliderView.addSubview(sliderLine)
+                    sliderLine.translatesAutoresizingMaskIntoConstraints = false
+                    NSLayoutConstraint.activate([
+                        sliderLine.leadingAnchor.constraint(equalTo: splitSliderView.leadingAnchor, constant: X),
+                        sliderLine.topAnchor.constraint(equalTo: splitSliderView.topAnchor, constant: Y),
+                        sliderLine.trailingAnchor.constraint(equalTo: vline.leadingAnchor),
+                        sliderLine.heightAnchor.constraint(equalToConstant: H)
+                    ])
+
+                    // gray half
+                    let grayHalf = UIView(frame: CGRect(x: X + (W/2), y: Y,
+                                            width: W/2, height: H))
+                    grayHalf.layer.cornerRadius = H/2
+                    grayHalf.backgroundColor = .lightGray
+                    splitSliderView.addSubview(grayHalf)
+                    grayHalf.translatesAutoresizingMaskIntoConstraints = false
+                    NSLayoutConstraint.activate([
+                        grayHalf.leadingAnchor.constraint(equalTo: vline.trailingAnchor),
+                        grayHalf.topAnchor.constraint(equalTo: sliderLine.topAnchor),
+                        grayHalf.widthAnchor.constraint(equalTo: sliderLine.widthAnchor),
+                        grayHalf.heightAnchor.constraint(equalToConstant: H)
+                    ])
+                    
                     
                 
-                miniview.addSubview(splitLabel)
-                miniview.addSubview(splitButton)
-                
                 miniview.addSubview(splitSliderView)
+                splitSliderView.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    splitSliderView.leadingAnchor.constraint(equalTo: slider.leadingAnchor),
+                    splitSliderView.topAnchor.constraint(equalTo: slider.topAnchor, constant: -5),
+                    splitSliderView.widthAnchor.constraint(equalTo: slider.widthAnchor),
+                    splitSliderView.heightAnchor.constraint(equalTo: slider.heightAnchor, constant: 10)
+                ])
+                
                 splitSliderView.tag = 99 + i
                 splitSliderView.isHidden = true
                 
@@ -296,7 +372,7 @@ extension SliderPopup {
                 
             }
             
-            
+            //miniview.backgroundColor = .green
 
         }
         
@@ -799,16 +875,28 @@ extension SliderPopup {
     }
     
     func adaptToScreen() {
+        if(self.superview == nil){ return }
+    
+    // PANEL WIDTH + POS Y
         var mFrame = self.frame
+        var posY: CGFloat = 0.0
+        switch(self.status) {
+            case "SL01":
+                posY = self.superview!.frame.height - self.state01_height
+            case "SL02":
+                posY = self.superview!.frame.height - self.state02_height
+            default:
+                posY = self.superview!.frame.height
+        }
+        
+        mFrame.origin.y = posY
         mFrame.size.width = UIScreen.main.bounds.width
         self.frame = mFrame
         
+        
+        
         /*
-        
-        ancho del panel
-        ancho de los items con sliders
-        ubicacion en pantalla (dependiendo del estado)
-        
+            ancho de los items con sliders
         */
     }
 }
