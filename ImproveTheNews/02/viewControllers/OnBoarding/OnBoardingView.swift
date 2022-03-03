@@ -33,7 +33,7 @@ protocol OnBoardingViewDelegate {
 class OnBoardingView: UIView {
 
     var delegate: OnBoardingViewDelegate? 
-    static let headlinesType1_height: CGFloat = 204
+    static var headlinesType1_height: CGFloat = 204
     
     var view1 = UIView()
     var view2 = UIView()
@@ -55,6 +55,10 @@ class OnBoardingView: UIView {
     
     init(container: UIView, parser: News, skipFirstStep: Bool = false,
         topic: String = "news", sliderValues: String = "") {
+        
+        if(IS_iPAD()) {
+            OnBoardingView.headlinesType1_height = 380
+        }
         
         print("???", "ONBOARDING INIT")
         self.topic = topic
@@ -135,12 +139,22 @@ class OnBoardingView: UIView {
         let showMeButton = OrangeRoundedButton(title: "SHOW ME!")
         self.view1.addSubview(showMeButton)
         showMeButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            showMeButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 30),
-            showMeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30),
-            showMeButton.heightAnchor.constraint(equalToConstant: 50),
-            showMeButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: offset)
-        ])
+        if(IS_iPHONE()) {
+            NSLayoutConstraint.activate([
+                showMeButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 30),
+                showMeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30),
+                showMeButton.heightAnchor.constraint(equalToConstant: 50),
+                showMeButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: offset)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                showMeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+                showMeButton.widthAnchor.constraint(equalToConstant: 500),
+                showMeButton.heightAnchor.constraint(equalToConstant: 50),
+                showMeButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: offset)
+            ])
+        }
+        
         
         showMeButton.addTarget(self, action: #selector(showView2(_:)),
                 for: .touchUpInside)
@@ -156,6 +170,10 @@ class OnBoardingView: UIView {
         
         label1.font = UIFont(name: "Roboto-Regular", size: 20)
         if(IS_ZOOMED()){ label1.font = UIFont(name: "Roboto-Regular", size: 16) }
+        
+        if(IS_iPAD()) {
+            label1.font = UIFont(name: "Roboto-Regular", size: 25)
+        }
         
         offset = SAFE_AREA()!.bottom
         if(offset==0){ offset = 34 }
@@ -175,6 +193,10 @@ class OnBoardingView: UIView {
         button1.addTarget(self, action: #selector(closeButtonOnTap(_:)),
                 for: .touchUpInside)
         
+        if(IS_iPAD()) {
+            button1.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 20)
+        }
+        
         self.view1.addSubview(button1)
         button1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -183,6 +205,7 @@ class OnBoardingView: UIView {
             button1.heightAnchor.constraint(equalToConstant: 40),
             button1.topAnchor.constraint(equalTo: label1.bottomAnchor, constant: 20)
         ])
+
     }
     
     
@@ -212,12 +235,21 @@ class OnBoardingView: UIView {
             label1.leadingAnchor.constraint(equalTo: self.leadingAnchor,
                     constant: 15),
         ])
+        if(IS_iPAD()) {
+            label1.font = UIFont(name: "Merriweather-Bold", size: 35)
+        }
+        
+        var headlineTopSep: CGFloat = 16
+        if(IS_iPAD() && landscape()) {
+            label1.textColor = .clear
+            headlineTopSep = -55
+        }
         
         let headline1 = OnBoardingView.headlinesType1_dynamic()
         self.view2.addSubview(headline1)
         headline1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            headline1.topAnchor.constraint(equalTo: label1.bottomAnchor, constant: 16),
+            headline1.topAnchor.constraint(equalTo: label1.bottomAnchor, constant: headlineTopSep),
             headline1.leadingAnchor.constraint(equalTo: self.view2.leadingAnchor),
             headline1.trailingAnchor.constraint(equalTo: self.view2.trailingAnchor),
             headline1.heightAnchor.constraint(equalToConstant: OnBoardingView.headlinesType1_height)
@@ -242,6 +274,14 @@ class OnBoardingView: UIView {
         }
         
         self.view2.isHidden = true
+    }
+    
+    private func landscape() -> Bool {
+        if(UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height) {
+            return false
+        } else {
+            return true
+        }
     }
     
     @objc func showView2(_ sender: UIButton?) {
@@ -531,13 +571,15 @@ class OnBoardingView: UIView {
         }
 
         // Loading...
+        var topForloading: CGFloat = 30
+        if(IS_iPAD()){ topForloading = 80 }
         let loadingView = UIView()
         loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
         loadingView.layer.cornerRadius = 15
         result.addSubview(loadingView)
         loadingView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            loadingView.topAnchor.constraint(equalTo: result.topAnchor, constant: 30),
+            loadingView.topAnchor.constraint(equalTo: result.topAnchor, constant: topForloading),
             loadingView.centerXAnchor.constraint(equalTo: result.centerXAnchor),
             loadingView.widthAnchor.constraint(equalToConstant: 65),
             loadingView.heightAnchor.constraint(equalToConstant: 65)

@@ -62,6 +62,7 @@ class NewsBigViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        AppUtility.lockOrientation(.all)
         Utils.shared.navController = self.navigationController as? CustomNavigationController
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
@@ -119,6 +120,7 @@ class NewsBigViewController: UIViewController {
                 UIView.animate(withDuration: 0.4, delay: 1.0, options: .curveLinear) {
                     obView.alpha = 1.0
                 } completion: { success in
+                    AppUtility.lockOrientation(ORIENTATION_MASK())
                 }
             }
         }
@@ -1305,6 +1307,8 @@ extension NewsBigViewController: OnBoardingViewDelegate {
             self.onBoard?.removeFromSuperview()
             self.onBoard = nil
         }
+        
+        AppUtility.lockOrientation(.all)
     }
     
     @objc func showOnboardingAgain() {
@@ -1315,6 +1319,8 @@ extension NewsBigViewController: OnBoardingViewDelegate {
         self.onBoard = OnBoardingView(container: self.view, parser: self.newsParser,
         skipFirstStep: true, topic: self.topic, sliderValues: self.getSliderValues())
         self.onBoard?.delegate = self
+        
+        AppUtility.lockOrientation(ORIENTATION_MASK())
     }
     
     func getSliderValues() -> String {

@@ -25,6 +25,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
+    
+    
+    
+    
+    var orientationLock = UIInterfaceOrientationMask.all
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+    
+        return self.orientationLock
+    }
 
 }
 

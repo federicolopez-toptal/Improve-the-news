@@ -110,7 +110,13 @@ class OnBoardingView3: UIView {
     }
     
     private func initHeadlines() {
-        let offset: CGFloat = 22 + 38 + 16 //+ OnBoardingView.headlinesType1_height + 4
+        var offset: CGFloat = 22 + 38 + 16 //+ OnBoardingView.headlinesType1_height + 4
+        if(IS_iPAD()) {
+            offset += 7
+            if(landscape()) {
+                offset = 10
+            }
+        }
         
         // headline 1
         self.headline = OnBoardingView.headlinesType1_dynamic()
@@ -323,11 +329,25 @@ class OnBoardingView3: UIView {
         }
     }
     
+    private func landscape() -> Bool {
+        if(UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height) {
+            return false
+        } else {
+            return true
+        }
+    }
+    
     // MARK: - Step 7 /////////////////////////
     func createStep7() {
         self.initStep(self.step7view)
         
-        let label = self.createLabel_B(self.texts[3], container: self.step7view, topOffset: 20)
+        var textForLabel = self.texts[3]
+        print(landscape())
+        if(IS_iPAD() && landscape()) {
+            textForLabel = textForLabel.replacingOccurrences(of: "\n", with: " ")
+        }
+        
+        let label = self.createLabel_B(textForLabel, container: self.step7view, topOffset: 20)
         let exitButton = self.createExitButton(container: self.step7view,
             bottomOffset: self.exitButtonBottomOffset)
         let dots = self.createDots_B(currentPage: 4, container: self.step7view,
@@ -487,6 +507,7 @@ class OnBoardingView3: UIView {
         
         var checkboxTopOffset: CGFloat = 30
         if(SAFE_AREA()!.bottom == 0){ checkboxTopOffset = 15 }
+        if(IS_iPAD() && landscape()){ checkboxTopOffset = 0 }
         let checkbox = self.createCheckboxLarge(container: self.step8view,
             below: label, topOffset: checkboxTopOffset, state: true)
             
@@ -567,6 +588,7 @@ class OnBoardingView3: UIView {
     }
     
     @objc func showStep9(_ sender: UIButton?) {
+
         self.logEvent(type: .completed, step: .step5_splitIntro)
         self.currentStep = .step6_otherSliders
     
@@ -849,6 +871,10 @@ class OnBoardingView3: UIView {
         var _topOffset: CGFloat = topOffset
         if(IS_ZOOMED()){ _topOffset -= 10 }
         
+        if(IS_iPAD()) {
+            label.font = UIFont(name: "Roboto-Regular", size: 25)
+        }
+        
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: container.topAnchor, constant: _topOffset),
             label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 30),
@@ -867,6 +893,10 @@ class OnBoardingView3: UIView {
         button.setTitleColor(accentOrange, for: .normal)
         button.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 16)
         if(IS_ZOOMED()){ button.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 14) }
+        
+        if(IS_iPAD()) {
+            button.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 20)
+        }
         
         container.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -949,9 +979,8 @@ class OnBoardingView3: UIView {
         container.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 30),
-            button.trailingAnchor.constraint(equalTo: container.trailingAnchor,
-                    constant: -30),
+            button.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            button.widthAnchor.constraint(equalToConstant: 500),
             button.bottomAnchor.constraint(equalTo: above.topAnchor, constant: bottomOffset),
             button.heightAnchor.constraint(equalToConstant: 50),
             
@@ -971,9 +1000,8 @@ class OnBoardingView3: UIView {
         
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 30),
-            button.trailingAnchor.constraint(equalTo: container.trailingAnchor,
-                    constant: -30),
+            button.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            button.widthAnchor.constraint(equalToConstant: 500),
             button.topAnchor.constraint(equalTo: below.bottomAnchor, constant: _topOffset),
             button.heightAnchor.constraint(equalToConstant: 50),
             

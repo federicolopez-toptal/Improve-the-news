@@ -104,6 +104,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     var articleSide = 0
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
     // MARK: - Initialization
     init(topic: String) {
         let layout = UICollectionViewFlowLayout.init()
@@ -126,7 +130,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     override func viewDidLoad() {
-    
+        AppUtility.lockOrientation(.all)
+        
         Utils.shared.navController = self.navigationController as? CustomNavigationController
         Utils.shared.newsViewController_ID += 1
         self.uniqueID = Utils.shared.newsViewController_ID
@@ -268,6 +273,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                 UIView.animate(withDuration: 0.4, delay: 1.0, options: .curveLinear) {
                     obView.alpha = 1.0
                 } completion: { success in
+                    AppUtility.lockOrientation(ORIENTATION_MASK())
                 }
             }
         }
@@ -2833,6 +2839,8 @@ extension NewsViewController: OnBoardingViewDelegate {
             self.onBoard?.removeFromSuperview()
             self.onBoard = nil
         }
+        
+        AppUtility.lockOrientation(.all)
     }
     
     @objc func showOnboardingAgain() {
@@ -2844,6 +2852,7 @@ extension NewsViewController: OnBoardingViewDelegate {
             skipFirstStep: true, topic: self.topic, sliderValues: self.getSliderValues())
             
         self.onBoard?.delegate = self
+        AppUtility.lockOrientation(ORIENTATION_MASK())
     }
     
     

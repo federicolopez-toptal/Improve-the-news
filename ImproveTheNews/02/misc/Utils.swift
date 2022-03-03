@@ -387,3 +387,24 @@ func BIGARTICLE_CELL_HEIGHT() -> Int {
         return 360
     }
 }
+
+
+func LANDSCAPE() -> Bool {
+    if(UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height) {
+        return false
+    } else {
+        return true
+    }
+}
+
+func ORIENTATION_MASK() -> UIInterfaceOrientationMask {
+    var result: UIInterfaceOrientationMask = .portrait
+    var orientation = UIApplication.shared.statusBarOrientation
+    
+    if(orientation == .portrait){ result = .portrait }
+    else if(orientation == .portraitUpsideDown){ result = .portraitUpsideDown }
+    else if(orientation == .landscapeLeft){ result = .landscapeLeft }
+    else if(orientation == .landscapeRight){ result = .landscapeRight }
+    
+    return result
+}
