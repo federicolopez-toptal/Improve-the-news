@@ -1075,11 +1075,17 @@ extension NewsViewController: TopicSelectorDelegate {
         // PARAM (S) // --------------------------------
         vc.param_S = 0
         for _vc in self.navigationController!.viewControllers {
+            vc.param_S += GET_COUNT_FOR(topic: newTopic, in: _vc)
+        }
+        
+        /*
+        for _vc in self.navigationController!.viewControllers {
             let topicAndCount = GET_TOPICARTICLESCOUNT(from: _vc)
             if(topicAndCount.0 == newTopic) {
                 vc.param_S += topicAndCount.1
             }
         }
+        */
         
         navigationController?.pushViewController(vc, animated: true)
     }

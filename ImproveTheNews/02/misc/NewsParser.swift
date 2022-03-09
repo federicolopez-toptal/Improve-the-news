@@ -55,6 +55,7 @@ class News {
     private var topicCount: Int
     private var data: [NewsData]
     private var sectionCounts: [Int]
+    private var topicCodes: [String]
     private var sectionTitles: [String]
     private var subTopicsCount: [Int]
     private var popularities: [Float]
@@ -135,6 +136,7 @@ class News {
         topicCount = 0
         data = []
         sectionCounts = []
+        topicCodes = []
         sectionTitles = []
         popularities = []
         hierarchy = ""
@@ -207,6 +209,7 @@ class News {
         self.data.removeAll()
         self.sectionCounts.removeAll()
         self.sectionTitles.removeAll()
+        self.topicCodes.removeAll()
         self.topicCount = 0
         self.popularities.removeAll()
         self.chosenPopularities.removeAll()
@@ -278,6 +281,7 @@ class News {
                                 let num = articles[3].intValue
                                 self.subTopicsCount.append(num)
                                 
+                                self.topicCodes.append(articles[0].stringValue)
                                 self.sectionTitles.append(subtopic)
                                 self.popularities.append(articles[5].float!) // baseline popularities
                                 self.chosenPopularities.append(articles[6].float!) // chosen popularities
@@ -300,6 +304,7 @@ class News {
                                     let num = articles[3].intValue
                                     self.subTopicsCount.append(num)
                                     
+                                    self.topicCodes.append(articles[0].stringValue)
                                     self.sectionTitles.append(subtopic)
                                     if articles[5].float != nil {
                                         self.popularities.append(articles[5].float!)
@@ -495,6 +500,10 @@ class News {
     
     func getAllTopics() -> [String] {
         return self.sectionTitles
+    }
+    
+    func getAllTopicCodes() -> [String] {
+        return self.topicCodes
     }
     
     func getTopic(index: Int) -> String {

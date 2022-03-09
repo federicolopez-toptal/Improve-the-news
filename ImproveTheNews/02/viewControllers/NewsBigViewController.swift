@@ -753,11 +753,17 @@ class NewsBigViewController: UIViewController {
         // PARAM (S) // --------------------------------
         vc.param_S = 0
         for _vc in self.navigationController!.viewControllers {
+            vc.param_S += GET_COUNT_FOR(topic: topicCode, in: _vc)
+        }
+        /*
+        vc.param_S = 0
+        for _vc in self.navigationController!.viewControllers {
             let topicAndCount = GET_TOPICARTICLESCOUNT(from: _vc)
             if(topicAndCount.0 == topicCode) {
                 vc.param_S += topicAndCount.1
             }
         }
+        */
 
         navigationController?.pushViewController(vc, animated: true)
     }

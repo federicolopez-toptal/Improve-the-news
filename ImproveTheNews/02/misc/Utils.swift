@@ -64,6 +64,28 @@ func GET_TOPICARTICLESCOUNT(from vc: UIViewController) -> (String, Int) {
     return (topic, count)
 }
 
+func GET_COUNT_FOR(topic: String, in vc: UIViewController) -> Int {
+    var result = 0
+    var newsParser: News?
+    
+    if(vc is NewsViewController) {
+        newsParser = (vc as! NewsViewController).newsParser
+    } else if(vc is NewsTextViewController) {
+        newsParser = (vc as! NewsTextViewController).newsParser
+    } else if(vc is NewsBigViewController) {
+        newsParser = (vc as! NewsBigViewController).newsParser
+    }
+    
+    if let _news = newsParser {
+        if let index = _news.getAllTopicCodes().firstIndex{$0 == topic} {
+            let count = _news.getArticleCountInSection(section: index)
+            result = count
+        }
+    }
+    
+    return result
+}
+
 
 
 
