@@ -97,7 +97,7 @@ class StoryCollectionViewCell: UICollectionViewCell {
                 ])
                 
                 let iconURL = StorySourceManager.shared.getIconForSource(self.validSources[i-1])
-                print(":: ICON", self.validSources[i-1], iconURL)
+                //print(":: ICON", self.validSources[i-1], iconURL)
                 
                 if(!iconURL.contains(".svg")) {
                     _icon.sd_setImage(with: URL(string: iconURL), placeholderImage: nil)

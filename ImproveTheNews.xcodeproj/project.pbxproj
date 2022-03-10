@@ -12,6 +12,7 @@
 		1F0CDCD22799E10D00368282 /* gradient_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CDCD12799E10D00368282 /* gradient_light.png */; };
 		1F0CDCD42799E23300368282 /* gradient_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CDCD32799E23300368282 /* gradient_dark.png */; };
 		1F2147D727B54F650004F832 /* StoryViewCellTextOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2147D627B54F650004F832 /* StoryViewCellTextOnly.swift */; };
+		1F245A9327DA67050088A238 /* ShareAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F245A9227DA67050088A238 /* ShareAPI.swift */; };
 		1F587F6D27C7FEE9005181A0 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F587F6C27C7FEE9005181A0 /* AppData.swift */; };
 		1F587F6F27C7FF51005181A0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F587F6E27C7FF51005181A0 /* Preview Assets.xcassets */; };
 		1F5B144327A0308900F743FB /* aljazeera.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B143A27A0308800F743FB /* aljazeera.png */; };
@@ -386,6 +387,7 @@
 		1F0CDCD12799E10D00368282 /* gradient_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_light.png; sourceTree = "<group>"; };
 		1F0CDCD32799E23300368282 /* gradient_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_dark.png; sourceTree = "<group>"; };
 		1F2147D627B54F650004F832 /* StoryViewCellTextOnly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryViewCellTextOnly.swift; sourceTree = "<group>"; };
+		1F245A9227DA67050088A238 /* ShareAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareAPI.swift; sourceTree = "<group>"; };
 		1F587F6C27C7FEE9005181A0 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		1F587F6E27C7FF51005181A0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1F5B143A27A0308800F743FB /* aljazeera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aljazeera.png; sourceTree = "<group>"; };
@@ -1369,6 +1371,7 @@
 				BDAC5A6F27623BC200927195 /* in_logo.png */,
 				BDFA587A2742E9550040C7AA /* tmpTest.xib */,
 				BDADB58527678234001820D8 /* ShareSplitAPI.swift */,
+				1F245A9227DA67050088A238 /* ShareAPI.swift */,
 			);
 			path = News;
 			sourceTree = "<group>";
@@ -1917,6 +1920,7 @@
 				1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */,
 				BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */,
 				1F0CDCCC2799CC2800368282 /* StorySourceManager.swift in Sources */,
+				1F245A9327DA67050088A238 /* ShareAPI.swift in Sources */,
 				BDEE62B5274EC518001E59B7 /* ShareSplitArticles.swift in Sources */,
 				BD9D55C9264ABCAF00509722 /* FooterCellTextOnlyItem0.swift in Sources */,
 				A8E94A1524F08E9200936E07 /* SupplementaryViews.swift in Sources */,

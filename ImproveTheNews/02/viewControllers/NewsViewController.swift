@@ -394,7 +394,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         //self.testHaptic()
         
-        
+        self.testSharingWorkflow()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -3130,4 +3130,17 @@ extension UIViewController {
         self.navigationController?.setNeedsStatusBarAppearanceUpdate()
         */
     }
+}
+
+extension NewsViewController {
+
+    func testSharingWorkflow() {
+        
+        let api = ShareAPI()
+        api.getJWT { (success, requestContent) in
+            print("JWT", requestContent)
+        }
+        
+    }
+
 }
