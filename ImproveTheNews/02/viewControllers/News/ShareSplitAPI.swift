@@ -10,7 +10,9 @@ import UIKit
 
 class ShareSplitAPI {
 
-    let BASE_URL = "http://ec2-3-16-162-167.us-east-2.compute.amazonaws.com/php/api/"
+    //let BASE_URL = "http://ec2-3-16-162-167.us-east-2.compute.amazonaws.com/php/api/"
+    let BASE_URL = "https://www.improvemynews.com/php/api/"
+    
 
     func share(imgUrl: String, comment: String,
         art1: (String, String, String, String, Bool),
