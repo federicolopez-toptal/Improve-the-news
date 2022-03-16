@@ -394,7 +394,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         //self.testHaptic()
         
-        self.testSharingWorkflow()
+        self.test()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -3134,12 +3134,69 @@ extension UIViewController {
 
 extension NewsViewController {
 
-    func testSharingWorkflow() {
+    func test() {
+        //self.testSharingJWT()
+
         
-        let api = ShareAPI()
-        api.getJWT { (success, requestContent) in
-            print("JWT", requestContent)
+        DELAY(1.0) {
+            self.test_FBLogin()
         }
+        
+        
+        //self.testSharingLogin()
+    }
+
+    func testSharingJWT() {
+        
+        let api = ShareAPI.instance
+        api.getJWT { (success, requestContent) in
+            if(success) {
+                print("SHARING", "got JWT", requestContent)
+            } else {
+                print("SHARING", "Error", requestContent)
+            }
+        }
+        
+    }
+    
+    func test_FBLogin() {
+        let fb = FB_SDK.instance
+        
+        if(!fb.isLogged()) {
+            fb.login(vc: self)
+        } else {
+            print("SHARING", "TOKEN", fb.getToken()!)
+            
+            /*
+            fb.logout(vc: self) { success in
+                print("SHARING", "log out complete")
+            }
+            */
+        }
+        
+        /*
+        DELAY(1.0) {
+            fb.logout(vc: self) { result in
+                if(result){ print("LOGGED OUT")
+                
+                }
+            }
+        }
+        */
+        
+    }
+    
+    func testSharingLogin() {
+    
+        let fb = FB_SDK.instance
+        if(!fb.isLogged()){ return }
+    
+        let token = fb.getToken()!
+        let api = ShareAPI.instance
+        api.login(accessToken: token, callback: { (success, content) in
+            print("SHARING", success)
+        })
+        
         
     }
 

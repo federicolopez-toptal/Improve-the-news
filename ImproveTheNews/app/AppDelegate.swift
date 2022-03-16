@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FBSDKCoreKit
 
 
 @UIApplicationMain
@@ -17,8 +18,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         FirebaseApp.configure() // for Crashlytics
         Thread.sleep(forTimeInterval: 1.0)  // 1 sec delay to extend the launch screen duration
+        
+        // FB
+        ApplicationDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
     
         return true
+    }
+    
+    func application(_ app: UIApplication, open url: URL,
+        options: [UIApplication.OpenURLOptionsKey : Any] = [:] ) -> Bool {
+        
+        // FB
+        ApplicationDelegate.shared.application(app, open: url,
+            sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+            annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+        )
     }
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
