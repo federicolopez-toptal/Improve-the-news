@@ -3137,10 +3137,11 @@ extension NewsViewController {
     func test() {
         //self.testSharingJWT()
 
-        
+        /*
         DELAY(1.0) {
             self.test_FBLogin()
         }
+        */
         
         
         //self.testSharingLogin()
@@ -3148,6 +3149,7 @@ extension NewsViewController {
 
     func testSharingJWT() {
         
+        /*
         let api = ShareAPI.instance
         api.getJWT { (success, requestContent) in
             if(success) {
@@ -3156,6 +3158,7 @@ extension NewsViewController {
                 print("SHARING", "Error", requestContent)
             }
         }
+        */
         
     }
     
@@ -3172,6 +3175,7 @@ extension NewsViewController {
                 print("SHARING", "log out complete")
             }
             */
+            
         }
         
         /*

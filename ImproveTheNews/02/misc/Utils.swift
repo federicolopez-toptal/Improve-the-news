@@ -242,7 +242,7 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
     return link
 }
 
-func USER_ID() -> String {
+func USER_ID_old() -> String {
     var result = "3"
     let limit = 19
     
@@ -263,6 +263,20 @@ func USER_ID() -> String {
         result += fixedID
     }
     return result
+}
+
+func USER_ID() -> String {
+    if(APP_CFG_NEW_USERID) {
+        let api = ShareAPI.instance
+        if let _uuid = api.uuid {
+            return _uuid
+        } else {
+            api.generate()
+            return USER_ID_old()
+        }
+    } else {
+        return USER_ID_old()
+    }
 }
 
 // MARK: - Validations

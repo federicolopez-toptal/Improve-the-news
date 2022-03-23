@@ -42,6 +42,8 @@ let APP_CFG_MORE_PREFS = true
 
 
 let APP_CFG_SPLITSHARING = true
+let APP_CFG_NEW_USERID = true
+
 
 
 // false/false for v1

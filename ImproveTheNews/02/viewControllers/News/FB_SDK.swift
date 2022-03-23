@@ -6,6 +6,13 @@
 //  Copyright © 2022 Mindy Long. All rights reserved.
 //
 
+/*
+    https://developers.facebook.com/docs/facebook-login/ios/
+    https://developers.facebook.com/docs/facebook-login/ios/advanced
+    https://cocoapods.org/pods/FBSDKCoreKit
+*/
+
+
 import Foundation
 import FBSDKLoginKit
 import UIKit
