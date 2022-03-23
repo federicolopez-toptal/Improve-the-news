@@ -3135,36 +3135,35 @@ extension UIViewController {
 extension NewsViewController {
 
     func test() {
-        //self.testSharingJWT()
-
-        /*
-        DELAY(1.0) {
+        
+        DELAY(2.0) {
             self.test_FBLogin()
         }
-        */
         
         
         //self.testSharingLogin()
     }
 
-    func testSharingJWT() {
-        
-        /*
-        let api = ShareAPI.instance
-        api.getJWT { (success, requestContent) in
-            if(success) {
-                print("SHARING", "got JWT", requestContent)
-            } else {
-                print("SHARING", "Error", requestContent)
-            }
-        }
-        */
-        
-    }
+    
     
     func test_FBLogin() {
-        let fb = FB_SDK.instance
         
+        let fb = FB_SDK.instance
+        if(!fb.isLogged()) {
+            fb.login(vc: self)
+        } else {
+            fb.logout(vc: self) { (_a) in
+                print("SHARE", _a)
+                print("SHARE", fb.isLogged())
+            }
+        }
+        
+        //fb.login(vc: self)
+        
+        // return
+        
+        
+        /*
         if(!fb.isLogged()) {
             fb.login(vc: self)
         } else {
@@ -3177,6 +3176,7 @@ extension NewsViewController {
             */
             
         }
+        */
         
         /*
         DELAY(1.0) {
@@ -3191,17 +3191,17 @@ extension NewsViewController {
     }
     
     func testSharingLogin() {
-    
+        /*
         let fb = FB_SDK.instance
         if(!fb.isLogged()){ return }
     
         let token = fb.getToken()!
         let api = ShareAPI.instance
-        api.login(accessToken: token, callback: { (success, content) in
+        api.login(accessToken: token, callback: { (success) in
             print("SHARING", success)
         })
         
-        
+        */
     }
 
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /*
     By Armin
@@ -28,8 +29,10 @@ class ShareAPI {
     private let keySHARE_uuid = "SHARE_uuid"
     private let keySHARE_jwt = "SHARE_jwt"
 
+    private let bearerAuth = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDc0NDcwMTYsImp0aSI6IkRcL01OQ0RQVG8xcVVZaXJcL2lTRjdMQT09IiwiaXNzIjoiaW1wcm92ZXRoZW5ld3Mub3JnIiwibmJmIjoxNjQ3NDQ3MDE2LCJleHAiOjI5NjI0NTUwMTYsImRhdGEiOnsidXNyaWQiOiIzNjM1MDU0MzI1NTE3NDIwMDA1In19.gH0w7cENtFfMou4IeCiBp2Ov4zy1IhS-5Q7WlBY84qbkwiTFOORbR5SBMf_F-5hwUFB7xjn2a39A8MlCLHpVsQ"
+
     var uuid: String? {
-        return self.readKey(keySHARE_uuid)
+        return ShareAPI.readStringKey(keySHARE_uuid)
     }
 
 
@@ -57,8 +60,8 @@ class ShareAPI {
                     if let _jwt = json["jwt"] as? String, let _uuid = json["uuid"] as? String {
                         print("JWT", _jwt)
                         print("UserID", _uuid)
-                        self.writeKey(self.keySHARE_uuid, value: _uuid)
-                        self.writeKey(self.keySHARE_jwt, value: _jwt)
+                        ShareAPI.writeKey(self.keySHARE_uuid, value: _uuid)
+                        ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
                     } else {
                         print("SHARE/GENERATE/ERROR", "Error parsing json")
                     }
@@ -70,14 +73,18 @@ class ShareAPI {
         task.resume()
         
     }
+    /*
+    RESPONSE example
+    
+    {"jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDgwNDAwMTQsImp0aSI6IlpucUMrM29STGI3RDdxOGh6SkliTmc9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTY0ODA0MDAxNCwiZXhwIjoyOTYzMDQ4MDE0LCJkYXRhIjp7InVzcmlkIjoiMzYzNTA1NDMyNTUxNzQyMDAwNSJ9fQ.C1JN5BwFDAwQ4Tmwu3qofFkTvmcvgdmgeYzmOos875OTa7c_r2uq6Swj1zOSxpY8h0hKcvBjuxCYXhaevwW-Aw","uuid":"3635054325517420005"}
+    */
     
     // ************************************************************ //
-                                                        // success, errorDescription or JWT string
-    func login(accessToken: String, callback: @escaping (Bool, String) -> ()) {
+    func login(type: String, accessToken: String, callback: @escaping (Bool) -> ()) { // (success)
         let url = API_BASE_URL() + "/php/api/user/"
         
         let bodyJson: [String: String] = [
-            "type": "Facebook",
+            "type": type,
             "userId": USER_ID(),
             "access_token": accessToken
         ]
@@ -86,35 +93,46 @@ class ShareAPI {
         request.httpMethod = "POST"
         let body = try? JSONSerialization.data(withJSONObject: bodyJson)
         request.httpBody = body
-        
-        let bearer = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MzgyNzg4ODUsImp0aSI6InZWbXN4WHhwRTRWaTVxN25UN3VtTVE9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTYzODI3ODg4NSwiZXhwIjoyOTUzMDI3Njg1LCJkYXRhIjp7InVzcmlkIjoiMjUwOTAwMjUzNzUzNjA1MiJ9fQ.dX7XCCAypg0J8JJGj5FE8gzkGtX-Kbij4G__olkB8lG5gFaCPwIAv44VBbnGfzZ2MmLKLkDPWas5Gr_22XOGvA"
-        request.setValue(bearer, forHTTPHeaderField: "Authorization")
-        
+        request.setValue(self.bearerAuth, forHTTPHeaderField: "Authorization")
 
         let task = URLSession.shared.dataTask(with: request) { data, resp, error in
             if let _error = error {
-                callback(false, _error.localizedDescription)
+                print("SHARE/LOGIN/ERROR", _error.localizedDescription)
             } else {
                 if let json = self.json(fromData: data) {
-                    if let _jwt = json["jwt"] as? String { //}, let _uuid = json["uuid"] {
-                        //self.writeLocal_JWT(_jwt)
-                        callback(true, _jwt)
+                    if let _jwt = json["jwt"] as? String { // let _uuid = json["uuid"]
+                        ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
+                        callback(true)
                     } else {
-                        callback(false, "Error parsing json")
+                        print("SHARE/LOGIN/ERROR", "Error parsing json")
+                        callback(false)
                     }
                 } else {
-                    callback(false, "Error parsing json")
+                    print("SHARE/LOGIN/ERROR", "Error parsing json")
+                    callback(false)
                 }
             }
         }
         task.resume()
     }
     
+    /*
+    RESPONSE example
+    
+    {"uuid":"3635054325517420005","socialnetworks":[],"message":"OK","slidercookies":"","jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDgwMzk3NzYsImp0aSI6IlhUUUh0UWt3TTErTXk4XC9FY0Z1K1wvZz09IiwiaXNzIjoiaW1wcm92ZXRoZW5ld3Mub3JnIiwibmJmIjoxNjQ4MDM5Nzc2LCJleHAiOjI5NjMwNDc3NzYsImRhdGEiOnsidXNyaWQiOiIzNjM1MDU0MzI1NTE3NDIwMDA1In19.llMWJtx_MQTdWCcnaMIeXk2neJSH6yruLdr-JAnCQhs6_k2i-uy1kHaZixtY00_1YisgGo78rWKWz1pLnFWU1A"}
+    */
+    
+    // ************************************************************ //
+    func disconnect() { // (success)
+    }
 }
+
+// ************************************************************ //
+// ************************************************************ //
 
 extension ShareAPI {
 
-    // Some private methods
+    // Some utility methods
     private func json(fromData data: Data?) -> [String: Any]? {
         if let _data = data {
             do{
@@ -129,7 +147,7 @@ extension ShareAPI {
         }
     }
     
-    private func readKey(_ key: String) -> String? {
+    static func readStringKey(_ key: String) -> String? {
         if let _value = UserDefaults.standard.string(forKey: key) {
             return _value
         } else {
@@ -137,9 +155,36 @@ extension ShareAPI {
         }
     }
     
-    private func writeKey(_ key: String, value: String) {
+    static func readBoolKey(_ key: String) -> Bool {
+        let _value = UserDefaults.standard.bool(forKey: key)
+        return _value
+    }
+    
+    static func writeKey(_ key: String, value: Any) {
         UserDefaults.standard.setValue(value, forKey: key)
         UserDefaults.standard.synchronize()
+    }
+    
+    static func removeKey(_ key: String) {
+        UserDefaults.standard.removeObject(forKey: key)
+        UserDefaults.standard.synchronize()
+    }
+    
+    static func logoutDialog(vc: UIViewController, header: String, question: String, callback: @escaping (Bool) -> ()) {
+        let alert = UIAlertController(title: header, message: question, preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Yes", style: .default) { action in
+            callback(true)
+        }
+        let noAction = UIAlertAction(title: "No", style: .default) { action in
+            callback(false)
+        }
+        
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        
+        vc.present(alert, animated: true) {
+        }
     }
     
 }

@@ -21,17 +21,17 @@ class FB_SDK {
 
     static let instance = FB_SDK()
 
+    private let keySHARE_FBLogged = "SHARE_FBLogged"
 
+
+    // ************************************************************ //
     func isLogged() -> Bool {
-        if let token = AccessToken.current, !token.isExpired {
+        let logged = ShareAPI.readBoolKey(keySHARE_FBLogged)
+        if logged, let token = AccessToken.current, !token.isExpired {
             return true
         } else {
             return false
         }
-    }
-    
-    func getToken() -> String? {
-        return AccessToken.current?.tokenString
     }
     
     func login(vc: UIViewController) {
@@ -46,37 +46,44 @@ class FB_SDK {
                         print("FB - Cancelled")
                     } else {
                         print("FB - Logueado!")
+                        
+                        // _result.token?.tokenString
+                        // _result.authenticationToken?.tokenString
+                        self.ITN_login(token: _result.token!.tokenString)
                     }
-                    
-                    /*
-                    print(_result.token?.tokenString)
-                    print(_result.authenticationToken?.tokenString)
-                    */
                 }
             }
+        }
+        
+    }
+    
+    private func ITN_login(token: String) {
+        let api = ShareAPI.instance
+        api.login(type: "Facebook", accessToken: token) { (success) in
+            ShareAPI.writeKey(self.keySHARE_FBLogged, value: true)
+            print("FB login to the server -", success)
         }
     }
     
     func logout(vc: UIViewController, callback: @escaping (Bool)->() ) {
         
-        let alert = UIAlertController(title: "Facebook", message: "Close current session?", preferredStyle: .alert)
-        
-        let yesAction = UIAlertAction(title: "Yes", style: .default) { action in
-            let loginManager = LoginManager()
-            loginManager.logOut()
-        
-            callback(true)
+        let _h = "Facebook"
+        let _q = "Close current Facebook session?"
+        ShareAPI.logoutDialog(vc: vc, header: _h, question: _q) { (wasLoggedOut) in
+            if(wasLoggedOut) {
+                LoginManager().logOut()
+                ShareAPI.removeKey(self.keySHARE_FBLogged)
+                //TODO: ShareAPI.instance.disconnect()
+            }
+            callback(wasLoggedOut)
         }
-        let noAction = UIAlertAction(title: "No", style: .default) { action in
-            callback(false)
-        }
-        
-        alert.addAction(yesAction)
-        alert.addAction(noAction)
-        
-        vc.present(alert, animated: true) {
-        }
-        
-        
     }
+    
 }
+
+
+/*
+    func getToken() -> String? {
+        return AccessToken.current?.tokenString
+    }
+    */
