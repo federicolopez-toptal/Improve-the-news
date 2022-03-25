@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import FBSDKCoreKit
+import Swifter
 
 
 @UIApplicationMain
@@ -31,6 +32,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL,
         options: [UIApplication.OpenURLOptionsKey : Any] = [:] ) -> Bool {
         
+        /*
+        print("asdadas")
+        return true
+        */
+        
+        /*
+        // TW
+        let callbackUrl = URL(string: TW_SDK.callbackUrl)!
+        Swifter.handleOpenURL(url, callbackURL: callbackUrl)
+        return true
+        */
+        
         // FB
         ApplicationDelegate.shared.application(app, open: url,
             sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
@@ -40,6 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
 
+        // FB
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
     

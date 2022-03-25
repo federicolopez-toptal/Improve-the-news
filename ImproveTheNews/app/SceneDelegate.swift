@@ -8,6 +8,7 @@
 
 import UIKit
 import FBSDKCoreKit
+import Swifter
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -19,6 +20,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
 
+        // Twitter
+        if(url.absoluteString.lowercased().contains("itntestapp")) {
+            guard let context = URLContexts.first else { return }
+            let callbackUrl = URL(string: TW_SDK.callbackUrl)!
+            Swifter.handleOpenURL(context.url, callbackURL: callbackUrl)
+        }
+        
         // FB
         ApplicationDelegate.shared.application(
             UIApplication.shared,

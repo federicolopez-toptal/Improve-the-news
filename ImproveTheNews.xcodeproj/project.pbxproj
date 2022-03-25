@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F0CB8F627EBE3C4000F388A /* TW_SDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CB8F527EBE3C4000F388A /* TW_SDK.swift */; };
 		1F0CDCCA2799BBDF00368282 /* updatedIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CDCC92799BBDF00368282 /* updatedIcon.png */; };
 		1F0CDCCC2799CC2800368282 /* StorySourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CDCCB2799CC2800368282 /* StorySourceManager.swift */; };
 		1F0CDCD22799E10D00368282 /* gradient_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CDCD12799E10D00368282 /* gradient_light.png */; };
@@ -383,6 +384,7 @@
 
 /* Begin PBXFileReference section */
 		14F78899320DBC683DD84507 /* Pods-ImproveTheNewsTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNewsTests.app store.xcconfig"; path = "Target Support Files/Pods-ImproveTheNewsTests/Pods-ImproveTheNewsTests.app store.xcconfig"; sourceTree = "<group>"; };
+		1F0CB8F527EBE3C4000F388A /* TW_SDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TW_SDK.swift; sourceTree = "<group>"; };
 		1F0CDCC92799BBDF00368282 /* updatedIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = updatedIcon.png; sourceTree = "<group>"; };
 		1F0CDCCB2799CC2800368282 /* StorySourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorySourceManager.swift; sourceTree = "<group>"; };
 		1F0CDCD12799E10D00368282 /* gradient_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_light.png; sourceTree = "<group>"; };
@@ -1375,6 +1377,7 @@
 				BDADB58527678234001820D8 /* ShareSplitAPI.swift */,
 				1F245A9227DA67050088A238 /* ShareAPI.swift */,
 				1FFCEBD827E10B8400EB4797 /* FB_SDK.swift */,
+				1F0CB8F527EBE3C4000F388A /* TW_SDK.swift */,
 			);
 			path = News;
 			sourceTree = "<group>";
@@ -1929,6 +1932,7 @@
 				A8E94A1524F08E9200936E07 /* SupplementaryViews.swift in Sources */,
 				BD2FEB3327468E2200CE5F07 /* ShareSplitActionsPopup.swift in Sources */,
 				BD1C4021276927EB007C258B /* URLExtension.swift in Sources */,
+				1F0CB8F627EBE3C4000F388A /* TW_SDK.swift in Sources */,
 				1FA083BC27BAD71A00C2E01D /* ArticleLayouts.swift in Sources */,
 				B6B87DA225626E9F00707A5C /* CustomSlider.swift in Sources */,
 				BDF37F65263AE026003D910D /* HeaderCellTextOnly.swift in Sources */,

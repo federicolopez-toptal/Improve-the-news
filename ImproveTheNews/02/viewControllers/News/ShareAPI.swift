@@ -123,7 +123,70 @@ class ShareAPI {
     */
     
     // ************************************************************ //
-    func disconnect() { // (success)
+    func login_TW(token T: String, verifier V: String, callback: @escaping (Bool) -> ()) { // (success)
+        
+        let url = API_BASE_URL() + "/php/twitter/login.php?oauth_verifier=\(V)&oauth_token=\(T)"
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                print("SHARE/LOGIN.TW/ERROR", _error.localizedDescription)
+                callback(false)
+            } else {
+                if let _response = resp as? HTTPURLResponse {
+                    let statusCode = _response.statusCode
+                    if(statusCode == 200) {
+                        print("SHARE/LOGIN.TW", "Success!")
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    /*
+    RESPONSE example
+    
+    "" 🤦‍♂️
+    */
+    
+    // ************************************************************ //
+    func disconnect(type: String) { // (success)
+        let url = API_BASE_URL() + "/php/api/user/"
+        
+        let bodyJson: [String: String] = [
+            "type": "Disconnect",
+            "userId": USER_ID(),
+            "socialNetwork": type
+        ]
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(self.bearerAuth, forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                print("SHARE/DISCONNECT/ERROR", _error.localizedDescription)
+            } else {
+                if let _response = resp as? HTTPURLResponse {
+                    let statusCode = _response.statusCode
+                    if(statusCode == 200) {
+                        print("SHARE/DISCONNECT", "successful")
+                    }
+                } else {
+                    print("SHARE/DISCONNECT/ERROR", "Unknow error")
+                }
+
+            }
+        }
+        task.resume()
     }
 }
 

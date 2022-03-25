@@ -3132,23 +3132,26 @@ extension UIViewController {
     }
 }
 
-extension NewsViewController {
+extension NewsViewController: SFSafariViewControllerDelegate {
 
     func test() {
         
         DELAY(2.0) {
-            self.test_FBLogin()
+            //self.test_FBLogin()
+            self.test_TWLogin()
         }
         
-        
-        //self.testSharingLogin()
     }
 
-    
+    func test_TWLogin() {
+        let tw = TW_SDK.instance
+        tw.login(vc: self)
+    }
     
     func test_FBLogin() {
         
         let fb = FB_SDK.instance
+
         if(!fb.isLogged()) {
             fb.login(vc: self)
         } else {

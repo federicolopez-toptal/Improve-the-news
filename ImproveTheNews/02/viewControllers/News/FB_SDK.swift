@@ -20,7 +20,6 @@ import UIKit
 class FB_SDK {
 
     static let instance = FB_SDK()
-
     private let keySHARE_FBLogged = "SHARE_FBLogged"
 
 
@@ -73,7 +72,7 @@ class FB_SDK {
             if(wasLoggedOut) {
                 LoginManager().logOut()
                 ShareAPI.removeKey(self.keySHARE_FBLogged)
-                //TODO: ShareAPI.instance.disconnect()
+                ShareAPI.instance.disconnect(type: "Facebook")
             }
             callback(wasLoggedOut)
         }
