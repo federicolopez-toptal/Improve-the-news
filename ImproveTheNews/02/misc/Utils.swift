@@ -243,6 +243,7 @@ func API_CALL(topicCode: String, abs: [Int], biasStatus: String,
 }
 
 func USER_ID_old() -> String {
+    /*
     var result = "3"
     let limit = 19
     
@@ -263,9 +264,17 @@ func USER_ID_old() -> String {
         result += fixedID
     }
     return result
+    */
+    
+    return "3635054325517420005" //1
+    //return "3596010244403483218" //2
 }
 
 func USER_ID() -> String {
+    
+    return USER_ID_old()
+    
+    /*
     if(APP_CFG_NEW_USERID) {
         let api = ShareAPI.instance
         if let _uuid = api.uuid {
@@ -276,6 +285,23 @@ func USER_ID() -> String {
         }
     } else {
         return USER_ID_old()
+    }
+    */
+}
+
+func USER_ID_new() -> String {
+    let key = "USER_ID Random"
+    
+    if let _value = ShareAPI.readStringKey(key) {
+        return _value
+    } else {
+        var randomNums = "3"
+        for _ in 1...18 {
+            let n = Int.random(in: 0...9)
+            randomNums += String(n)
+        }
+        ShareAPI.writeKey(key, value: randomNums)
+        return randomNums
     }
 }
 

@@ -99,12 +99,17 @@ class ShareAPI {
             if let _error = error {
                 print("SHARE/LOGIN/ERROR", _error.localizedDescription)
             } else {
+                /*
+                let str = String(decoding: data!, as: UTF8.self)
+                print(str)
+                */
+            
                 if let json = self.json(fromData: data) {
                     if let _jwt = json["jwt"] as? String { // let _uuid = json["uuid"]
                         ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
                         callback(true)
                     } else {
-                        print("SHARE/LOGIN/ERROR", "Error parsing json")
+                        print("SHARE/LOGIN/ERROR", "Json error, no JWT")
                         callback(false)
                     }
                 } else {
@@ -119,13 +124,14 @@ class ShareAPI {
     /*
     RESPONSE example
     
-    {"uuid":"3635054325517420005","socialnetworks":[],"message":"OK","slidercookies":"","jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDgwMzk3NzYsImp0aSI6IlhUUUh0UWt3TTErTXk4XC9FY0Z1K1wvZz09IiwiaXNzIjoiaW1wcm92ZXRoZW5ld3Mub3JnIiwibmJmIjoxNjQ4MDM5Nzc2LCJleHAiOjI5NjMwNDc3NzYsImRhdGEiOnsidXNyaWQiOiIzNjM1MDU0MzI1NTE3NDIwMDA1In19.llMWJtx_MQTdWCcnaMIeXk2neJSH6yruLdr-JAnCQhs6_k2i-uy1kHaZixtY00_1YisgGo78rWKWz1pLnFWU1A"}
+    {"uuid":"3635054325517420005","socialnetworks":[],"message":"OK","slidercookies":"","jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDgyMTk3OTksImp0aSI6Im9YXC9NU3BiWkhsZEVaeG9JSlNyOENRPT0iLCJpc3MiOiJpbXByb3ZldGhlbmV3cy5vcmciLCJuYmYiOjE2NDgyMTk3OTksImV4cCI6Mjk2MzIyNzc5OSwiZGF0YSI6eyJ1c3JpZCI6IjM2MzUwNTQzMjU1MTc0MjAwMDUifX0.xI1ciS8vUbYoLQ9n731nuJi0j3ldAA03hyXjxJE60m6ZzQkiAJxBPVtg1BI_yApQN6DZiLL1Ava_YeP7hb_aGg"}
     */
     
     // ************************************************************ //
     func login_TW(token T: String, verifier V: String, callback: @escaping (Bool) -> ()) { // (success)
         
-        let url = API_BASE_URL() + "/php/twitter/login.php?oauth_verifier=\(V)&oauth_token=\(T)"
+        let U = USER_ID()
+        let url = API_BASE_URL() + "/php/twitter/login.php?oauth_verifier=\(V)&oauth_token=\(T)&userid=\(U)"
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
@@ -135,14 +141,20 @@ class ShareAPI {
                 print("SHARE/LOGIN.TW/ERROR", _error.localizedDescription)
                 callback(false)
             } else {
-                if let _response = resp as? HTTPURLResponse {
-                    let statusCode = _response.statusCode
-                    if(statusCode == 200) {
-                        print("SHARE/LOGIN.TW", "Success!")
+                let str = String(decoding: data!, as: UTF8.self)
+                print(str)
+            
+                if let json = self.json(fromData: data) {
+                    if let _output=json["output"] as? [String: Any], let _jwt=_output["jwt"] as? String {
+                        ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
                         callback(true)
                     } else {
+                        print("SHARE/LOGIN.TW/ERROR", "Error parsing json/getting info")
                         callback(false)
                     }
+                } else {
+                    print("SHARE/LOGIN.TW/ERROR", "Error parsing json/getting info")
+                    callback(false)
                 }
             }
         }
@@ -152,7 +164,18 @@ class ShareAPI {
     /*
     RESPONSE example
     
-    "" 🤦‍♂️
+    {
+    "output": {
+        "uuid": null,
+        "socialnetworks": [
+            "Twitter"
+        ],
+        "message": "OK",
+        "slidercookies": null,
+        "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDgyMTkyNzcsImp0aSI6IjdJWjBBek5TU1pBYysza2E5U09ZUWc9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTY0ODIxOTI3NywiZXhwIjoyOTYzMjI3Mjc3LCJkYXRhIjp7InVzcmlkIjpudWxsfX0.XmeMChtVJYboLKubhmzoleIyuW-iEBHq2nob-tvEDoCMOsTnvJwPL1XjPo1jtZOIpu2hXL0jd9is-O07qqEZFw"
+    },
+    "socialNetworks": "[\"Twitter\"]"
+    }
     */
     
     // ************************************************************ //
@@ -171,10 +194,15 @@ class ShareAPI {
         request.httpBody = body
         request.setValue(self.bearerAuth, forHTTPHeaderField: "Authorization")
         
-        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+        let task = URLSession.shared.dataTask(with: request) { (data, resp, error) in
             if let _error = error {
                 print("SHARE/DISCONNECT/ERROR", _error.localizedDescription)
             } else {
+                /*
+                let str = String(decoding: data!, as: UTF8.self)
+                print(str)
+                */
+            
                 if let _response = resp as? HTTPURLResponse {
                     let statusCode = _response.statusCode
                     if(statusCode == 200) {
@@ -188,6 +216,12 @@ class ShareAPI {
         }
         task.resume()
     }
+    
+    /*
+    RESPONSE example
+    
+    {"message":"OK"}
+     */
 }
 
 // ************************************************************ //

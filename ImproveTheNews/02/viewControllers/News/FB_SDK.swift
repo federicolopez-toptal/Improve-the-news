@@ -22,6 +22,7 @@ class FB_SDK {
     static let instance = FB_SDK()
     private let keySHARE_FBLogged = "SHARE_FBLogged"
 
+    // FB ids & URLs in the info.plist file
 
     // ************************************************************ //
     func isLogged() -> Bool {
@@ -65,9 +66,9 @@ class FB_SDK {
     }
     
     func logout(vc: UIViewController, callback: @escaping (Bool)->() ) {
-        
         let _h = "Facebook"
         let _q = "Close current Facebook session?"
+        
         ShareAPI.logoutDialog(vc: vc, header: _h, question: _q) { (wasLoggedOut) in
             if(wasLoggedOut) {
                 LoginManager().logOut()

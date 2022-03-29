@@ -26,6 +26,22 @@ class TW_SDK {
     
     
     // ************************************************************ //
+    private func start() {
+        if(self.swifter == nil) {
+            self.swifter = Swifter(consumerKey: tw_consumerKey,
+                consumerSecret: tw_consumerSecret, appOnly: false)
+        }
+    }
+    
+    func isLogged() -> Bool {
+        let logged = ShareAPI.readBoolKey(keySHARE_TWLogged)
+        if logged {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func login(vc: UIViewController) {
         self.start()
         let callback = URL(string: TW_SDK.callbackUrl)!
@@ -54,17 +70,24 @@ class TW_SDK {
         }
     }
     
-    // ************************************************************ //
+    func logout(vc: UIViewController, callback: @escaping (Bool)->() ) {
+        let _h = "Twitter"
+        let _q = "Close current Twitter session?"
+        
+        ShareAPI.logoutDialog(vc: vc, header: _h, question: _q) { (wasLoggedOut) in
+            if(wasLoggedOut) {
+                //LoginManager().logOut()
+                ShareAPI.removeKey(self.keySHARE_TWLogged)
+                ShareAPI.instance.disconnect(type: "Twitter")
+            }
+            callback(wasLoggedOut)
+        }
+    }
     
 }
 
 extension TW_SDK {
     
-    private func start() {
-        if(self.swifter == nil) {
-            self.swifter = Swifter(consumerKey: tw_consumerKey,
-                consumerSecret: tw_consumerSecret, appOnly: false)
-        }
-    }
+    
     
 }

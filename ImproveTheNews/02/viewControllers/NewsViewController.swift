@@ -3139,19 +3139,14 @@ extension NewsViewController: SFSafariViewControllerDelegate {
         DELAY(2.0) {
             //self.test_FBLogin()
             self.test_TWLogin()
+            //self.test_LILogin()
         }
         
     }
 
-    func test_TWLogin() {
-        let tw = TW_SDK.instance
-        tw.login(vc: self)
-    }
-    
     func test_FBLogin() {
-        
         let fb = FB_SDK.instance
-
+        
         if(!fb.isLogged()) {
             fb.login(vc: self)
         } else {
@@ -3160,51 +3155,39 @@ extension NewsViewController: SFSafariViewControllerDelegate {
                 print("SHARE", fb.isLogged())
             }
         }
+    }
+
+
+    func test_LILogin() {
+        let li = LI_SDK.instance
         
-        //fb.login(vc: self)
-        
-        // return
-        
-        
-        /*
-        if(!fb.isLogged()) {
-            fb.login(vc: self)
+        if(!li.isLogged()) {
+            li.login(vc: self)
         } else {
-            print("SHARING", "TOKEN", fb.getToken()!)
-            
-            /*
-            fb.logout(vc: self) { success in
-                print("SHARING", "log out complete")
-            }
-            */
-            
-        }
-        */
-        
-        /*
-        DELAY(1.0) {
-            fb.logout(vc: self) { result in
-                if(result){ print("LOGGED OUT")
-                
-                }
+            li.logout(vc: self) { (a) in
+                print("LINKEDIN", "loggedOut", a)
             }
         }
-        */
+
         
     }
-    
-    func testSharingLogin() {
+
+    func test_TWLogin() {
+        let tw = TW_SDK.instance
+        
+        tw.login(vc: self)
+        
         /*
-        let fb = FB_SDK.instance
-        if(!fb.isLogged()){ return }
-    
-        let token = fb.getToken()!
-        let api = ShareAPI.instance
-        api.login(accessToken: token, callback: { (success) in
-            print("SHARING", success)
-        })
-        
+        if(!tw.isLogged()) {
+            tw.login(vc: self)
+        } else {
+            tw.logout(vc: self) { (_a) in
+                print("SHARE", _a)
+                print("SHARE", tw.isLogged())
+            }
+        }
         */
     }
+    
 
 }
