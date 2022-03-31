@@ -56,7 +56,7 @@ class ShareAPI {
             if let _error = error {
                 print("SHARE/GENERATE/ERROR", _error.localizedDescription)
             } else {
-                if let json = self.json(fromData: data) {
+                if let json = ShareAPI.json(fromData: data) {
                     if let _jwt = json["jwt"] as? String, let _uuid = json["uuid"] as? String {
                         print("JWT", _jwt)
                         print("UserID", _uuid)
@@ -99,12 +99,10 @@ class ShareAPI {
             if let _error = error {
                 print("SHARE/LOGIN/ERROR", _error.localizedDescription)
             } else {
-                /*
                 let str = String(decoding: data!, as: UTF8.self)
                 print(str)
-                */
             
-                if let json = self.json(fromData: data) {
+                if let json = ShareAPI.json(fromData: data) {
                     if let _jwt = json["jwt"] as? String { // let _uuid = json["uuid"]
                         ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
                         callback(true)
@@ -144,7 +142,7 @@ class ShareAPI {
                 let str = String(decoding: data!, as: UTF8.self)
                 print(str)
             
-                if let json = self.json(fromData: data) {
+                if let json = ShareAPI.json(fromData: data) {
                     if let _output=json["output"] as? [String: Any], let _jwt=_output["jwt"] as? String {
                         ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
                         callback(true)
@@ -230,7 +228,7 @@ class ShareAPI {
 extension ShareAPI {
 
     // Some utility methods
-    private func json(fromData data: Data?) -> [String: Any]? {
+    static func json(fromData data: Data?) -> [String: Any]? {
         if let _data = data {
             do{
                 let json = try JSONSerialization.jsonObject(with: _data,

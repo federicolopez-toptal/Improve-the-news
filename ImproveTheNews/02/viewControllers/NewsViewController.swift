@@ -3138,11 +3138,19 @@ extension NewsViewController: SFSafariViewControllerDelegate {
         
         DELAY(2.0) {
             //self.test_FBLogin()
-            self.test_TWLogin()
+            //self.test_TWLogin()
             //self.test_LILogin()
+            
+            self.test_REDLogin()
         }
-        
     }
+    
+    func test_REDLogin() {
+        let red = RED_SDK.instance
+        
+        red.login(vc: self)
+    }
+    
 
     func test_FBLogin() {
         let fb = FB_SDK.instance
