@@ -42,22 +42,25 @@ class TW_SDK {
         }
     }
     
-    func login(vc: UIViewController) {
+    func login(vc: UIViewController, callback: @escaping (Bool)->()) {
         self.start()
-        let callback = URL(string: TW_SDK.callbackUrl)!
+        let callbackUrl = URL(string: TW_SDK.callbackUrl)!
         
-        self.swifter!.authorize(withCallback: callback,
+        self.swifter!.authorize(withCallback: callbackUrl,
                                 presentingFrom: vc,
                                 authSuccess: { (T, V) in
             
             print("TW - Logueado")
-            self.ITN_login(token: T, verifier: V)
+            //self.ITN_login(token: T, verifier: V)
+                callback(true)
+                ShareAPI.writeKey(self.keySHARE_TWLogged, value: true)
 
         }, failure: { _ in
             print("TW - Cancelled")
             if(vc.presentingViewController != nil) {
                 vc.dismiss(animated: true)
             }
+            callback(false)
         })
         
     }
@@ -66,7 +69,7 @@ class TW_SDK {
         let api = ShareAPI.instance
         api.login_TW(token: T, verifier: V) { (success) in
             ShareAPI.writeKey(self.keySHARE_TWLogged, value: true)
-            print("TW login to the server -", success)
+            //ShareAPI.LOG(where: "Twitter login", msg: "Success")
         }
     }
     
@@ -78,7 +81,7 @@ class TW_SDK {
             if(wasLoggedOut) {
                 //LoginManager().logOut()
                 ShareAPI.removeKey(self.keySHARE_TWLogged)
-                ShareAPI.instance.disconnect(type: "Twitter")
+                //ShareAPI.instance.disconnect(type: "Twitter")
             }
             callback(wasLoggedOut)
         }

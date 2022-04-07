@@ -26,6 +26,8 @@ class LI_SDK: NSObject {
     private let AUTHURL = "https://www.linkedin.com/oauth/v2/authorization"
     private let TOKENURL = "https://www.linkedin.com/oauth/v2/accessToken"
     
+    private var callback: ( (Bool)->() )?
+    
     // ************************************************************ //
     func isLogged() -> Bool {
         let logged = ShareAPI.readBoolKey(keySHARE_LILogged)
@@ -36,8 +38,9 @@ class LI_SDK: NSObject {
         }
     }
     
-    func login(vc: UIViewController) {
+    func login(vc: UIViewController, callback: @escaping (Bool)->()) {
         self.vc = vc
+        self.callback = callback
         
         let nav = self.createNavController()
         self.loadLoginPage()
@@ -48,7 +51,7 @@ class LI_SDK: NSObject {
         let api = ShareAPI.instance
         api.login(type: "Linkedin", accessToken: token) { (success) in
             ShareAPI.writeKey(self.keySHARE_LILogged, value: true)
-            print("LINKEDIN login to the server -", success)
+            //ShareAPI.LOG(where: "Linkedin login", msg: "Success")
         }
     }
     
@@ -59,11 +62,23 @@ class LI_SDK: NSObject {
         ShareAPI.logoutDialog(vc: vc, header: _h, question: _q) { (wasLoggedOut) in
             if(wasLoggedOut) {
                 //LoginManager().logOut()
-                ShareAPI.removeKey(self.keySHARE_LILogged)
-                ShareAPI.instance.disconnect(type: "Linkedin")
+                
+                self.logout_web {
+                    ShareAPI.removeKey(self.keySHARE_LILogged)
+                    //ShareAPI.instance.disconnect(type: "Linkedin")
+                }
+
             }
             callback(wasLoggedOut)
         }
+    }
+    
+    private func logout_web(callback: @escaping ()->()) {
+        
+        let url = "https://linkedin.com/m/logout"
+        var request = URLRequest(url: URL(string: url)!)
+        self.webView.load(request)
+        callback()
     }
     
     // ************************************************************ //
@@ -157,10 +172,15 @@ extension LI_SDK: WKNavigationDelegate {
          if(url.contains("?code=")) {
             print("LINKEDIN - Logueado")
             decisionHandler(.cancel)
+            
             self.getAccessTokenWith(authCode: self.getAuthCodeFrom(url: url)) { (token) in
                 if let _token = token {
-                    self.ITN_login(token: _token)
+                    //self.ITN_login(token: _token)
                     self.cancelAction()
+                    ShareAPI.writeKey(self.keySHARE_LILogged, value: true)
+                    self.callback?(true)
+                } else {
+                    self.callback?(false)
                 }
             }
         } else {

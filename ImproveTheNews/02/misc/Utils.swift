@@ -266,30 +266,33 @@ func USER_ID_old() -> String {
     return result
     */
     
-    return "3635054325517420005" //1
-    //return "3596010244403483218" //2
+    //return "3635054325517420005" //1
+    return "3596010244403483218" //2
 }
 
 func USER_ID() -> String {
     
-    return USER_ID_old()
-    
-    /*
     if(APP_CFG_NEW_USERID) {
+    
+        // **************************+
         let api = ShareAPI.instance
         if let _uuid = api.uuid {
             return _uuid
         } else {
-            api.generate()
-            return USER_ID_old()
+            if(!api.isGenerating) {
+                api.generate()
+            }
+            return USER_ID_RND()
         }
+        // ***************************
+        
     } else {
-        return USER_ID_old()
+        return USER_ID_RND()
     }
-    */
+    
 }
 
-func USER_ID_new() -> String {
+func USER_ID_RND() -> String {
     let key = "USER_ID Random"
     
     if let _value = ShareAPI.readStringKey(key) {
@@ -301,6 +304,7 @@ func USER_ID_new() -> String {
             randomNums += String(n)
         }
         ShareAPI.writeKey(key, value: randomNums)
+        ShareAPI.LOG(where: "UserIdRandom", msg: randomNums + " was generated")
         return randomNums
     }
 }

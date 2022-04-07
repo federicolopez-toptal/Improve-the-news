@@ -28,21 +28,29 @@ class ShareAPI {
     
     private let keySHARE_uuid = "SHARE_uuid"
     private let keySHARE_jwt = "SHARE_jwt"
+    private let keySHARE_bearerAuth = "SHARE_bearerAuth"
 
-    private let bearerAuth = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDc0NDcwMTYsImp0aSI6IkRcL01OQ0RQVG8xcVVZaXJcL2lTRjdMQT09IiwiaXNzIjoiaW1wcm92ZXRoZW5ld3Mub3JnIiwibmJmIjoxNjQ3NDQ3MDE2LCJleHAiOjI5NjI0NTUwMTYsImRhdGEiOnsidXNyaWQiOiIzNjM1MDU0MzI1NTE3NDIwMDA1In19.gH0w7cENtFfMou4IeCiBp2Ov4zy1IhS-5Q7WlBY84qbkwiTFOORbR5SBMf_F-5hwUFB7xjn2a39A8MlCLHpVsQ"
+    private var bearerAuth = ""
+    public var isGenerating = false
 
     var uuid: String? {
         return ShareAPI.readStringKey(keySHARE_uuid)
     }
 
 
+    private func getBearerAuth() -> String {
+        return ShareAPI.readStringKey(keySHARE_bearerAuth)!
+    }
+
     // ************************************************************ //
     func generate() {
+        self.isGenerating = true
+        let here = "Generate"
         let url = API_BASE_URL() + "/php/api/user/"
         
         let bodyJson: [String: String] = [
             "type": "Generate",
-            "userId": USER_ID_old(),
+            "userId": USER_ID_RND(),
             "app": "iOS"
         ]
         
@@ -51,24 +59,30 @@ class ShareAPI {
         let body = try? JSONSerialization.data(withJSONObject: bodyJson)
         request.httpBody = body
         
-
+        
         let task = URLSession.shared.dataTask(with: request) { data, resp, error in
             if let _error = error {
-                print("SHARE/GENERATE/ERROR", _error.localizedDescription)
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
             } else {
+                ShareAPI.LOG_DATA(data, where: here)
                 if let json = ShareAPI.json(fromData: data) {
                     if let _jwt = json["jwt"] as? String, let _uuid = json["uuid"] as? String {
-                        print("JWT", _jwt)
-                        print("UserID", _uuid)
+                        
+                        ShareAPI.LOG(where: here, msg: "got uuid from server: " + _uuid)
+                        
                         ShareAPI.writeKey(self.keySHARE_uuid, value: _uuid)
                         ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
+                        
+                        let _bearer = "Bearer " + _jwt
+                        ShareAPI.writeKey(self.keySHARE_bearerAuth, value: _bearer)
                     } else {
-                        print("SHARE/GENERATE/ERROR", "Error parsing json")
+                        ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
                     }
                 } else {
-                    print("SHARE/GENERATE/ERROR", "Error parsing json")
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
                 }
             }
+            self.isGenerating = false
         }
         task.resume()
         
@@ -76,11 +90,12 @@ class ShareAPI {
     /*
     RESPONSE example
     
-    {"jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDgwNDAwMTQsImp0aSI6IlpucUMrM29STGI3RDdxOGh6SkliTmc9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTY0ODA0MDAxNCwiZXhwIjoyOTYzMDQ4MDE0LCJkYXRhIjp7InVzcmlkIjoiMzYzNTA1NDMyNTUxNzQyMDAwNSJ9fQ.C1JN5BwFDAwQ4Tmwu3qofFkTvmcvgdmgeYzmOos875OTa7c_r2uq6Swj1zOSxpY8h0hKcvBjuxCYXhaevwW-Aw","uuid":"3635054325517420005"}
+    {"jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDg3NTE3MDEsImp0aSI6IjFGajlWXC9LcUtsaHB0XC9PMnpudFBTQT09IiwiaXNzIjoiaW1wcm92ZXRoZW5ld3Mub3JnIiwibmJmIjoxNjQ4NzUxNzAxLCJleHAiOjI5NjM3NTk3MDEsImRhdGEiOnsidXNyaWQiOiIzNTAxODQwMDE2OTg1Mzk0MTE1In19.itVlxjouwB9aPwHsJUQYO_EyEFBZzmPg-RedpfYZfWj3UkaJf6HZlK85o6J60Dff_UekoMuMSJy9TpiAAYbiEw","uuid":"3501840016985394115"}
     */
     
     // ************************************************************ //
     func login(type: String, accessToken: String, callback: @escaping (Bool) -> ()) { // (success)
+        let here = "Login"
         let url = API_BASE_URL() + "/php/api/user/"
         
         let bodyJson: [String: String] = [
@@ -93,25 +108,25 @@ class ShareAPI {
         request.httpMethod = "POST"
         let body = try? JSONSerialization.data(withJSONObject: bodyJson)
         request.httpBody = body
-        request.setValue(self.bearerAuth, forHTTPHeaderField: "Authorization")
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
 
         let task = URLSession.shared.dataTask(with: request) { data, resp, error in
             if let _error = error {
-                print("SHARE/LOGIN/ERROR", _error.localizedDescription)
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
             } else {
-                let str = String(decoding: data!, as: UTF8.self)
-                print(str)
+                ShareAPI.LOG_DATA(data, where: here)
             
                 if let json = ShareAPI.json(fromData: data) {
                     if let _jwt = json["jwt"] as? String { // let _uuid = json["uuid"]
+                        ShareAPI.LOG(where: here, msg: type + " success")
                         ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
                         callback(true)
                     } else {
-                        print("SHARE/LOGIN/ERROR", "Json error, no JWT")
+                        ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
                         callback(false)
                     }
                 } else {
-                    print("SHARE/LOGIN/ERROR", "Error parsing json")
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
                     callback(false)
                 }
             }
@@ -122,59 +137,51 @@ class ShareAPI {
     /*
     RESPONSE example
     
-    {"uuid":"3635054325517420005","socialnetworks":[],"message":"OK","slidercookies":"","jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDgyMTk3OTksImp0aSI6Im9YXC9NU3BiWkhsZEVaeG9JSlNyOENRPT0iLCJpc3MiOiJpbXByb3ZldGhlbmV3cy5vcmciLCJuYmYiOjE2NDgyMTk3OTksImV4cCI6Mjk2MzIyNzc5OSwiZGF0YSI6eyJ1c3JpZCI6IjM2MzUwNTQzMjU1MTc0MjAwMDUifX0.xI1ciS8vUbYoLQ9n731nuJi0j3ldAA03hyXjxJE60m6ZzQkiAJxBPVtg1BI_yApQN6DZiLL1Ava_YeP7hb_aGg"}
+    {"uuid":"3501840016985394115","socialnetworks":["Facebook"],"message":"OK","slidercookies":null,"jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDg3NTIxMDcsImp0aSI6InQ5a0dYSmpjY3ArbHFwd1ZSNUw3Znc9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTY0ODc1MjEwNywiZXhwIjoyOTYzNzYwMTA3LCJkYXRhIjp7InVzcmlkIjoiMzUwMTg0MDAxNjk4NTM5NDExNSJ9fQ.4DXgJmXCjzBPKvGCD-w8dN8dg2WlRGL4RjzA7xXkUePgLElPdJ2gqBd2pDzWhu87JaIcHjBVCZLuZyyea6hzrA"}
     */
     
     // ************************************************************ //
-    func login_TW(token T: String, verifier V: String, callback: @escaping (Bool) -> ()) { // (success)
+    func login_TW(token: String, verifier: String, callback: @escaping (Bool) -> ()) {
+        let type = "Twitter"
+        let here = "Login"
+        let url = API_BASE_URL() + "/php/api/user/"
         
-        let U = USER_ID()
-        let url = API_BASE_URL() + "/php/twitter/login.php?oauth_verifier=\(V)&oauth_token=\(T)&userid=\(U)"
+        let bodyJson: [String: String] = [
+            "type": type,
+            "userId": USER_ID(),
+            "access_token": token,
+            "secret_token": verifier
+        ]
         
         var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = "GET"
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
 
         let task = URLSession.shared.dataTask(with: request) { data, resp, error in
             if let _error = error {
-                print("SHARE/LOGIN.TW/ERROR", _error.localizedDescription)
-                callback(false)
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
             } else {
-                let str = String(decoding: data!, as: UTF8.self)
-                print(str)
+                ShareAPI.LOG_DATA(data, where: here)
             
                 if let json = ShareAPI.json(fromData: data) {
-                    if let _output=json["output"] as? [String: Any], let _jwt=_output["jwt"] as? String {
+                    if let _jwt = json["jwt"] as? String { // let _uuid = json["uuid"]
+                        ShareAPI.LOG(where: here, msg: type + " success")
                         ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
                         callback(true)
                     } else {
-                        print("SHARE/LOGIN.TW/ERROR", "Error parsing json/getting info")
+                        ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
                         callback(false)
                     }
                 } else {
-                    print("SHARE/LOGIN.TW/ERROR", "Error parsing json/getting info")
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
                     callback(false)
                 }
             }
         }
         task.resume()
     }
-    
-    /*
-    RESPONSE example
-    
-    {
-    "output": {
-        "uuid": null,
-        "socialnetworks": [
-            "Twitter"
-        ],
-        "message": "OK",
-        "slidercookies": null,
-        "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDgyMTkyNzcsImp0aSI6IjdJWjBBek5TU1pBYysza2E5U09ZUWc9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTY0ODIxOTI3NywiZXhwIjoyOTYzMjI3Mjc3LCJkYXRhIjp7InVzcmlkIjpudWxsfX0.XmeMChtVJYboLKubhmzoleIyuW-iEBHq2nob-tvEDoCMOsTnvJwPL1XjPo1jtZOIpu2hXL0jd9is-O07qqEZFw"
-    },
-    "socialNetworks": "[\"Twitter\"]"
-    }
-    */
     
     // ************************************************************ //
     func disconnect(type: String) { // (success)
@@ -275,11 +282,24 @@ extension ShareAPI {
             callback(false)
         }
         
-        alert.addAction(yesAction)
         alert.addAction(noAction)
+        alert.addAction(yesAction)
         
         vc.present(alert, animated: true) {
         }
+    }
+    
+    static func LOG(where w: String, msg: String) {
+        print("SHARE-\(w): " + msg)
+    }
+    
+    static func LOG_ERROR(where w: String, msg: String) {
+        print("SHARE", "ERROR in \"\(w)\": \(msg)")
+    }
+    
+    static func LOG_DATA(_ data: Data?, where w: String) {
+        let str = String(decoding: data!, as: UTF8.self)
+        print("SHARE-\(w)", "DATA " + str)
     }
     
 }

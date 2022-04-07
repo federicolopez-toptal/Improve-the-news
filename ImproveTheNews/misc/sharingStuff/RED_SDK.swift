@@ -22,6 +22,9 @@ class RED_SDK: NSObject {
     private let CLIENT_ID = "4ohV1VzBRgfMRbbtlSXlWA"
     private let REDIRECT_URI = "https://www.improvethenews.org"
     
+    private var callback: ( (Bool)->() )?
+    
+    
     /*
     private let CLIENT_ID = "78dxrtqsoxss3p"
     private let CLIENT_SECRET = "FesDHpaPtRaRlkdR"
@@ -42,8 +45,9 @@ class RED_SDK: NSObject {
         }
     }
     
-    func login(vc: UIViewController) {
+    func login(vc: UIViewController, callback: @escaping (Bool)->()) {
         self.vc = vc
+        self.callback = callback
         
         let nav = self.createNavController()
         self.loadLoginPage()
@@ -57,11 +61,24 @@ class RED_SDK: NSObject {
         ShareAPI.logoutDialog(vc: vc, header: _h, question: _q) { (wasLoggedOut) in
             if(wasLoggedOut) {
                 //LoginManager().logOut()
-                ShareAPI.removeKey(self.keySHARE_REDLogged)
-                ShareAPI.instance.disconnect(type: "Reddit")
+                
+                self.logout_web {
+                    ShareAPI.removeKey(self.keySHARE_REDLogged)
+                    //ShareAPI.instance.disconnect(type: "Reddit")
+                }
+                
             }
             callback(wasLoggedOut)
         }
+    }
+    
+    private func logout_web(callback: @escaping ()->()) {
+        
+        let url = "https://www.reddit.com/logout"
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        self.webView.load(request)
+        callback()
     }
     
     // ************************************************************ //
@@ -166,8 +183,11 @@ extension RED_SDK: WKNavigationDelegate {
             _state == self.rndState,
             let _token = params["access_token"] as? String {
             
-                self.ITN_login(token: _token)
+                //self.ITN_login(token: _token)
                 decisionHandler(.cancel)
+                self.cancelAction()
+                ShareAPI.writeKey(self.keySHARE_REDLogged, value: true)
+                self.callback?(true)
         } else {
             decisionHandler(.allow)
         }
@@ -177,7 +197,7 @@ extension RED_SDK: WKNavigationDelegate {
         let api = ShareAPI.instance
         api.login(type: "Reddit", accessToken: token) { (success) in
             ShareAPI.writeKey(self.keySHARE_REDLogged, value: true)
-            print("REDDIT login to the server -", success)
+            //ShareAPI.LOG(where: "Reddit login", msg: "Success")
         }
     }
     

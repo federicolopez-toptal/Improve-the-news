@@ -394,7 +394,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         //self.testHaptic()
         
-        self.test()
+        if(self.firstTime){ self.test() }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -3135,13 +3135,35 @@ extension UIViewController {
 extension NewsViewController: SFSafariViewControllerDelegate {
 
     func test() {
+        let vc = MyAccountViewController.createInstance()
+        self.present(vc, animated: true)
+    }
+
+/*
+    func test() {
         
         DELAY(2.0) {
-            //self.test_FBLogin()
-            //self.test_TWLogin()
-            //self.test_LILogin()
-            
-            self.test_REDLogin()
+            let vc = MyAccountViewController.createInstance()
+            self.present(vc, animated: true)
+        
+            /*
+            let fb = FB_SDK.instance
+            fb.login(vc: self)
+            */
+            /*
+            let li = LI_SDK.instance
+            li.login(vc: self)
+            */
+        
+            /*
+            let red = RED_SDK.instance
+            red.login(vc: self)
+            */
+        
+            /*
+            let tw = TW_SDK.instance
+            tw.login(vc: self)
+            */
         }
     }
     
@@ -3155,6 +3177,7 @@ extension NewsViewController: SFSafariViewControllerDelegate {
     func test_FBLogin() {
         let fb = FB_SDK.instance
         
+        /*
         if(!fb.isLogged()) {
             fb.login(vc: self)
         } else {
@@ -3163,10 +3186,13 @@ extension NewsViewController: SFSafariViewControllerDelegate {
                 print("SHARE", fb.isLogged())
             }
         }
+        */
     }
 
 
     func test_LILogin() {
+    
+        /*
         let li = LI_SDK.instance
         
         if(!li.isLogged()) {
@@ -3176,14 +3202,17 @@ extension NewsViewController: SFSafariViewControllerDelegate {
                 print("LINKEDIN", "loggedOut", a)
             }
         }
+        */
 
         
     }
 
     func test_TWLogin() {
+        /*
         let tw = TW_SDK.instance
         
         tw.login(vc: self)
+        */
         
         /*
         if(!tw.isLogged()) {
@@ -3197,5 +3226,5 @@ extension NewsViewController: SFSafariViewControllerDelegate {
         */
     }
     
-
+*/
 }

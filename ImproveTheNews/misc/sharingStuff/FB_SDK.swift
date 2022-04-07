@@ -34,23 +34,32 @@ class FB_SDK {
         }
     }
     
-    func login(vc: UIViewController) {
+    func login(vc: UIViewController, callback: @escaping (Bool)->()) {
         let loginManager = LoginManager()
         let permissions = ["public_profile"]
         loginManager.logIn(permissions: permissions, from: vc) { result, error in
             if let _error = error {
                 print("Error", _error.localizedDescription)
+                callback(false)
             } else {
                 if let _result = result {
                     if(_result.isCancelled) {
                         print("FB - Cancelled")
+                        callback(false)
                     } else {
                         print("FB - Logueado!")
+
+                        /*
+                            _result.token?.tokenString
+                            _result.authenticationToken?.tokenString
+                        */
                         
-                        // _result.token?.tokenString
-                        // _result.authenticationToken?.tokenString
-                        self.ITN_login(token: _result.token!.tokenString)
+                        //self.ITN_login(token: _result.token!.tokenString)
+                            callback(true)
+                            ShareAPI.writeKey(self.keySHARE_FBLogged, value: true)
                     }
+                } else {
+                    callback(false)
                 }
             }
         }
@@ -61,7 +70,7 @@ class FB_SDK {
         let api = ShareAPI.instance
         api.login(type: "Facebook", accessToken: token) { (success) in
             ShareAPI.writeKey(self.keySHARE_FBLogged, value: true)
-            print("FB login to the server -", success)
+            //ShareAPI.LOG(where: "Facebook login", msg: "Success")
         }
     }
     
@@ -73,7 +82,7 @@ class FB_SDK {
             if(wasLoggedOut) {
                 LoginManager().logOut()
                 ShareAPI.removeKey(self.keySHARE_FBLogged)
-                ShareAPI.instance.disconnect(type: "Facebook")
+                //ShareAPI.instance.disconnect(type: "Facebook")
             }
             callback(wasLoggedOut)
         }
