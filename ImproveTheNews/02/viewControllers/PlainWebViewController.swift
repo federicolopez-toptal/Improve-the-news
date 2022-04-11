@@ -204,7 +204,6 @@ class PlainWebViewController: UIViewController, WKUIDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.updateStatusBar()
         setupWebNavBar()
         initControls()
     }

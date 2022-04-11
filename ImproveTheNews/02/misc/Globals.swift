@@ -9,6 +9,12 @@
 import Foundation
 import UIKit
 
+
+let APP_CFG_MY_ACCOUNT = true
+
+
+
+
 // bright mode
 let bgWhite_DARK = UIColor(rgb: 0xE8E5E7)
 let bgWhite_LIGHT = UIColor(rgb: 0xFFFFFF)

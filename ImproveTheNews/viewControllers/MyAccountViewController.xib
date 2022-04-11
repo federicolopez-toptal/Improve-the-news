@@ -31,11 +31,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tOI-Qn-9Xd">
-                    <rect key="frame" x="354" y="35" width="65" height="37.5"/>
+                    <rect key="frame" x="344.5" y="35" width="69.5" height="37.5"/>
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="plain">
                         <attributedString key="attributedTitle">
-                            <fragment content="Back">
+                            <fragment content="Close">
                                 <attributes>
                                     <color key="NSColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <font key="NSFont" size="17" name="OpenSans-Bold"/>
@@ -317,7 +317,7 @@
             <constraints>
                 <constraint firstItem="Ppz-Y6-B2r" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="2DA-cp-I6C"/>
                 <constraint firstItem="mwq-uU-TKM" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="15" id="4tm-77-Doa"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="tOI-Qn-9Xd" secondAttribute="trailing" constant="-5" id="6ga-rk-DNr"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="tOI-Qn-9Xd" secondAttribute="trailing" id="6ga-rk-DNr"/>
                 <constraint firstItem="mwq-uU-TKM" firstAttribute="top" secondItem="dVI-in-zoH" secondAttribute="bottom" constant="14" id="A4O-vI-Gsj"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="USk-0d-80c" secondAttribute="trailing" id="AVI-qs-0DB"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="top" secondItem="9nQ-7g-UzE" secondAttribute="top" constant="14" id="CTh-XJ-4qS"/>

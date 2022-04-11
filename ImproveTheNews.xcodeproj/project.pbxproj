@@ -30,6 +30,7 @@
 		1F5B144B27A0308900F743FB /* wapo.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F5B144227A0308900F743FB /* wapo.png */; };
 		1F5B144D27A03CF100F743FB /* StoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B144C27A03CF100F743FB /* StoryViewCell.swift */; };
 		1F5B144F27A0850100F743FB /* PlainWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B144E27A0850100F743FB /* PlainWebViewController.swift */; };
+		1F5DA1402804C28900C7C81C /* NavBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DA13F2804C28900C7C81C /* NavBarStyle.swift */; };
 		1F7DE51527F56354008923FF /* RED_SDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7DE51427F56354008923FF /* RED_SDK.swift */; };
 		1F827C4A279E2B7C0077FB26 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */; };
 		1F8BFDFB2783BC76004632F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F8BFDFA2783BC76004632F3 /* Main.storyboard */; };
@@ -415,6 +416,7 @@
 		1F5B144227A0308900F743FB /* wapo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wapo.png; sourceTree = "<group>"; };
 		1F5B144C27A03CF100F743FB /* StoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryViewCell.swift; sourceTree = "<group>"; };
 		1F5B144E27A0850100F743FB /* PlainWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainWebViewController.swift; sourceTree = "<group>"; };
+		1F5DA13F2804C28900C7C81C /* NavBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarStyle.swift; sourceTree = "<group>"; };
 		1F7DE51427F56354008923FF /* RED_SDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RED_SDK.swift; sourceTree = "<group>"; };
 		1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		1F8BFDFA2783BC76004632F3 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -888,6 +890,7 @@
 			isa = PBXGroup;
 			children = (
 				1F54863527FF55C600161996 /* UI.swift */,
+				1F5DA13F2804C28900C7C81C /* NavBarStyle.swift */,
 				1F8F213827FCA132008CB00D /* sharingStuff */,
 			);
 			path = misc;
@@ -1991,6 +1994,7 @@
 				1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */,
 				1F54863427FF2CE000161996 /* UIViewExtension.swift in Sources */,
 				BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */,
+				1F5DA1402804C28900C7C81C /* NavBarStyle.swift in Sources */,
 				1F0CDCCC2799CC2800368282 /* StorySourceManager.swift in Sources */,
 				1F54863627FF55C600161996 /* UI.swift in Sources */,
 				1F245A9327DA67050088A238 /* ShareAPI.swift in Sources */,

@@ -68,7 +68,7 @@ class SectionsViewController: UIViewController {
             self.support.append("More Preferences")
         }
         self.support.append("Tour")
-        self.support.append("My account")
+        //self.support.append("My account")
         
         navigationItem.largeTitleDisplayMode = .never
         safeArea = view.layoutMarginsGuide
@@ -152,7 +152,6 @@ class SectionsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.hidesBackButton = true
-        self.updateStatusBar()
         //navigationController?.navigationBar.barStyle = DARKMODE() ? .black : .default
         //navigationController?.navigationBar.barStyle = .default
         
@@ -240,9 +239,11 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
                 present(prefs, animated: true, completion: nil)
             case 9:
                 self.showOnboarding()
+            /*
             case 10:
                 let vc = MyAccountViewController.createInstance()
                 self.present(vc, animated: true)
+            */
             default:
                 fatalError()
         }

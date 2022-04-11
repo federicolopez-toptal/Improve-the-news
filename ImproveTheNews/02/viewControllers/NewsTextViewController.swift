@@ -293,106 +293,21 @@ class NewsTextViewController: UIViewController {
     }
     
     @objc private func setUpNavBar() {
+        /*
         print("GATO999", self.uniqueID)
         DispatchQueue.main.async {
             self.setUpNavBar_2()
         }
-    }
-    
-    @objc private func setUpNavBar_2() {
-        searchBar.sizeToFit()
-        searchBar.searchTextField.backgroundColor = .white
-        searchBar.searchTextField.textColor = .black
-        searchBar.tintColor = .black
-
-        let logo = UIImage(named: "N64")
-        let titleView = UIImageView(image: logo)
-        titleView.contentMode = .scaleAspectFit
-        navigationItem.titleView = titleView
-
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
-        navigationController?.navigationBar.isTranslucent = false
-        
-        let _textColor = DARKMODE() ? UIColor.white : textBlack
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
-        
-        if #available(iOS 15.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
-            appearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
-            
-            navigationController?.navigationBar.standardAppearance = appearance
-            navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
-        }
-        //navigationController?.navigationBar.barStyle = .black
-        
-
-        let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.sectionButtonItemClicked(_:)))
-
-        let iconsMargin: CGFloat = 45.0
-
-        let bellButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain,
-            target: self, action: #selector(bellButtonTap(_:)) )
-        bellButton.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: iconsMargin)
-
-        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self,
-            action: #selector(searchItemClicked(_:)))
-            
-        var userImage = UIImage(systemName: "person")
-        if(MarkupUser.shared.userInfo != nil) {
-            userImage = UIImage(systemName: "person.fill")
-        }
-            
-        let userButton = UIBarButtonItem(image: userImage, style: .plain,
-            target: self, action: #selector(userButtonTap(_:)) )
-        userButton.imageInsets = UIEdgeInsets(top: 0, left: iconsMargin, bottom: 0, right: 0)
-
-        var leftButtons: [UIBarButtonItem] = [sectionsButton]
-        var rightButtons: [UIBarButtonItem] = [searchButton]
-
-        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
-            leftButtons.append(bellButton)
-            rightButtons.append(userButton)
-        }
-        
-        
-        navigationItem.leftBarButtonItems = leftButtons
-        navigationItem.rightBarButtonItems = rightButtons
-
-        /*
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchItemClicked(_:)))
-        navigationItem.leftBarButtonItem = sectionsButton
         */
-        navigationItem.leftItemsSupplementBackButton = true
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-
-        var logoFile = "ITN_logo.png"
-        if(!DARKMODE()){ logoFile = "ITN_logo_blackText.png" }
-        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 165, height: 30))
         
-        let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
-        let homeButton = UIButton(image: img!)
-        
-        var valX: CGFloat = 0
-        let elementsSizeSum: CGFloat = (44*4)+195+(5*2)
-        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
-            valX = ((view.frame.size.width - 195)/2) //- 10.0
-            if(elementsSizeSum>=UIScreen.main.bounds.width) {
-                valX -= 10.0
-            }
+        DispatchQueue.main.async {
+            SETUP_NAVBAR(viewController: self,
+                homeTap: #selector(self.homeButtonTapped),
+                menuTap: #selector(self.hamburgerButtonItemClicked(_:)),
+                searchTap: #selector(self.searchItemClicked(_:)),
+                userTap: #selector(self.userButtonItemClicked(_:)))
         }
         
-        self.addBadge()
-        //homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
-        homeButton.frame = CGRect(x: valX, y: 0, width: 195, height: 30)
-        homeButton.addTarget(self, action: #selector(homeButtonTapped),
-                            for: .touchUpInside)
-        
-        view.addSubview(homeButton)
-        view.center = navigationItem.titleView!.center
-        self.navigationItem.titleView = view
     }
     
     func setupTableView() {
@@ -576,17 +491,18 @@ class NewsTextViewController: UIViewController {
     }
     
     // MARK: - Some action(s)
-    @objc func sectionButtonItemClicked(_ sender:UIBarButtonItem!) {
-        //if(self.onBoard == nil) {
-            navigationController?.customPushViewController(SectionsViewController())
-        //}
+    @objc func hamburgerButtonItemClicked(_ sender:UIBarButtonItem!) {
+        navigationController?.customPushViewController(SectionsViewController())
+    }
+    
+    @objc func userButtonItemClicked(_ sender:UIBarButtonItem!) {
+        let vc = MyAccountViewController.createInstance()
+        self.present(vc, animated: true)
     }
     
     @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
-        //if(self.onBoard == nil) {
-            let searchvc = SearchViewController()
-            navigationController?.pushViewController(searchvc, animated: true)
-        //}
+        let searchvc = SearchViewController()
+        navigationController?.pushViewController(searchvc, animated: true)
     }
     
     @objc func refresh(_ sender: UIRefreshControl!) {
@@ -1328,3 +1244,116 @@ extension NewsTextViewController: OnBoardingViewDelegate {
         }
     }
 }
+
+
+/*
+    TRASH
+    
+    @objc private func setUpNavBar_2() {
+        searchBar.sizeToFit()
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.searchTextField.textColor = .black
+        searchBar.tintColor = .black
+
+        let logo = UIImage(named: "N64")
+        let titleView = UIImageView(image: logo)
+        titleView.contentMode = .scaleAspectFit
+        navigationItem.titleView = titleView
+
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
+        navigationController?.navigationBar.isTranslucent = false
+        
+        let _textColor = DARKMODE() ? UIColor.white : textBlack
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
+        
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
+            appearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
+            
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        }
+        //navigationController?.navigationBar.barStyle = .black
+        
+
+        let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.hamburgerButtonItemClicked(_:)))
+
+        let iconsMargin: CGFloat = 45.0
+
+        let bellButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain,
+            target: self, action: #selector(bellButtonTap(_:)) )
+        bellButton.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: iconsMargin)
+
+        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self,
+            action: #selector(searchItemClicked(_:)))
+            
+        var userImage = UIImage(systemName: "person")
+        if(MarkupUser.shared.userInfo != nil) {
+            userImage = UIImage(systemName: "person.fill")
+        }
+            
+        let userButton = UIBarButtonItem(image: userImage, style: .plain,
+            target: self, action: #selector(userButtonTap(_:)) )
+        userButton.imageInsets = UIEdgeInsets(top: 0, left: iconsMargin, bottom: 0, right: 0)
+
+        var leftButtons: [UIBarButtonItem] = [sectionsButton]
+        var rightButtons: [UIBarButtonItem] = [searchButton]
+
+        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+            leftButtons.append(bellButton)
+            rightButtons.append(userButton)
+        }
+        
+         if(APP_CFG_MY_ACCOUNT) {
+            //var userImage = UIImage(systemName: "person")
+            let userButton2 = UIBarButtonItem(image: userImage, style: .plain, target: self,
+                action: #selector(userButtonItemClicked(_:)) )
+            userButton2.imageInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
+            
+            rightButtons.append(userButton2)
+        }
+        
+        
+        navigationItem.leftBarButtonItems = leftButtons
+        navigationItem.rightBarButtonItems = rightButtons
+
+        /*
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchItemClicked(_:)))
+        navigationItem.leftBarButtonItem = sectionsButton
+        */
+        navigationItem.leftItemsSupplementBackButton = true
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+
+        var logoFile = "ITN_logo.png"
+        if(!DARKMODE()){ logoFile = "ITN_logo_blackText.png" }
+        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 165, height: 30))
+        
+        let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
+        let homeButton = UIButton(image: img!)
+        
+        /*
+        var valX: CGFloat = 0
+        let elementsSizeSum: CGFloat = (44*4)+195+(5*2)
+        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
+            valX = ((view.frame.size.width - 195)/2) //- 10.0
+            if(elementsSizeSum>=UIScreen.main.bounds.width) {
+                valX -= 10.0
+            }
+        }
+        self.addBadge()
+        */
+        
+        //homeButton.frame = CGRect(x: valX, y: 0, width: 195, height: 30)
+        homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
+        homeButton.addTarget(self, action: #selector(homeButtonTapped),
+                            for: .touchUpInside)
+        
+        view.addSubview(homeButton)
+        view.center = navigationItem.titleView!.center
+        self.navigationItem.titleView = view
+    }
+    
+ */
