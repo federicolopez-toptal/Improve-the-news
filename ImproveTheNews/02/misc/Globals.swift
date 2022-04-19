@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 
-let APP_CFG_MY_ACCOUNT = true
 
 
 
@@ -47,8 +46,8 @@ let APP_CFG_INACTIVE_MINS: TimeInterval = 30.0
 let APP_CFG_MORE_PREFS = true
 
 
-let APP_CFG_SPLITSHARING = true
-let APP_CFG_NEW_USERID = true
+
+
 
 
 

@@ -15,6 +15,15 @@ class MyAccountViewController: UIViewController {
         super.viewDidLoad()
         self.applyStyle()
         self.updateButtons()
+        
+        
+        DELAY(1.0) {
+            let api = ShareAPI.instance
+            
+            print("SHARE", api.uuid)
+            print("SHARE", api.getBearerAuth())
+        }
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -117,11 +126,11 @@ extension MyAccountViewController: SFSafariViewControllerDelegate {
     
         if(fb.isLogged()) {
             fb.logout(vc: self) { (isLoggedOut) in
-                if(isLoggedOut) { fb_button.connected = false }
+                if(isLoggedOut) { self.updateButton(fb_button, connected: false) }
             }
         } else {
             fb.login(vc: self) { (isLogged) in
-                if(isLogged) { fb_button.connected = true }
+                if(isLogged) { self.updateButton(fb_button, connected: true) }
             }
         }
     }
@@ -132,11 +141,11 @@ extension MyAccountViewController: SFSafariViewControllerDelegate {
     
         if(tw.isLogged()) {
             tw.logout(vc: self) { (isLoggedOut) in
-                if(isLoggedOut) { tw_button.connected = false }
+                if(isLoggedOut) { self.updateButton(tw_button, connected: false) }
             }
         } else {
             tw.login(vc: self) { (isLogged) in
-                if(isLogged) { tw_button.connected = true }
+                if(isLogged) { self.updateButton(tw_button, connected: true) }
             }
         }
     }
@@ -172,6 +181,12 @@ extension MyAccountViewController: SFSafariViewControllerDelegate {
                     DispatchQueue.main.async { red_button.connected = true }
                 }
             }
+        }
+    }
+    
+    private func updateButton(_ button: SocialConnectButton, connected: Bool) {
+        DispatchQueue.main.async {
+            button.connected = connected
         }
     }
 }

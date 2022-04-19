@@ -19,8 +19,15 @@ class RED_SDK: NSObject {
     private let webView = WKWebView()
     private var rndState = ""
     
+    
     private let CLIENT_ID = "4ohV1VzBRgfMRbbtlSXlWA"
     private let REDIRECT_URI = "https://www.improvethenews.org"
+    
+    /*
+    private let CLIENT_ID = "GU2ZOAR1Tpku_xdtt8fwpw"
+    private let CLIENT_SECRET = "cM01yBeT415RA8VqFHfHuVE5NRbPHA"
+    private let REDIRECT_URI = "https://www.improvemynews.com/reddit"
+    */
     
     private var callback: ( (Bool)->() )?
     
@@ -60,11 +67,9 @@ class RED_SDK: NSObject {
         
         ShareAPI.logoutDialog(vc: vc, header: _h, question: _q) { (wasLoggedOut) in
             if(wasLoggedOut) {
-                //LoginManager().logOut()
-                
                 self.logout_web {
                     ShareAPI.removeKey(self.keySHARE_REDLogged)
-                    //ShareAPI.instance.disconnect(type: "Reddit")
+                    ShareAPI.instance.disconnect(type: "Reddit")
                 }
                 
             }
@@ -183,11 +188,14 @@ extension RED_SDK: WKNavigationDelegate {
             _state == self.rndState,
             let _token = params["access_token"] as? String {
             
-                //self.ITN_login(token: _token)
+                self.ITN_login(token: _token)
                 decisionHandler(.cancel)
+                
+                /*
                 self.cancelAction()
                 ShareAPI.writeKey(self.keySHARE_REDLogged, value: true)
                 self.callback?(true)
+                */
         } else {
             decisionHandler(.allow)
         }
@@ -197,7 +205,9 @@ extension RED_SDK: WKNavigationDelegate {
         let api = ShareAPI.instance
         api.login(type: "Reddit", accessToken: token) { (success) in
             ShareAPI.writeKey(self.keySHARE_REDLogged, value: true)
-            //ShareAPI.LOG(where: "Reddit login", msg: "Success")
+            ShareAPI.LOG(where: "Reddit login", msg: "Success")
+            self.callback?(true)
+            self.cancelAction()
         }
     }
     

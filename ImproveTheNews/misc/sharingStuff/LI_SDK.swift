@@ -18,9 +18,17 @@ class LI_SDK: NSObject {
     private var vc: UIViewController?
     private let webView = WKWebView()
     
+    /*
     private let CLIENT_ID = "78dxrtqsoxss3p"
     private let CLIENT_SECRET = "FesDHpaPtRaRlkdR"
     private let REDIRECT_URI = "https://www.improvethenews.org/"
+    */
+    
+    
+    private let CLIENT_ID = "86hkerhuw16kd6"
+    private let CLIENT_SECRET = "fYU2FzY8VBhCvOO2"
+    private let REDIRECT_URI = "https://www.improvemynews.com"
+    
     
     private let SCOPE = "r_liteprofile%20r_emailaddress"
     private let AUTHURL = "https://www.linkedin.com/oauth/v2/authorization"
@@ -51,8 +59,11 @@ class LI_SDK: NSObject {
         let api = ShareAPI.instance
         api.login(type: "Linkedin", accessToken: token) { (success) in
             ShareAPI.writeKey(self.keySHARE_LILogged, value: true)
-            //ShareAPI.LOG(where: "Linkedin login", msg: "Success")
+            ShareAPI.LOG(where: "Linkedin login", msg: "Success")
+            self.callback?(true)
+            self.cancelAction()
         }
+
     }
     
     func logout(vc: UIViewController, callback: @escaping (Bool)->() ) {
@@ -61,11 +72,10 @@ class LI_SDK: NSObject {
         
         ShareAPI.logoutDialog(vc: vc, header: _h, question: _q) { (wasLoggedOut) in
             if(wasLoggedOut) {
-                //LoginManager().logOut()
-                
+
                 self.logout_web {
                     ShareAPI.removeKey(self.keySHARE_LILogged)
-                    //ShareAPI.instance.disconnect(type: "Linkedin")
+                    ShareAPI.instance.disconnect(type: "Linkedin")
                 }
 
             }
@@ -160,13 +170,12 @@ extension LI_SDK: WKNavigationDelegate {
     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
         let url = (navigationAction.request.url?.absoluteString)! as String
-        //print("LINKEDIN", url)
         
         /*if(url.contains("/login-cancel")) {
             print("LINKEDIN - Cancelled")
             self.cancelAction()
             decisionHandler(.cancel)
-        } else
+        }
         */
         
          if(url.contains("?code=")) {
@@ -175,10 +184,12 @@ extension LI_SDK: WKNavigationDelegate {
             
             self.getAccessTokenWith(authCode: self.getAuthCodeFrom(url: url)) { (token) in
                 if let _token = token {
-                    //self.ITN_login(token: _token)
-                    self.cancelAction()
-                    ShareAPI.writeKey(self.keySHARE_LILogged, value: true)
-                    self.callback?(true)
+                    self.ITN_login(token: _token)
+                    /*
+                        self.cancelAction()
+                        ShareAPI.writeKey(self.keySHARE_LILogged, value: true)
+                        self.callback?(true)
+                    */
                 } else {
                     self.callback?(false)
                 }

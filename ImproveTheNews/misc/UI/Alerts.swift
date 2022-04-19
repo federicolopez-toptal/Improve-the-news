@@ -1,5 +1,5 @@
 //
-//  UI.swift
+//  Alerts.swift
 //  ImproveTheNews
 //
 //  Created by Federico Lopez on 07/04/2022.
@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+
 
 func ALERT(vc: UIViewController, title T: String, message M: String) {
     let alert = UIAlertController(title: T, message: M, preferredStyle: .alert)

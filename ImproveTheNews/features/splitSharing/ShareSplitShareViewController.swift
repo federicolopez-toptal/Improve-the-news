@@ -488,6 +488,16 @@ class ShareSplitShareViewController: UIViewController {
         
         let api = ShareSplitAPI()
         api.generateImage(self.article1!, self.article2!) { (error, imageUrl) in
+            if let _error = error {
+                print("ERROR", _error)
+            } else if let _imageURL = imageUrl {
+                print("IMG", _imageURL)
+            }
+        }
+        
+        /*
+        let api = ShareSplitAPI()
+        api.generateImage(self.article1!, self.article2!) { (error, imageUrl) in
             DispatchQueue.main.async {
                 self.loadingView.isHidden = true
             }
@@ -495,15 +505,24 @@ class ShareSplitShareViewController: UIViewController {
             if let _error = error {
                 print("ERROR", _error)
             } else if let _img = imageUrl {
-                //print("IMG", _img)
+                print("IMG", _img)
                 DispatchQueue.main.async {
                     UIApplication.shared.open(URL(string: _img)!)
                 }
             }
-        }
+        }*/
         
         /*
         let img = "http://ec2-3-16-162-167.us-east-2.compute.amazonaws.com/php/api/image-generator/images/u2jKupucLCkMcmcizdoB.jpg"
+        
+        let api = ShareSplitAPI()
+        api.share(imgUrl: img, comment: self.textInput.text,
+            art1: self.article1!, art2: self.article2!) {
+        }
+        */
+        
+        /*
+        let img = "https://es.web.img3.acsta.net/pictures/22/02/18/10/20/5195258.jpg"
         
         let api = ShareSplitAPI()
         api.share(imgUrl: img, comment: self.textInput.text,

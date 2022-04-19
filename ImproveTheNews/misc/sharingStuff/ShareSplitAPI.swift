@@ -70,7 +70,13 @@ class ShareSplitAPI {
 extension ShareSplitAPI {
 
     private func request(reqUrl: String) -> URLRequest {
-        let bearer = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MzgyNzg4ODUsImp0aSI6InZWbXN4WHhwRTRWaTVxN25UN3VtTVE9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTYzODI3ODg4NSwiZXhwIjoyOTUzMDI3Njg1LCJkYXRhIjp7InVzcmlkIjoiMjUwOTAwMjUzNzUzNjA1MiJ9fQ.dX7XCCAypg0J8JJGj5FE8gzkGtX-Kbij4G__olkB8lG5gFaCPwIAv44VBbnGfzZ2MmLKLkDPWas5Gr_22XOGvA"
+        
+        /*
+        let bearer = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDk4NTg5OTYsImp0aSI6IkUxQ0F1WElZSEpjazdGdUgwZ1dGUXc9PSIsImlzcyI6ImltcHJvdmV0aGVuZXdzLm9yZyIsIm5iZiI6MTY0OTg1ODk5NiwiZXhwIjoyOTY0NzgwNTk2LCJkYXRhIjp7InVzcmlkIjoiMzkxMTI3ODE2NzUxMTc0NDQxNSJ9fQ.yDNeEqiWKWcma-A31cCDRyWhxYGVtxjkjJvOthyRWZEhlKYOs65lrqiAQwNV1kSlNyt4sKjJe_E-1fE_gpJEcA"
+        */
+        
+        let bearer = ShareAPI.instance.getBearerAuth()
+        //let bearer = "Bearer " + ShareAPI.instance.getJWT()
         
         var request = URLRequest(url: URL(string: reqUrl)!)
         request.httpMethod = "POST"
@@ -84,16 +90,17 @@ extension ShareSplitAPI {
 
         let img1 = self.clearImgUrl(item1.0)
         let img2 = self.clearImgUrl(item2.0)
-        let source1 = self.clearImgUrl(item1.2)
-        let source2 = self.clearImgUrl(item2.2)
+        let source1 = self.clearSource(item1.2)
+        let source2 = self.clearSource(item2.2)
 
         let json: [String: String] = [
             "img1": img1,
             "img2": img2,
             "title1": item1.1,
             "title2": item2.1,
-            "source1": source1,
-            "source2": source2
+            "source1": self.clearSource(source1),
+            "source2": self.clearSource(source2),
+            "userId": USER_ID()
         ]
         
         let jsonData = try? JSONSerialization.data(withJSONObject: json)

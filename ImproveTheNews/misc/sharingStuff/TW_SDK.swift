@@ -19,11 +19,19 @@ class TW_SDK {
     private let keySHARE_TWLogged = "SHARE_TWLogged"
 
     private var swifter: Swifter?
-    static let callbackUrl = "ITNTestApp://"
     
+    /*
     private let tw_consumerKey = "csb01s65kGzYIr3OGyYQGIf52"
     private let tw_consumerSecret = "qtdyt54STbMgN2ieoZKj4NRhMOtDvQRJJOgwa74Sw002W6WgB5"
+    static let callbackUrl = "ITNTestApp://"
+    */
     
+    private let tw_consumerKey = "n7YSfPhxCWRl2UMzMjGvifB8J"
+    private let tw_consumerSecret = "AsPxQmra31to7nvKBFMwYXW4nBu6nLoAOwrWZAqmYdsPqu0gXW"
+    static let callbackUrl = "ITNTestApp://"
+    //static let callbackUrl = "https://www.improvemynews.com/loader"
+
+    private var callback: ( (Bool)->() )?
     
     // ************************************************************ //
     private func start() {
@@ -43,6 +51,8 @@ class TW_SDK {
     }
     
     func login(vc: UIViewController, callback: @escaping (Bool)->()) {
+        self.callback = callback
+        
         self.start()
         let callbackUrl = URL(string: TW_SDK.callbackUrl)!
         
@@ -51,16 +61,20 @@ class TW_SDK {
                                 authSuccess: { (T, V) in
             
             print("TW - Logueado")
-            //self.ITN_login(token: T, verifier: V)
+                
+            /*
                 callback(true)
                 ShareAPI.writeKey(self.keySHARE_TWLogged, value: true)
+            */
+            
+            self.ITN_login(token: T, verifier: V)
 
         }, failure: { _ in
             print("TW - Cancelled")
             if(vc.presentingViewController != nil) {
                 vc.dismiss(animated: true)
             }
-            callback(false)
+            self.callback?(false)
         })
         
     }
@@ -68,8 +82,9 @@ class TW_SDK {
     private func ITN_login(token T: String, verifier V: String) {
         let api = ShareAPI.instance
         api.login_TW(token: T, verifier: V) { (success) in
+            self.callback?(true)
             ShareAPI.writeKey(self.keySHARE_TWLogged, value: true)
-            //ShareAPI.LOG(where: "Twitter login", msg: "Success")
+            ShareAPI.LOG(where: "Twitter login", msg: "Success")
         }
     }
     
@@ -79,9 +94,8 @@ class TW_SDK {
         
         ShareAPI.logoutDialog(vc: vc, header: _h, question: _q) { (wasLoggedOut) in
             if(wasLoggedOut) {
-                //LoginManager().logOut()
                 ShareAPI.removeKey(self.keySHARE_TWLogged)
-                //ShareAPI.instance.disconnect(type: "Twitter")
+                ShareAPI.instance.disconnect(type: "Twitter")
             }
             callback(wasLoggedOut)
         }

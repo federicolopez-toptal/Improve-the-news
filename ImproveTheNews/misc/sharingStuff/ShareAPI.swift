@@ -37,9 +37,16 @@ class ShareAPI {
         return ShareAPI.readStringKey(keySHARE_uuid)
     }
 
-
-    private func getBearerAuth() -> String {
+    func getBearerAuth() -> String {
         return ShareAPI.readStringKey(keySHARE_bearerAuth)!
+    }
+    
+    func getJWT() -> String {
+        if let _jwt = ShareAPI.readStringKey(self.keySHARE_jwt) {
+            return _jwt
+        } else {
+            return ""
+        }
     }
 
     // ************************************************************ //
@@ -50,7 +57,7 @@ class ShareAPI {
         
         let bodyJson: [String: String] = [
             "type": "Generate",
-            "userId": USER_ID_RND(),
+            "userId": USER_ID__rnd(),
             "app": "iOS"
         ]
         
@@ -69,12 +76,13 @@ class ShareAPI {
                     if let _jwt = json["jwt"] as? String, let _uuid = json["uuid"] as? String {
                         
                         ShareAPI.LOG(where: here, msg: "got uuid from server: " + _uuid)
+                                                
+                        let _bearer = "Bearer " + _jwt
+                        ShareAPI.writeKey(self.keySHARE_bearerAuth, value: _bearer)
+                        ShareAPI.LOG(where: here, msg: "Auth: " + _bearer)
                         
                         ShareAPI.writeKey(self.keySHARE_uuid, value: _uuid)
                         ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
-                        
-                        let _bearer = "Bearer " + _jwt
-                        ShareAPI.writeKey(self.keySHARE_bearerAuth, value: _bearer)
                     } else {
                         ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
                     }
@@ -101,8 +109,16 @@ class ShareAPI {
         let bodyJson: [String: String] = [
             "type": type,
             "userId": USER_ID(),
-            "access_token": accessToken
+            "access_token": accessToken,
+            "option": "Sign In",
+            "newsletter": "Y",
+            "app": "iOS"
         ]
+        
+        /*
+        print(bodyJson)
+        print(self.getBearerAuth())
+        */
         
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
@@ -117,9 +133,10 @@ class ShareAPI {
                 ShareAPI.LOG_DATA(data, where: here)
             
                 if let json = ShareAPI.json(fromData: data) {
-                    if let _jwt = json["jwt"] as? String { // let _uuid = json["uuid"]
+                    if let _jwt = json["jwt"] as? String, let _uuid = json["uuid"] as? String {
                         ShareAPI.LOG(where: here, msg: type + " success")
                         ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
+                        ShareAPI.writeKey(self.keySHARE_uuid, value: _uuid)
                         callback(true)
                     } else {
                         ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
@@ -185,6 +202,7 @@ class ShareAPI {
     
     // ************************************************************ //
     func disconnect(type: String) { // (success)
+        let here = "Disconnect"
         let url = API_BASE_URL() + "/php/api/user/"
         
         let bodyJson: [String: String] = [
@@ -193,28 +211,27 @@ class ShareAPI {
             "socialNetwork": type
         ]
         
+        // print(self.getBearerAuth())
+        
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "POST"
         let body = try? JSONSerialization.data(withJSONObject: bodyJson)
         request.httpBody = body
-        request.setValue(self.bearerAuth, forHTTPHeaderField: "Authorization")
+        request.setValue(self.getBearerAuth(), forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.dataTask(with: request) { (data, resp, error) in
             if let _error = error {
-                print("SHARE/DISCONNECT/ERROR", _error.localizedDescription)
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
             } else {
-                /*
-                let str = String(decoding: data!, as: UTF8.self)
-                print(str)
-                */
+                ShareAPI.LOG_DATA(data, where: here)
             
                 if let _response = resp as? HTTPURLResponse {
                     let statusCode = _response.statusCode
                     if(statusCode == 200) {
-                        print("SHARE/DISCONNECT", "successful")
+                        ShareAPI.LOG(where: here, msg: type + " success")
                     }
                 } else {
-                    print("SHARE/DISCONNECT/ERROR", "Unknow error")
+                    ShareAPI.LOG_ERROR(where: here, msg: "Unknown error")
                 }
 
             }
