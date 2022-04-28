@@ -8,6 +8,7 @@
 
 import UIKit
 import SafariServices
+import FBSDKShareKit
 
 class MyAccountViewController: UIViewController {
 
@@ -22,6 +23,11 @@ class MyAccountViewController: UIViewController {
             
             print("SHARE", api.uuid)
             print("SHARE", api.getBearerAuth())
+            
+//            let fb = FB_SDK.instance
+////            let _link = "https://www.independent.co.uk/space/kamala-harris-missiles-satellite-destroy-b2060554.html"
+//            let _link = "https://www.improvethenews.org/split-shares?id=340"
+//            fb.share(link: _link, vc: self)
         }
         
     }
@@ -189,4 +195,22 @@ extension MyAccountViewController: SFSafariViewControllerDelegate {
             button.connected = connected
         }
     }
+}
+
+
+extension MyAccountViewController: SharingDelegate {
+    
+    func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+        print("SHARE", "yessss")
+    }
+    
+    func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+        print("SHARE", "fail")
+    }
+    
+    func sharerDidCancel(_ sharer: Sharing) {
+        print("SHARE", "cancel!")
+    }
+    
+
 }

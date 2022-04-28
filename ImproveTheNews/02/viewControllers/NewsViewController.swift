@@ -2950,6 +2950,7 @@ extension NewsViewController: ShareSplitActionsPopupDelegate {
         vc.modalPresentationStyle = .fullScreen
         vc.articles = self.shareArticles?.getSelectedArticles()
         
+        //self.navigationController?.pushViewController(vc, animated: true)
         self.present(vc, animated: true) {
         }
     }

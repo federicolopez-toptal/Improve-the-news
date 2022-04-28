@@ -50,10 +50,22 @@ class ShareAPI {
     }
 
     // ************************************************************ //
+    private func host(includePhp: Bool = true) -> String {
+        /*
+        var result = API_BASE_URL()
+        if(includePhp){ result += "/php" }
+        
+        return result
+        */
+        
+        return "https://biaspost.org"
+    }
+    
+    // ************************************************************ //
     func generate() {
         self.isGenerating = true
         let here = "Generate"
-        let url = API_BASE_URL() + "/php/api/user/"
+        let url = self.host() + "/api/user/"
         
         let bodyJson: [String: String] = [
             "type": "Generate",
@@ -104,7 +116,7 @@ class ShareAPI {
     // ************************************************************ //
     func login(type: String, accessToken: String, callback: @escaping (Bool) -> ()) { // (success)
         let here = "Login"
-        let url = API_BASE_URL() + "/php/api/user/"
+        let url = self.host() + "/api/user/"
         
         let bodyJson: [String: String] = [
             "type": type,
@@ -161,7 +173,7 @@ class ShareAPI {
     func login_TW(token: String, verifier: String, callback: @escaping (Bool) -> ()) {
         let type = "Twitter"
         let here = "Login"
-        let url = API_BASE_URL() + "/php/api/user/"
+        let url = self.host() + "/api/user/"
         
         let bodyJson: [String: String] = [
             "type": type,
@@ -203,14 +215,13 @@ class ShareAPI {
     // ************************************************************ //
     func disconnect(type: String) { // (success)
         let here = "Disconnect"
-        let url = API_BASE_URL() + "/php/api/user/"
+        let url = self.host() + "/api/user/"
         
         let bodyJson: [String: String] = [
             "type": "Disconnect",
             "userId": USER_ID(),
             "socialNetwork": type
         ]
-        
         // print(self.getBearerAuth())
         
         var request = URLRequest(url: URL(string: url)!)
@@ -243,7 +254,185 @@ class ShareAPI {
     RESPONSE example
     
     {"message":"OK"}
+    */
+     
+     // ************************************************************ //
+     func generateImage(_ article1: (String, String, String, String, Bool, String),
+        _ article2: (String, String, String, String, Bool, String),
+        callback: @escaping (String?) -> ()) {
+        // 0: img, 1: title, 2: country, 3: source, 4: state, 5: URL
+     
+        let here = "GenerateImage"
+        let url = self.host() + "/api/image-generator/"
+        
+        let bodyJson: [String: String] = [
+            "img1": ShareAPI.clearUrl(article1.0),
+            "img2": ShareAPI.clearUrl(article2.0),
+            "title1": article1.1,
+            "title2": article2.1,
+            "source1": ShareAPI.clearSource(article1.3),
+            "source2": ShareAPI.clearSource(article2.3),
+            "userId": USER_ID()
+        ]
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+            
+                if let json = ShareAPI.json(fromData: data) {
+                    if let _image = json["image"] as? String {
+                        ShareAPI.LOG(where: here, msg: "Image generated! " + _image)
+                        callback(_image)
+                    } else {
+                        ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                        callback(nil)
+                    }
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(nil)
+                }
+            }
+        }
+        task.resume()
+        
+     }
+     
+     /*
+     RESPONSE example
+     
+     {
+        "message": "OK",
+        "image": "https://www.improvemynews.com/php/api/image-generator/images/wb6gRfWd63Z04eKnj9aV.jpg"
+     }
      */
+      
+    // ************************************************************ //
+    func shareSplit(_ article1: (String, String, String, String, Bool, String),
+        _ article2: (String, String, String, String, Bool, String),
+        types: [String], imageURL: String, text: String,
+        callback: @escaping (Bool, String) -> ()) {
+        // 0: img, 1: title, 2: country, 3: source, 4: state, 5: URL
+        
+        let here = "ShareSplit"
+        let url = self.host() + "/api/split-share/"
+        
+//        let imageURL2 = "https://www.lacasadeel.net/wp-content/uploads/2022/02/SONIC-the-hedgehog-2-poster-final-sin-arreglar-554x790.png"
+        
+        let bodyJson: [String: Any] = [
+            "types": types,
+            "image": ShareAPI.clearUrl(imageURL),
+            "aid1": ShareAPI.clearUrl(article1.5),
+            "aid2": ShareAPI.clearUrl(article2.5),
+            "comment": text,
+            "source1": ShareAPI.clearSource(article1.3),
+            "source2": ShareAPI.clearSource(article2.3),
+            "slidercookies": "LR50PE50NU70DE70SL70RE70SS00LA00ST01yT01VM00VA00VB00VC00VE33oB11", //!!!
+            "userId": USER_ID()
+        ]
+        
+        let errorMsg = "There was an error sharing your articles. Please try again"
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+            
+                if let json = ShareAPI.json(fromData: data) {
+                    var responses = self.responsePerSocialNetwork(json: json, types: types)
+                    if(responses==nil){ responses = errorMsg }
+                    callback(true, responses!)
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(false, errorMsg)
+                }
+            }
+        }
+        task.resume()
+        
+    }
+    
+    func responsePerSocialNetwork(json: [String: Any], types: [String]) -> String? {
+        var result: String? = nil
+        let okMsg = "Articles shared successfully"
+        
+        if(types.count==1) {
+            let T = types.first!
+            if let _typeContent = json[T] as? [String: String] {
+                if let _message = _typeContent["message"] {
+                    if(_message.lowercased() == "ok") {
+                        result = okMsg
+                        if(T=="Facebook"){ result = nil }
+                    }
+                }
+            }
+        } else {
+            var results = [String: Bool]()
+        
+            for T in types {
+                var T_result = false
+                if let _typeContent = json[T] as? [String: String] {
+                    if let _message = _typeContent["message"] {
+                        if(_message.lowercased() == "ok") {
+                            T_result = true
+                            if(T=="Facebook"){ T_result = false }
+                        }
+                    }
+                }
+                results[T] = T_result
+            }
+            
+            var ok = 0
+            var nok = 0
+            for(_, value) in results {
+                if(value){ ok += 1 }
+                else{ nok += 1 }
+            }
+            
+            if(ok==types.count) { // All ok
+                result = okMsg
+            } else if(nok==types.count) { // All failed
+                result = nil
+            } else {
+                result = okMsg + " via:\n"
+                for(key, value) in results {
+                    if(value){ result! += "* " + key + "\n" }
+                }
+                
+                result! += "\n"
+                result! += "Articles failed not be shared via:\n"
+                for(key, value) in results {
+                    if(!value){ result! += "* " + key + "\n" }
+                }
+            }
+        }
+    
+        return result
+    }
+    
+    
+    /*
+    RESPONSE example
+    
+    OK      {"Linkedin":{"message":"OK"}}
+    ERROR   {"Reddit":{"message":"NOK"}}
+    
+    */
+      
 }
 
 // ************************************************************ //
@@ -315,8 +504,37 @@ extension ShareAPI {
     }
     
     static func LOG_DATA(_ data: Data?, where w: String) {
-        let str = String(decoding: data!, as: UTF8.self)
+        var str = String(decoding: data!, as: UTF8.self)
+        str = str.replacingOccurrences(of: "\n", with: "")
+        
+        /*
+        let index = str.index(of: "{")
+        
+        
+        print(str[0])
+        if(str[0] == "\n") {
+            print("yep")
+        }
+        */
+        
         print("SHARE-\(w)", "DATA " + str)
+    }
+    
+    static func clearUrl(_ url: String) -> String {
+        var result = url.replacingOccurrences(of: "http://", with: "")
+        result = result.replacingOccurrences(of: "https://", with: "")
+        return result
+    }
+    
+    static func clearSource(_ source: String) -> String {
+        var result = ""
+        if(source.contains("#")) {
+            result = source.components(separatedBy: " #")[0]
+        } else {
+            result = source.components(separatedBy: " - ")[0]
+        }
+        
+        return result
     }
     
 }

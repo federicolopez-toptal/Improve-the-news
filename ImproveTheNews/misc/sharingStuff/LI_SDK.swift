@@ -24,13 +24,13 @@ class LI_SDK: NSObject {
     private let REDIRECT_URI = "https://www.improvethenews.org/"
     */
     
-    
     private let CLIENT_ID = "86hkerhuw16kd6"
     private let CLIENT_SECRET = "fYU2FzY8VBhCvOO2"
-    private let REDIRECT_URI = "https://www.improvemynews.com"
+    private let REDIRECT_URI = "https://www.improvemynews.com/php/linkedin/loader.php"
     
     
-    private let SCOPE = "r_liteprofile%20r_emailaddress"
+//    private let SCOPE = "r_liteprofile%20r_emailaddress%20w_member_social"
+    private let SCOPE = "r_liteprofile%20r_emailaddress%20w_member_social"
     private let AUTHURL = "https://www.linkedin.com/oauth/v2/authorization"
     private let TOKENURL = "https://www.linkedin.com/oauth/v2/accessToken"
     

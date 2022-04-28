@@ -28,10 +28,10 @@ class ShareSplitArticles: UIView {
     var dp1Bottom = 0
     var dp2top = 0
     var dp2Bottom = 0
-    var dp1 = [(String, String, String, String, Bool)]()
-    var dp2 = [(String, String, String, String, Bool)]()
-    var dataProvider1 = [(String, String, String, String, Bool)]()
-    var dataProvider2 = [(String, String, String, String, Bool)]()
+    var dp1 = [(String, String, String, String, Bool, String)]()
+    var dp2 = [(String, String, String, String, Bool, String)]()
+    var dataProvider1 = [(String, String, String, String, Bool, String)]()
+    var dataProvider2 = [(String, String, String, String, Bool, String)]()
     let ARTICLES_TO_ADD = 15
 
     var headerHeightConstraint: NSLayoutConstraint?
@@ -271,10 +271,10 @@ class ShareSplitArticles: UIView {
         var index = 0
         var side = 1
         
-        self.dp1 = [(String, String, String, String, Bool)]()
-        self.dp2 = [(String, String, String, String, Bool)]()
-        self.dataProvider1 = [(String, String, String, String, Bool)]()
-        self.dataProvider2 = [(String, String, String, String, Bool)]()
+        self.dp1 = [(String, String, String, String, Bool, String)]()
+        self.dp2 = [(String, String, String, String, Bool, String)]()
+        self.dataProvider1 = [(String, String, String, String, Bool, String)]()
+        self.dataProvider2 = [(String, String, String, String, Bool, String)]()
         
         if let sections = self.parser?.getNumOfSections(), sections>0 {
             for i in 0...sections-1 {
@@ -284,8 +284,9 @@ class ShareSplitArticles: UIView {
                         let img = self.parser!.getIMG(index: index)
                         let flag = self.parser!.getCountryID(index: index)
                         let source = self.parser!.getSource(index: index) + " - " + self.parser!.getDate(index: index)
+                        let url = self.parser!.getURL(index: index)
                         
-                        let newItem = (img, title, flag, source, false)
+                        let newItem = (img, title, flag, source, false, url)
                         if(side==1){
                             self.dp1.append(newItem)
                             self.dataProvider1.append(newItem)
@@ -310,8 +311,8 @@ class ShareSplitArticles: UIView {
         dp2top = self.dp2.count-1
     }
     
-    func getSelectedArticles() -> [(String, String, String, String, Bool)] {
-        var result = [(String, String, String, String, Bool)]()
+    func getSelectedArticles() -> [(String, String, String, String, Bool, String)] {
+        var result = [(String, String, String, String, Bool, String)]()
     
         for _d in self.dataProvider1 {
             if(_d.4) {
@@ -355,7 +356,7 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         let  cell = tableView.dequeueReusableCell(withIdentifier:
             "ShareSplitArticleCell") as! ShareSplitArticleCell
            
-        var info = ("", "", "", "", false)
+        var info = ("", "", "", "", false, "")
         let index = indexPath.row
         if(tableView.tag == 101) {
             info = self.dataProvider1[index]
@@ -806,7 +807,7 @@ extension ShareSplitArticles {
         if(index==2){ offset = self.column2.contentOffset }
         offset.y += (240 * CGFloat(self.ARTICLES_TO_ADD))
         
-        var toAdd = [(String, String, String, String, Bool)]()
+        var toAdd = [(String, String, String, String, Bool, String)]()
         var j = dp1top
         if(index==2){ j = dp2top }
         for _ in 1...self.ARTICLES_TO_ADD {
@@ -844,7 +845,7 @@ extension ShareSplitArticles {
         if(index==2){ offset = self.column2.contentOffset }
         offset.y -= (240 * CGFloat(self.ARTICLES_TO_ADD))
         
-        var toAdd = [(String, String, String, String, Bool)]()
+        var toAdd = [(String, String, String, String, Bool, String)]()
         var j = dp1Bottom
         if(index==2){ j = dp2Bottom }
         for _ in 1...self.ARTICLES_TO_ADD {

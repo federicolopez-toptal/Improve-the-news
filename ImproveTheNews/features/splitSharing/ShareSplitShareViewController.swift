@@ -8,14 +8,15 @@
 
 import UIKit
 import SDWebImage
+import SafariServices
 
 let NOTIFICATION_CLOSE_SPLITSHARE = Notification.Name("closeSplitShare")
 
 class ShareSplitShareViewController: UIViewController {
 
-    var articles: [(String, String, String, String, Bool)]?
-    private var article1: (String, String, String, String, Bool)?
-    private var article2: (String, String, String, String, Bool)?
+    var articles: [(String, String, String, String, Bool, String)]?
+    private var article1: (String, String, String, String, Bool, String)?
+    private var article2: (String, String, String, String, Bool, String)?
     let blueContainer = UIView()
 
     let scrollview = UIScrollView()
@@ -25,6 +26,13 @@ class ShareSplitShareViewController: UIViewController {
 
     let loadingView = UIView()
     var scrollViewHeight: CGFloat = 0.0
+
+    var FB_state = false
+    var TW_state = false
+    var IN_state = false
+    var RE_state = false
+    
+    let dialogTitle = "Improve the News"
 
     override func viewDidLoad() {
         self.view.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
@@ -314,6 +322,8 @@ class ShareSplitShareViewController: UIViewController {
             fb_icon.widthAnchor.constraint(equalToConstant: 32),
             fb_icon.heightAnchor.constraint(equalToConstant: 32)
         ])
+        fb_icon.tag = 301
+        fb_icon.addTarget(self, action: #selector(socialButtonTap(_:)), for: .touchUpInside)
         
         let in_icon = UIButton(type: .custom)
         in_icon.setImage(UIImage(named: "in_logo.png"), for: .normal)
@@ -323,6 +333,8 @@ class ShareSplitShareViewController: UIViewController {
             in_icon.widthAnchor.constraint(equalToConstant: 32),
             in_icon.heightAnchor.constraint(equalToConstant: 32)
         ])
+        in_icon.tag = 302
+        in_icon.addTarget(self, action: #selector(socialButtonTap(_:)), for: .touchUpInside)
         
         let tw_icon = UIButton(type: .custom)
         tw_icon.setImage(UIImage(named: "tw_logo.png"), for: .normal)
@@ -332,6 +344,8 @@ class ShareSplitShareViewController: UIViewController {
             tw_icon.widthAnchor.constraint(equalToConstant: 32),
             tw_icon.heightAnchor.constraint(equalToConstant: 32)
         ])
+        tw_icon.tag = 303
+        tw_icon.addTarget(self, action: #selector(socialButtonTap(_:)), for: .touchUpInside)
         
         let re_icon = UIButton(type: .custom)
         re_icon.setImage(UIImage(named: "re_logo.png"), for: .normal)
@@ -341,6 +355,8 @@ class ShareSplitShareViewController: UIViewController {
             re_icon.widthAnchor.constraint(equalToConstant: 32),
             re_icon.heightAnchor.constraint(equalToConstant: 32)
         ])
+        re_icon.tag = 304
+        re_icon.addTarget(self, action: #selector(socialButtonTap(_:)), for: .touchUpInside)
         
         let shareButton = UIButton(type: .custom)
         shareButton.backgroundColor = accentOrange
@@ -378,6 +394,11 @@ class ShareSplitShareViewController: UIViewController {
         loading.center = CGPoint(x: dim/2, y: dim/2)
         loading.startAnimating()
         self.view.addSubview(self.loadingView)
+        
+        self.updateButton(fb_icon)
+        self.updateButton(in_icon)
+        self.updateButton(tw_icon)
+        self.updateButton(re_icon)
     }
     
     private func drawVerticalLine() {
@@ -482,54 +503,110 @@ class ShareSplitShareViewController: UIViewController {
         self.view.endEditing(true)
     }
     
+    @objc func socialButtonTap(_ sender: UIButton) {
+        let tag = sender.tag - 300
+        switch(tag) {
+            case 1:
+            FB_buttonTap()
+            case 2:
+            LI_buttonTap()
+            case 3:
+            TW_buttonTap()
+            case 4:
+            RED_buttonTap()
+        
+            default:
+            FB_buttonTap()
+        }
+    }
+    
+    private func validateForm() -> Bool {
+        var result = false
+        
+        if(FB_state || TW_state || IN_state || RE_state) {
+            result = true
+        } else {
+            ALERT(vc: self, title: self.dialogTitle,
+                message: "Please, select at least one social network to share the articles")
+        }
+        
+        return result
+    }
+    
     @objc func shareOnTap(_ sender: UIButton?) {
 
-        self.loadingView.isHidden = false
-        
-        let api = ShareSplitAPI()
-        api.generateImage(self.article1!, self.article2!) { (error, imageUrl) in
-            if let _error = error {
-                print("ERROR", _error)
-            } else if let _imageURL = imageUrl {
-                print("IMG", _imageURL)
-            }
+        if(!self.validateForm()) {
+            return
         }
         
-        /*
-        let api = ShareSplitAPI()
-        api.generateImage(self.article1!, self.article2!) { (error, imageUrl) in
-            DispatchQueue.main.async {
-                self.loadingView.isHidden = true
-            }
-            
-            if let _error = error {
-                print("ERROR", _error)
-            } else if let _img = imageUrl {
-                print("IMG", _img)
-                DispatchQueue.main.async {
-                    UIApplication.shared.open(URL(string: _img)!)
+        if(self.textInput.text.isEmpty) {
+            ALERT_YESNO(vc: self, title: self.dialogTitle,
+                question: "No text was entered. Do you want to share your articles without a comment?") { (answer) in
+                
+                if(answer) {
+                    DispatchQueue.main.async {
+                        self.performSharing()
+                    }
                 }
             }
-        }*/
-        
-        /*
-        let img = "http://ec2-3-16-162-167.us-east-2.compute.amazonaws.com/php/api/image-generator/images/u2jKupucLCkMcmcizdoB.jpg"
-        
-        let api = ShareSplitAPI()
-        api.share(imgUrl: img, comment: self.textInput.text,
-            art1: self.article1!, art2: self.article2!) {
+        } else {
+            DispatchQueue.main.async {
+                self.performSharing()
+            }
         }
-        */
+    }
+
+    private func getTypes() -> [String] {
+        var result = [String]()
         
-        /*
-        let img = "https://es.web.img3.acsta.net/pictures/22/02/18/10/20/5195258.jpg"
+        if(FB_state){ result.append("Facebook") }
+        if(TW_state){ result.append("Twitter") }
+        if(IN_state){ result.append("Linkedin") }
+        if(RE_state){ result.append("Reddit") }
         
-        let api = ShareSplitAPI()
-        api.share(imgUrl: img, comment: self.textInput.text,
-            art1: self.article1!, art2: self.article2!) {
+        return result
+    }
+
+    private func performSharing() {
+    
+        self.showLoading()
+        var txt = self.textInput.text!
+        if(txt.isEmpty){ txt = " " }
+        let types = self.getTypes()
+        
+        let api = ShareAPI.instance
+        api.generateImage(self.article1!, self.article2!) { (image) in
+
+            if let _image = image {
+                let types = types
+                api.shareSplit(self.article1!, self.article2!, types: types, imageURL: _image, text: txt) { (ok, str) in
+                    self.showLoading(false)
+                    
+                    DispatchQueue.main.async {
+                        ALERT(vc: self, title: self.dialogTitle, message: str)
+                    }
+                    
+                    
+                
+                    
+//                    if(self.FB_state) {
+//                        let fb = FB_SDK.instance
+//                        let _link = "https://www.independent.co.uk/space/kamala-harris-missiles-satellite-destroy-b2060554.html"
+//                        fb.share(link: _link, vc: self)
+//                    }
+                }
+            } else {
+                self.showLoading(false)
+            }
         }
-        */
         
+    }
+    
+    func showLoading(_ visible: Bool = true) {
+        DispatchQueue.main.async {
+            self.loadingView.isHidden = !visible
+            self.view.isUserInteractionEnabled = !visible
+        }
     }
 
 }
@@ -546,4 +623,152 @@ extension ShareSplitShareViewController: UITextViewDelegate {
         return true
     }
 
+}
+
+// MARK: Button(s) stuff
+extension ShareSplitShareViewController: SFSafariViewControllerDelegate {
+
+    private func updateButton(_ button: UIButton) {
+        DispatchQueue.main.async {
+            let tag = button.tag - 300
+            var state = false
+            
+            switch(tag) {
+                case 1:
+                state = self.FB_state
+                case 2:
+                state = self.IN_state
+                case 3:
+                state = self.TW_state
+                case 4:
+                state = self.RE_state
+            
+                default:
+                state = false
+            }
+        
+            if(state) {
+                button.alpha = 1.0
+            } else {
+                button.alpha = 0.25
+            }
+        }
+    }
+
+    private func FB_buttonTap() {
+        let fb = FB_SDK.instance
+        let fb_button = self.view.viewWithTag(301) as! UIButton
+    
+//        if(fb.isLogged()) {
+//            fb.logout(vc: self) { (isLoggedOut) in
+//                if(isLoggedOut) { self.updateButton(fb_button, connected: false) }
+//            }
+//        } else {
+//            fb.login(vc: self) { (isLogged) in
+//                if(isLogged) { self.updateButton(fb_button, connected: true) }
+//            }
+//        }
+
+        if(fb.isLogged()) {
+            FB_state = !FB_state
+            self.updateButton(fb_button)
+        } else {
+            fb.login(vc: self) { (isLogged) in
+                if(isLogged) {
+                    self.FB_state = true
+                    self.updateButton(fb_button)
+                }
+            }
+        }
+    }
+    
+    private func TW_buttonTap() {
+        let tw = TW_SDK.instance
+        let tw_button = self.view.viewWithTag(303) as! UIButton
+    
+//        if(tw.isLogged()) {
+//            tw.logout(vc: self) { (isLoggedOut) in
+//                if(isLoggedOut) { self.updateButton(tw_button, connected: false) }
+//            }
+//        } else {
+//            tw.login(vc: self) { (isLogged) in
+//                if(isLogged) { self.updateButton(tw_button, connected: true) }
+//            }
+//        }
+
+        if(tw.isLogged()) {
+            TW_state = !TW_state
+            self.updateButton(tw_button)
+        } else {
+            tw.login(vc: self) { (isLogged) in
+                if(isLogged) {
+                    self.TW_state = true
+                    self.updateButton(tw_button)
+                }
+            }
+        }
+
+    }
+    
+    private func LI_buttonTap() {
+        let li = LI_SDK.instance
+        let li_button = self.view.viewWithTag(302) as! UIButton
+    
+//        if(li.isLogged()) {
+//            li.logout(vc: self) { (isLoggedOut) in
+//                if(isLoggedOut) { li_button.connected = false }
+//            }
+//        } else {
+//            li.login(vc: self) { (isLogged) in
+//                if(isLogged) {
+//                    DispatchQueue.main.async { li_button.connected = true }
+//                }
+//            }
+//        }
+
+        if(li.isLogged()) {
+            IN_state = !IN_state
+            self.updateButton(li_button)
+        } else {
+            li.login(vc: self) { (isLogged) in
+                if(isLogged) {
+                    self.IN_state = true
+                    self.updateButton(li_button)
+                }
+            }
+        }
+
+    }
+    
+    private func RED_buttonTap() {
+        let red = RED_SDK.instance
+        let red_button = self.view.viewWithTag(304) as! UIButton
+    
+//        if(red.isLogged()) {
+//            red.logout(vc: self) { (isLoggedOut) in
+//                if(isLoggedOut) { red_button.connected = false }
+//            }
+//        } else {
+//            red.login(vc: self) { (isLogged) in
+//                if(isLogged) {
+//                    DispatchQueue.main.async { red_button.connected = true }
+//                }
+//            }
+//        }
+
+        if(red.isLogged()) {
+            RE_state = !RE_state
+            self.updateButton(red_button)
+        } else {
+            red.login(vc: self) { (isLogged) in
+                if(isLogged) {
+                    self.RE_state = true
+                    self.updateButton(red_button)
+                }
+            }
+        }
+
+
+    }
+    
 }

@@ -102,6 +102,7 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector, menuTap: 
 
 }
 
+
 private func SEARCH_BAR(fromViewController vc: UIViewController) -> UISearchBar {
     if(vc is NewsViewController) {
         return (vc as! NewsViewController).searchBar

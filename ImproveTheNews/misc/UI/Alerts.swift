@@ -20,6 +20,23 @@ func ALERT(vc: UIViewController, title T: String, message M: String) {
     }
 }
 
+func ALERT_YESNO(vc: UIViewController, title T: String, question Q: String, callback: @escaping (Bool) -> ()) {
+    let alert = UIAlertController(title: T, message: Q, preferredStyle: .alert)
+    
+    let yesAction = UIAlertAction(title: "Yes", style: .default) { action in
+        callback(true)
+    }
+    let noAction = UIAlertAction(title: "No", style: .default) { action in
+        callback(false)
+    }
+    
+    alert.addAction(noAction)
+    alert.addAction(yesAction)
+    
+    vc.present(alert, animated: true) {
+    }
+}
+
 
 /*
 static func logoutDialog(vc: UIViewController, header: String, question: String, callback: @escaping (Bool) -> ()) {

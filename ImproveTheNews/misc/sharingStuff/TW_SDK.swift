@@ -29,7 +29,6 @@ class TW_SDK {
     private let tw_consumerKey = "n7YSfPhxCWRl2UMzMjGvifB8J"
     private let tw_consumerSecret = "AsPxQmra31to7nvKBFMwYXW4nBu6nLoAOwrWZAqmYdsPqu0gXW"
     static let callbackUrl = "ITNTestApp://"
-    //static let callbackUrl = "https://www.improvemynews.com/loader"
 
     private var callback: ( (Bool)->() )?
     
@@ -81,6 +80,7 @@ class TW_SDK {
     
     private func ITN_login(token T: String, verifier V: String) {
         let api = ShareAPI.instance
+        
         api.login_TW(token: T, verifier: V) { (success) in
             self.callback?(true)
             ShareAPI.writeKey(self.keySHARE_TWLogged, value: true)

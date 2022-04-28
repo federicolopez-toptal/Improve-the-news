@@ -9,12 +9,16 @@
 /*
     https://developers.facebook.com/docs/facebook-login/ios/
     https://developers.facebook.com/docs/facebook-login/ios/advanced
+    
+    https://developers.facebook.com/docs/ios
+    
     https://cocoapods.org/pods/FBSDKCoreKit
 */
 
 
 import Foundation
 import FBSDKLoginKit
+import FBSDKShareKit
 import UIKit
 
 class FB_SDK {
@@ -90,11 +94,22 @@ class FB_SDK {
         }
     }
     
+    func share(link: String, vc: UIViewController) {
+        let content = ShareLinkContent()
+        content.contentURL = URL(string: link)
+        content.quote = "Comment for testing"
+        
+        let dialog = ShareDialog(viewController: vc, content: content, delegate: vc as? SharingDelegate)
+        dialog.show()
+        
+    }
+    
+    
+//        let photo = SharePhoto(image: UIImage(named: "sonic2.jpg")!, isUserGenerated: false)
+//        let photoContent = SharePhotoContent()
+//        photoContent.photos = [photo]
+//        //photoContent.contentURL = URL(string: link)
+//        //photoContent.
 }
 
 
-/*
-    func getToken() -> String? {
-        return AccessToken.current?.tokenString
-    }
-    */
