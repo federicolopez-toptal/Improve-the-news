@@ -113,7 +113,7 @@ extension RED_SDK {
         self.webView.load(urlRequest)
     }
     
-    private func getTokenWith(code: String, callback: @escaping (String?) -> ()) {
+    private func getTokenWith(code: String, callback: @escaping (String?, String?) -> ()) {
         
         let here = "Reddit, getToken"
         let tokenUrl = "https://www.reddit.com/api/v1/access_token"
@@ -133,16 +133,18 @@ extension RED_SDK {
                 ShareAPI.LOG_DATA(data, where: here)
             
                 if let json = ShareAPI.json(fromData: data) {
-                    if let _token = json["access_token"] as? String {
+                    if let _token = json["access_token"] as? String,
+                        let _refresh = json["refresh_token"] as? String {
+                        
                         ShareAPI.LOG(where: here, msg: "got access token:" + _token)
-                        callback(_token)
+                        callback(_token, _refresh)
                     } else {
                         ShareAPI.LOG_ERROR(where: here, msg: "No access token")
-                        callback(nil)
+                        callback(nil, nil)
                     }
                 } else {
                     ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
-                    callback(nil)
+                    callback(nil, nil)
                 }
             }
         }
@@ -234,9 +236,9 @@ extension RED_SDK: WKNavigationDelegate {
             
                 print("SHARE", _code)
                 
-                self.getTokenWith(code: _code) { (token) in
-                    if let _token = token {
-                        self.ITN_login(token: _token)
+                self.getTokenWith(code: _code) { (token, refresh) in
+                    if let _token = token, let _refresh = refresh {
+                        self.ITN_login(token: _token, refresh: _refresh)
                     }
                 }
                 decisionHandler(.cancel)
@@ -246,9 +248,9 @@ extension RED_SDK: WKNavigationDelegate {
         }
     }
     
-    private func ITN_login(token: String) {
+    private func ITN_login(token: String, refresh: String) {
         let api = ShareAPI.instance
-        api.login(type: "Reddit", accessToken: token) { (success) in
+        api.login(type: "Reddit", accessToken: token, secret: refresh) { (success) in
             ShareAPI.writeKey(self.keySHARE_REDLogged, value: true)
             ShareAPI.LOG(where: "Reddit login", msg: "Success")
             self.callback?(true)

@@ -9,6 +9,7 @@
 import UIKit
 import SDWebImage
 import SafariServices
+import FBSDKShareKit
 
 let NOTIFICATION_CLOSE_SPLITSHARE = Notification.Name("closeSplitShare")
 
@@ -33,6 +34,7 @@ class ShareSplitShareViewController: UIViewController {
     var RE_state = false
     
     let dialogTitle = "Improve the News"
+    var tmpMsg: String?
 
     override func viewDidLoad() {
         self.view.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
@@ -60,7 +62,7 @@ class ShareSplitShareViewController: UIViewController {
         closeButton.backgroundColor = .clear
         closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
         closeButton.tintColor = .white
-        if(!DARKMODE()){ closeButton.tintColor = UIColor.black.withAlphaComponent(0.5) }
+        if(!DARKMODE()){ closeButton.tintColor = UIColor.black.withAlphaComponent(0.8) }
         self.view.addSubview(closeButton)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -86,7 +88,7 @@ class ShareSplitShareViewController: UIViewController {
         titleLabel.textAlignment = .left
         titleLabel.text = "Share the split &\nimprove the news!"
         titleLabel.textColor = .white
-        if(!DARKMODE()){ titleLabel.textColor = UIColor.black.withAlphaComponent(0.25) }
+        if(!DARKMODE()){ titleLabel.textColor = UIColor.black.withAlphaComponent(0.8) }
         titleLabel.font = UIFont(name: "Merriweather-Bold", size: 22)
         self.contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -276,7 +278,7 @@ class ShareSplitShareViewController: UIViewController {
         title2Label.textAlignment = .left
         title2Label.text = "Your thoughts on these news outlets\nreporting of this topic?"
         title2Label.textColor = titleLabel.textColor
-        if(!DARKMODE()){ title2Label.textColor = UIColor.black.withAlphaComponent(0.4) }
+        if(!DARKMODE()){ title2Label.textColor = UIColor.black.withAlphaComponent(0.8) }
         title2Label.font = UIFont(name: "Merriweather-Bold", size: 16)
         self.contentView.addSubview(title2Label)
         title2Label.translatesAutoresizingMaskIntoConstraints = false
@@ -298,7 +300,7 @@ class ShareSplitShareViewController: UIViewController {
         textInput.font = UIFont.systemFont(ofSize: 15.0)
         textInput.layer.borderWidth = 1.0
         textInput.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
-        if(!DARKMODE()){ textInput.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor }
+        if(!DARKMODE()){ textInput.layer.borderColor = UIColor.black.withAlphaComponent(0.8).cgColor }
         textInput.text = ""
         textInput.delegate = self
         
@@ -388,8 +390,7 @@ class ShareSplitShareViewController: UIViewController {
         self.loadingView.layer.cornerRadius = 15
     
         let loading = UIActivityIndicatorView(style: .medium)
-        if(DARKMODE()){ loading.color = .white }
-        else { loading.color = darkForBright }
+        loading.color = .white
         self.loadingView.addSubview(loading)
         loading.center = CGPoint(x: dim/2, y: dim/2)
         loading.startAnimating()
@@ -579,24 +580,35 @@ class ShareSplitShareViewController: UIViewController {
 
             if let _image = image {
                 let types = types
-                api.shareSplit(self.article1!, self.article2!, types: types, imageURL: _image, text: txt) { (ok, str) in
+                api.shareSplit(self.article1!, self.article2!, types: types, imageURL: _image, text: txt) { (ok, str, url) in
                     self.showLoading(false)
                     
-                    DispatchQueue.main.async {
-                        ALERT(vc: self, title: self.dialogTitle, message: str)
+                    let has_FB = types.contains("Facebook")
+                    
+                    if(!has_FB) {
+                        DispatchQueue.main.async {
+                            ALERT(vc: self, title: self.dialogTitle, message: str)
+                        }
+                    } else {
+                        if(types.count==1) {
+                            self.tmpMsg = nil
+                        } else {
+                            self.tmpMsg = str
+                        }
+                        
+                        DispatchQueue.main.async {
+                            let fb = FB_SDK.instance
+                            fb.share(link: url, comment: self.textInput.text, vc: self)
+                        }
                     }
-                    
-                    
-                
-                    
-//                    if(self.FB_state) {
-//                        let fb = FB_SDK.instance
-//                        let _link = "https://www.independent.co.uk/space/kamala-harris-missiles-satellite-destroy-b2060554.html"
-//                        fb.share(link: _link, vc: self)
-//                    }
                 }
             } else {
                 self.showLoading(false)
+                
+                DispatchQueue.main.async {
+                    let msg = "There was an error sharing your articles. Please try again"
+                    ALERT(vc: self, title: self.dialogTitle, message: msg)
+                }
             }
         }
         
@@ -771,4 +783,27 @@ extension ShareSplitShareViewController: SFSafariViewControllerDelegate {
 
     }
     
+}
+
+extension ShareSplitShareViewController: SharingDelegate {
+    // FACEBOOK
+    func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+        self.showFinalMessage()
+    }
+    
+    func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+        self.showFinalMessage()
+    }
+    
+    func sharerDidCancel(_ sharer: Sharing) {
+        self.showFinalMessage()
+    }
+    
+    private func showFinalMessage() {
+        if(self.tmpMsg != nil) {
+            DispatchQueue.main.async {
+                ALERT(vc: self, title: self.dialogTitle, message: self.tmpMsg!)
+            }
+        }
+    }
 }

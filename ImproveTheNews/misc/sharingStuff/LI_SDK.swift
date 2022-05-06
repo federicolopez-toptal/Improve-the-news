@@ -57,7 +57,7 @@ class LI_SDK: NSObject {
     
     private func ITN_login(token: String) {
         let api = ShareAPI.instance
-        api.login(type: "Linkedin", accessToken: token) { (success) in
+        api.login(type: "Linkedin", accessToken: token, secret: nil) { (success) in
             ShareAPI.writeKey(self.keySHARE_LILogged, value: true)
             ShareAPI.LOG(where: "Linkedin login", msg: "Success")
             self.callback?(true)

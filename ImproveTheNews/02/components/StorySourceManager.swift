@@ -17,7 +17,11 @@ class StorySourceManager {
     private var loaded = false
     
     public func getIconForSource(_ sourceName: String) -> String {
-        return self.sources[sourceName]!
+        if let _value = self.sources[sourceName] {
+            return _value
+        } else {
+            return ""
+        }
     }
     
     public func filterSources(toFilter: [String]) -> [String] {

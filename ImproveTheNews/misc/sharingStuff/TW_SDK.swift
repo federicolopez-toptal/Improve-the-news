@@ -81,7 +81,13 @@ class TW_SDK {
     private func ITN_login(token T: String, verifier V: String) {
         let api = ShareAPI.instance
         
-        api.login_TW(token: T, verifier: V) { (success) in
+//        api.login_TW(token: T, verifier: V) { (success) in
+//            self.callback?(true)
+//            ShareAPI.writeKey(self.keySHARE_TWLogged, value: true)
+//            ShareAPI.LOG(where: "Twitter login", msg: "Success")
+//        }
+        
+        api.login(type: "Twitter", accessToken: T, secret: V) { (success) in
             self.callback?(true)
             ShareAPI.writeKey(self.keySHARE_TWLogged, value: true)
             ShareAPI.LOG(where: "Twitter login", msg: "Success")

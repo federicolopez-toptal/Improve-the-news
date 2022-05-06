@@ -91,7 +91,9 @@ class StoryViewCell: UITableViewCell {
                 
                 let iconURL = StorySourceManager.shared.getIconForSource(self.validSources[i-1])
                 
-                if(!iconURL.contains(".svg")) {
+                if(iconURL.isEmpty) {
+                    _icon.image = nil
+                } else if(!iconURL.contains(".svg")) {
                     _icon.sd_setImage(with: URL(string: iconURL), placeholderImage: nil)
                 } else {
                     let filename = self.validSources[i-1] + ".png"

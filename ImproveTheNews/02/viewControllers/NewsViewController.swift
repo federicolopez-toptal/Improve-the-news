@@ -131,6 +131,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidLoad() {
         AppUtility.lockOrientation(.all)
+        self.enableSplitSharingAfterLoading = ENABLE_SPLIT_SHARING_AFTER_LOADING
+        ENABLE_SPLIT_SHARING_AFTER_LOADING = false
         
         Utils.shared.navController = self.navigationController as? CustomNavigationController
         Utils.shared.newsViewController_ID += 1
@@ -620,7 +622,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         if(enableSplitSharingAfterLoading) {
             self.enableSplitSharingAfterLoading = false
-            self.startSplitSharingWorkflow()
+            DELAY(0.5) {
+                self.startSplitSharingWorkflow()
+            }
+            
         }
         
         DELAY(2.0) {

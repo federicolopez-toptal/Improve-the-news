@@ -31,6 +31,10 @@ class NewsTextViewController: UIViewController {
     let loadingView = UIView()              // loading with activityIndicator inside
     let horizontalMenu = HorizontalMenuView()
     var bannerView: BannerView?
+    
+    var biasMiniButton = UIView()
+    var miniButtonTimer: Timer?
+    
 
     let shadeView = UIView()
     var biasButton: UIButton = {
@@ -133,6 +137,8 @@ class NewsTextViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(showSlidersInfo),
             name: NOTIFICATION_SHOW_SLIDERS_INFO, object: nil)
+            
+        self.initBiasMiniButton()
     }
     
     @objc func onJsonParseError() {
@@ -420,6 +426,10 @@ class NewsTextViewController: UIViewController {
         biasSliders.buildViews()
         self.biasSliders.status = "SL00"
         self.updateBiasButtonPosition()
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self,
+            action: #selector(biasButtonOnLongPress(gesture:)))
+        self.biasButton.addGestureRecognizer(longPressGesture)
     }
     
     func updateBiasButtonPosition() {
@@ -454,6 +464,9 @@ class NewsTextViewController: UIViewController {
         
         mFrame.origin.y = posY
         self.biasButton.frame = mFrame
+        
+        self.biasMiniButtonUpdatePosition()
+        self.biasMiniButton.superview?.bringSubviewToFront(self.biasMiniButton)
     }
     
     func configureBiasSliders() {
@@ -1246,114 +1259,85 @@ extension NewsTextViewController: OnBoardingViewDelegate {
 }
 
 
-/*
-    TRASH
-    
-    @objc private func setUpNavBar_2() {
-        searchBar.sizeToFit()
-        searchBar.searchTextField.backgroundColor = .white
-        searchBar.searchTextField.textColor = .black
-        searchBar.tintColor = .black
+// MARK: - Mini-button
+extension NewsTextViewController {
 
-        let logo = UIImage(named: "N64")
-        let titleView = UIImageView(image: logo)
-        titleView.contentMode = .scaleAspectFit
-        navigationItem.titleView = titleView
-
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
-        navigationController?.navigationBar.isTranslucent = false
+    func initBiasMiniButton() {
+        let dim: CGFloat = 45.0
         
-        let _textColor = DARKMODE() ? UIColor.white : textBlack
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
+        self.biasMiniButton.frame = CGRect(x: 0, y: 0, width: dim, height: dim)
+        self.biasMiniButton.backgroundColor = .clear
+        view.addSubview(self.biasMiniButton)
         
-        if #available(iOS 15.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
-            appearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "PlayfairDisplay-SemiBold", size: 26)!, NSAttributedString.Key.foregroundColor: _textColor]
-            
-            navigationController?.navigationBar.standardAppearance = appearance
-            navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
-        }
-        //navigationController?.navigationBar.barStyle = .black
+        let icon = UIImageView()
+        icon.image = UIImage(named: "shareSplitButton.png")
+        icon.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+        self.biasMiniButton.addSubview(icon)
+        icon.center = CGPoint(x: dim/2, y: dim/2)
+        icon.tag = 767
         
-
-        let sectionsButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"), style: .plain, target: self, action: #selector(self.hamburgerButtonItemClicked(_:)))
-
-        let iconsMargin: CGFloat = 45.0
-
-        let bellButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain,
-            target: self, action: #selector(bellButtonTap(_:)) )
-        bellButton.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: iconsMargin)
-
-        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self,
-            action: #selector(searchItemClicked(_:)))
-            
-        var userImage = UIImage(systemName: "person")
-        if(MarkupUser.shared.userInfo != nil) {
-            userImage = UIImage(systemName: "person.fill")
-        }
-            
-        let userButton = UIBarButtonItem(image: userImage, style: .plain,
-            target: self, action: #selector(userButtonTap(_:)) )
-        userButton.imageInsets = UIEdgeInsets(top: 0, left: iconsMargin, bottom: 0, right: 0)
-
-        var leftButtons: [UIBarButtonItem] = [sectionsButton]
-        var rightButtons: [UIBarButtonItem] = [searchButton]
-
-        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
-            leftButtons.append(bellButton)
-            rightButtons.append(userButton)
-        }
+        let buttonArea = UIButton(type: .custom)
+        buttonArea.frame = CGRect(x: 0, y: 0, width: dim, height: dim)
+        buttonArea.backgroundColor = .clear
+        self.biasMiniButton.addSubview(buttonArea)
+        buttonArea.addTarget(self, action: #selector(biasMiniButtonOnTap(sender:)),
+            for: .touchUpInside)
         
-         if(APP_CFG_MY_ACCOUNT) {
-            //var userImage = UIImage(systemName: "person")
-            let userButton2 = UIBarButtonItem(image: userImage, style: .plain, target: self,
-                action: #selector(userButtonItemClicked(_:)) )
-            userButton2.imageInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
-            
-            rightButtons.append(userButton2)
-        }
-        
-        
-        navigationItem.leftBarButtonItems = leftButtons
-        navigationItem.rightBarButtonItems = rightButtons
-
-        /*
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchItemClicked(_:)))
-        navigationItem.leftBarButtonItem = sectionsButton
-        */
-        navigationItem.leftItemsSupplementBackButton = true
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-
-        var logoFile = "ITN_logo.png"
-        if(!DARKMODE()){ logoFile = "ITN_logo_blackText.png" }
-        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 165, height: 30))
-        
-        let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
-        let homeButton = UIButton(image: img!)
-        
-        /*
-        var valX: CGFloat = 0
-        let elementsSizeSum: CGFloat = (44*4)+195+(5*2)
-        if(APP_CFG_SHOW_MARKUPS && self.uniqueID==1) {
-            valX = ((view.frame.size.width - 195)/2) //- 10.0
-            if(elementsSizeSum>=UIScreen.main.bounds.width) {
-                valX -= 10.0
-            }
-        }
-        self.addBadge()
-        */
-        
-        //homeButton.frame = CGRect(x: valX, y: 0, width: 195, height: 30)
-        homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
-        homeButton.addTarget(self, action: #selector(homeButtonTapped),
-                            for: .touchUpInside)
-        
-        view.addSubview(homeButton)
-        view.center = navigationItem.titleView!.center
-        self.navigationItem.titleView = view
+        self.biasMiniButtonUpdatePosition()
+        self.biasMiniButton.isHidden = true
     }
     
- */
+    func biasMiniButtonUpdatePosition(offset: CGFloat = 20) {
+        var mFrame = self.biasMiniButton.frame
+        mFrame.origin.x = self.biasButton.frame.origin.x - offset
+        mFrame.origin.y = self.biasButton.frame.origin.y - offset
+        self.biasMiniButton.frame = mFrame
+    }
+    
+    @objc func biasMiniButtonOnTap(sender: UIButton) {
+        HAPTIC_CLICK()
+        
+        ENABLE_SPLIT_SHARING_AFTER_LOADING = true
+        self.biasSliders.enableSplitForSharing()
+    }
+    
+    @objc func biasButtonOnLongPress(gesture: UILongPressGestureRecognizer) {
+        if(gesture.state != .began){ return }
+        
+        if(APP_CFG_SPLITSHARING) {
+            HAPTIC_CLICK()
+        
+            if(self.biasMiniButton.isHidden) {
+                self.biasMiniButtonUpdatePosition(offset: 0)
+                self.biasMiniButton.alpha = 1.0
+                self.biasMiniButton.isHidden = false
+                self.biasButton.superview?.bringSubviewToFront(self.biasButton)
+
+                UIView.animate(withDuration: 0.4) {
+                    self.biasMiniButton.alpha = 1.0
+                    self.biasMiniButtonUpdatePosition()
+                } completion: { succeed in
+                    if(self.miniButtonTimer != nil) {
+                        self.miniButtonTimer?.invalidate()
+                    }
+                    self.miniButtonTimer = Timer.scheduledTimer(withTimeInterval: 4.0,
+                        repeats: false) { timer in
+
+                        self.biasButton.superview?.bringSubviewToFront(self.biasButton)
+                        UIView.animate(withDuration: 0.4) {
+                            self.biasMiniButton.alpha = 1.0
+                            self.biasMiniButtonUpdatePosition(offset: 0)
+                        } completion: { (succeed) in
+                            self.biasMiniButton.isHidden = true
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    
+}
+
+
+

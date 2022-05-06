@@ -60,12 +60,13 @@ let ONBOARDING_VERSION = "v1"
 let ONBOARDING_ID = "onboarding " + ONBOARDING_VERSION
     
     
-
-
-
     
     
     
+    
+    
+    
+var ENABLE_SPLIT_SHARING_AFTER_LOADING = false
     
 func prettifyText(fullString: NSString, boldPartsOfString: Array<NSString>, font: UIFont!, boldFont: UIFont!, paths: [String], linkedSubstrings: [String], accented: [String]) -> NSAttributedString {
 

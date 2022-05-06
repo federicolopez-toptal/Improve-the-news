@@ -73,7 +73,7 @@ class FB_SDK {
     
     private func ITN_login(token: String) {
         let api = ShareAPI.instance
-        api.login(type: "Facebook", accessToken: token) { (success) in
+        api.login(type: "Facebook", accessToken: token, secret: nil) { (success) in
             self.callback?(true)
             ShareAPI.writeKey(self.keySHARE_FBLogged, value: true)
             ShareAPI.LOG(where: "Facebook login", msg: "Success")
@@ -94,14 +94,13 @@ class FB_SDK {
         }
     }
     
-    func share(link: String, vc: UIViewController) {
+    func share(link: String, comment: String?, vc: UIViewController) {
         let content = ShareLinkContent()
         content.contentURL = URL(string: link)
-        content.quote = "Comment for testing"
+        content.quote = comment
         
         let dialog = ShareDialog(viewController: vc, content: content, delegate: vc as? SharingDelegate)
         dialog.show()
-        
     }
     
     

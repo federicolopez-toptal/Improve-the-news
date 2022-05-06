@@ -114,11 +114,11 @@ class ShareAPI {
     */
     
     // ************************************************************ //
-    func login(type: String, accessToken: String, callback: @escaping (Bool) -> ()) { // (success)
+    func login(type: String, accessToken: String, secret: String?, callback: @escaping (Bool) -> ()) { // (success)
         let here = "Login"
         let url = self.host() + "/api/user/"
         
-        let bodyJson: [String: String] = [
+        var bodyJson: [String: String] = [
             "type": type,
             "userId": USER_ID(),
             "access_token": accessToken,
@@ -126,6 +126,9 @@ class ShareAPI {
             "newsletter": "Y",
             "app": "iOS"
         ]
+        if let _secret = secret {
+            bodyJson["secret_token"] = _secret
+        }
         
         /*
         print(bodyJson)
@@ -318,7 +321,7 @@ class ShareAPI {
     func shareSplit(_ article1: (String, String, String, String, Bool, String),
         _ article2: (String, String, String, String, Bool, String),
         types: [String], imageURL: String, text: String,
-        callback: @escaping (Bool, String) -> ()) {
+        callback: @escaping (Bool, String, String) -> ()) {
         // 0: img, 1: title, 2: country, 3: source, 4: state, 5: URL
         
         let here = "ShareSplit"
@@ -355,10 +358,17 @@ class ShareAPI {
                 if let json = ShareAPI.json(fromData: data) {
                     var responses = self.responsePerSocialNetwork(json: json, types: types)
                     if(responses==nil){ responses = errorMsg }
-                    callback(true, responses!)
+                    
+                    var url = ""
+                    if let _url = json["url"] as? String {
+                        url = _url
+                    }
+                    
+                    print(responses!, url)
+                    callback(true, responses!, url)
                 } else {
                     ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
-                    callback(false, errorMsg)
+                    callback(false, errorMsg, "")
                 }
             }
         }
@@ -372,27 +382,37 @@ class ShareAPI {
         
         if(types.count==1) {
             let T = types.first!
-            if let _typeContent = json[T] as? [String: String] {
-                if let _message = _typeContent["message"] {
-                    if(_message.lowercased() == "ok") {
-                        result = okMsg
-                        if(T=="Facebook"){ result = nil }
+            if(T=="Facebook"){
+                result = nil
+            } else {
+                if let _typeContent = json[T] as? [String: String] {
+                    if let _message = _typeContent["message"] {
+                        if(_message.lowercased() == "ok") {
+                            result = okMsg
+                        }
                     }
                 }
             }
         } else {
             var results = [String: Bool]()
+            var typesCount = types.count
         
             for T in types {
                 var T_result = false
-                if let _typeContent = json[T] as? [String: String] {
-                    if let _message = _typeContent["message"] {
-                        if(_message.lowercased() == "ok") {
-                            T_result = true
-                            if(T=="Facebook"){ T_result = false }
+                if(T=="Facebook"){
+                    T_result = false
+                    typesCount -= 1
+                    continue
+                } else {
+                    if let _typeContent = json[T] as? [String: String] {
+                        if let _message = _typeContent["message"] {
+                            if(_message.lowercased() == "ok") {
+                                T_result = true
+                            }
                         }
                     }
                 }
+                
                 results[T] = T_result
             }
             
@@ -403,9 +423,9 @@ class ShareAPI {
                 else{ nok += 1 }
             }
             
-            if(ok==types.count) { // All ok
+            if(ok==typesCount) { // All ok
                 result = okMsg
-            } else if(nok==types.count) { // All failed
+            } else if(nok==typesCount) { // All failed
                 result = nil
             } else {
                 result = okMsg + " via:\n"
@@ -506,16 +526,6 @@ extension ShareAPI {
     static func LOG_DATA(_ data: Data?, where w: String) {
         var str = String(decoding: data!, as: UTF8.self)
         str = str.replacingOccurrences(of: "\n", with: "")
-        
-        /*
-        let index = str.index(of: "{")
-        
-        
-        print(str[0])
-        if(str[0] == "\n") {
-            print("yep")
-        }
-        */
         
         print("SHARE-\(w)", "DATA " + str)
     }

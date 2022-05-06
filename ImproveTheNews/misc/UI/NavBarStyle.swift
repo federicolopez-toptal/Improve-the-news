@@ -20,6 +20,8 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector, menuTap: 
         searchBar.searchTextField.textColor = .black
         searchBar.tintColor = .black
 
+        if(viewController.navigationController == nil){ return }
+
         let navController = viewController.navigationController!
         navController.navigationBar.prefersLargeTitles = false
         navController.navigationBar.barTintColor = DARKMODE() ? bgBlue_DARK : bgWhite_DARK
@@ -42,28 +44,32 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector, menuTap: 
         var leftButtons = [UIBarButtonItem]()
         var rightButtons = [UIBarButtonItem]()
         
+        
+        
+
+
+
         if(uniqueID == 1) {
             // LEFT
             let hamburgerButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"),
             style: .plain, target: viewController, action: menuTap)
             
             leftButtons.append(hamburgerButton)
+        }
+        
+        // RIGHT
+        let searchButton = UIBarButtonItem(barButtonSystemItem: .search,
+            target: viewController, action: searchTap)
             
+        rightButtons.append(searchButton)
+        
+        if(APP_CFG_MY_ACCOUNT) {
+            let userImage = UIImage(systemName: "person")
+            let userButton = UIBarButtonItem(image: userImage, style: .plain,
+                target: viewController, action: userTap)
+            userButton.imageInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
             
-            // RIGHT
-            let searchButton = UIBarButtonItem(barButtonSystemItem: .search,
-                target: viewController, action: searchTap)
-                
-            rightButtons.append(searchButton)
-            
-            if(APP_CFG_MY_ACCOUNT) {
-                let userImage = UIImage(systemName: "person")
-                let userButton = UIBarButtonItem(image: userImage, style: .plain,
-                    target: viewController, action: userTap)
-                userButton.imageInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
-                
-                rightButtons.append(userButton)
-            }
+            rightButtons.append(userButton)
         }
         
         
