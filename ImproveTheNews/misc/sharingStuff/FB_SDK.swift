@@ -100,6 +100,7 @@ class FB_SDK {
         content.quote = comment
         
         let dialog = ShareDialog(viewController: vc, content: content, delegate: vc as? SharingDelegate)
+        if(IS_iPAD()){ dialog.mode = .web }
         dialog.show()
     }
     

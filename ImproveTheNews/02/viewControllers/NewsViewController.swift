@@ -288,6 +288,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.shareArticles?.delegate = self
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        self.shareArticles?.rotate()
+    }
+    
     @objc func onJsonParseError() {
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { action in
         }
@@ -387,15 +393,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             }
         }
         
-        /*
-        DELAY(2.0) {
-            self.showBiasSliders(self.biasButton)
-        }
-        */
         
-        //self.testHaptic()
         
-        if(self.firstTime){ self.test() }
+        
+        //!!!
+//        if(self.firstTime) {
+//            let vc = FAQViewController.createInstance()
+//            self.present(vc, animated: true)
+//        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -1325,7 +1330,6 @@ extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
         ])
         topicSliders.buildViews()
     }
-    
 }
 
 // MARK: Super slider

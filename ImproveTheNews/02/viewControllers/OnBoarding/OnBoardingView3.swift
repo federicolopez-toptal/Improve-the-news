@@ -808,6 +808,7 @@ class OnBoardingView3: UIView {
             dots.centerXAnchor.constraint(equalTo: container.centerXAnchor)
         ])
         
+        dots.isUserInteractionEnabled = false
         return dots
     }
     

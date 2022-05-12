@@ -200,9 +200,12 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
         deselect()
         switch indexPath.row {
             case 0:
-                let FAQ = FAQPage()
-                FAQ.modalPresentationCapturesStatusBarAppearance = true
-                present(FAQ, animated: true, completion: nil)
+//                let FAQ = FAQPage()
+//                FAQ.modalPresentationCapturesStatusBarAppearance = true
+//                present(FAQ, animated: true, completion: nil)
+
+                let vc = FAQViewController.createInstance()
+                self.present(vc, animated: true)
             case 1:
                 let sliders = SliderDoc()
                 sliders.modalPresentationCapturesStatusBarAppearance = true

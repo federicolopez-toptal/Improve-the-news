@@ -587,7 +587,10 @@ class ShareSplitShareViewController: UIViewController {
                     
                     if(!has_FB) {
                         DispatchQueue.main.async {
-                            ALERT(vc: self, title: self.dialogTitle, message: str)
+                            ALERT(vc: self, title: self.dialogTitle, message: str) {
+                                self.dismiss(animated: true) {
+                                }
+                            }
                         }
                     } else {
                         if(types.count==1) {
@@ -802,7 +805,13 @@ extension ShareSplitShareViewController: SharingDelegate {
     private func showFinalMessage() {
         if(self.tmpMsg != nil) {
             DispatchQueue.main.async {
-                ALERT(vc: self, title: self.dialogTitle, message: self.tmpMsg!)
+                ALERT(vc: self, title: self.dialogTitle, message: self.tmpMsg!) {
+                    self.dismiss(animated: true) {
+                    }
+                }
+            }
+        } else {
+            self.dismiss(animated: true) {
             }
         }
     }

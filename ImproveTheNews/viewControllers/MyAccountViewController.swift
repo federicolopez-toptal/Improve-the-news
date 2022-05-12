@@ -23,11 +23,6 @@ class MyAccountViewController: UIViewController {
             
             print("SHARE", api.uuid)
             print("SHARE", api.getBearerAuth())
-            
-//            let fb = FB_SDK.instance
-////            let _link = "https://www.independent.co.uk/space/kamala-harris-missiles-satellite-destroy-b2060554.html"
-//            let _link = "https://www.improvethenews.org/split-shares?id=340"
-//            fb.share(link: _link, vc: self)
         }
         
     }

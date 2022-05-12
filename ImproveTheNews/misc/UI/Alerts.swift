@@ -20,6 +20,17 @@ func ALERT(vc: UIViewController, title T: String, message M: String) {
     }
 }
 
+func ALERT(vc: UIViewController, title T: String, message M: String, callback: @escaping () -> ()) {
+    let alert = UIAlertController(title: T, message: M, preferredStyle: .alert)
+    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
+        callback()
+    }
+    
+    alert.addAction(okAction)
+    vc.present(alert, animated: true) {
+    }
+}
+
 func ALERT_YESNO(vc: UIViewController, title T: String, question Q: String, callback: @escaping (Bool) -> ()) {
     let alert = UIAlertController(title: T, message: Q, preferredStyle: .alert)
     

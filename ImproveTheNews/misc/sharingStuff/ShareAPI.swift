@@ -126,8 +126,13 @@ class ShareAPI {
             "newsletter": "Y",
             "app": "iOS"
         ]
+        
         if let _secret = secret {
-            bodyJson["secret_token"] = _secret
+            if(type.lowercased() == "reddit") {
+                bodyJson["refresh_token"] = _secret
+            } else {
+                bodyJson["secret_token"] = _secret
+            }
         }
         
         /*

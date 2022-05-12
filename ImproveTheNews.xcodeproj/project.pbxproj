@@ -42,8 +42,13 @@
 		1F92D8F827AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F92D8F627AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib */; };
 		1F92D8FB27AC648000AA58B4 /* FooterCellBig1Topic.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F92D8F927AC648000AA58B4 /* FooterCellBig1Topic.xib */; };
 		1F92D8FC27AC648000AA58B4 /* FooterCellBig1Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F92D8FA27AC648000AA58B4 /* FooterCellBig1Topic.swift */; };
+		1F9318BC282C0AC000058739 /* FAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9318BA282C0AC000058739 /* FAQViewController.swift */; };
+		1F9318BF282C35CC00058739 /* NSAttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9318BE282C35CC00058739 /* NSAttributedStringExtension.swift */; };
+		1F9318C1282C3DC900058739 /* FAQ_stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9318C0282C3DC900058739 /* FAQ_stuff.swift */; };
 		1FA083BC27BAD71A00C2E01D /* ArticleLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA083BB27BAD71A00C2E01D /* ArticleLayouts.swift */; };
 		1FA57C4727D08CBF0027DE26 /* AppUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA57C4627D08CBF0027DE26 /* AppUtility.swift */; };
+		1FB13C84282C809900DA4CDB /* einstein.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1FB13C82282C809800DA4CDB /* einstein.jpg */; };
+		1FB13C85282C809900DA4CDB /* galileo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1FB13C83282C809900DA4CDB /* galileo.jpg */; };
 		1FC188FF27B1A75C00CF7CEA /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = 1FC188FE27B1A75B00CF7CEA /* test.html */; };
 		1FCE7D2E27FE197300B4EB66 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE7D2D27FE197300B4EB66 /* UIButtonExtension.swift */; };
 		1FD319AB279898AD00BD65D5 /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1FD319AA279898AD00BD65D5 /* notes.txt */; };
@@ -430,8 +435,13 @@
 		1F92D8F627AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellTextOnly1Topic.xib; sourceTree = "<group>"; };
 		1F92D8F927AC648000AA58B4 /* FooterCellBig1Topic.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FooterCellBig1Topic.xib; sourceTree = "<group>"; };
 		1F92D8FA27AC648000AA58B4 /* FooterCellBig1Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellBig1Topic.swift; sourceTree = "<group>"; };
+		1F9318BA282C0AC000058739 /* FAQViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQViewController.swift; sourceTree = "<group>"; };
+		1F9318BE282C35CC00058739 /* NSAttributedStringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedStringExtension.swift; sourceTree = "<group>"; };
+		1F9318C0282C3DC900058739 /* FAQ_stuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQ_stuff.swift; sourceTree = "<group>"; };
 		1FA083BB27BAD71A00C2E01D /* ArticleLayouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleLayouts.swift; sourceTree = "<group>"; };
 		1FA57C4627D08CBF0027DE26 /* AppUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtility.swift; sourceTree = "<group>"; };
+		1FB13C82282C809800DA4CDB /* einstein.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = einstein.jpg; sourceTree = "<group>"; };
+		1FB13C83282C809900DA4CDB /* galileo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = galileo.jpg; sourceTree = "<group>"; };
 		1FC188FE27B1A75B00CF7CEA /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
 		1FCE7D2D27FE197300B4EB66 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 		1FD319AA279898AD00BD65D5 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
@@ -886,8 +896,10 @@
 		1F8F213927FCAFF9008CB00D /* viewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				1FB13C81282C808800DA4CDB /* FAQ */,
 				1F8F214927FCBF16008CB00D /* MyAccountViewController.swift */,
 				1F8F214A27FCBF16008CB00D /* MyAccountViewController.xib */,
+				1F9318BA282C0AC000058739 /* FAQViewController.swift */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -913,11 +925,22 @@
 			path = socialLogos;
 			sourceTree = "<group>";
 		};
+		1FB13C81282C808800DA4CDB /* FAQ */ = {
+			isa = PBXGroup;
+			children = (
+				1F9318C0282C3DC900058739 /* FAQ_stuff.swift */,
+				1FB13C82282C809800DA4CDB /* einstein.jpg */,
+				1FB13C83282C809900DA4CDB /* galileo.jpg */,
+			);
+			path = FAQ;
+			sourceTree = "<group>";
+		};
 		1FCE7D2C27FE195A00B4EB66 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
 				1FCE7D2D27FE197300B4EB66 /* UIButtonExtension.swift */,
 				1F54863327FF2CE000161996 /* UIViewExtension.swift */,
+				1F9318BE282C35CC00058739 /* NSAttributedStringExtension.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -1661,6 +1684,7 @@
 				BDDA45902612301100C9C3AF /* SYR64.png in Resources */,
 				BDDA45892612301100C9C3AF /* IDN64.png in Resources */,
 				BDAC5A7127623BC200927195 /* in_logo.png in Resources */,
+				1FB13C84282C809900DA4CDB /* einstein.jpg in Resources */,
 				BDDA451D2612301100C9C3AF /* WSM64.png in Resources */,
 				BDDA44EA2612301100C9C3AF /* LBR64.png in Resources */,
 				BDEB78682667296700BE3532 /* sources.csv in Resources */,
@@ -1773,6 +1797,7 @@
 				BD0FEDA825D170500079A32B /* Poppins-SemiBold.ttf in Resources */,
 				B6AF8732254465C900227CCC /* PlayfairDisplay-SemiBold.ttf in Resources */,
 				BDDA45612612301100C9C3AF /* GEO64.png in Resources */,
+				1FB13C85282C809900DA4CDB /* galileo.jpg in Resources */,
 				BDDA44F12612301100C9C3AF /* XKX64.png in Resources */,
 				BDDA450F2612301100C9C3AF /* ZWE64.png in Resources */,
 				1F92D8FB27AC648000AA58B4 /* FooterCellBig1Topic.xib in Resources */,
@@ -2021,12 +2046,14 @@
 				1F5B144D27A03CF100F743FB /* StoryViewCell.swift in Sources */,
 				1F92D8FC27AC648000AA58B4 /* FooterCellBig1Topic.swift in Sources */,
 				1FA57C4727D08CBF0027DE26 /* AppUtility.swift in Sources */,
+				1F9318BF282C35CC00058739 /* NSAttributedStringExtension.swift in Sources */,
 				1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */,
 				1F54863427FF2CE000161996 /* UIViewExtension.swift in Sources */,
 				BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */,
 				1F5DA1402804C28900C7C81C /* NavBarStyle.swift in Sources */,
 				1F0CDCCC2799CC2800368282 /* StorySourceManager.swift in Sources */,
 				1F54863627FF55C600161996 /* Alerts.swift in Sources */,
+				1F9318BC282C0AC000058739 /* FAQViewController.swift in Sources */,
 				1F245A9327DA67050088A238 /* ShareAPI.swift in Sources */,
 				1FE5F2202805A7B40020D4A4 /* UserIdGeneration.swift in Sources */,
 				BDEE62B5274EC518001E59B7 /* ShareSplitArticles.swift in Sources */,
@@ -2042,6 +2069,7 @@
 				A81B3B252481E67200A52A97 /* ImproveTheNews.xcdatamodeld in Sources */,
 				BD03C9B5264C5A1200F3BE1F /* NewsBigViewController.swift in Sources */,
 				A89B803624AFAB8B009BB0F8 /* WebViewController.swift in Sources */,
+				1F9318C1282C3DC900058739 /* FAQ_stuff.swift in Sources */,
 				A87144EA24F43B3100A7E404 /* SearchViewController.swift in Sources */,
 				BD3F58DA264CA5CC00B99522 /* FooterCellBig.swift in Sources */,
 				BD43FA862774D5D10037D304 /* Easing.swift in Sources */,
@@ -2262,7 +2290,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2292,7 +2320,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2463,7 +2491,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Beta";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;

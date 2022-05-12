@@ -151,6 +151,7 @@ class News {
         let url = Foundation.URL(string: name)
         // URL(string: name)
         var jsonData: Data?
+        if(url==nil){ return }
         
         let task = URLSession.shared.dataTask(with: url!) { data, response, error in
             

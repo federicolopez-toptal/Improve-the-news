@@ -47,6 +47,11 @@ class ShareSplitArticles: UIView {
     var centered2: Int = 0
     var randomizeCount = 0
 
+    ///
+    var column1WidthConstraint: NSLayoutConstraint?
+    var column2WidthConstraint: NSLayoutConstraint?
+
+
 
     init(into container: UIView) {
         super.init(frame: CGRect.zero)
@@ -133,9 +138,10 @@ class ShareSplitArticles: UIView {
         column1.backgroundColor = header.backgroundColor
         self.addSubview(column1)
         column1.translatesAutoresizingMaskIntoConstraints = false
+        self.column1WidthConstraint = column1.widthAnchor.constraint(equalToConstant: halfScreenWidth)
         NSLayoutConstraint.activate([
             column1.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            column1.widthAnchor.constraint(equalToConstant: halfScreenWidth),
+            self.column1WidthConstraint!,
             column1.topAnchor.constraint(equalTo: header.bottomAnchor),
             column1.bottomAnchor.constraint(equalTo: self.bottomAnchor)
             /*
@@ -147,11 +153,13 @@ class ShareSplitArticles: UIView {
         column2.backgroundColor = header.backgroundColor
         self.addSubview(column2)
         column2.translatesAutoresizingMaskIntoConstraints = false
+        self.column2WidthConstraint = column2.widthAnchor.constraint(equalToConstant: halfScreenWidth)
         NSLayoutConstraint.activate([
             column2.leadingAnchor.constraint(equalTo: column1.trailingAnchor),
             column2.topAnchor.constraint(equalTo: header.bottomAnchor),
             column2.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            column2.widthAnchor.constraint(equalTo: column1.widthAnchor)
+            self.column2WidthConstraint!
+            //column2.widthAnchor.constraint(equalTo: column1.widthAnchor)
         ])
         
         let line = UIView()
@@ -193,6 +201,24 @@ class ShareSplitArticles: UIView {
         
         self.column1.addGestureRecognizer(panGesture1)
         //self.column2.addGestureRecognizer(panGesture2)
+    }
+    
+    func rotate() {
+        let halfScreenWidth = UIScreen.main.bounds.size.height/2
+        
+        self.column1WidthConstraint?.constant = halfScreenWidth
+        self.column2WidthConstraint?.constant = halfScreenWidth
+        
+        if(self.headerHeightConstraint!.constant > 0.0) {
+            self.headerHeightConstraint?.constant = 0.0
+            UIView.animate(withDuration: 0.4) {
+                self.superview!.layoutIfNeeded()
+            } completion: { (succeed) in
+            }
+        }
+        
+        self.fixListsScrollPosition(self.column1)
+        self.fixListsScrollPosition(self.column2)
     }
     
     func start(parser: News) {
