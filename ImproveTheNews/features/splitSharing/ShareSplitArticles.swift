@@ -212,7 +212,7 @@ class ShareSplitArticles: UIView {
         if(self.headerHeightConstraint!.constant > 0.0) {
             self.headerHeightConstraint?.constant = 0.0
             UIView.animate(withDuration: 0.4) {
-                self.superview!.layoutIfNeeded()
+                self.superview?.layoutIfNeeded()
             } completion: { (succeed) in
             }
         }

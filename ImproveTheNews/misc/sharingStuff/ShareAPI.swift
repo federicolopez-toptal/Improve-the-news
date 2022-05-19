@@ -178,47 +178,47 @@ class ShareAPI {
     */
     
     // ************************************************************ //
-    func login_TW(token: String, verifier: String, callback: @escaping (Bool) -> ()) {
-        let type = "Twitter"
-        let here = "Login"
-        let url = self.host() + "/api/user/"
-        
-        let bodyJson: [String: String] = [
-            "type": type,
-            "userId": USER_ID(),
-            "access_token": token,
-            "secret_token": verifier
-        ]
-        
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = "POST"
-        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
-        request.httpBody = body
-        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
-
-        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
-            if let _error = error {
-                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
-            } else {
-                ShareAPI.LOG_DATA(data, where: here)
-            
-                if let json = ShareAPI.json(fromData: data) {
-                    if let _jwt = json["jwt"] as? String { // let _uuid = json["uuid"]
-                        ShareAPI.LOG(where: here, msg: type + " success")
-                        ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
-                        callback(true)
-                    } else {
-                        ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
-                        callback(false)
-                    }
-                } else {
-                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
-                    callback(false)
-                }
-            }
-        }
-        task.resume()
-    }
+//    func login_TW(token: String, verifier: String, callback: @escaping (Bool) -> ()) {
+//        let type = "Twitter"
+//        let here = "Login"
+//        let url = self.host() + "/api/user/"
+//
+//        let bodyJson: [String: String] = [
+//            "type": type,
+//            "userId": USER_ID(),
+//            "access_token": token,
+//            "secret_token": verifier
+//        ]
+//
+//        var request = URLRequest(url: URL(string: url)!)
+//        request.httpMethod = "POST"
+//        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+//        request.httpBody = body
+//        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+//
+//        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+//            if let _error = error {
+//                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+//            } else {
+//                ShareAPI.LOG_DATA(data, where: here)
+//
+//                if let json = ShareAPI.json(fromData: data) {
+//                    if let _jwt = json["jwt"] as? String { // let _uuid = json["uuid"]
+//                        ShareAPI.LOG(where: here, msg: type + " success")
+//                        ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
+//                        callback(true)
+//                    } else {
+//                        ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+//                        callback(false)
+//                    }
+//                } else {
+//                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+//                    callback(false)
+//                }
+//            }
+//        }
+//        task.resume()
+//    }
     
     // ************************************************************ //
     func disconnect(type: String) { // (success)

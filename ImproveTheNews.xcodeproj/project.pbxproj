@@ -938,6 +938,7 @@
 		1FCE7D2C27FE195A00B4EB66 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
+				BD1C4020276927EB007C258B /* URLExtension.swift */,
 				1FCE7D2D27FE197300B4EB66 /* UIButtonExtension.swift */,
 				1F54863327FF2CE000161996 /* UIViewExtension.swift */,
 				1F9318BE282C35CC00058739 /* NSAttributedStringExtension.swift */,
@@ -1200,7 +1201,6 @@
 				BD94151525FFD231002DEDF7 /* SegueFromLeft.swift */,
 				BD4652A2260E68EC00FFFB11 /* UIColorExtension.swift */,
 				BD1B39CD262F270000CDC9F0 /* UIDeviceExtension.swift */,
-				BD1C4020276927EB007C258B /* URLExtension.swift */,
 				BD43FA852774D5D10037D304 /* Easing.swift */,
 				1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */,
 				1FA57C4627D08CBF0027DE26 /* AppUtility.swift */,
@@ -2290,7 +2290,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2320,7 +2320,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
@@ -2491,7 +2491,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Beta";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;

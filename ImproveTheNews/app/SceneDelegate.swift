@@ -20,11 +20,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
 
-        // Twitter
-        if(url.absoluteString.lowercased().contains("itntestapp")) {
-            guard let context = URLContexts.first else { return }
-            let callbackUrl = URL(string: TW_SDK.callbackUrl)!
-            Swifter.handleOpenURL(context.url, callbackURL: callbackUrl)
+        // URL SCHEME
+        let strUrl = url.absoluteString.lowercased()
+        if(strUrl.contains("itntestapp")) {
+            if(strUrl.contains("fb")) {
+                // FB
+                let params = url.params()
+                let userId = params["usrid"] as! String
+                let jwt = params["jwt"] as! String
+                print(userId, jwt)
+                print("")
+            } else {
+                // Twitter library (Swifter)
+                guard let context = URLContexts.first else { return }
+                let callbackUrl = URL(string: TW_SDK.callbackUrl)!
+                Swifter.handleOpenURL(context.url, callbackURL: callbackUrl)
+            }
         }
         
         // FB

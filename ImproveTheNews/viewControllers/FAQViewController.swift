@@ -110,10 +110,10 @@ extension FAQViewController {
         // Close button
         let closeButton = UIButton(type: .custom)
         let attributes = [NSAttributedString.Key.font: UIFont(name: "OpenSans-Bold", size: 17)!,
-                            NSAttributedString.Key.foregroundColor: UIColor.white]
+                            NSAttributedString.Key.foregroundColor: DARKMODE() ? UIColor.white : UIColor.black.withAlphaComponent(0.6)]
         let attrTitle = NSAttributedString(string: "Close", attributes: attributes)
         closeButton.setAttributedTitle(attrTitle, for: .normal)
-        closeButton.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+        closeButton.backgroundColor = .clear //UIColor.black.withAlphaComponent(0.25)
         titleHStack.addArrangedSubview(closeButton)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -153,7 +153,7 @@ extension FAQViewController {
             
             let titleLabel = UILabel(text: FAQ_titles[i],
                 font: UIFont(name: "PTSerif-Bold", size: 25),
-                textColor: .white, textAlignment: .left,
+                textColor: DARKMODE() ? .white : .black.withAlphaComponent(0.6), textAlignment: .left,
                 numberOfLines: 1)
             titleLabel.numberOfLines = 0
             hStack.addArrangedSubview(titleLabel)
@@ -255,7 +255,8 @@ extension FAQViewController {
             
         let mAttr = NSMutableAttributedString(attributedString: attr)
         let range = NSRange(location: 0, length: attr.string.count)
-        mAttr.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.white, range: range)
+        mAttr.addAttribute(NSAttributedString.Key.foregroundColor, value: DARKMODE() ? UIColor.white : UIColor.black,
+            range: range)
             
         return mAttr
     }

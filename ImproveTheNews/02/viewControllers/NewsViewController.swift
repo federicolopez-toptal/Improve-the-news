@@ -286,6 +286,18 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.shareActionsView?.delegate = self
         self.shareArticles = ShareSplitArticles(into: self.view)
         self.shareArticles?.delegate = self
+        
+//        // ----------------------------------------------
+//        let api = ShareAPI.instance
+//        let jwt = api.getBearerAuth().replacingOccurrences(of: "Bearer ", with: "")
+//        let fbLogin = "https://www.improvemynews.com/mobile-auth?jwt=" + jwt + "&usrid=" + api.uuid! + "&type=iOS&social_network=Facebook"
+//
+//        let fbShare = "https://www.facebook.com/dialog/share?app_id=499204491779033&display=popup&quote=comment&href=https://www.improvemynews.com/story/2022/day-ukraine-refuses-mariupol-surrender-offer-zelenskyy-calls-for-putin-talks-biden-to-visit-poland&redirect_uri=https://www.improvemynews.com/ios-fb-auth"
+//
+//        DELAY(2.0) {
+//            print("SHARE", fbShare)
+//            UIApplication.shared.open(URL(string: fbShare)!)
+//        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
