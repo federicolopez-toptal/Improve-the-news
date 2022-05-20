@@ -24,12 +24,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let strUrl = url.absoluteString.lowercased()
         if(strUrl.contains("itntestapp")) {
             if(strUrl.contains("fb")) {
-                // FB
-                let params = url.params()
-                let userId = params["usrid"] as! String
-                let jwt = params["jwt"] as! String
-                print(userId, jwt)
-                print("")
+                if(strUrl.contains("usrid") && strUrl.contains("jwt")) {
+                    // FB login callback
+                    let params = url.params()
+                    let _uuid = params["usrid"] as! String
+                    let _jwt = params["jwt"] as! String
+                    
+                    let api = ShareAPI.instance
+                    api.writeJWT(_jwt)
+                    api.writeUUID(_uuid)
+                    NotificationCenter.default.post(name: NOTIFICATION_FB_LOGGED, object: nil)
+                }
             } else {
                 // Twitter library (Swifter)
                 guard let context = URLContexts.first else { return }

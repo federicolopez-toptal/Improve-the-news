@@ -36,6 +36,9 @@ class ShareSplitShareViewController: UIViewController {
     let dialogTitle = "Improve the News"
     var tmpMsg: String?
 
+    var generatedImage: String?
+
+
     override func viewDidLoad() {
         self.view.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
 
@@ -571,50 +574,63 @@ class ShareSplitShareViewController: UIViewController {
     private func performSharing() {
     
         self.showLoading()
-        var txt = self.textInput.text!
-        if(txt.isEmpty){ txt = " " }
-        let types = self.getTypes()
         
         let api = ShareAPI.instance
-        api.generateImage(self.article1!, self.article2!) { (image) in
-
-            if let _image = image {
-                let types = types
-                api.shareSplit(self.article1!, self.article2!, types: types, imageURL: _image, text: txt) { (ok, str, url) in
-                    self.showLoading(false)
+        if let _generatedImage = self.generatedImage {
+            self.performSharing_step2()
+        } else {
+            api.generateImage(self.article1!, self.article2!) { (image) in
+                if let _image = image {
+                    self.generatedImage = _image
+                    DispatchQueue.main.async {
+                        self.performSharing_step2()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.performSharing_step2()
+                    }
                     
-                    let has_FB = types.contains("Facebook")
-                    
-                    if(!has_FB) {
-                        DispatchQueue.main.async {
-                            ALERT(vc: self, title: self.dialogTitle, message: str) {
-                                self.dismiss(animated: true) {
-                                }
-                            }
-                        }
-                    } else {
-                        if(types.count==1) {
-                            self.tmpMsg = nil
-                        } else {
-                            self.tmpMsg = str
-                        }
-                        
-                        DispatchQueue.main.async {
-                            let fb = FB_SDK.instance
-                            fb.share(link: url, comment: self.textInput.text, vc: self)
+                    DispatchQueue.main.async {
+                        let msg = "There was an error sharing your articles. Please try again"
+                        ALERT(vc: self, title: self.dialogTitle, message: msg)
+                    }
+                }
+            }
+        }
+    }
+     
+    private func performSharing_step2() {
+        let api = ShareAPI.instance
+        let types = self.getTypes()
+        var txt = self.textInput.text!
+        if(txt.isEmpty){ txt = " " }
+        let _image = self.generatedImage!
+        
+        api.shareSplit(self.article1!, self.article2!, types: types, imageURL: _image, text: txt) { (ok, str, url) in
+            self.showLoading(false)
+            
+            let has_FB = types.contains("Facebook")
+            
+            if(!has_FB) {
+                DispatchQueue.main.async {
+                    ALERT(vc: self, title: self.dialogTitle, message: str) {
+                        self.dismiss(animated: true) {
                         }
                     }
                 }
             } else {
-                self.showLoading(false)
+                if(types.count==1) {
+                    self.tmpMsg = nil
+                } else {
+                    self.tmpMsg = str
+                }
                 
                 DispatchQueue.main.async {
-                    let msg = "There was an error sharing your articles. Please try again"
-                    ALERT(vc: self, title: self.dialogTitle, message: msg)
+                    let fb = FB_SDK.instance
+                    fb.share(link: url, comment: self.textInput.text, vc: self)
                 }
             }
         }
-        
     }
     
     func showLoading(_ visible: Bool = true) {

@@ -38,7 +38,8 @@ class ShareAPI {
     }
 
     func getBearerAuth() -> String {
-        return ShareAPI.readStringKey(keySHARE_bearerAuth)!
+        return "Bearer " + self.getJWT()
+        //return ShareAPI.readStringKey(keySHARE_bearerAuth)!
     }
     
     func getJWT() -> String {
@@ -496,6 +497,14 @@ extension ShareAPI {
     static func writeKey(_ key: String, value: Any) {
         UserDefaults.standard.setValue(value, forKey: key)
         UserDefaults.standard.synchronize()
+    }
+    
+    func writeJWT(_ jwt: String) {
+        ShareAPI.writeKey(self.keySHARE_jwt, value: jwt)
+    }
+    
+    func writeUUID(_ uuid: String) {
+        ShareAPI.writeKey(self.keySHARE_uuid, value: uuid)
     }
     
     static func removeKey(_ key: String) {

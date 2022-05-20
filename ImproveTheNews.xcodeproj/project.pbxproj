@@ -45,6 +45,7 @@
 		1F9318BC282C0AC000058739 /* FAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9318BA282C0AC000058739 /* FAQViewController.swift */; };
 		1F9318BF282C35CC00058739 /* NSAttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9318BE282C35CC00058739 /* NSAttributedStringExtension.swift */; };
 		1F9318C1282C3DC900058739 /* FAQ_stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9318C0282C3DC900058739 /* FAQ_stuff.swift */; };
+		1F9B96F22836BA900027AA14 /* FB_odl_SDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9B96F12836BA900027AA14 /* FB_odl_SDK.swift */; };
 		1FA083BC27BAD71A00C2E01D /* ArticleLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA083BB27BAD71A00C2E01D /* ArticleLayouts.swift */; };
 		1FA57C4727D08CBF0027DE26 /* AppUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA57C4627D08CBF0027DE26 /* AppUtility.swift */; };
 		1FB13C84282C809900DA4CDB /* einstein.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1FB13C82282C809800DA4CDB /* einstein.jpg */; };
@@ -438,6 +439,7 @@
 		1F9318BA282C0AC000058739 /* FAQViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQViewController.swift; sourceTree = "<group>"; };
 		1F9318BE282C35CC00058739 /* NSAttributedStringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedStringExtension.swift; sourceTree = "<group>"; };
 		1F9318C0282C3DC900058739 /* FAQ_stuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQ_stuff.swift; sourceTree = "<group>"; };
+		1F9B96F12836BA900027AA14 /* FB_odl_SDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FB_odl_SDK.swift; sourceTree = "<group>"; };
 		1FA083BB27BAD71A00C2E01D /* ArticleLayouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleLayouts.swift; sourceTree = "<group>"; };
 		1FA57C4627D08CBF0027DE26 /* AppUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtility.swift; sourceTree = "<group>"; };
 		1FB13C82282C809800DA4CDB /* einstein.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = einstein.jpg; sourceTree = "<group>"; };
@@ -884,6 +886,7 @@
 			isa = PBXGroup;
 			children = (
 				BDADB58527678234001820D8 /* ShareSplitAPI.swift */,
+				1F9B96F12836BA900027AA14 /* FB_odl_SDK.swift */,
 				1FFCEBD827E10B8400EB4797 /* FB_SDK.swift */,
 				1F0CB8F527EBE3C4000F388A /* TW_SDK.swift */,
 				1FF48B4F27F235FD00A4097A /* LI_SDK.swift */,
@@ -2095,6 +2098,7 @@
 				BD51B8E72761160F001A465C /* PulseButton.swift in Sources */,
 				BD88FD52264CA93C00F8BCCB /* FooterCellBigItem0.swift in Sources */,
 				A8A7935C2482F98C009A55FE /* TabBarController.swift in Sources */,
+				1F9B96F22836BA900027AA14 /* FB_odl_SDK.swift in Sources */,
 				BD9D55D2264ACFDE00509722 /* HorizontalMenuView.swift in Sources */,
 				BD2813EE25F6A7D000A91E38 /* SliderDocNewVersion.swift in Sources */,
 				BD1B39CE262F270000CDC9F0 /* UIDeviceExtension.swift in Sources */,
