@@ -561,11 +561,15 @@ extension ShareSplitArticles: UITableViewDelegate, UITableViewDataSource,
         var list = self.column1
         if(scrollView.tag == 102) { list = self.column2 }
 
-        let iPath = list.indexPathForRow(at: CGPoint(x: list.bounds.midX, y: list.bounds.midY))!
-        list.scrollToRow(at: iPath, at: .middle, animated: true)
+        if let iPath = list.indexPathForRow(at: CGPoint(x: list.bounds.midX, y: list.bounds.midY)) {
+            list.scrollToRow(at: iPath, at: .middle, animated: true)
         
-        self.centered1 = self.getCenteredRow(index: 1)
-        self.centered2 = self.getCenteredRow(index: 2)
+            self.centered1 = self.getCenteredRow(index: 1)
+            self.centered2 = self.getCenteredRow(index: 2)
+        }
+        
+        //let iPath = list.indexPathForRow(at: CGPoint(x: list.bounds.midX, y: list.bounds.midY))!
+        
     }
     
     @objc func columnOnPan(_ gesture: UIPanGestureRecognizer?) {

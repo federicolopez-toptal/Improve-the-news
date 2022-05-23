@@ -77,7 +77,9 @@ class ShareSplitShareViewController: UIViewController {
         closeButton.addTarget(self, action: #selector(closeButtonOnTap(sender:)),
             for: .touchUpInside)
         
-        let contentHeight: CGFloat = 800
+        var contentHeight: CGFloat = 800
+        if(IS_iPAD()){ contentHeight += 100 }
+        
         self.contentView.backgroundColor = self.view.backgroundColor
         self.scrollview.addSubview(self.contentView)
         self.contentView.frame = CGRect(x: 0, y: 0,
@@ -108,9 +110,14 @@ class ShareSplitShareViewController: UIViewController {
             blueContainer.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
             blueContainer.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor,
                 constant: -20),
-            blueContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-            blueContainer.heightAnchor.constraint(equalToConstant: 400)
+            blueContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10)
         ])
+        
+        if(IS_iPAD()) {
+            blueContainer.heightAnchor.constraint(equalToConstant: 500).isActive = true
+        } else {
+            blueContainer.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        }
         
         let half = (UIScreen.main.bounds.size.width - 40)/2
         let splitOption = UserDefaults.standard.integer(forKey: "userSplitPrefs")
@@ -126,7 +133,7 @@ class ShareSplitShareViewController: UIViewController {
         NSLayoutConstraint.activate([
             header1.leadingAnchor.constraint(equalTo: blueContainer.leadingAnchor),
             header1.topAnchor.constraint(equalTo: blueContainer.topAnchor, constant: 13),
-            header1.widthAnchor.constraint(equalToConstant: half)
+            header1.widthAnchor.constraint(equalTo: blueContainer.widthAnchor, multiplier: 0.5)
         ])
         
         let header2 = UILabel()
@@ -138,13 +145,17 @@ class ShareSplitShareViewController: UIViewController {
         blueContainer.addSubview(header2)
         header2.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            header2.leadingAnchor.constraint(equalTo: blueContainer.leadingAnchor, constant: half),
+            header2.leadingAnchor.constraint(equalTo: header1.trailingAnchor),
             header2.topAnchor.constraint(equalTo: blueContainer.topAnchor, constant: 13),
-            header2.widthAnchor.constraint(equalToConstant: half)
+            header2.widthAnchor.constraint(equalTo: blueContainer.widthAnchor, multiplier: 0.5)
         ])
         
         // 150 x 95
-        let H: CGFloat = (95 * (half-20)) / 150
+        //var H: CGFloat = (95 * (half-20)) / 150
+        //if(IS_iPAD()){ H += 100 }
+        
+        var H: CGFloat = 95
+        if(IS_iPAD()){ H = 200 }
         
         let image1 = UIImageView()
         image1.backgroundColor = .gray
@@ -154,8 +165,8 @@ class ShareSplitShareViewController: UIViewController {
         image1.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             image1.leadingAnchor.constraint(equalTo: blueContainer.leadingAnchor, constant: 10),
-            image1.widthAnchor.constraint(equalToConstant: half-20),
-            image1.heightAnchor.constraint(equalToConstant: 95),
+            image1.widthAnchor.constraint(equalTo: header1.widthAnchor, constant: -20),
+            image1.heightAnchor.constraint(equalToConstant: H),
             image1.topAnchor.constraint(equalTo: header1.bottomAnchor, constant: 10)
         ])
         
@@ -218,8 +229,13 @@ class ShareSplitShareViewController: UIViewController {
         NSLayoutConstraint.activate([
             source1.leadingAnchor.constraint(equalTo: title1.leadingAnchor),
             source1.widthAnchor.constraint(equalTo: title1.widthAnchor),
-            source1.topAnchor.constraint(equalTo: blueContainer.topAnchor, constant: 300)
         ])
+        if(IS_iPAD()){
+            source1.topAnchor.constraint(equalTo: blueContainer.topAnchor, constant: 380).isActive = true
+        } else {
+            source1.topAnchor.constraint(equalTo: blueContainer.topAnchor, constant: 300).isActive = true
+        }
+        
         
         let source2 = UILabel()
         source2.textColor = UIColor.white.withAlphaComponent(0.5)
@@ -232,7 +248,7 @@ class ShareSplitShareViewController: UIViewController {
         NSLayoutConstraint.activate([
             source2.leadingAnchor.constraint(equalTo: title2.leadingAnchor),
             source2.widthAnchor.constraint(equalTo: title2.widthAnchor),
-            source2.topAnchor.constraint(equalTo: blueContainer.topAnchor, constant: 300)
+            source2.topAnchor.constraint(equalTo: source1.topAnchor)
         ])
         
         if let _a1 = self.article1 {
@@ -273,8 +289,8 @@ class ShareSplitShareViewController: UIViewController {
             footer.bottomAnchor.constraint(equalTo: logo.bottomAnchor, constant: 5),
         ])
         
-        drawVerticalLine()
-        drawHorizontalLine()
+        drawVerticalLine(screenWidth: UIScreen.main.bounds.size.width)
+        drawHorizontalLine(screenWidth: UIScreen.main.bounds.size.width)
         
         let title2Label = UILabel()
         title2Label.numberOfLines = 2
@@ -405,14 +421,16 @@ class ShareSplitShareViewController: UIViewController {
         self.updateButton(re_icon)
     }
     
-    private func drawVerticalLine() {
+    private func drawVerticalLine(screenWidth: CGFloat) {
         let length: CGFloat = 5
-        let totalHeight: CGFloat = 325
-        let half = (UIScreen.main.bounds.size.width - 40)/2
+        var totalHeight: CGFloat = 325
+        if(IS_iPAD()){ totalHeight += 80 }
+        let half = (screenWidth - 40)/2
         
         var currentY: CGFloat = 0.0
         while(currentY < totalHeight) {
             let line = UIView()
+            line.tag = 576
             line.backgroundColor = UIColor.white.withAlphaComponent(0.5)
             line.frame = CGRect(x: half-1, y: currentY, width: 2.0, height: length)
             self.blueContainer.addSubview(line)
@@ -421,15 +439,19 @@ class ShareSplitShareViewController: UIViewController {
         }
     }
     
-    private func drawHorizontalLine() {
+    private func drawHorizontalLine(screenWidth: CGFloat) {
         let length: CGFloat = 5
-        let totalWidth: CGFloat = UIScreen.main.bounds.size.width - 40
+        let totalWidth: CGFloat = screenWidth - 40
         
         var currentX: CGFloat = 0.0
+        var posY: CGFloat = 325
+        if(IS_iPAD()){ posY += 80 }
+        
         while(currentX < totalWidth) {
             let line = UIView()
+            line.tag = 577
             line.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-            line.frame = CGRect(x: currentX, y: 325, width: length, height: 2.0)
+            line.frame = CGRect(x: currentX, y: posY, width: length, height: 2.0)
             self.blueContainer.addSubview(line)
         
             currentX += (length * 2)
@@ -463,6 +485,24 @@ class ShareSplitShareViewController: UIViewController {
         mOffset.y -= 150 // bottom margin (fixed)
         
         self.scrollview.setContentOffset(mOffset, animated: false)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        let newWidth = UIScreen.main.bounds.size.height
+        
+        for V in self.blueContainer.subviews {
+            if(V.tag==576 || V.tag==577) {
+                V.removeFromSuperview()
+            }
+        }
+        
+        self.drawVerticalLine(screenWidth: newWidth)
+        self.drawHorizontalLine(screenWidth: newWidth)
+        
+        self.contentView.frame = CGRect(x: 0, y: 0,
+            width: newWidth, height: self.contentView.frame.size.height)
     }
     
     // MARK: - Keyboard stuff
@@ -830,5 +870,11 @@ extension ShareSplitShareViewController: SharingDelegate {
             self.dismiss(animated: true) {
             }
         }
+    }
+}
+
+extension ShareSplitShareViewController {
+    func rotate() {
+        
     }
 }

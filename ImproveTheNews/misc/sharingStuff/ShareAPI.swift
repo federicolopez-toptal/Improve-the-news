@@ -39,7 +39,7 @@ class ShareAPI {
 
     func getBearerAuth() -> String {
         return "Bearer " + self.getJWT()
-        //return ShareAPI.readStringKey(keySHARE_bearerAuth)!
+//        return ShareAPI.readStringKey(keySHARE_bearerAuth)!
     }
     
     func getJWT() -> String {
