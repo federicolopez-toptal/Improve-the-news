@@ -300,11 +300,14 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //        }
     }
     
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
         self.shareArticles?.rotate()
     }
+    
+    
     
     @objc func onJsonParseError() {
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { action in

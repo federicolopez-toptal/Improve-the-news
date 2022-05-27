@@ -306,23 +306,26 @@ class ShareSplitArticles: UIView {
             for i in 0...sections-1 {
                 if let arts = self.parser?.getArticleCountInSection(section: i), arts>0 {
                     for _ in 0...arts-1 {
-                        let title = self.parser!.getTitle(index: index)
-                        let img = self.parser!.getIMG(index: index)
-                        let flag = self.parser!.getCountryID(index: index)
-                        let source = self.parser!.getSource(index: index) + " - " + self.parser!.getDate(index: index)
-                        let url = self.parser!.getURL(index: index)
-                        
-                        let newItem = (img, title, flag, source, false, url)
-                        if(side==1){
-                            self.dp1.append(newItem)
-                            self.dataProvider1.append(newItem)
-                            side = 2
-                        } else {
-                            self.dp2.append(newItem)
-                            self.dataProvider2.append(newItem)
-                            side = 1
+                    
+                        if(self.parser!.getStory(index: index) == nil) {
+                            let title = self.parser!.getTitle(index: index)
+                            let img = self.parser!.getIMG(index: index)
+                            let flag = self.parser!.getCountryID(index: index)
+                            let source = self.parser!.getSource(index: index) + " - " + self.parser!.getDate(index: index)
+                            let url = self.parser!.getURL(index: index)
+                            
+                            let newItem = (img, title, flag, source, false, url)
+                            if(side==1){
+                                self.dp1.append(newItem)
+                                self.dataProvider1.append(newItem)
+                                side = 2
+                            } else {
+                                self.dp2.append(newItem)
+                                self.dataProvider2.append(newItem)
+                                side = 1
+                            }
                         }
-
+                        
                         index += 1
                         //if(self.dp1.count>=5 && self.dp2.count>=5){ break } //!!!
                     }

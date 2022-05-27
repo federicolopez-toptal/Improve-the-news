@@ -17,8 +17,12 @@ class StorySourceManager {
     private var loaded = false
     
     public func getIconForSource(_ sourceName: String) -> String {
-        if let _value = self.sources[sourceName] {
-            return _value
+        if(self.sources.keys.contains("sourceName")) {
+            if let _value = self.sources[sourceName] {
+                return _value
+            } else {
+                return ""
+            }
         } else {
             return ""
         }

@@ -347,6 +347,7 @@ class ShareAPI {
             "userId": USER_ID()
         ]
         
+        print("SHARE", bodyJson)
         let errorMsg = "There was an error sharing your articles. Please try again"
         
         var request = URLRequest(url: URL(string: url)!)

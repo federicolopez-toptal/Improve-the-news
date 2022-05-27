@@ -370,6 +370,13 @@ We are not part of a regulated industry.
         
         overrideUserInterfaceStyle = .dark
         view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
+        
+        if(DARKMODE() && IS_iPAD()) {
+            self.view.layer.borderWidth = 2.0
+            self.view.layer.borderColor = UIColor.white.withAlphaComponent(0.15).cgColor
+            self.view.layer.cornerRadius = 10.0
+        }
+        
         configureView()
     }
     
@@ -474,6 +481,13 @@ If you have feature requests, bug reports or any other feedback on this app, we 
         
         overrideUserInterfaceStyle = .dark
         view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
+        
+        if(DARKMODE() && IS_iPAD()) {
+            self.view.layer.borderWidth = 2.0
+            self.view.layer.borderColor = UIColor.white.withAlphaComponent(0.15).cgColor
+            self.view.layer.cornerRadius = 10.0
+        }
+        
         configureView()
     }
     

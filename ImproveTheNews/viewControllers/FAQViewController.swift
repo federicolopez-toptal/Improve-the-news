@@ -15,6 +15,9 @@ class FAQViewController: UIViewController {
     var scrollview = UIScrollView()
     var contentView = UIView()
 
+    var firstTime = true
+
+
 
     public static func createInstance() -> FAQViewController {
         let vc = FAQViewController()
@@ -24,7 +27,23 @@ class FAQViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = DARKMODE() ? .black : bgWhite_LIGHT
-        self.buildContent()
+        
+        if(DARKMODE() && IS_iPAD()) {
+            self.view.layer.borderWidth = 2.0
+            self.view.layer.borderColor = UIColor.white.withAlphaComponent(0.15).cgColor
+            self.view.layer.cornerRadius = 10.0
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        print("SCREEN", self.view.frame.size.width, UIScreen.main.bounds.width)
+        
+        if(self.firstTime) {
+            self.firstTime = false
+            self.buildContent()
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -70,6 +89,7 @@ extension FAQViewController {
             self.contentView.widthAnchor.constraint(equalTo: self.scrollview.widthAnchor)
             //contentViewHeightConstraint
         ])
+        //self.contentView.backgroundColor = .red
         
         // VStack
         let vStack = UIStackView()
@@ -181,11 +201,24 @@ extension FAQViewController {
                 contentText = FAQ_contents[i]
             }
             
+            if(IS_iPHONE()) {
+                var specialCases = [2, 7, 8, 14]
+                if(specialCases.contains(i)) {
+                    contentText += "\n"
+                }
+                
+                specialCases = [11]
+                if(specialCases.contains(i)) {
+                    contentText += "\n"
+                }
+            }
+        
             contentTextView.attributedText = self.attrText(contentText, i)
             contentTextView.delegate = self
             innerVStack.addArrangedSubview(contentTextView)
-            var H = contentTextView.attributedText.height(containerWidth: UIScreen.main.bounds.width-20) + 15
-            if(i==FAQ_titles.count-1){ H += 30 }
+            
+            let W = self.view.frame.size.width - 20
+            let H = contentTextView.attributedText.height(containerWidth: W)
             contentTextView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 contentTextView.topAnchor.constraint(equalTo: innerVStack.topAnchor),
@@ -193,22 +226,39 @@ extension FAQViewController {
                 contentTextView.trailingAnchor.constraint(equalTo: innerVStack.trailingAnchor),
                 contentTextView.heightAnchor.constraint(equalToConstant: H)
             ])
+            //contentTextView.backgroundColor = .green.withAlphaComponent(0.4)
             
             let pic = FAQ_PICS[i]
             if( pic != nil) {
+
                 let filename = pic![0] as! String
                 let size = pic![1] as! CGSize
-                
-                let W = UIScreen.main.bounds.width-20
-                let H = (W * size.height)/size.width
-                
+
                 let imageView = UIImageView()
                 imageView.image = UIImage(named: filename)
                 innerVStack.addArrangedSubview(imageView)
                 imageView.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    imageView.heightAnchor.constraint(equalToConstant: H)
-                ])
+                
+                if(IS_iPAD() && i==4) {
+                    // Special case
+                    let W = (self.view.frame.size.width-20) * 0.6
+                    let H = (W * size.height)/size.width
+                    let margin = ((self.view.frame.size.width-20)-W)/2
+                    
+                    NSLayoutConstraint.activate([
+                        imageView.leadingAnchor.constraint(equalTo: innerVStack.leadingAnchor, constant: margin),
+                        imageView.trailingAnchor.constraint(equalTo: innerVStack.trailingAnchor, constant: -margin),
+                        imageView.heightAnchor.constraint(equalToConstant: H)
+                    ])
+                } else {
+                    let W = self.view.frame.size.width - 20
+                    let H = (W * size.height)/size.width
+                    NSLayoutConstraint.activate([
+                        imageView.widthAnchor.constraint(equalToConstant: W),
+                        imageView.heightAnchor.constraint(equalToConstant: H)
+                    ])
+                }
+
             }
             
             let bottomSpacer = UIView()
@@ -219,8 +269,7 @@ extension FAQViewController {
                 bottomSpacer.heightAnchor.constraint(equalToConstant: 13)
             ])
             
-            
-            innerVStack.isHidden = true
+            //innerVStack.isHidden = true
         }
 
     }
