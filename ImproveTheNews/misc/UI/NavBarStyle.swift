@@ -9,17 +9,20 @@
 import Foundation
 import UIKit
 
-func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector, menuTap: Selector,
-    searchTap: Selector, userTap: Selector) {
+func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector?, menuTap: Selector?,
+    searchTap: Selector?, userTap: Selector?) {
         
         let searchBar = SEARCH_BAR(fromViewController: viewController)
         let uniqueID = UNIQUE_ID(fromViewController: viewController)
+        let isSignInUp = viewController is SignInSignUpViewControllerViewController
         
-        searchBar.sizeToFit()
-        searchBar.searchTextField.backgroundColor = .white
-        searchBar.searchTextField.textColor = .black
-        searchBar.tintColor = .black
-
+        if let _searchBar = searchBar {
+            _searchBar.sizeToFit()
+            _searchBar.searchTextField.backgroundColor = .white
+            _searchBar.searchTextField.textColor = .black
+            _searchBar.tintColor = .black
+        }
+        
         if(viewController.navigationController == nil){ return }
 
         let navController = viewController.navigationController!
@@ -60,10 +63,9 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector, menuTap: 
         // RIGHT
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search,
             target: viewController, action: searchTap)
-            
-        rightButtons.append(searchButton)
+        if(!isSignInUp){ rightButtons.append(searchButton) }
         
-        if(APP_CFG_MY_ACCOUNT) {
+        if(APP_CFG_MY_ACCOUNT && !isSignInUp) {
             let userImage = UIImage(systemName: "person")
             let userButton = UIBarButtonItem(image: userImage, style: .plain,
                 target: viewController, action: userTap)
@@ -87,10 +89,11 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector, menuTap: 
         let img = UIImage(named: logoFile)?.withRenderingMode(.alwaysOriginal)
         let homeButton = UIButton(image: img!)
         homeButton.frame = CGRect(x: 0, y: 0, width: 195, height: 30)
-        homeButton.addTarget(viewController, action: homeTap, for: .touchUpInside)
-                           
+        if let _homeTap = homeTap {
+            homeButton.addTarget(viewController, action: _homeTap, for: .touchUpInside)
+        }
         
-        if(IS_ZOOMED() && uniqueID>1) {
+        if(IS_ZOOMED() && uniqueID>1 && !isSignInUp) {
             let f: CGFloat = 0.85
             homeButton.frame = CGRect(x: 0, y: 0,
                     width: 195 * f, height: 30 * f)
@@ -109,13 +112,15 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector, menuTap: 
 }
 
 
-private func SEARCH_BAR(fromViewController vc: UIViewController) -> UISearchBar {
+private func SEARCH_BAR(fromViewController vc: UIViewController) -> UISearchBar? {
     if(vc is NewsViewController) {
         return (vc as! NewsViewController).searchBar
     } else if(vc is NewsTextViewController) {
         return (vc as! NewsTextViewController).searchBar
-    } else {
+    } else if(vc is NewsBigViewController) {
         return (vc as! NewsBigViewController).searchBar
+    } else {
+        return nil
     }
 }
 
@@ -124,7 +129,9 @@ private func UNIQUE_ID(fromViewController vc: UIViewController) -> Int {
         return (vc as! NewsViewController).uniqueID
     } else if(vc is NewsTextViewController) {
         return (vc as! NewsTextViewController).uniqueID
-    } else {
+    } else if(vc is NewsBigViewController) {
         return (vc as! NewsBigViewController).uniqueID
+    } else {
+        return 20
     }
 }

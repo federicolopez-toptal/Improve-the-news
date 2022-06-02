@@ -155,7 +155,7 @@ class ShareSplitShareViewController: UIViewController {
         //if(IS_iPAD()){ H += 100 }
         
         var H: CGFloat = 95
-        if(IS_iPAD()){ H = 200 }
+        if(IS_iPAD()){ H = 240 }
         
         let image1 = UIImageView()
         image1.backgroundColor = .gray
@@ -190,7 +190,7 @@ class ShareSplitShareViewController: UIViewController {
         title1.numberOfLines = 0
         title1.lineBreakMode = .byClipping
         title1.adjustsFontSizeToFitWidth = true
-        title1.minimumScaleFactor = 0.5
+        title1.minimumScaleFactor = 0.4
         //title1.backgroundColor = .red
         title1.text = "UK government reveals net zero plan it says will create up to 440,000 jobs"
         blueContainer.addSubview(title1)
@@ -207,7 +207,7 @@ class ShareSplitShareViewController: UIViewController {
         title2.font = UIFont(name: "Roboto-Bold", size: 16)
         title2.numberOfLines = 0
         title2.adjustsFontSizeToFitWidth = true
-        title2.minimumScaleFactor = 0.5
+        title2.minimumScaleFactor = 0.4
         //title2.backgroundColor = .red
         title2.text = "UK government reveals net zero plan it says will create up to 440,000 jobs"
         blueContainer.addSubview(title2)
@@ -419,6 +419,16 @@ class ShareSplitShareViewController: UIViewController {
         self.updateButton(in_icon)
         self.updateButton(tw_icon)
         self.updateButton(re_icon)
+        
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(onFacebookDone),
+            name: NOTIFICATION_FB_DONE,
+            object: nil)
+    }
+    
+    @objc func onFacebookDone() {
+        self.dismiss(animated: true) {
+        }
     }
     
     private func drawVerticalLine(screenWidth: CGFloat) {

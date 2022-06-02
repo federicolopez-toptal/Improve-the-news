@@ -34,6 +34,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     api.writeJWT(_jwt)
                     api.writeUUID(_uuid)
                     NotificationCenter.default.post(name: NOTIFICATION_FB_LOGGED, object: nil)
+                } else {
+                    NotificationCenter.default.post(name: NOTIFICATION_FB_DONE, object: nil)
                 }
             } else {
                 // Twitter library (Swifter)

@@ -269,7 +269,7 @@ extension FAQViewController {
                 bottomSpacer.heightAnchor.constraint(equalToConstant: 13)
             ])
             
-            //innerVStack.isHidden = true
+            innerVStack.isHidden = true
         }
 
     }

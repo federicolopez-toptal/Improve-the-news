@@ -62,6 +62,7 @@ class ShareAPI {
         return "https://biaspost.org"
     }
     
+// MARK: - API methods
     // ************************************************************ //
     func generate() {
         self.isGenerating = true
@@ -460,11 +461,170 @@ class ShareAPI {
     
     */
       
+    // ************************************************************ //
+    func signIn(email: String, password: String,
+        callback: @escaping (Bool, String?) -> ()) {
+        
+        let here = "SignIn (Login)"
+        let url = self.host() + "/api/user/"
+        
+        let bodyJson: [String: String] = [
+            "type": "Sign In",
+            "userId": USER_ID(),
+            "email": email,
+            "password": password,
+            "app": "iOS"
+        ]
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+                callback(false, nil)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+                if let json = ShareAPI.json(fromData: data) {
+                    if let _status = json["status"] as? String {
+                        if(_status == "OK") {
+                            if let _jwt = json["jwt"], let _uuid = json["uuid"] as? String {
+                                ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
+                                ShareAPI.writeKey(self.keySHARE_uuid, value: _uuid)
+                            }
+                            callback(true, nil)
+                        } else {
+                            if let _msg = json["message"] as? String {
+                                callback(false, _msg)
+                            } else {
+                                callback(false, nil)
+                            }
+                        }
+                    } else {
+                        callback(false, nil)
+                    }
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(false, nil)
+                }
+            
+            
+            
+//                ShareAPI.LOG_DATA(data, where: here)
+//
+//                if let json = ShareAPI.json(fromData: data) {
+//                    if let _image = json["image"] as? String {
+//                        ShareAPI.LOG(where: here, msg: "Image generated! " + _image)
+//                        callback(true)
+//                    } else {
+//                        ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+//                        callback(false)
+//                    }
+//                } else {
+//                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+//                    callback(false)
+//                }
+            }
+        }
+        task.resume()
+    }
+    
+    /*
+    RESPONSE example
+    
+    {
+    "status": "NOK",
+    "message": "Email not verified. Please verify your email by clicking the 'Verify Email' link in the email that was sent on the account registration."
+    }
+    
+    {
+    "status": "NOK",
+    "message": "Invalid credentials"
+    }
+    
+     */
+    
+    // ************************************************************ //
+    // Registration
+    func signUp(email: String, password: String, newsletter: Bool,
+        callback: @escaping (Bool, String?) -> ()) {
+        
+        let here = "SignUp (Registration)"
+        let url = self.host() + "/api/user/"
+        
+        let bodyJson: [String: String] = [
+            "type": "Sign Up",
+            "userId": USER_ID(),
+            "email": email,
+            "password": password,
+            "newsletter": newsletter ? "Y" : "N",
+            "app": "iOS"
+        ]
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+                callback(false, nil)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+                if let json = ShareAPI.json(fromData: data) {
+                    if let _status = json["status"] as? String {
+                        if(_status == "OK") {
+                            if let _jwt = json["jwt"], let _uuid = json["uuid"] as? String {
+                                ShareAPI.writeKey(self.keySHARE_jwt, value: _jwt)
+                                ShareAPI.writeKey(self.keySHARE_uuid, value: _uuid)
+                            }
+                            callback(true, nil)
+                        } else {
+                            if let _msg = json["message"] as? String {
+                                callback(false, _msg)
+                            } else {
+                                callback(false, nil)
+                            }
+                        }
+                    } else {
+                        callback(false, nil)
+                    }
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(false, nil)
+                }
+            }
+        }
+        task.resume()
+    }
+ 
+    /*
+    RESPONSE example
+    
+    {
+    "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NTQwMjQ2ODQsImp0aSI6IklERmg0XC9DUWgrVUtKVjZVS2dnSk1nPT0iLCJpc3MiOiJpbXByb3ZldGhlbmV3cy5vcmciLCJuYmYiOjE2NTQwMjQ2ODQsImV4cCI6Mjk2OTAzMjY4NCwiZGF0YSI6eyJ1c3JpZCI6IjMyNTU0NzYxNTE2NzI0ODA0MzcifX0.8dddcj1csRmZJ3a1VNwoAAjRJ3IkirpV0giq41lon41vnd9QJrSrtSXR4PPyqrpOhemjYkoULLEEJA44krwy8A",
+    "uuid": "3255476151672480437",
+    "status": "OK"
+    }
+    
+    {
+    "status": "NOK",
+    "message": "User already exists, please login instead."
+    }
+    
+    */
+ 
 }
 
 // ************************************************************ //
 // ************************************************************ //
 
+// MARK: - Utility methods
 extension ShareAPI {
 
     // Some utility methods

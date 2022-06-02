@@ -288,16 +288,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.shareArticles?.delegate = self
         
 //        // ----------------------------------------------
-//        let api = ShareAPI.instance
-//        let jwt = api.getBearerAuth().replacingOccurrences(of: "Bearer ", with: "")
-//        let fbLogin = "https://www.improvemynews.com/mobile-auth?jwt=" + jwt + "&usrid=" + api.uuid! + "&type=iOS&social_network=Facebook"
-//
-//        let fbShare = "https://www.facebook.com/dialog/share?app_id=499204491779033&display=popup&quote=comment&href=https://www.improvemynews.com/story/2022/day-ukraine-refuses-mariupol-surrender-offer-zelenskyy-calls-for-putin-talks-biden-to-visit-poland&redirect_uri=https://www.improvemynews.com/fb-share?app=iOS"
-//
-//        DELAY(2.0) {
-//            print("SHARE", fbShare)
-//            UIApplication.shared.open(URL(string: fbShare)!)
-//        }
+
+        DELAY(1.0) {
+            let vc = SignInSignUpViewControllerViewController.createInstance()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
     }
     
     
@@ -1472,7 +1468,9 @@ extension NewsViewController {
             cell.hideHeaders()
         }
         
-        cell.setupViews(sources: self.newsParser.getStory(index: index)!.sources)
+        if let _story = self.newsParser.getStory(index: index) {
+            cell.setupViews(sources: _story.sources)
+        }
         
         cell.updated.text = "Last updated " + newsParser.getDate(index: index)
         cell.titleLabel.text = self.newsParser.getTitle(index: index)

@@ -30,6 +30,11 @@ class MyAccountViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return STATUS_BAR_STYLE()
     }
+    
+    override var shouldAutorotate: Bool {
+        if(IS_iPHONE()){ return false }
+        else { return true }
+    }
 
 }
 
