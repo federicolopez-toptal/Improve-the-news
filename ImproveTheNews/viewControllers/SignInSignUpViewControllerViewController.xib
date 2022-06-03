@@ -58,7 +58,7 @@
             <point key="canvasLocation" x="131.8840579710145" y="110.49107142857143"/>
         </view>
         <view contentMode="scaleToFill" id="a3V-SO-188">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="750"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="605"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VBe-1f-mLt" userLabel="formContainer" customClass="SignInUpFormFormView" customModule="ImproveTheNews" customModuleProvider="target">
@@ -189,48 +189,80 @@
                             <color key="textColor" red="0.57647058823529407" green="0.62745098039215685" blue="0.70588235294117641" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <stackView opaque="NO" contentMode="scaleToFill" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="QbR-9y-rum">
-                            <rect key="frame" x="119.5" y="438" width="175" height="40"/>
+                        <stackView opaque="NO" tag="888" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="QbR-9y-rum">
+                            <rect key="frame" x="107" y="448" width="200" height="35"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8k-xJ-WOq">
-                                    <rect key="frame" x="0.0" y="0.0" width="38.5" height="40"/>
-                                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8k-xJ-WOq">
+                                    <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="35" id="Mtb-Wl-EpQ"/>
+                                        <constraint firstAttribute="width" constant="35" id="cb3-rg-Iqe"/>
+                                    </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title=" "/>
+                                    <buttonConfiguration key="configuration" style="plain" title=" ">
+                                        <backgroundConfiguration key="background" image="fb_logo.png"/>
+                                    </buttonConfiguration>
+                                    <connections>
+                                        <action selector="socialButtonTap:" destination="-1" eventType="touchUpInside" id="j96-MM-Kdi"/>
+                                    </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LAb-0x-da3">
-                                    <rect key="frame" x="45.5" y="0.0" width="38.5" height="40"/>
-                                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <button opaque="NO" tag="102" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LAb-0x-da3">
+                                    <rect key="frame" x="55" y="0.0" width="35" height="35"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="35" id="Hir-Zh-lUP"/>
+                                        <constraint firstAttribute="width" constant="35" id="jUa-u5-gaT"/>
+                                    </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title=" "/>
+                                    <buttonConfiguration key="configuration" style="plain" title=" ">
+                                        <backgroundConfiguration key="background" image="in_logo.png"/>
+                                    </buttonConfiguration>
+                                    <connections>
+                                        <action selector="socialButtonTap:" destination="-1" eventType="touchUpInside" id="Yj1-0Y-bom"/>
+                                    </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DYw-S4-cNb">
-                                    <rect key="frame" x="91" y="0.0" width="38.5" height="40"/>
-                                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DYw-S4-cNb">
+                                    <rect key="frame" x="110" y="0.0" width="35" height="35"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="35" id="Ms2-Wc-R0v"/>
+                                        <constraint firstAttribute="width" constant="35" id="g2G-YH-Ade"/>
+                                    </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title=" "/>
+                                    <buttonConfiguration key="configuration" style="plain" title=" ">
+                                        <backgroundConfiguration key="background" image="tw_logo.png"/>
+                                    </buttonConfiguration>
+                                    <connections>
+                                        <action selector="socialButtonTap:" destination="-1" eventType="touchUpInside" id="lVc-vy-4DE"/>
+                                    </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TgF-bJ-TnM">
-                                    <rect key="frame" x="136.5" y="0.0" width="38.5" height="40"/>
-                                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TgF-bJ-TnM">
+                                    <rect key="frame" x="165" y="0.0" width="35" height="35"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="35" id="IBy-HS-yeU"/>
+                                        <constraint firstAttribute="width" constant="35" id="odx-Gd-gxR"/>
+                                    </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title=" "/>
+                                    <buttonConfiguration key="configuration" style="plain" title=" ">
+                                        <backgroundConfiguration key="background" image="re_logo.png"/>
+                                    </buttonConfiguration>
+                                    <connections>
+                                        <action selector="socialButtonTap:" destination="-1" eventType="touchUpInside" id="iaX-tX-TBo"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="175" id="ABi-0e-uEh"/>
-                                <constraint firstAttribute="height" constant="40" id="fnc-97-GfC"/>
-                            </constraints>
                         </stackView>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2U3-pU-QLg">
-                            <rect key="frame" x="131" y="495" width="152" height="17"/>
+                            <rect key="frame" x="131" y="500" width="152" height="17"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9TX-cg-yIc">
-                            <rect key="frame" x="90" y="523" width="234" height="31"/>
+                            <rect key="frame" x="90" y="528" width="234" height="31"/>
                             <color key="backgroundColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="234" id="mK9-ui-cyv"/>
@@ -239,7 +271,7 @@
                             <buttonConfiguration key="configuration" style="plain" title="Click here to Sign Up!"/>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="6DP-9e-zcu" firstAttribute="centerX" secondItem="VBe-1f-mLt" secondAttribute="centerX" id="0Jz-tW-nGC"/>
                         <constraint firstItem="QbR-9y-rum" firstAttribute="centerX" secondItem="VBe-1f-mLt" secondAttribute="centerX" id="6eB-OO-7K9"/>
@@ -248,7 +280,7 @@
                         <constraint firstItem="hwE-Uh-kN6" firstAttribute="top" secondItem="6DP-9e-zcu" secondAttribute="bottom" constant="12" id="BMB-6Z-idp"/>
                         <constraint firstItem="9TX-cg-yIc" firstAttribute="top" secondItem="2U3-pU-QLg" secondAttribute="bottom" constant="11" id="BPp-Uq-RU5"/>
                         <constraint firstItem="2U3-pU-QLg" firstAttribute="top" secondItem="QbR-9y-rum" secondAttribute="bottom" constant="17" id="FtK-my-HkD"/>
-                        <constraint firstItem="QbR-9y-rum" firstAttribute="top" secondItem="hwE-Uh-kN6" secondAttribute="bottom" constant="20" id="G5W-0z-v6N"/>
+                        <constraint firstItem="QbR-9y-rum" firstAttribute="top" secondItem="hwE-Uh-kN6" secondAttribute="bottom" constant="30" id="G5W-0z-v6N"/>
                         <constraint firstItem="zTs-CB-dTO" firstAttribute="leading" secondItem="VBe-1f-mLt" secondAttribute="leading" id="Kqq-8k-HcO"/>
                         <constraint firstItem="3BJ-Xt-6O4" firstAttribute="width" secondItem="VBe-1f-mLt" secondAttribute="width" multiplier="0.5" id="LxF-8H-lOz"/>
                         <constraint firstItem="uMd-BG-7Hy" firstAttribute="leading" secondItem="Baw-lU-DsD" secondAttribute="leading" id="N6T-DM-9Y8"/>
@@ -276,10 +308,10 @@
                 <constraint firstItem="5AN-Gl-AeD" firstAttribute="trailing" secondItem="VBe-1f-mLt" secondAttribute="trailing" id="Iey-Iq-Em9"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="850.72463768115949" y="144.64285714285714"/>
+            <point key="canvasLocation" x="850.72463768115949" y="96.09375"/>
         </view>
         <view contentMode="scaleToFill" id="4XZ-6w-fSe">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="695"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MPp-JT-C4w" userLabel="formContainer" customClass="SignInUpFormFormView" customModule="ImproveTheNews" customModuleProvider="target">
@@ -415,48 +447,80 @@
                             <color key="textColor" red="0.57647058819999997" green="0.62745098040000002" blue="0.70588235290000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="eGq-nS-zTo">
-                            <rect key="frame" x="119.5" y="513" width="175" height="40"/>
+                        <stackView opaque="NO" tag="999" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eGq-nS-zTo">
+                            <rect key="frame" x="107" y="528" width="200" height="35"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7WF-Aa-bid">
-                                    <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
-                                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7WF-Aa-bid">
+                                    <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="35" id="hez-qg-ML1"/>
+                                        <constraint firstAttribute="height" constant="35" id="z8v-Dk-dz8"/>
+                                    </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title=" "/>
+                                    <buttonConfiguration key="configuration" style="plain" title=" ">
+                                        <backgroundConfiguration key="background" image="fb_logo.png"/>
+                                    </buttonConfiguration>
+                                    <connections>
+                                        <action selector="socialButtonTap:" destination="-1" eventType="touchUpInside" id="Llr-Tf-eF3"/>
+                                    </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfS-Lb-e9J">
-                                    <rect key="frame" x="45" y="0.0" width="40" height="40"/>
-                                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <button opaque="NO" tag="102" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfS-Lb-e9J">
+                                    <rect key="frame" x="55" y="0.0" width="35" height="35"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="35" id="2dW-lP-CeU"/>
+                                        <constraint firstAttribute="width" constant="35" id="T6R-gT-gxJ"/>
+                                    </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title=" "/>
+                                    <buttonConfiguration key="configuration" style="plain" title=" ">
+                                        <backgroundConfiguration key="background" image="in_logo.png"/>
+                                    </buttonConfiguration>
+                                    <connections>
+                                        <action selector="socialButtonTap:" destination="-1" eventType="touchUpInside" id="G6q-6j-opq"/>
+                                    </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Hn-He-ZZu">
-                                    <rect key="frame" x="90" y="0.0" width="40" height="40"/>
-                                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Hn-He-ZZu">
+                                    <rect key="frame" x="110" y="0.0" width="35" height="35"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="35" id="Whs-Gu-28U"/>
+                                        <constraint firstAttribute="width" constant="35" id="gjz-Ek-BR9"/>
+                                    </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title=" "/>
+                                    <buttonConfiguration key="configuration" style="plain" title=" ">
+                                        <backgroundConfiguration key="background" image="tw_logo.png"/>
+                                    </buttonConfiguration>
+                                    <connections>
+                                        <action selector="socialButtonTap:" destination="-1" eventType="touchUpInside" id="0cX-WK-o28"/>
+                                    </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nCX-NR-gHI">
-                                    <rect key="frame" x="135" y="0.0" width="40" height="40"/>
-                                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nCX-NR-gHI">
+                                    <rect key="frame" x="165" y="0.0" width="35" height="35"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="35" id="Sl9-ZF-Tf9"/>
+                                        <constraint firstAttribute="width" constant="35" id="ZxG-GQ-3Vo"/>
+                                    </constraints>
                                     <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title=" "/>
+                                    <buttonConfiguration key="configuration" style="plain" title=" ">
+                                        <backgroundConfiguration key="background" image="re_logo.png"/>
+                                    </buttonConfiguration>
+                                    <connections>
+                                        <action selector="socialButtonTap:" destination="-1" eventType="touchUpInside" id="0dg-zv-WHd"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="175" id="51D-6I-mgF"/>
-                                <constraint firstAttribute="height" constant="40" id="hvw-iB-Bm0"/>
-                            </constraints>
                         </stackView>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7UB-8Z-Tle">
-                            <rect key="frame" x="131" y="573" width="152" height="17"/>
+                            <rect key="frame" x="131" y="583" width="152" height="17"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="NGr-24-6eG" firstAttribute="top" secondItem="MPp-JT-C4w" secondAttribute="top" constant="90" id="0f6-v2-94d"/>
                         <constraint firstItem="iPs-kU-vmB" firstAttribute="top" secondItem="t1e-WS-UxN" secondAttribute="bottom" constant="12" id="0ga-xr-aLI"/>
@@ -464,7 +528,7 @@
                         <constraint firstAttribute="height" constant="620" id="3kd-yu-Rzq"/>
                         <constraint firstItem="t1e-WS-UxN" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="6lB-Pl-bJ2"/>
                         <constraint firstItem="NGr-24-6eG" firstAttribute="leading" secondItem="aWl-Xd-abh" secondAttribute="leading" id="7jM-An-MBG"/>
-                        <constraint firstItem="eGq-nS-zTo" firstAttribute="top" secondItem="iPs-kU-vmB" secondAttribute="bottom" constant="15" id="7lx-XU-BOK"/>
+                        <constraint firstItem="eGq-nS-zTo" firstAttribute="top" secondItem="iPs-kU-vmB" secondAttribute="bottom" constant="30" id="7lx-XU-BOK"/>
                         <constraint firstItem="aWl-Xd-abh" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="80n-mx-8DW"/>
                         <constraint firstItem="IZP-vN-V71" firstAttribute="top" secondItem="aWl-Xd-abh" secondAttribute="bottom" constant="18" id="9C5-MX-V0d"/>
                         <constraint firstItem="t1e-WS-UxN" firstAttribute="top" secondItem="IZP-vN-V71" secondAttribute="bottom" constant="30" id="BXD-yd-ns2"/>
@@ -493,18 +557,16 @@
                 <constraint firstItem="gu7-qr-YOX" firstAttribute="trailing" secondItem="MPp-JT-C4w" secondAttribute="trailing" id="naf-jn-JpI"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="1561" y="145"/>
+            <point key="canvasLocation" x="1560.8695652173915" y="42.522321428571423"/>
         </view>
     </objects>
     <resources>
+        <image name="fb_logo.png" width="32" height="32"/>
+        <image name="in_logo.png" width="32" height="32"/>
+        <image name="re_logo.png" width="32" height="32"/>
+        <image name="tw_logo.png" width="32" height="26.5"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

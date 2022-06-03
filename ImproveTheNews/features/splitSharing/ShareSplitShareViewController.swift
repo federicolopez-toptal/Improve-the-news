@@ -885,6 +885,5 @@ extension ShareSplitShareViewController: SharingDelegate {
 
 extension ShareSplitShareViewController {
     func rotate() {
-        
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class SignInSignUpViewControllerViewController: UIViewController {
 
@@ -24,9 +25,11 @@ class SignInSignUpViewControllerViewController: UIViewController {
         @IBOutlet weak var regPassConfirmTextField: UITextField!
         @IBOutlet weak var regNewsletterCheckbox: UISwitch!
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.buildContentViews()
+        self.updateAllSocialButtons()
         
         SETUP_NAVBAR(viewController: self,
             homeTap: nil,
@@ -363,6 +366,7 @@ extension SignInSignUpViewControllerViewController {
     @IBAction func regActionButtonTap(_ sender: UIButton) {
         self.performRegistration()
     }
+
 }
 
 // MARK: - Form action(s)
@@ -389,6 +393,10 @@ extension SignInSignUpViewControllerViewController {
                     }
                     
                     ALERT(vc: self, title: "Warning", message: msg)
+                } else {
+                    ALERT(vc: self, title: "Success", message: "Successful login") {
+                        self.navigationController?.popViewController(animated: true)
+                    }
                 }
             }
             
@@ -420,10 +428,177 @@ extension SignInSignUpViewControllerViewController {
                     }
                     
                     ALERT(vc: self, title: "Warning", message: msg)
+                } else {
+                    ALERT(vc: self, title: "Success", message: "Registration successful. You' receive an email to verify your account")
                 }
             }
         }
         
+    }
+    
+}
+
+extension SignInSignUpViewControllerViewController: SFSafariViewControllerDelegate {
+// MARK: - Social
+    private func updateAllSocialButtons() {
+        let loginButtons = loginView.viewWithTag(888) as! UIStackView
+        for B in loginButtons.arrangedSubviews {
+            self.updateButton((B as! UIButton))
+        }
+        
+        let regButtons = registrationView.viewWithTag(999) as! UIStackView
+        for B in regButtons.arrangedSubviews {
+            self.updateButton((B as! UIButton))
+        }
+    }
+    
+    private func updateButton(_ button: UIButton) {
+        DispatchQueue.main.async {
+            let tag = button.tag - 100
+            var state = false
+            
+            switch(tag) {
+                case 1:
+                    let fb = FB_SDK.instance
+                    state = fb.isLogged()
+                case 2:
+                    let li = LI_SDK.instance
+                    state = li.isLogged()
+                case 3:
+                    let tw = TW_SDK.instance
+                    state = tw.isLogged()
+                case 4:
+                    let red = RED_SDK.instance
+                    state = red.isLogged()
+            
+                default:
+                    state = false
+            }
+        
+            if(state) {
+                button.alpha = 1.0
+                //button.isEnabled = false
+            } else {
+                button.alpha = 0.25
+                //button.isEnabled = true
+            }
+        }
+    }
+    
+    @IBAction func socialButtonTap(_ sender: UIButton) {
+        let tag = sender.tag-100
+        print(tag)
+        
+        switch(tag) {
+            case 1:
+            FB_buttonTap()
+            case 2:
+            LI_buttonTap()
+            case 3:
+            TW_buttonTap()
+            case 4:
+            RED_buttonTap()
+
+            default:
+            FB_buttonTap()
+        }
+    }
+    
+    private func getButton(groupTag: Int, tag: Int) -> UIButton {
+        var group = loginView.viewWithTag(888) as! UIStackView
+        if(groupTag==999) {
+            group = registrationView.viewWithTag(999) as! UIStackView
+        }
+        
+        return (group.viewWithTag(tag) as! UIButton)
+    }
+    
+    private func FB_buttonTap() {
+        let fb = FB_SDK.instance
+        let button1 = self.getButton(groupTag: 888, tag: 101)
+        let button2 = self.getButton(groupTag: 999, tag: 101)
+        
+        if(fb.isLogged()) {
+            fb.logout(vc: self) { (isLoggedOut) in
+                if(isLoggedOut) {
+                    self.updateButton(button1)
+                    self.updateButton(button2)
+                }
+            }
+        } else {
+            fb.login(vc: self) { (isLogged) in
+                if(isLogged) {
+                    self.updateButton(button1)
+                    self.updateButton(button2)
+                }
+            }
+        }
+    }
+    
+    private func TW_buttonTap() {
+        let tw = TW_SDK.instance
+        let button1 = self.getButton(groupTag: 888, tag: 103)
+        let button2 = self.getButton(groupTag: 999, tag: 103)
+
+        if(tw.isLogged()) {
+            tw.logout(vc: self) { (isLoggedOut) in
+                if(isLoggedOut) {
+                    self.updateButton(button1)
+                    self.updateButton(button2)
+                }
+            }
+        } else {
+            tw.login(vc: self) { (isLogged) in
+                if(isLogged) {
+                    self.updateButton(button1)
+                    self.updateButton(button2)
+                }
+            }
+        }
+    }
+
+    private func LI_buttonTap() {
+        let li = LI_SDK.instance
+        let button1 = self.getButton(groupTag: 888, tag: 102)
+        let button2 = self.getButton(groupTag: 999, tag: 102)
+
+        if(li.isLogged()) {
+            li.logout(vc: self) { (isLoggedOut) in
+                if(isLoggedOut) {
+                    self.updateButton(button1)
+                    self.updateButton(button2)
+                }
+            }
+        } else {
+            li.login(vc: self) { (isLogged) in
+                if(isLogged) {
+                    self.updateButton(button1)
+                    self.updateButton(button2)
+                }
+            }
+        }
+    }
+
+    private func RED_buttonTap() {
+        let red = RED_SDK.instance
+        let button1 = self.getButton(groupTag: 888, tag: 104)
+        let button2 = self.getButton(groupTag: 999, tag: 104)
+
+        if(red.isLogged()) {
+            red.logout(vc: self) { (isLoggedOut) in
+                if(isLoggedOut) {
+                    self.updateButton(button1)
+                    self.updateButton(button2)
+                }
+            }
+        } else {
+            red.login(vc: self) { (isLogged) in
+                if(isLogged) {
+                    self.updateButton(button1)
+                    self.updateButton(button2)
+                }
+            }
+        }
     }
     
 }

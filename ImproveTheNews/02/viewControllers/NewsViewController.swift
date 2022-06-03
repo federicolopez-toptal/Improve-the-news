@@ -289,10 +289,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
 //        // ----------------------------------------------
 
-        DELAY(1.0) {
-            let vc = SignInSignUpViewControllerViewController.createInstance()
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+//        DELAY(1.0) {
+//            let vc = SignInSignUpViewControllerViewController.createInstance()
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        }
         
     }
     
@@ -863,8 +863,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     @objc func userButtonItemClicked(_ sender: UIBarButtonItem!) {
-        let vc = MyAccountViewController.createInstance()
-        self.present(vc, animated: true)
+//        let vc = MyAccountViewController.createInstance()
+//        self.present(vc, animated: true)
+        let vc = SignInSignUpViewControllerViewController.createInstance()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
     @objc func hamburgerButtonItemClicked(_ sender: UIBarButtonItem!) {

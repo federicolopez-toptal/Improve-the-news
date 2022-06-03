@@ -23,13 +23,15 @@ func ALERT(vc: UIViewController, title T: String, message M: String) {
 }
 
 func ALERT(vc: UIViewController, title T: String, message M: String, callback: @escaping () -> ()) {
-    let alert = UIAlertController(title: T, message: M, preferredStyle: .alert)
-    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
-        callback()
-    }
-    
-    alert.addAction(okAction)
-    vc.present(alert, animated: true) {
+    DispatchQueue.main.async {
+        let alert = UIAlertController(title: T, message: M, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default) { action in
+            callback()
+        }
+        
+        alert.addAction(okAction)
+        vc.present(alert, animated: true) {
+        }
     }
 }
 

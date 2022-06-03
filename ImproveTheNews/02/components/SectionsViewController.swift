@@ -243,8 +243,10 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
             case 9:
                 self.showOnboarding()
             case 10:
-                let vc = MyAccountViewController.createInstance()
-                self.present(vc, animated: true)
+//                let vc = MyAccountViewController.createInstance()
+//                self.present(vc, animated: true)
+                let vc = SignInSignUpViewControllerViewController.createInstance()
+                self.navigationController?.pushViewController(vc, animated: true)
                 
             default:
                 fatalError()
