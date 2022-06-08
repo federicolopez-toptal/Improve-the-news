@@ -201,11 +201,16 @@ class ShareSplitExplainPopup: UIView {
         blueRect.addSubview(dontShowButton)
         dontShowButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dontShowButton.topAnchor.constraint(equalTo: label3.bottomAnchor, constant: 25),
             dontShowButton.leadingAnchor.constraint(equalTo: blueRect.leadingAnchor, constant: 20),
             dontShowButton.trailingAnchor.constraint(equalTo: blueRect.trailingAnchor, constant: -20),
             dontShowButton.heightAnchor.constraint(equalToConstant: 30)
         ])
+        
+        if(IS_iPHONE()) {
+            dontShowButton.topAnchor.constraint(equalTo: label3.bottomAnchor, constant: 25).isActive = true
+        } else if(IS_iPAD()) {
+            dontShowButton.topAnchor.constraint(equalTo: icon3.bottomAnchor, constant: 35).isActive = true
+        }
         
         dontShowButton.addTarget(self,
             action: #selector(dontShowButtonTap(sender: )), for: .touchUpInside)

@@ -289,10 +289,10 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         
 //        // ----------------------------------------------
 
-//        DELAY(1.0) {
-//            let vc = SignInSignUpViewControllerViewController.createInstance()
-//            self.navigationController?.pushViewController(vc, animated: true)
-//        }
+        DELAY(1.0) {
+            let vc = SignInSignUpViewControllerViewController.createInstance()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
         
     }
     

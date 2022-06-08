@@ -11,6 +11,8 @@ import SafariServices
 
 class SignInSignUpViewControllerViewController: UIViewController {
 
+    var firstTime = true
+
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     private let loadingView = UIView()
@@ -18,24 +20,51 @@ class SignInSignUpViewControllerViewController: UIViewController {
     @IBOutlet weak var loginView: UIView!
         @IBOutlet weak var loginEmailTextField: UITextField!
         @IBOutlet weak var loginPassTextField: UITextField!
+        @IBOutlet weak var loginNewsletterTextField: UITextField!
     
     @IBOutlet weak var registrationView: UIView!
         @IBOutlet weak var regEmailTextField: UITextField!
         @IBOutlet weak var regPassTextField: UITextField!
         @IBOutlet weak var regPassConfirmTextField: UITextField!
         @IBOutlet weak var regNewsletterCheckbox: UISwitch!
-
+        @IBOutlet weak var regNewsletterTextField: UITextField!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.buildContentViews()
         self.updateAllSocialButtons()
+        self.buildContentViews()
         
         SETUP_NAVBAR(viewController: self,
             homeTap: nil,
             menuTap: nil,
             searchTap: nil,
             userTap: nil)
+            
+        NotificationCenter.default.addObserver(self, selector: #selector(onDeviceOrientationChanged),
+            name: UIDevice.orientationDidChangeNotification,
+            object: nil)
+            
+        DELAY(1.0) {
+            let api = ShareAPI.instance
+            
+            print("SHARE", api.uuid)
+            print("SHARE", api.getBearerAuth())
+        }
+    }
+    
+    @objc func onDeviceOrientationChanged() {
+        var mFrame = self.loginView.frame
+        mFrame.size.width = UIScreen.main.bounds.width
+        self.loginView.frame = mFrame
+        
+        mFrame = self.registrationView.frame
+        mFrame.size.width = UIScreen.main.bounds.width
+        self.registrationView.frame = mFrame
+        
+        let dim: CGFloat = 65
+        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -98,6 +127,7 @@ extension SignInSignUpViewControllerViewController {
         let gesture1 = UITapGestureRecognizer(target: self, action: #selector(viewOnTap(sender:)))
         
         self.scrollView.addSubview(self.loginView)
+        
         self.loginView.frame = CGRect(x: 0, y: 0, width: screen_W, height: self.loginView.frame.size.height)
         self.loginView.addGestureRecognizer(gesture1)
         self.loginView.backgroundColor = .clear
@@ -144,6 +174,14 @@ extension SignInSignUpViewControllerViewController {
             endPoint: CGPoint(x: midScreenX, y: posY)))
         loginFormView.lines.append(Line(startPont: CGPoint(x: midScreenX+10, y: posY),
             endPoint: CGPoint(x: UIScreen.main.bounds.size.width-15, y: posY)))
+
+        self.loginNewsletterTextField.layer.borderWidth = 1.0
+        self.loginNewsletterTextField.layer.borderColor = UIColor(hex: 0xBBBBBB).withAlphaComponent(0.8).cgColor
+        self.loginNewsletterTextField.backgroundColor = DARKMODE() ? UIColor(hex: 0x1E1E1E) : .white
+        self.loginNewsletterTextField.attributedPlaceholder = NSAttributedString(
+            string: "Your Email",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(hex: 0xBBBBBB).withAlphaComponent(0.5)]
+        )
 
         if(!DARKMODE()) {
             let regButton = loginFormView.subviews[1] as! UIButton
@@ -225,6 +263,13 @@ extension SignInSignUpViewControllerViewController {
         regFormView.lines.append(Line(startPont: CGPoint(x: 15, y: posY),
             endPoint: CGPoint(x: midScreenX-10, y: posY)))
     
+        self.regNewsletterTextField.layer.borderWidth = 1.0
+        self.regNewsletterTextField.layer.borderColor = UIColor(hex: 0xBBBBBB).withAlphaComponent(0.8).cgColor
+        self.regNewsletterTextField.backgroundColor = DARKMODE() ? UIColor(hex: 0x1E1E1E) : .white
+        self.regNewsletterTextField.attributedPlaceholder = NSAttributedString(
+            string: "Your Email",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(hex: 0xBBBBBB).withAlphaComponent(0.5)]
+        )
     
         if(!DARKMODE()) {
             let loginButton = regFormView.subviews[0] as! UIButton
@@ -250,8 +295,8 @@ extension SignInSignUpViewControllerViewController {
     
     
     // misc
-        self.showLogin()
-        //self.showRegistration()
+        //self.showLogin()
+        self.showRegistration()
         
         self.scrollView.backgroundColor = self.view.backgroundColor
     }
@@ -366,6 +411,10 @@ extension SignInSignUpViewControllerViewController {
     @IBAction func regActionButtonTap(_ sender: UIButton) {
         self.performRegistration()
     }
+    
+    @IBAction func newsletterButtonTap(_ sender: UIButton) {
+        self.subscribeToNewsletter(tag: sender.tag)
+    }
 
 }
 
@@ -434,6 +483,24 @@ extension SignInSignUpViewControllerViewController {
             }
         }
         
+    }
+    
+    private func subscribeToNewsletter(tag: Int) {
+        self.dismissKeyboard()
+        var email = self.loginNewsletterTextField.text!
+        if(tag==2){ email = self.regNewsletterTextField.text! }
+        
+        if(!VALIDATE_EMAIL(email)) {
+            ALERT(vc: self, title: "Warning", message: "Please, enter a valid email")
+        } else {
+            
+            self.showLoading()
+            let api = ShareAPI.instance
+            api.subscribeToNewsLetter(email: email) { success in
+                self.showLoading(false)
+                ALERT(vc: self, title: "Success", message: "Subscription successfull")
+            }
+        }
     }
     
 }

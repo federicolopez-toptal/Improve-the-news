@@ -23,10 +23,12 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignInSignUpViewControllerViewController" customModule="ImproveTheNews" customModuleProvider="target">
             <connections>
                 <outlet property="loginEmailTextField" destination="LcL-f8-V2o" id="DxU-VL-CyJ"/>
+                <outlet property="loginNewsletterTextField" destination="MTa-OK-D7a" id="dO5-tm-kGc"/>
                 <outlet property="loginPassTextField" destination="U2X-Tr-OIs" id="oIu-Db-gJN"/>
                 <outlet property="loginView" destination="a3V-SO-188" id="wij-6H-Hgw"/>
                 <outlet property="regEmailTextField" destination="bMf-U6-w93" id="LpQ-cv-c2I"/>
                 <outlet property="regNewsletterCheckbox" destination="IZP-vN-V71" id="3X8-nj-zb6"/>
+                <outlet property="regNewsletterTextField" destination="DW4-LD-1lF" id="qFl-8v-9TH"/>
                 <outlet property="regPassConfirmTextField" destination="2mJ-Aa-mZd" id="mAj-nX-0AU"/>
                 <outlet property="regPassTextField" destination="C4e-NE-0Fh" id="RlY-8u-X7z"/>
                 <outlet property="registrationView" destination="4XZ-6w-fSe" id="bi5-6c-PIC"/>
@@ -58,11 +60,11 @@
             <point key="canvasLocation" x="131.8840579710145" y="110.49107142857143"/>
         </view>
         <view contentMode="scaleToFill" id="a3V-SO-188">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="605"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="1092"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VBe-1f-mLt" userLabel="formContainer" customClass="SignInUpFormFormView" customModule="ImproveTheNews" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="64" width="414" height="530"/>
+                    <rect key="frame" x="0.0" y="64" width="414" height="600"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign In" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zTs-CB-dTO">
                             <rect key="frame" x="0.0" y="22" width="207" height="20.5"/>
@@ -161,7 +163,7 @@
                                 </attributedString>
                             </buttonConfiguration>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6DP-9e-zcu">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6DP-9e-zcu" customClass="SignInUpOrangeButton" customModule="ImproveTheNews" customModuleProvider="target">
                             <rect key="frame" x="60.5" y="342" width="293" height="45"/>
                             <color key="backgroundColor" red="0.95294117647058818" green="0.39215686274509803" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
@@ -184,13 +186,13 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="or use social networks to sign in:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwE-Uh-kN6">
-                            <rect key="frame" x="91" y="399" width="232.5" height="19"/>
-                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                            <rect key="frame" x="89.5" y="402" width="235" height="19"/>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
                             <color key="textColor" red="0.57647058823529407" green="0.62745098039215685" blue="0.70588235294117641" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" tag="888" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="QbR-9y-rum">
-                            <rect key="frame" x="107" y="448" width="200" height="35"/>
+                            <rect key="frame" x="107" y="446" width="200" height="35"/>
                             <subviews>
                                 <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8k-xJ-WOq">
                                     <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
@@ -255,20 +257,35 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </stackView>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2U3-pU-QLg">
-                            <rect key="frame" x="131" y="500" width="152" height="17"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o4v-Ig-7fg">
+                            <rect key="frame" x="124.5" y="511" width="165" height="19"/>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                            <color key="textColor" red="0.57647058819999997" green="0.62745098040000002" blue="0.70588235290000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9TX-cg-yIc">
-                            <rect key="frame" x="90" y="528" width="234" height="31"/>
-                            <color key="backgroundColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NG8-So-HNs">
+                            <rect key="frame" x="112" y="540" width="190" height="32"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="234" id="mK9-ui-cyv"/>
+                                <constraint firstAttribute="width" constant="190" id="x4L-OT-8kH"/>
                             </constraints>
                             <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="Click here to Sign Up!"/>
+                            <buttonConfiguration key="configuration" style="plain">
+                                <attributedString key="attributedTitle">
+                                    <fragment content="Click here to Sign Up!">
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="0.39216000000000001" blue="0.23529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="15" name="Roboto-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                            <integer key="NSUnderline" value="1"/>
+                                            <color key="NSUnderlineColor" red="1" green="0.39216000000000001" blue="0.23529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                            </buttonConfiguration>
+                            <connections>
+                                <action selector="gotoRegistrationButtonTap:" destination="-1" eventType="touchUpInside" id="1az-jO-3zT"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -276,18 +293,18 @@
                         <constraint firstItem="6DP-9e-zcu" firstAttribute="centerX" secondItem="VBe-1f-mLt" secondAttribute="centerX" id="0Jz-tW-nGC"/>
                         <constraint firstItem="QbR-9y-rum" firstAttribute="centerX" secondItem="VBe-1f-mLt" secondAttribute="centerX" id="6eB-OO-7K9"/>
                         <constraint firstItem="3BJ-Xt-6O4" firstAttribute="top" secondItem="VBe-1f-mLt" secondAttribute="top" constant="15" id="7D5-pf-rhf"/>
-                        <constraint firstItem="2U3-pU-QLg" firstAttribute="centerX" secondItem="VBe-1f-mLt" secondAttribute="centerX" id="84q-S2-IPv"/>
-                        <constraint firstItem="hwE-Uh-kN6" firstAttribute="top" secondItem="6DP-9e-zcu" secondAttribute="bottom" constant="12" id="BMB-6Z-idp"/>
-                        <constraint firstItem="9TX-cg-yIc" firstAttribute="top" secondItem="2U3-pU-QLg" secondAttribute="bottom" constant="11" id="BPp-Uq-RU5"/>
-                        <constraint firstItem="2U3-pU-QLg" firstAttribute="top" secondItem="QbR-9y-rum" secondAttribute="bottom" constant="17" id="FtK-my-HkD"/>
-                        <constraint firstItem="QbR-9y-rum" firstAttribute="top" secondItem="hwE-Uh-kN6" secondAttribute="bottom" constant="30" id="G5W-0z-v6N"/>
+                        <constraint firstItem="o4v-Ig-7fg" firstAttribute="top" secondItem="QbR-9y-rum" secondAttribute="bottom" constant="30" id="7Ym-Jw-6pd"/>
+                        <constraint firstItem="o4v-Ig-7fg" firstAttribute="centerX" secondItem="VBe-1f-mLt" secondAttribute="centerX" id="AvJ-Lr-scS"/>
+                        <constraint firstItem="hwE-Uh-kN6" firstAttribute="top" secondItem="6DP-9e-zcu" secondAttribute="bottom" constant="15" id="BMB-6Z-idp"/>
+                        <constraint firstItem="QbR-9y-rum" firstAttribute="top" secondItem="hwE-Uh-kN6" secondAttribute="bottom" constant="25" id="G5W-0z-v6N"/>
                         <constraint firstItem="zTs-CB-dTO" firstAttribute="leading" secondItem="VBe-1f-mLt" secondAttribute="leading" id="Kqq-8k-HcO"/>
                         <constraint firstItem="3BJ-Xt-6O4" firstAttribute="width" secondItem="VBe-1f-mLt" secondAttribute="width" multiplier="0.5" id="LxF-8H-lOz"/>
+                        <constraint firstItem="NG8-So-HNs" firstAttribute="centerX" secondItem="VBe-1f-mLt" secondAttribute="centerX" id="MZL-0B-v8Y"/>
                         <constraint firstItem="uMd-BG-7Hy" firstAttribute="leading" secondItem="Baw-lU-DsD" secondAttribute="leading" id="N6T-DM-9Y8"/>
+                        <constraint firstItem="NG8-So-HNs" firstAttribute="top" secondItem="o4v-Ig-7fg" secondAttribute="bottom" constant="10" id="PdL-cm-wau"/>
                         <constraint firstItem="zTs-CB-dTO" firstAttribute="width" secondItem="VBe-1f-mLt" secondAttribute="width" multiplier="0.5" id="SQN-kU-rTN"/>
                         <constraint firstItem="Xph-qg-REf" firstAttribute="top" secondItem="Baw-lU-DsD" secondAttribute="bottom" constant="15" id="aGl-4m-7iJ"/>
                         <constraint firstItem="6DP-9e-zcu" firstAttribute="top" secondItem="Xph-qg-REf" secondAttribute="bottom" constant="20" id="c6x-oM-I8Y"/>
-                        <constraint firstItem="9TX-cg-yIc" firstAttribute="centerX" secondItem="VBe-1f-mLt" secondAttribute="centerX" id="dyr-7k-w4j"/>
                         <constraint firstItem="6DP-9e-zcu" firstAttribute="width" secondItem="Baw-lU-DsD" secondAttribute="width" id="eOF-aU-f3h"/>
                         <constraint firstItem="uMd-BG-7Hy" firstAttribute="top" secondItem="VBe-1f-mLt" secondAttribute="top" constant="90" id="j37-pn-8fd"/>
                         <constraint firstItem="Baw-lU-DsD" firstAttribute="top" secondItem="uMd-BG-7Hy" secondAttribute="bottom" constant="25" id="jnm-aU-tdd"/>
@@ -295,27 +312,134 @@
                         <constraint firstItem="Baw-lU-DsD" firstAttribute="centerX" secondItem="VBe-1f-mLt" secondAttribute="centerX" id="mCv-vO-a0p"/>
                         <constraint firstAttribute="trailing" secondItem="3BJ-Xt-6O4" secondAttribute="trailing" id="rJc-ZM-OyZ"/>
                         <constraint firstItem="zTs-CB-dTO" firstAttribute="top" secondItem="VBe-1f-mLt" secondAttribute="top" constant="22" id="sf9-JY-W9W"/>
-                        <constraint firstAttribute="height" constant="530" id="uMe-iI-sny"/>
+                        <constraint firstAttribute="height" constant="600" id="uMe-iI-sny"/>
                         <constraint firstItem="Xph-qg-REf" firstAttribute="leading" secondItem="Baw-lU-DsD" secondAttribute="leading" constant="-10" id="xj4-jr-KUX"/>
                     </constraints>
                 </view>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ITN_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="0d0-1g-fXN">
+                    <rect key="frame" x="12" y="684" width="220" height="33"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="33" id="0Xb-xT-MBs"/>
+                        <constraint firstAttribute="width" constant="220" id="L0t-zu-k0x"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A non-profit news aggregator helping you break out of your filter bubble" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FAN-tO-Uke">
+                    <rect key="frame" x="12" y="729" width="382" height="37.5"/>
+                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                    <color key="textColor" red="0.57647058819999997" green="0.62745098040000002" blue="0.70588235290000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ifb-9l-0M6">
+                    <rect key="frame" x="0.0" y="793.5" width="414" height="200"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="tdy-MW-H7F">
+                            <rect key="frame" x="32" y="20" width="350" height="139"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Try our skim:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JWt-2k-TS7">
+                                    <rect key="frame" x="0.0" y="0.0" width="350" height="19"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="dcv-6t-HKk">
+                                    <rect key="frame" x="0.0" y="27" width="350" height="35"/>
+                                    <subviews>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Your Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MTa-OK-D7a" customClass="SignInUpTextField" customModule="ImproveTheNews" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="230" height="35"/>
+                                            <color key="backgroundColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="35" id="mw9-Gu-KLR"/>
+                                            </constraints>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bSF-3p-ojP">
+                                            <rect key="frame" x="240" y="0.0" width="110" height="35"/>
+                                            <color key="backgroundColor" red="0.95294117649999999" green="0.3921568627" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="110" id="TZ7-gJ-FcP"/>
+                                            </constraints>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain">
+                                                <attributedString key="attributedTitle">
+                                                    <fragment content="SUBSCRIBE">
+                                                        <attributes>
+                                                            <color key="NSColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <font key="NSFont" size="14" name="Roboto-Medium"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                            </buttonConfiguration>
+                                            <connections>
+                                                <action selector="newsletterButtonTap:" destination="-1" eventType="touchUpInside" id="nlv-Ut-tcY"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </stackView>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4ku-oo-5x5">
+                                    <rect key="frame" x="0.0" y="70" width="350" height="8"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="8" id="PNW-zT-vsE"/>
+                                    </constraints>
+                                </view>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Get daily/weekly news updates separating facts from narratives (unsubscribe anytime; we'll never share your email)" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b1Y-He-pr1">
+                                    <rect key="frame" x="0.0" y="86" width="350" height="53"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="350" id="0eL-mh-qlZ"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.11764705882352941" green="0.14117647058823529" blue="0.18431372549019609" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="tdy-MW-H7F" firstAttribute="centerX" secondItem="Ifb-9l-0M6" secondAttribute="centerX" id="QtY-sp-yik"/>
+                        <constraint firstAttribute="height" constant="200" id="bOu-Db-QoF"/>
+                        <constraint firstItem="tdy-MW-H7F" firstAttribute="top" secondItem="Ifb-9l-0M6" secondAttribute="top" constant="20" symbolic="YES" id="hVo-Gn-57D"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="© 2022 Improve The News Foundation, all Rights Reserved" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5bG-Li-6EU">
+                    <rect key="frame" x="12" y="1014.5" width="390" height="37.5"/>
+                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                    <color key="textColor" red="0.57647058819999997" green="0.62745098040000002" blue="0.70588235290000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="5AN-Gl-AeD"/>
             <color key="backgroundColor" systemColor="systemPinkColor"/>
             <constraints>
                 <constraint firstItem="VBe-1f-mLt" firstAttribute="leading" secondItem="5AN-Gl-AeD" secondAttribute="leading" id="0cP-pp-kvX"/>
+                <constraint firstItem="0d0-1g-fXN" firstAttribute="leading" secondItem="5AN-Gl-AeD" secondAttribute="leading" constant="12" id="4Hj-ii-3CT"/>
+                <constraint firstItem="5bG-Li-6EU" firstAttribute="trailing" secondItem="5AN-Gl-AeD" secondAttribute="trailing" constant="-12" id="6Ve-hi-HXK"/>
+                <constraint firstItem="5bG-Li-6EU" firstAttribute="top" secondItem="Ifb-9l-0M6" secondAttribute="bottom" constant="21" id="9tZ-BU-Zxf"/>
+                <constraint firstItem="FAN-tO-Uke" firstAttribute="top" secondItem="0d0-1g-fXN" secondAttribute="bottom" constant="12" id="C19-27-9vt"/>
                 <constraint firstItem="5AN-Gl-AeD" firstAttribute="top" secondItem="VBe-1f-mLt" secondAttribute="top" constant="-20" id="DVd-p0-TD8"/>
+                <constraint firstItem="Ifb-9l-0M6" firstAttribute="top" secondItem="FAN-tO-Uke" secondAttribute="bottom" constant="27" id="Enn-C4-2g3"/>
+                <constraint firstItem="5bG-Li-6EU" firstAttribute="leading" secondItem="5AN-Gl-AeD" secondAttribute="leading" constant="12" id="IcN-Z9-kxV"/>
                 <constraint firstItem="5AN-Gl-AeD" firstAttribute="trailing" secondItem="VBe-1f-mLt" secondAttribute="trailing" id="Iey-Iq-Em9"/>
+                <constraint firstItem="5AN-Gl-AeD" firstAttribute="trailing" secondItem="Ifb-9l-0M6" secondAttribute="trailing" id="PXy-z4-oYk"/>
+                <constraint firstItem="0d0-1g-fXN" firstAttribute="top" secondItem="VBe-1f-mLt" secondAttribute="bottom" constant="20" id="V9h-Cb-M9Q"/>
+                <constraint firstItem="Ifb-9l-0M6" firstAttribute="leading" secondItem="5AN-Gl-AeD" secondAttribute="leading" id="YZk-dz-iFe"/>
+                <constraint firstItem="FAN-tO-Uke" firstAttribute="leading" secondItem="5AN-Gl-AeD" secondAttribute="leading" constant="12" id="caW-ZD-Lse"/>
+                <constraint firstItem="5AN-Gl-AeD" firstAttribute="trailing" secondItem="FAN-tO-Uke" secondAttribute="trailing" constant="20" id="kOC-Ei-KD1"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="850.72463768115949" y="96.09375"/>
+            <point key="canvasLocation" x="850.72463768115949" y="256.47321428571428"/>
         </view>
         <view contentMode="scaleToFill" id="4XZ-6w-fSe">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="695"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="1305"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MPp-JT-C4w" userLabel="formContainer" customClass="SignInUpFormFormView" customModule="ImproveTheNews" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="64" width="414" height="620"/>
+                    <rect key="frame" x="0.0" y="64" width="414" height="825"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cd3-eh-mT6">
                             <rect key="frame" x="0.0" y="15" width="207" height="34.5"/>
@@ -351,7 +475,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="aWl-Xd-abh">
-                            <rect key="frame" x="60.5" y="141" width="293" height="202"/>
+                            <rect key="frame" x="60.5" y="143" width="293" height="243"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="* Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6x3-YT-CGd">
                                     <rect key="frame" x="0.0" y="0.0" width="293" height="19"/>
@@ -404,6 +528,13 @@
                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
                                     <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                 </textField>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="* Password must contain minimum eight characters, at least one letter and one number." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9iG-l4-wp9">
+                                    <rect key="frame" x="0.0" y="210" width="293" height="33"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
@@ -411,16 +542,17 @@
                             </constraints>
                         </stackView>
                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IZP-vN-V71">
-                            <rect key="frame" x="60.5" y="361" width="51" height="31"/>
+                            <rect key="frame" x="60.5" y="406" width="51" height="31"/>
+                            <color key="onTintColor" red="1" green="0.3921568627" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
                         </switch>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign me up for the newsletter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CdM-O5-k6B">
-                            <rect key="frame" x="127" y="367.5" width="202" height="18"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <rect key="frame" x="127" y="412" width="210.5" height="19"/>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
                             <color key="textColor" red="0.57647058819999997" green="0.62745098040000002" blue="0.70588235290000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t1e-WS-UxN">
-                            <rect key="frame" x="60.5" y="422" width="293" height="45"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t1e-WS-UxN" customClass="SignInUpOrangeButton" customModule="ImproveTheNews" customModuleProvider="target">
+                            <rect key="frame" x="60.5" y="472" width="293" height="45"/>
                             <color key="backgroundColor" red="1" green="0.3921568627" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="45" id="Q6S-Ps-3LI"/>
@@ -441,14 +573,93 @@
                                 <action selector="regActionButtonTap:" destination="-1" eventType="touchUpInside" id="vHK-Na-iTW"/>
                             </connections>
                         </button>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Ubq-WJ-ejb">
+                            <rect key="frame" x="37" y="537" width="340" height="62"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="c5V-MP-EhS">
+                                    <rect key="frame" x="0.0" y="0.0" width="340" height="18"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="4t5-rb-bdW">
+                                            <rect key="frame" x="0.0" y="2" width="20" height="14.5"/>
+                                            <color key="tintColor" red="1" green="0.3921568627" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="18" id="WyB-ZM-E6U"/>
+                                                <constraint firstAttribute="width" constant="20" id="xw0-LX-AEi"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your news diet is shared across all your devices" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fdm-hF-rgq">
+                                            <rect key="frame" x="25" y="0.0" width="315" height="18"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </stackView>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="PhD-FF-elk">
+                                    <rect key="frame" x="0.0" y="22" width="340" height="18"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="qN6-yk-6H0">
+                                            <rect key="frame" x="0.0" y="2" width="20" height="14.5"/>
+                                            <color key="tintColor" red="1" green="0.3921568627" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="7mM-bb-DsY"/>
+                                                <constraint firstAttribute="height" constant="18" id="ACC-D2-EtV"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="One-click sharing to multiple social networks" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qq6-eH-hyw">
+                                            <rect key="frame" x="25" y="0.0" width="315" height="18"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </stackView>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="oJh-dO-hSH">
+                                    <rect key="frame" x="0.0" y="44" width="340" height="18"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="jdj-ke-vLn">
+                                            <rect key="frame" x="0.0" y="2" width="20" height="14.5"/>
+                                            <color key="tintColor" red="1" green="0.3921568627" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="47c-ss-El6"/>
+                                                <constraint firstAttribute="height" constant="18" id="j5f-qd-to6"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can hold news outlets accountable by raising flags about articles" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ye-LR-p7S">
+                                            <rect key="frame" x="25" y="0.0" width="315" height="18"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="340" id="Hiz-QM-v7C"/>
+                            </constraints>
+                        </stackView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="flags about articles" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okT-CM-ftm">
+                            <rect key="frame" x="62" y="601" width="121" height="16.5"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="or use social networks to sign in:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPs-kU-vmB">
-                            <rect key="frame" x="91" y="479" width="232.5" height="19"/>
+                            <rect key="frame" x="91" y="634" width="232.5" height="19"/>
                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
                             <color key="textColor" red="0.57647058819999997" green="0.62745098040000002" blue="0.70588235290000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" tag="999" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eGq-nS-zTo">
-                            <rect key="frame" x="107" y="528" width="200" height="35"/>
+                            <rect key="frame" x="107" y="678" width="200" height="35"/>
                             <subviews>
                                 <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7WF-Aa-bid">
                                     <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
@@ -513,54 +724,193 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </stackView>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7UB-8Z-Tle">
-                            <rect key="frame" x="131" y="583" width="152" height="17"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already have an account?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oRk-Sx-Jov">
+                            <rect key="frame" x="115.5" y="743" width="183.5" height="19"/>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                            <color key="textColor" red="0.57647058819999997" green="0.62745098040000002" blue="0.70588235290000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vn-OR-Fc7">
+                            <rect key="frame" x="112" y="772" width="190" height="32"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="190" id="Bvo-Az-bpi"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain">
+                                <attributedString key="attributedTitle">
+                                    <fragment content="Click here to Sign In!">
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="0.39216000000000001" blue="0.23529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="15" name="Roboto-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                            <integer key="NSUnderline" value="1"/>
+                                            <color key="NSUnderlineColor" red="1" green="0.39216000000000001" blue="0.23529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                            </buttonConfiguration>
+                            <connections>
+                                <action selector="gotoLoginButtonTap:" destination="-1" eventType="touchUpInside" id="oXX-yE-EVm"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="NGr-24-6eG" firstAttribute="top" secondItem="MPp-JT-C4w" secondAttribute="top" constant="90" id="0f6-v2-94d"/>
-                        <constraint firstItem="iPs-kU-vmB" firstAttribute="top" secondItem="t1e-WS-UxN" secondAttribute="bottom" constant="12" id="0ga-xr-aLI"/>
+                        <constraint firstItem="Ubq-WJ-ejb" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="261-7C-FwT"/>
                         <constraint firstItem="CdM-O5-k6B" firstAttribute="centerY" secondItem="IZP-vN-V71" secondAttribute="centerY" id="2vM-fy-aqX"/>
-                        <constraint firstAttribute="height" constant="620" id="3kd-yu-Rzq"/>
+                        <constraint firstAttribute="height" constant="825" id="3kd-yu-Rzq"/>
+                        <constraint firstItem="8vn-OR-Fc7" firstAttribute="top" secondItem="oRk-Sx-Jov" secondAttribute="bottom" constant="10" id="5cL-fu-TUw"/>
                         <constraint firstItem="t1e-WS-UxN" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="6lB-Pl-bJ2"/>
                         <constraint firstItem="NGr-24-6eG" firstAttribute="leading" secondItem="aWl-Xd-abh" secondAttribute="leading" id="7jM-An-MBG"/>
-                        <constraint firstItem="eGq-nS-zTo" firstAttribute="top" secondItem="iPs-kU-vmB" secondAttribute="bottom" constant="30" id="7lx-XU-BOK"/>
+                        <constraint firstItem="eGq-nS-zTo" firstAttribute="top" secondItem="iPs-kU-vmB" secondAttribute="bottom" constant="25" id="7lx-XU-BOK"/>
                         <constraint firstItem="aWl-Xd-abh" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="80n-mx-8DW"/>
-                        <constraint firstItem="IZP-vN-V71" firstAttribute="top" secondItem="aWl-Xd-abh" secondAttribute="bottom" constant="18" id="9C5-MX-V0d"/>
-                        <constraint firstItem="t1e-WS-UxN" firstAttribute="top" secondItem="IZP-vN-V71" secondAttribute="bottom" constant="30" id="BXD-yd-ns2"/>
+                        <constraint firstItem="IZP-vN-V71" firstAttribute="top" secondItem="aWl-Xd-abh" secondAttribute="bottom" constant="20" id="9C5-MX-V0d"/>
+                        <constraint firstItem="t1e-WS-UxN" firstAttribute="top" secondItem="IZP-vN-V71" secondAttribute="bottom" constant="35" id="BXD-yd-ns2"/>
                         <constraint firstAttribute="trailing" secondItem="49u-T9-gYh" secondAttribute="trailing" id="Bm1-Rn-eCy"/>
                         <constraint firstItem="iPs-kU-vmB" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="CL9-Wp-6Ml"/>
+                        <constraint firstItem="oRk-Sx-Jov" firstAttribute="top" secondItem="eGq-nS-zTo" secondAttribute="bottom" constant="30" id="FXz-kQ-gOr"/>
                         <constraint firstItem="eGq-nS-zTo" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="K0p-Te-UWy"/>
                         <constraint firstItem="49u-T9-gYh" firstAttribute="width" secondItem="MPp-JT-C4w" secondAttribute="width" multiplier="0.5" id="KCB-36-rmP"/>
+                        <constraint firstItem="iPs-kU-vmB" firstAttribute="top" secondItem="Ubq-WJ-ejb" secondAttribute="bottom" constant="35" id="LNV-fn-UNn"/>
+                        <constraint firstItem="oRk-Sx-Jov" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="Lel-jh-nzp"/>
+                        <constraint firstItem="okT-CM-ftm" firstAttribute="top" secondItem="Ubq-WJ-ejb" secondAttribute="bottom" constant="2" id="OOr-GW-cL5"/>
                         <constraint firstItem="cd3-eh-mT6" firstAttribute="width" secondItem="MPp-JT-C4w" secondAttribute="width" multiplier="0.5" id="RnQ-6V-l9o"/>
-                        <constraint firstItem="7UB-8Z-Tle" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="SLZ-2Z-Pp0"/>
-                        <constraint firstItem="aWl-Xd-abh" firstAttribute="top" secondItem="NGr-24-6eG" secondAttribute="bottom" constant="23" id="WKW-Bp-vtT"/>
+                        <constraint firstItem="aWl-Xd-abh" firstAttribute="top" secondItem="NGr-24-6eG" secondAttribute="bottom" constant="25" id="WKW-Bp-vtT"/>
                         <constraint firstItem="cd3-eh-mT6" firstAttribute="top" secondItem="MPp-JT-C4w" secondAttribute="top" constant="15" id="WmN-Nc-SVX"/>
                         <constraint firstItem="cd3-eh-mT6" firstAttribute="leading" secondItem="MPp-JT-C4w" secondAttribute="leading" id="XIc-Zj-PnF"/>
-                        <constraint firstItem="7UB-8Z-Tle" firstAttribute="top" secondItem="eGq-nS-zTo" secondAttribute="bottom" constant="20" id="caA-QU-9nY"/>
                         <constraint firstItem="49u-T9-gYh" firstAttribute="top" secondItem="MPp-JT-C4w" secondAttribute="top" constant="22" id="cbq-Ws-yOY"/>
+                        <constraint firstItem="okT-CM-ftm" firstAttribute="leading" secondItem="Ubq-WJ-ejb" secondAttribute="leading" constant="25" id="qn3-5I-E5H"/>
                         <constraint firstItem="IZP-vN-V71" firstAttribute="leading" secondItem="aWl-Xd-abh" secondAttribute="leading" id="sXy-8C-q5P"/>
                         <constraint firstItem="t1e-WS-UxN" firstAttribute="width" secondItem="aWl-Xd-abh" secondAttribute="width" id="tV4-Eo-CBi"/>
+                        <constraint firstItem="Ubq-WJ-ejb" firstAttribute="top" secondItem="t1e-WS-UxN" secondAttribute="bottom" constant="20" id="ufn-ZI-4tI"/>
+                        <constraint firstItem="8vn-OR-Fc7" firstAttribute="centerX" secondItem="MPp-JT-C4w" secondAttribute="centerX" id="vfd-3P-Hlj"/>
                         <constraint firstItem="CdM-O5-k6B" firstAttribute="leading" secondItem="IZP-vN-V71" secondAttribute="trailing" constant="17.5" id="x3e-wo-RrN"/>
                     </constraints>
                 </view>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ITN_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="HIk-Ds-PBv">
+                    <rect key="frame" x="12" y="909" width="220" height="33"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="220" id="kI4-pC-qBg"/>
+                        <constraint firstAttribute="height" constant="33" id="maK-cT-V4i"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A non-profit news aggregator helping you break out of your filter bubble" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mzu-eq-kOg">
+                    <rect key="frame" x="12" y="954" width="382" height="37.5"/>
+                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                    <color key="textColor" red="0.57647058819999997" green="0.62745098040000002" blue="0.70588235290000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uz5-3S-Hng">
+                    <rect key="frame" x="0.0" y="1019" width="414" height="200"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Gfi-X0-6Ld">
+                            <rect key="frame" x="32" y="20" width="350" height="139"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Try our skim:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IBK-9f-Z88">
+                                    <rect key="frame" x="0.0" y="0.0" width="350" height="19"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="FO8-Kq-rbq">
+                                    <rect key="frame" x="0.0" y="27" width="350" height="35"/>
+                                    <subviews>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Your Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DW4-LD-1lF" customClass="SignInUpTextField" customModule="ImproveTheNews" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="230" height="35"/>
+                                            <color key="backgroundColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="35" id="RLn-po-bUT"/>
+                                            </constraints>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rmh-f3-JOq">
+                                            <rect key="frame" x="240" y="0.0" width="110" height="35"/>
+                                            <color key="backgroundColor" red="0.95294117649999999" green="0.3921568627" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="110" id="N9Q-9R-A4s"/>
+                                            </constraints>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain">
+                                                <attributedString key="attributedTitle">
+                                                    <fragment content="SUBSCRIBE">
+                                                        <attributes>
+                                                            <color key="NSColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <font key="NSFont" size="14" name="Roboto-Medium"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                            </buttonConfiguration>
+                                            <connections>
+                                                <action selector="newsletterButtonTap:" destination="-1" eventType="touchUpInside" id="1lb-p6-OI8"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </stackView>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Qo-3e-tF4">
+                                    <rect key="frame" x="0.0" y="70" width="350" height="8"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="8" id="yWT-i9-H9v"/>
+                                    </constraints>
+                                </view>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Get daily/weekly news updates separating facts from narratives (unsubscribe anytime; we'll never share your email)" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jxD-Xd-Exm">
+                                    <rect key="frame" x="0.0" y="86" width="350" height="53"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="350" id="woB-AG-qR7"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.1176470588" green="0.14117647059999999" blue="0.1843137255" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="FO8-Kq-rbq" firstAttribute="top" secondItem="uz5-3S-Hng" secondAttribute="top" constant="47" id="Orb-SP-bMb"/>
+                        <constraint firstAttribute="height" constant="200" id="dpY-bs-QhE"/>
+                        <constraint firstItem="Gfi-X0-6Ld" firstAttribute="centerX" secondItem="uz5-3S-Hng" secondAttribute="centerX" id="mRg-0n-yiJ"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="© 2022 Improve The News Foundation, all Rights Reserved" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Udm-zy-6QM">
+                    <rect key="frame" x="12" y="1240" width="390" height="37.5"/>
+                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                    <color key="textColor" red="0.57647058819999997" green="0.62745098040000002" blue="0.70588235290000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="gu7-qr-YOX"/>
             <color key="backgroundColor" systemColor="systemPinkColor"/>
             <constraints>
                 <constraint firstItem="MPp-JT-C4w" firstAttribute="leading" secondItem="gu7-qr-YOX" secondAttribute="leading" id="9oc-wZ-d1C"/>
+                <constraint firstItem="uz5-3S-Hng" firstAttribute="leading" secondItem="gu7-qr-YOX" secondAttribute="leading" id="APt-7R-X20"/>
                 <constraint firstItem="gu7-qr-YOX" firstAttribute="top" secondItem="MPp-JT-C4w" secondAttribute="top" constant="-20" id="Ary-ny-qic"/>
+                <constraint firstItem="gu7-qr-YOX" firstAttribute="trailing" secondItem="uz5-3S-Hng" secondAttribute="trailing" id="Fcf-Rj-5vL"/>
+                <constraint firstItem="Udm-zy-6QM" firstAttribute="leading" secondItem="gu7-qr-YOX" secondAttribute="leading" constant="12" id="KfJ-iZ-pHJ"/>
+                <constraint firstItem="HIk-Ds-PBv" firstAttribute="leading" secondItem="gu7-qr-YOX" secondAttribute="leading" constant="12" id="Kux-CY-sxL"/>
+                <constraint firstItem="HIk-Ds-PBv" firstAttribute="top" secondItem="MPp-JT-C4w" secondAttribute="bottom" constant="20" id="LKJ-9q-kld"/>
+                <constraint firstItem="Mzu-eq-kOg" firstAttribute="trailing" secondItem="gu7-qr-YOX" secondAttribute="trailing" constant="-20" id="Pjs-TC-zS4"/>
+                <constraint firstItem="Mzu-eq-kOg" firstAttribute="leading" secondItem="gu7-qr-YOX" secondAttribute="leading" constant="12" id="S5v-KH-5kr"/>
+                <constraint firstItem="uz5-3S-Hng" firstAttribute="top" secondItem="Mzu-eq-kOg" secondAttribute="bottom" constant="27.5" id="fJJ-JN-S7y"/>
+                <constraint firstItem="Udm-zy-6QM" firstAttribute="trailing" secondItem="gu7-qr-YOX" secondAttribute="trailing" constant="-12" id="ipl-9r-Qys"/>
+                <constraint firstItem="Udm-zy-6QM" firstAttribute="top" secondItem="uz5-3S-Hng" secondAttribute="bottom" constant="21" id="lpV-2K-aNc"/>
                 <constraint firstItem="gu7-qr-YOX" firstAttribute="trailing" secondItem="MPp-JT-C4w" secondAttribute="trailing" id="naf-jn-JpI"/>
+                <constraint firstItem="Mzu-eq-kOg" firstAttribute="top" secondItem="HIk-Ds-PBv" secondAttribute="bottom" constant="12" id="pSN-ut-lZ0"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="1560.8695652173915" y="42.522321428571423"/>
+            <point key="canvasLocation" x="1560.8695652173915" y="232.70089285714283"/>
         </view>
     </objects>
     <resources>
+        <image name="ITN_logo.png" width="630" height="97"/>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="fb_logo.png" width="32" height="32"/>
         <image name="in_logo.png" width="32" height="32"/>
         <image name="re_logo.png" width="32" height="32"/>

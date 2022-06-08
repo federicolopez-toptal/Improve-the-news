@@ -119,26 +119,42 @@ class SectionsViewController: UIViewController {
     }
     
     private func addVersionNumber() {
-        
-        var val_y = UIScreen.main.bounds.height - 25 - 88 - 20
-        if(SAFE_AREA()!.bottom==0) {
-            val_y = UIScreen.main.bounds.height - 25 - 20 - 48
-        }
-        
-        let val_w = UIScreen.main.bounds.width - 30
-        let vLabel = UILabel(text: "version 1.0",
+//
+//        var val_y = UIScreen.main.bounds.height - 25 - 88 - 20
+//        if(SAFE_AREA()!.bottom==0) {
+//            val_y = UIScreen.main.bounds.height - 25 - 20 - 48
+//        }
+//
+//        let val_w = UIScreen.main.bounds.width - 30
+//        let vLabel = UILabel(text: "version 1.0",
+//                        font: UIFont(name: "Poppins-SemiBold", size: 13),
+//                        textColor: accentOrange,
+//                        textAlignment: .center,
+//                        numberOfLines: 1)
+//        vLabel.backgroundColor = .clear
+//        vLabel.frame = CGRect(x: 15, y: val_y, width: val_w, height: 25)
+//        vLabel.alpha = 0.75
+//
+//        vLabel.text = "version " + Bundle.main.releaseVersionNumber! + " (build " +
+//                    Bundle.main.buildVersionNumber! + ")"
+//
+//        self.view.addSubview(vLabel)
+
+        let vInfo = "version " + Bundle.main.releaseVersionNumber! + " (build " + Bundle.main.buildVersionNumber! + ")"
+        let vLabel = UILabel(text: vInfo,
                         font: UIFont(name: "Poppins-SemiBold", size: 13),
                         textColor: accentOrange,
                         textAlignment: .center,
                         numberOfLines: 1)
         vLabel.backgroundColor = .clear
-        vLabel.frame = CGRect(x: 15, y: val_y, width: val_w, height: 25)
         vLabel.alpha = 0.75
         
-        vLabel.text = "version " + Bundle.main.releaseVersionNumber! + " (build " +
-                    Bundle.main.buildVersionNumber! + ")"
-        
         self.view.addSubview(vLabel)
+        vLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            vLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            vLabel.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -25)
+        ])
     }
     
     
