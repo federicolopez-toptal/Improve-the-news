@@ -71,6 +71,13 @@ class RED_SDK: NSObject {
         }
     }
     
+    func logoutDirect() {
+        self.logout_web {
+            ShareAPI.removeKey(self.keySHARE_REDLogged)
+            ShareAPI.instance.disconnect(type: "Reddit")
+        }
+    }
+    
     private func logout_web(callback: @escaping ()->()) {
         
         let url = "https://www.reddit.com/logout"

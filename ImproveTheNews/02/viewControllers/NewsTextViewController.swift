@@ -509,9 +509,7 @@ class NewsTextViewController: UIViewController {
     }
     
     @objc func userButtonItemClicked(_ sender:UIBarButtonItem!) {
-//        let vc = MyAccountViewController.createInstance()
-//        self.present(vc, animated: true)
-        let vc = SignInSignUpViewControllerViewController.createInstance()
+        let vc = AppUser.shared.accountViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

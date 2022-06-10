@@ -9,7 +9,6 @@
 import UIKit
 import SDWebImage
 import SafariServices
-import FBSDKShareKit
 
 let NOTIFICATION_CLOSE_SPLITSHARE = Notification.Name("closeSplitShare")
 
@@ -854,34 +853,34 @@ extension ShareSplitShareViewController: SFSafariViewControllerDelegate {
     
 }
 
-extension ShareSplitShareViewController: SharingDelegate {
-    // FACEBOOK
-    func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
-        self.showFinalMessage()
-    }
-    
-    func sharer(_ sharer: Sharing, didFailWithError error: Error) {
-        self.showFinalMessage()
-    }
-    
-    func sharerDidCancel(_ sharer: Sharing) {
-        self.showFinalMessage()
-    }
-    
-    private func showFinalMessage() {
-        if(self.tmpMsg != nil) {
-            DispatchQueue.main.async {
-                ALERT(vc: self, title: self.dialogTitle, message: self.tmpMsg!) {
-                    self.dismiss(animated: true) {
-                    }
-                }
-            }
-        } else {
-            self.dismiss(animated: true) {
-            }
-        }
-    }
-}
+//extension ShareSplitShareViewController: SharingDelegate {
+//    // FACEBOOK
+//    func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+//        self.showFinalMessage()
+//    }
+//    
+//    func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+//        self.showFinalMessage()
+//    }
+//    
+//    func sharerDidCancel(_ sharer: Sharing) {
+//        self.showFinalMessage()
+//    }
+//    
+//    private func showFinalMessage() {
+//        if(self.tmpMsg != nil) {
+//            DispatchQueue.main.async {
+//                ALERT(vc: self, title: self.dialogTitle, message: self.tmpMsg!) {
+//                    self.dismiss(animated: true) {
+//                    }
+//                }
+//            }
+//        } else {
+//            self.dismiss(animated: true) {
+//            }
+//        }
+//    }
+//}
 
 extension ShareSplitShareViewController {
     func rotate() {

@@ -36,6 +36,11 @@
 		1F5DA1402804C28900C7C81C /* NavBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DA13F2804C28900C7C81C /* NavBarStyle.swift */; };
 		1F7DE51527F56354008923FF /* RED_SDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7DE51427F56354008923FF /* RED_SDK.swift */; };
 		1F827C4A279E2B7C0077FB26 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */; };
+		1F8847A528526E3F00667A72 /* ForgotPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8847A328526E3F00667A72 /* ForgotPassViewController.swift */; };
+		1F8847A628526E3F00667A72 /* ForgotPassViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F8847A428526E3F00667A72 /* ForgotPassViewController.xib */; };
+		1F8847A928527A0B00667A72 /* MyAccountV2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8847A728527A0B00667A72 /* MyAccountV2ViewController.swift */; };
+		1F8847AA28527A0B00667A72 /* MyAccountV2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F8847A828527A0B00667A72 /* MyAccountV2ViewController.xib */; };
+		1F8847AC2852837800667A72 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8847AB2852837800667A72 /* AppUser.swift */; };
 		1F8BFDFB2783BC76004632F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F8BFDFA2783BC76004632F3 /* Main.storyboard */; };
 		1F8F214B27FCBF16008CB00D /* MyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8F214927FCBF16008CB00D /* MyAccountViewController.swift */; };
 		1F8F214C27FCBF16008CB00D /* MyAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F8F214A27FCBF16008CB00D /* MyAccountViewController.xib */; };
@@ -434,6 +439,11 @@
 		1F5DA13F2804C28900C7C81C /* NavBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarStyle.swift; sourceTree = "<group>"; };
 		1F7DE51427F56354008923FF /* RED_SDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RED_SDK.swift; sourceTree = "<group>"; };
 		1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
+		1F8847A328526E3F00667A72 /* ForgotPassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassViewController.swift; sourceTree = "<group>"; };
+		1F8847A428526E3F00667A72 /* ForgotPassViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ForgotPassViewController.xib; sourceTree = "<group>"; };
+		1F8847A728527A0B00667A72 /* MyAccountV2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAccountV2ViewController.swift; sourceTree = "<group>"; };
+		1F8847A828527A0B00667A72 /* MyAccountV2ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyAccountV2ViewController.xib; sourceTree = "<group>"; };
+		1F8847AB2852837800667A72 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		1F8BFDFA2783BC76004632F3 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		1F8F214927FCBF16008CB00D /* MyAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAccountViewController.swift; sourceTree = "<group>"; };
 		1F8F214A27FCBF16008CB00D /* MyAccountViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyAccountViewController.xib; sourceTree = "<group>"; };
@@ -915,6 +925,10 @@
 				1F9318BA282C0AC000058739 /* FAQViewController.swift */,
 				1FB3699E283E7DF20091A4C1 /* SignInSignUpViewControllerViewController.swift */,
 				1FB3699F283E7DF20091A4C1 /* SignInSignUpViewControllerViewController.xib */,
+				1F8847A328526E3F00667A72 /* ForgotPassViewController.swift */,
+				1F8847A428526E3F00667A72 /* ForgotPassViewController.xib */,
+				1F8847A728527A0B00667A72 /* MyAccountV2ViewController.swift */,
+				1F8847A828527A0B00667A72 /* MyAccountV2ViewController.xib */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -1125,6 +1139,7 @@
 				1F587F6C27C7FEE9005181A0 /* AppData.swift */,
 				A81B3B1F2481E67200A52A97 /* AppDelegate.swift */,
 				A81B3B212481E67200A52A97 /* SceneDelegate.swift */,
+				1F8847AB2852837800667A72 /* AppUser.swift */,
 			);
 			path = app;
 			sourceTree = "<group>";
@@ -1667,6 +1682,7 @@
 				BDDA44F32612301100C9C3AF /* BIH64.png in Resources */,
 				BDDA458C2612301100C9C3AF /* IRN64.png in Resources */,
 				BD817A6226D688A8007BE315 /* PrefCell.xib in Resources */,
+				1F8847A628526E3F00667A72 /* ForgotPassViewController.xib in Resources */,
 				BDA9162E26DE5E1600AE38F0 /* Roboto-Bold.ttf in Resources */,
 				BD366753268A413F0031C6FF /* warningIcon.png in Resources */,
 				BDDA45032612301100C9C3AF /* BEL64.png in Resources */,
@@ -1816,6 +1832,7 @@
 				1FB13C85282C809900DA4CDB /* galileo.jpg in Resources */,
 				BDDA44F12612301100C9C3AF /* XKX64.png in Resources */,
 				BDDA450F2612301100C9C3AF /* ZWE64.png in Resources */,
+				1F8847AA28527A0B00667A72 /* MyAccountV2ViewController.xib in Resources */,
 				1F92D8FB27AC648000AA58B4 /* FooterCellBig1Topic.xib in Resources */,
 				BDDA44E52612301100C9C3AF /* TGO64.png in Resources */,
 				BDDA450E2612301100C9C3AF /* GNQ64.png in Resources */,
@@ -2072,6 +2089,7 @@
 				1F245A9327DA67050088A238 /* ShareAPI.swift in Sources */,
 				1FE5F2202805A7B40020D4A4 /* UserIdGeneration.swift in Sources */,
 				BDEE62B5274EC518001E59B7 /* ShareSplitArticles.swift in Sources */,
+				1F8847AC2852837800667A72 /* AppUser.swift in Sources */,
 				BD9D55C9264ABCAF00509722 /* FooterCellTextOnlyItem0.swift in Sources */,
 				A8E94A1524F08E9200936E07 /* SupplementaryViews.swift in Sources */,
 				BD2FEB3327468E2200CE5F07 /* ShareSplitActionsPopup.swift in Sources */,
@@ -2083,6 +2101,7 @@
 				BD26A82B26DD5E48001EC167 /* OrangeRoundedButton.swift in Sources */,
 				A81B3B252481E67200A52A97 /* ImproveTheNews.xcdatamodeld in Sources */,
 				BD03C9B5264C5A1200F3BE1F /* NewsBigViewController.swift in Sources */,
+				1F8847A528526E3F00667A72 /* ForgotPassViewController.swift in Sources */,
 				A89B803624AFAB8B009BB0F8 /* WebViewController.swift in Sources */,
 				1F9318C1282C3DC900058739 /* FAQ_stuff.swift in Sources */,
 				A87144EA24F43B3100A7E404 /* SearchViewController.swift in Sources */,
@@ -2121,6 +2140,7 @@
 				BDC68ED4264C983C0072BDF9 /* HeaderCellBig.swift in Sources */,
 				BDD540DB25EEE09600AF4F91 /* DateExtension.swift in Sources */,
 				BD962478261B425F009EC21D /* PieChartViewController.swift in Sources */,
+				1F8847A928527A0B00667A72 /* MyAccountV2ViewController.swift in Sources */,
 				BDD67D822638433200B7FD7C /* NewsTextViewController.swift in Sources */,
 				1F493AE827FE0DE400CF7238 /* SocialConnectButton.swift in Sources */,
 				BD26A82926DD4725001EC167 /* OnBoardingView.swift in Sources */,

@@ -8,7 +8,6 @@
 
 import UIKit
 import SafariServices
-import FBSDKShareKit
 
 class MyAccountViewController: UIViewController {
 
@@ -136,7 +135,10 @@ extension MyAccountViewController: SFSafariViewControllerDelegate {
             }
         } else {
             fb.login(vc: self) { (isLogged) in
-                if(isLogged) { self.updateButton(fb_button, connected: true) }
+                if(isLogged) {
+                    self.updateButton(fb_button, connected: true)
+                    self.userWasLogged()
+                }
             }
         }
     }
@@ -151,7 +153,10 @@ extension MyAccountViewController: SFSafariViewControllerDelegate {
             }
         } else {
             tw.login(vc: self) { (isLogged) in
-                if(isLogged) { self.updateButton(tw_button, connected: true) }
+                if(isLogged) {
+                    self.updateButton(tw_button, connected: true)
+                    self.userWasLogged()
+                }
             }
         }
     }
@@ -167,7 +172,10 @@ extension MyAccountViewController: SFSafariViewControllerDelegate {
         } else {
             li.login(vc: self) { (isLogged) in
                 if(isLogged) {
-                    DispatchQueue.main.async { li_button.connected = true }
+                    DispatchQueue.main.async {
+                        li_button.connected = true
+                        self.userWasLogged()
+                    }
                 }
             }
         }
@@ -184,7 +192,10 @@ extension MyAccountViewController: SFSafariViewControllerDelegate {
         } else {
             red.login(vc: self) { (isLogged) in
                 if(isLogged) {
-                    DispatchQueue.main.async { red_button.connected = true }
+                    DispatchQueue.main.async {
+                        red_button.connected = true
+                        self.userWasLogged()
+                    }
                 }
             }
         }
@@ -198,19 +209,27 @@ extension MyAccountViewController: SFSafariViewControllerDelegate {
 }
 
 
-extension MyAccountViewController: SharingDelegate {
-    
-    func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
-        print("SHARE", "yessss")
+//extension MyAccountViewController: SharingDelegate {
+//    
+//    func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+//        print("SHARE", "yessss")
+//    }
+//    
+//    func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+//        print("SHARE", "fail")
+//    }
+//    
+//    func sharerDidCancel(_ sharer: Sharing) {
+//        print("SHARE", "cancel!")
+//    }
+//    
+//}
+
+
+extension MyAccountViewController {
+
+    func userWasLogged() {
+        AppUser.shared.setLogin(true)
     }
-    
-    func sharer(_ sharer: Sharing, didFailWithError error: Error) {
-        print("SHARE", "fail")
-    }
-    
-    func sharerDidCancel(_ sharer: Sharing) {
-        print("SHARE", "cancel!")
-    }
-    
 
 }

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FBSDKCoreKit
 import Swifter
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -45,13 +44,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
         
-        // FB
-        ApplicationDelegate.shared.application(
-            UIApplication.shared,
-            open: url,
-            sourceApplication: nil,
-            annotation: [UIApplication.OpenURLOptionsKey.annotation]
-        )
+//        // FB
+//        ApplicationDelegate.shared.application(
+//            UIApplication.shared,
+//            open: url,
+//            sourceApplication: nil,
+//            annotation: [UIApplication.OpenURLOptionsKey.annotation]
+//        )
     }
 
 

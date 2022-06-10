@@ -83,6 +83,13 @@ class LI_SDK: NSObject {
         }
     }
     
+    func logoutDirect() {
+        self.logout_web {
+            ShareAPI.removeKey(self.keySHARE_LILogged)
+            ShareAPI.instance.disconnect(type: "Linkedin")
+        }
+    }
+    
     private func logout_web(callback: @escaping ()->()) {
         
         let url = "https://linkedin.com/m/logout"

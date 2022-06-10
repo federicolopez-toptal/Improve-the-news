@@ -107,6 +107,11 @@ class TW_SDK {
         }
     }
     
+    func logoutDirect() {
+        ShareAPI.removeKey(self.keySHARE_TWLogged)
+        ShareAPI.instance.disconnect(type: "Twitter")
+    }
+    
 }
 
 extension TW_SDK {

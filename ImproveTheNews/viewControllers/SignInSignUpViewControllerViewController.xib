@@ -162,6 +162,9 @@
                                     </fragment>
                                 </attributedString>
                             </buttonConfiguration>
+                            <connections>
+                                <action selector="forgotPassButtonTap:" destination="-1" eventType="touchUpInside" id="6Nq-Nb-WwI"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6DP-9e-zcu" customClass="SignInUpOrangeButton" customModule="ImproveTheNews" customModuleProvider="target">
                             <rect key="frame" x="60.5" y="342" width="293" height="45"/>
@@ -432,7 +435,7 @@
                 <constraint firstItem="5AN-Gl-AeD" firstAttribute="trailing" secondItem="FAN-tO-Uke" secondAttribute="trailing" constant="20" id="kOC-Ei-KD1"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="850.72463768115949" y="256.47321428571428"/>
+            <point key="canvasLocation" x="843" y="175"/>
         </view>
         <view contentMode="scaleToFill" id="4XZ-6w-fSe">
             <rect key="frame" x="0.0" y="0.0" width="414" height="1305"/>
@@ -905,7 +908,7 @@
                 <constraint firstItem="Mzu-eq-kOg" firstAttribute="top" secondItem="HIk-Ds-PBv" secondAttribute="bottom" constant="12" id="pSN-ut-lZ0"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="1560.8695652173915" y="232.70089285714283"/>
+            <point key="canvasLocation" x="1571" y="247"/>
         </view>
     </objects>
     <resources>

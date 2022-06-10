@@ -79,6 +79,23 @@ class SignInSignUpViewControllerViewController: UIViewController {
         super.viewWillDisappear(animated)
         self.removeKeyboardObservers()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.removeMyAccountScreen()
+    }
+    
+    private func removeMyAccountScreen() {
+        var mVCs = self.navigationController?.viewControllers
+        for (i, vc) in mVCs!.enumerated() {
+            if(vc is MyAccountV2ViewController) {
+                mVCs?.remove(at: i)
+                break
+            }
+        }
+        
+        self.navigationController?.viewControllers = mVCs!
+    }
 
 }
 
@@ -202,6 +219,10 @@ extension SignInSignUpViewControllerViewController {
             
             self.loginEmailTextField.textColor = .black
             self.loginPassTextField.textColor = .black
+            self.loginNewsletterTextField.textColor = .black
+            
+            let darkView = self.loginView.subviews[3]
+            darkView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         }
     
     // REGISTRATION
@@ -291,12 +312,25 @@ extension SignInSignUpViewControllerViewController {
             self.regEmailTextField.textColor = .black
             self.regPassTextField.textColor = .black
             self.regPassConfirmTextField.textColor = .black
+            self.regNewsletterTextField.textColor = .black
+            
+            let darkView = self.registrationView.subviews[3]
+            darkView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+            
+            let labelsVStackView = regFormView.subviews[7] as! UIStackView
+            for V in labelsVStackView.arrangedSubviews {
+                let innerHStack = V as! UIStackView
+                let label = innerHStack.arrangedSubviews[1] as! UILabel
+                label.textColor = .black
+            }
+            let extraLabel = regFormView.subviews[8] as! UILabel
+            extraLabel.textColor = .black
         }
     
     
     // misc
-        //self.showLogin()
-        self.showRegistration()
+        self.showLogin()
+        //self.showRegistration()
         
         self.scrollView.backgroundColor = self.view.backgroundColor
     }
@@ -415,6 +449,11 @@ extension SignInSignUpViewControllerViewController {
     @IBAction func newsletterButtonTap(_ sender: UIButton) {
         self.subscribeToNewsletter(tag: sender.tag)
     }
+    
+    @IBAction func forgotPassButtonTap(_ sender: UIButton) {
+        let vc = ForgotPassViewController.createInstance()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 
 }
 
@@ -422,6 +461,9 @@ extension SignInSignUpViewControllerViewController {
 extension SignInSignUpViewControllerViewController {
     
     private func performLogin() {
+//        userWasLogged() //!!!
+//        return
+    
         self.dismissKeyboard()
         let email = self.loginEmailTextField.text!
         let pass = self.loginPassTextField.text!
@@ -444,7 +486,8 @@ extension SignInSignUpViewControllerViewController {
                     ALERT(vc: self, title: "Warning", message: msg)
                 } else {
                     ALERT(vc: self, title: "Success", message: "Successful login") {
-                        self.navigationController?.popViewController(animated: true)
+                        self.userWasLogged()
+//                        self.navigationController?.popViewController(animated: true)
                     }
                 }
             }
@@ -597,6 +640,7 @@ extension SignInSignUpViewControllerViewController: SFSafariViewControllerDelega
                 if(isLogged) {
                     self.updateButton(button1)
                     self.updateButton(button2)
+                    self.userWasLogged()
                 }
             }
         }
@@ -619,6 +663,7 @@ extension SignInSignUpViewControllerViewController: SFSafariViewControllerDelega
                 if(isLogged) {
                     self.updateButton(button1)
                     self.updateButton(button2)
+                    self.userWasLogged()
                 }
             }
         }
@@ -641,6 +686,7 @@ extension SignInSignUpViewControllerViewController: SFSafariViewControllerDelega
                 if(isLogged) {
                     self.updateButton(button1)
                     self.updateButton(button2)
+                    self.userWasLogged()
                 }
             }
         }
@@ -663,9 +709,23 @@ extension SignInSignUpViewControllerViewController: SFSafariViewControllerDelega
                 if(isLogged) {
                     self.updateButton(button1)
                     self.updateButton(button2)
+                    self.userWasLogged()
                 }
             }
         }
     }
     
+}
+
+
+extension SignInSignUpViewControllerViewController {
+    
+    func userWasLogged() {
+        AppUser.shared.setLogin(true)
+        
+        DispatchQueue.main.async {
+            let vc = AppUser.shared.accountViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }

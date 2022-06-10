@@ -663,6 +663,56 @@ class ShareAPI {
         }
         task.resume()
     }
+    
+    // ************************************************************ //
+    // Forgot password
+    func forgotPassword(email: String,
+        callback: @escaping (Bool) -> ()) {
+        
+        let here = "Subcribe to newsletter"
+        let url = self.host() + "/api/user/"
+        
+        let bodyJson: [String: String] = [
+            "type": "Generate Password Reset Link",
+            "email": email,
+            "app": "iOS"
+        ]
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+                callback(false)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+                if let json = ShareAPI.json(fromData: data) {
+                    if let _status = json["status"] as? String {
+                        if(_status == "OK") {
+                            callback(true)
+                        } else {
+                            callback(false)
+                        }
+                    } else {
+                        callback(false)
+                    }
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(false)
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    /*
+        RESPONSE example
+    {"status":"OK","message":"Please check your spam folder."}
+     */
 }
 
 // ************************************************************ //

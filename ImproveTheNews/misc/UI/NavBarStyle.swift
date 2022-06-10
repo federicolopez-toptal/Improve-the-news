@@ -14,7 +14,14 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector?, menuTap:
         
         let searchBar = SEARCH_BAR(fromViewController: viewController)
         let uniqueID = UNIQUE_ID(fromViewController: viewController)
-        let isSignInUp = viewController is SignInSignUpViewControllerViewController
+        
+        var isSignInUp = viewController is SignInSignUpViewControllerViewController
+        if(!isSignInUp) {
+            isSignInUp = viewController is ForgotPassViewController
+        }
+        if(!isSignInUp) {
+            isSignInUp = viewController is MyAccountV2ViewController
+        }
         
         if let _searchBar = searchBar {
             _searchBar.sizeToFit()
