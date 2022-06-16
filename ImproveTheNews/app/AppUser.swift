@@ -14,6 +14,14 @@ class AppUser {
     static let shared = AppUser()
     private let keyUSER_logged = "USER_logged"
     
+    var name: String?
+    var lastName: String?
+    var screenName: String?
+    var email: String?
+    var subscribed: Bool = false
+    
+    var newsletterOptions: [Int: Bool]?
+    
     func isLogged() -> Bool {
         let logged = ShareAPI.readBoolKey(keyUSER_logged)
         if logged {
@@ -42,6 +50,16 @@ class AppUser {
         }
         
         return vc!
+    }
+    
+    
+    
+    
+    func getInfo(callback: @escaping (Bool) -> ()) {
+        let api = ShareAPI.instance
+        api.getUserInfo { success in
+            callback(success)
+        }
     }
     
 }

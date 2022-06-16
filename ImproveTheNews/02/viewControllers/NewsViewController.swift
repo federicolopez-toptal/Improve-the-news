@@ -290,7 +290,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //        // ----------------------------------------------
 
 //        DELAY(1.0) {
-//            let vc = AppUser.shared.accountViewController()
+//            //let vc = AppUser.shared.accountViewController()
+//            let vc = MyAccountV2ViewController.createInstance()
 //            self.navigationController?.pushViewController(vc, animated: true)
 //        }
         

@@ -91,11 +91,12 @@ class LI_SDK: NSObject {
     }
     
     private func logout_web(callback: @escaping ()->()) {
-        
-        let url = "https://linkedin.com/m/logout"
-        var request = URLRequest(url: URL(string: url)!)
-        self.webView.load(request)
-        callback()
+        DispatchQueue.main.async {
+            let url = "https://linkedin.com/m/logout"
+            var request = URLRequest(url: URL(string: url)!)
+            self.webView.load(request)
+            callback()
+        }
     }
     
     // ************************************************************ //

@@ -79,12 +79,13 @@ class RED_SDK: NSObject {
     }
     
     private func logout_web(callback: @escaping ()->()) {
-        
-        let url = "https://www.reddit.com/logout"
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = "POST"
-        self.webView.load(request)
-        callback()
+        DispatchQueue.main.async {
+            let url = "https://www.reddit.com/logout"
+            var request = URLRequest(url: URL(string: url)!)
+            request.httpMethod = "POST"
+            self.webView.load(request)
+            callback()
+        }
     }
     
     // ************************************************************ //

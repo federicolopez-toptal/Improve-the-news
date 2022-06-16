@@ -620,7 +620,6 @@ class ShareAPI {
     */
  
     // ************************************************************ //
-    // Subscribe to newsletter
     func subscribeToNewsLetter(email: String,
         callback: @escaping (Bool) -> ()) {
         
@@ -648,6 +647,7 @@ class ShareAPI {
                 if let json = ShareAPI.json(fromData: data) {
                     if let _status = json["message"] as? String {
                         if(_status == "OK") {
+                            AppUser.shared.subscribed = true
                             callback(true)
                         } else {
                             callback(false)
@@ -663,13 +663,63 @@ class ShareAPI {
         }
         task.resume()
     }
+    /*
+        RESPONSE example
+        { "message": "OK" }
+     */
     
     // ************************************************************ //
-    // Forgot password
+    func unsubscribeToNewsLetter(callback: @escaping (Bool) -> ()) {
+        
+        let here = "Subcribe to newsletter"
+        let url = self.host() + "/api/newsletter/"
+        
+        let bodyJson: [String: String] = [
+            "type": "Unsubscribe",
+            "userId": USER_ID()
+        ]
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+                callback(false)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+                if let json = ShareAPI.json(fromData: data) {
+                    if let _status = json["message"] as? String {
+                        if(_status == "OK") {
+                            AppUser.shared.subscribed = false
+                            callback(true)
+                        } else {
+                            callback(false)
+                        }
+                    } else {
+                        callback(false)
+                    }
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(false)
+                }
+            }
+        }
+        task.resume()
+    }
+    /*
+        RESPONSE example
+        { "message": "OK" }
+     */
+    
+    // ************************************************************ //
     func forgotPassword(email: String,
         callback: @escaping (Bool) -> ()) {
         
-        let here = "Subcribe to newsletter"
+        let here = "Forgot password"
         let url = self.host() + "/api/user/"
         
         let bodyJson: [String: String] = [
@@ -711,7 +761,279 @@ class ShareAPI {
     
     /*
         RESPONSE example
-    {"status":"OK","message":"Please check your spam folder."}
+        
+        {"status":"OK","message":"Please check your spam folder."}
+     */
+     
+    // ************************************************************ //
+    private func setAppLocalUser(_ json: [String: Any]) {
+        let user = AppUser.shared
+        user.name = json["firstname"] as? String
+        user.lastName = json["lastname"] as? String
+        user.screenName = json["username"] as? String
+        user.email = json["email"] as? String
+        
+        if let _subscribed = json["subscribed"] as? String {
+            user.newsletterOptions = [Int: Bool]()
+            
+            if(_subscribed == "Y") {
+                user.subscribed = true
+                if let options = json["subscription"] as? [String: String] {
+                    if let frequency = options["frequency"] as? String {
+                        if(frequency=="Daily"){
+                            user.newsletterOptions![101] = true
+                            user.newsletterOptions![102] = false
+                        } else {
+                            user.newsletterOptions![101] = false
+                            user.newsletterOptions![102] = true
+                        }
+                    }
+                    
+                    if let frequency = options["content"] as? String {
+                        if(frequency=="All top stories"){
+                            user.newsletterOptions![103] = true
+                            user.newsletterOptions![104] = false
+                        } else {
+                            user.newsletterOptions![103] = false
+                            user.newsletterOptions![104] = true
+                        }
+                    }
+                    
+                    if let frequency = options["ordering"] as? String {
+                        if(frequency=="World news first"){
+                            user.newsletterOptions![105] = true
+                            user.newsletterOptions![106] = false
+                        } else {
+                            user.newsletterOptions![105] = false
+                            user.newsletterOptions![106] = true
+                        }
+                    }
+                }
+            } else {
+                user.subscribed = false
+            }
+        }
+    }
+    
+    func getUserInfo(callback: @escaping (Bool) -> ()) {
+        
+        let here = "get user info"
+        let url = self.host() + "/api/user/"
+        
+        let bodyJson: [String: String] = [
+            "type": "User Info Get",
+            "userId": USER_ID()
+        ]
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+                callback(false)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+                if let json = ShareAPI.json(fromData: data) {
+                    if let _msg = json["message"] as? String, _msg == "OK" {
+                        self.setAppLocalUser(json)
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(false)
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    /*
+        RESPONSE example
+    
+        {
+            "uuid": "3485127359718489297",
+            "message": "OK",
+            "socialnetworks": [
+                "Twitter"
+            ],
+            "slidercookies": "",
+            "firstname": "",
+            "username": " ",
+            "lastname": "",
+            "email": "",
+            "subscribed": "N"
+        }
+     */
+    // ************************************************************ //
+    func saveUserInfo(name: String?, lastName: String?, screenName: String?, email: String?,
+        callback: @escaping (Bool) -> ()) {
+        
+        let here = "save user info"
+        let url = self.host() + "/api/user/"
+        
+        var bodyJson: [String: String] = [
+            "type": "User Info Update",
+            "userId": USER_ID()
+        ]
+        if let _name = name {
+            bodyJson["firstName"] = _name
+        }
+        if let _lastName = lastName {
+            bodyJson["lastName"] = _lastName
+        }
+        if let _screenName = screenName {
+            bodyJson["username"] = _screenName
+        }
+        if let _email = email {
+            bodyJson["email"] = _email
+        }
+        
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+                callback(false)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+                if let json = ShareAPI.json(fromData: data) {
+                    if let _msg = json["message"] as? String, _msg == "OK" {
+                        self.setAppLocalUser(json)
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(false)
+                }
+            }
+        }
+        task.resume()
+    }
+    /*
+    RESPONSE EXAMPLE
+    
+    {
+        "uuid": "3485127359718489297",
+        "message": "OK",
+        "socialnetworks": [
+            "Twitter"
+        ],
+        "slidercookies": "",
+        "firstname": "Federico",
+        "username": "federico.test_ITN Lopez",
+        "lastname": "Lopez",
+        "email": "federico.002@gmail.com",
+        "subscribed": "N"
+    }
+     */
+     
+    // ************************************************************ //
+    func setNewsletterOption(email: String, fields: [String: String],
+        callback: @escaping (Bool) -> ()) {
+        
+        let here = "Set newsletter option"
+        let url = self.host() + "/api/newsletter/"
+        
+        var bodyJson: [String: String] = [
+            "type": "Options",
+            "userId": USER_ID(),
+            "email": email,
+        ]
+        for (key, value) in fields {
+            bodyJson[key] = value
+        }
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+                callback(false)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+                if let json = ShareAPI.json(fromData: data) {
+                    if let _status = json["message"] as? String {
+                        if(_status == "OK") {
+                            //AppUser.shared.subscribed = true
+                            callback(true)
+                        } else {
+                            callback(false)
+                        }
+                    } else {
+                        callback(false)
+                    }
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(false)
+                }
+            }
+        }
+        task.resume()
+    }
+    /*
+        RESPONSE example
+        { "message": "OK" }
+     */
+     
+    // ************************************************************ //
+    func disconnectAll(callback: @escaping (Bool) -> ()) {
+        
+        let here = "Disconnect All"
+        let url = self.host() + "/api/user/"
+        
+        let bodyJson: [String: String] = [
+            "type": "Disconnect All",
+            "userId": USER_ID()
+        ]
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        let body = try? JSONSerialization.data(withJSONObject: bodyJson)
+        request.httpBody = body
+        request.setValue(getBearerAuth(), forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, resp, error in
+            if let _error = error {
+                ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
+                callback(false)
+            } else {
+                ShareAPI.LOG_DATA(data, where: here)
+                if let json = ShareAPI.json(fromData: data) {
+                    if let _msg = json["message"] as? String, _msg == "OK" {
+                        self.setAppLocalUser(json)
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                } else {
+                    ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
+                    callback(false)
+                }
+            }
+        }
+        task.resume()
+    }
+    /*
+    RESPONSE EXAMPLE
+    
+    {"message":"OK"}
      */
 }
 

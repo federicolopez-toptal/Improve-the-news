@@ -461,8 +461,6 @@ extension SignInSignUpViewControllerViewController {
 extension SignInSignUpViewControllerViewController {
     
     private func performLogin() {
-//        userWasLogged() //!!!
-//        return
     
         self.dismissKeyboard()
         let email = self.loginEmailTextField.text!
