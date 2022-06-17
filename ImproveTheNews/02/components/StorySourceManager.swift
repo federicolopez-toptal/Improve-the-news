@@ -18,8 +18,12 @@ class StorySourceManager {
     
     public func getIconForSource(_ sourceName: String) -> String {
         if(self.sources.keys.count>0 && self.sources.keys.contains(sourceName)) {
-            if let _value = self.sources[sourceName] {
-                return _value
+            if(self.sources[sourceName] != nil) {
+                if let _value = self.sources[sourceName] {
+                    return _value
+                } else {
+                    return ""
+                }
             } else {
                 return ""
             }

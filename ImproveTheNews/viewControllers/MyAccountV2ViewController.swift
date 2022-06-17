@@ -481,6 +481,14 @@ extension MyAccountV2ViewController {
     }
     
     private func saveUserInfo() {
+        
+        let email = self.emailTextField.text!
+        if(!email.isEmpty && !VALIDATE_EMAIL(email)) {
+            ALERT(vc: self, title: "Warning", message: "Please, enter a valid email")
+            return
+        }
+        
+        
         self.showLoading()
         ShareAPI.instance.saveUserInfo(name: self.nameTextField.text,
                          lastName: self.lastNameTextField.text,
@@ -504,20 +512,21 @@ extension MyAccountV2ViewController {
             }
         } else {
             // subscribe!
-            let email = self.emailTextField.text
-            //let email = AppUser.shared.email
-            
-            if(email == nil || email!.isEmpty) {
-                ALERT(vc: self, title: "Warning", message: "Email is mandatory!")
+            let email = self.emailTextField.text!
+
+            if(!VALIDATE_EMAIL(email)) {
+                ALERT(vc: self, title: "Warning", message: "Please, enter a valid email")
                 self.showLoading(false)
-            } else {
-                ShareAPI.instance.subscribeToNewsLetter(email: email!) { success in
-                    DispatchQueue.main.async {
-                        if(success) { self.subscribeButton.setAsGray() }
-                        self.showLoading(false)
-                    }
+                return
+            }
+            
+            ShareAPI.instance.subscribeToNewsLetter(email: email) { success in
+                DispatchQueue.main.async {
+                    if(success) { self.subscribeButton.setAsGray() }
+                    self.showLoading(false)
                 }
             }
+            
         }
     }
     
