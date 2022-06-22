@@ -43,12 +43,13 @@ class AppUser {
     func accountViewController() -> UIViewController {
         var vc: UIViewController?
     
+        
         if(isLogged()) {
             vc = MyAccountV2ViewController.createInstance()
         } else {
             vc = SignInSignUpViewControllerViewController.createInstance()
         }
-        
+
         return vc!
     }
     

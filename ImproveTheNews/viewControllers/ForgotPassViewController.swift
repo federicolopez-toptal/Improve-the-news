@@ -136,11 +136,15 @@ extension ForgotPassViewController {
             self.showLoading()
             let api = ShareAPI.instance
             
-            api.forgotPassword(email: email) { success in
+            api.forgotPassword(email: email) { (success, msg) in
                 self.showLoading(false)
                 if(!success) {
-                    let msg = "An error ocurred. Please, try again later"
-                    ALERT(vc: self, title: "Warning", message: msg)
+                    if let _msg = msg {
+                        ALERT(vc: self, title: "Warning", message: _msg)
+                    } else {
+                        let msg = "An error ocurred. Please, try again later"
+                        ALERT(vc: self, title: "Warning", message: msg)
+                    }
                 } else {
                     ALERT(vc: self, title: "Success", message: "Password reset link sent to your email") {
                         self.navigationController?.popViewController(animated: true)

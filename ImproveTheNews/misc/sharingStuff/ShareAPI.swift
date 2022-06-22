@@ -717,7 +717,7 @@ class ShareAPI {
     
     // ************************************************************ //
     func forgotPassword(email: String,
-        callback: @escaping (Bool) -> ()) {
+        callback: @escaping (Bool, String?) -> ()) {
         
         let here = "Forgot password"
         let url = self.host() + "/api/user/"
@@ -737,22 +737,26 @@ class ShareAPI {
         let task = URLSession.shared.dataTask(with: request) { data, resp, error in
             if let _error = error {
                 ShareAPI.LOG_ERROR(where: here, msg: _error.localizedDescription)
-                callback(false)
+                callback(false, _error.localizedDescription)
             } else {
                 ShareAPI.LOG_DATA(data, where: here)
                 if let json = ShareAPI.json(fromData: data) {
                     if let _status = json["status"] as? String {
                         if(_status == "OK") {
-                            callback(true)
+                            callback(true, nil)
                         } else {
-                            callback(false)
+                            if let msg = json["message"] as? String {
+                                callback(false, msg)
+                            } else {
+                                callback(false, nil)
+                            }
                         }
                     } else {
-                        callback(false)
+                        callback(false, nil)
                     }
                 } else {
                     ShareAPI.LOG_ERROR(where: here, msg: "Error parsing JSON")
-                    callback(false)
+                    callback(false, nil)
                 }
             }
         }
@@ -763,6 +767,8 @@ class ShareAPI {
         RESPONSE example
         
         {"status":"OK","message":"Please check your spam folder."}
+        {"status":"NOK","message":"User does not exist"}
+        
      */
      
     // ************************************************************ //

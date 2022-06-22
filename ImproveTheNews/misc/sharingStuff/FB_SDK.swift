@@ -9,17 +9,16 @@
 /*
     https://developers.facebook.com/docs/facebook-login/ios/
     https://developers.facebook.com/docs/facebook-login/ios/advanced
-    
     https://developers.facebook.com/docs/ios
-    
     https://cocoapods.org/pods/FBSDKCoreKit
 */
 
 
 import Foundation
-import FBSDKLoginKit
-import FBSDKShareKit
 import UIKit
+
+let NOTIFICATION_FB_LOGGED = Notification.Name("FacebookLogged")
+let NOTIFICATION_FB_DONE = Notification.Name("FacebookDone")
 
 class FB_SDK {
 
@@ -33,51 +32,46 @@ class FB_SDK {
     // ************************************************************ //
     func isLogged() -> Bool {
         let logged = ShareAPI.readBoolKey(keySHARE_FBLogged)
-        if logged, let token = AccessToken.current, !token.isExpired {
+        if(logged) {
             return true
         } else {
             return false
         }
     }
     
+    
+//    let api = ShareAPI.instance
+//        let jwt = api.getBearerAuth().replacingOccurrences(of: "Bearer ", with: "")
+//        let fbLogin = "https://www.improvemynews.com/mobile-auth?jwt=" + jwt + "&usrid=" + api.uuid! + "&type=iOS&social_network=Facebook"
+//
+//
+//
+//        DELAY(2.0) {
+//            print("SHARE", fbShare)
+//            UIApplication.shared.open(URL(string: fbShare)!)
+//        }
+    
+    
     func login(vc: UIViewController, callback: @escaping (Bool)->()) {
         self.callback = callback
         
-        let loginManager = LoginManager()
-        let permissions = ["public_profile"]
-        loginManager.logIn(permissions: permissions, from: vc) { result, error in
-            if let _error = error {
-                print("Error", _error.localizedDescription)
-                self.callback?(false)
-            } else {
-                if let _result = result {
-                    if(_result.isCancelled) {
-                        print("FB - Cancelled")
-                        self.callback?(false)
-                    } else {
-                        print("FB - Logueado!")
-                        
-                        /*
-                            callback(true)
-                            ShareAPI.writeKey(self.keySHARE_FBLogged, value: true)
-                        */
-                        self.ITN_login(token: _result.token!.tokenString)
-                    }
-                } else {
-                    self.callback?(false)
-                }
-            }
-        }
-        
+        let api = ShareAPI.instance
+        let jwt = api.getBearerAuth().replacingOccurrences(of: "Bearer ", with: "")
+    
+        let loginUrl = "https://www.improvemynews.com/mobile-auth?jwt=" + jwt + "&usrid=" + api.uuid! + "&type=iOS&social_network=Facebook"
+
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(onFacebookLogged),
+            name: NOTIFICATION_FB_LOGGED,
+            object: nil)
+            
+        UIApplication.shared.open(URL(string: loginUrl)!)
     }
     
-    private func ITN_login(token: String) {
-        let api = ShareAPI.instance
-        api.login(type: "Facebook", accessToken: token, secret: nil) { (success) in
-            self.callback?(true)
-            ShareAPI.writeKey(self.keySHARE_FBLogged, value: true)
-            ShareAPI.LOG(where: "Facebook login", msg: "Success")
-        }
+    @objc func onFacebookLogged() {
+        self.callback?(true)
+        ShareAPI.writeKey(self.keySHARE_FBLogged, value: true)
+        ShareAPI.LOG(where: "Facebook login", msg: "Success")
     }
     
     func logout(vc: UIViewController, callback: @escaping (Bool)->() ) {
@@ -86,7 +80,6 @@ class FB_SDK {
         
         ShareAPI.logoutDialog(vc: vc, header: _h, question: _q) { (wasLoggedOut) in
             if(wasLoggedOut) {
-                LoginManager().logOut()
                 ShareAPI.removeKey(self.keySHARE_FBLogged)
                 ShareAPI.instance.disconnect(type: "Facebook")
             }
@@ -94,22 +87,31 @@ class FB_SDK {
         }
     }
     
-    func share(link: String, comment: String?, vc: UIViewController) {
-        let content = ShareLinkContent()
-        content.contentURL = URL(string: link)
-        content.quote = comment
-        
-        let dialog = ShareDialog(viewController: vc, content: content, delegate: vc as? SharingDelegate)
-        if(IS_iPAD()){ dialog.mode = .web }
-        dialog.show()
+    func logoutDirect() {
+        ShareAPI.removeKey(self.keySHARE_FBLogged)
+        ShareAPI.instance.disconnect(type: "Facebook")
     }
     
+    func share(link: String, comment: String?, vc: UIViewController) {
+//        let content = ShareLinkContent()
+//        content.contentURL = URL(string: link)
+//        content.quote = comment
+//
+//        let dialog = ShareDialog(viewController: vc, content: content, delegate: vc as? SharingDelegate)
+//        if(IS_iPAD()){ dialog.mode = .web }
+//        dialog.show()
+
+        var C = ""
+        if let _comment = comment {
+            C = _comment
+        }
+        C = C.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+
+        let shareUrl = "https://www.facebook.com/dialog/share?app_id=499204491779033&display=popup&quote=" + C + "&href=" + link + "&redirect_uri=https://www.improvemynews.com/fb-share?app=iOS"
+        
+        UIApplication.shared.open(URL(string: shareUrl)!)
+    }
     
-//        let photo = SharePhoto(image: UIImage(named: "sonic2.jpg")!, isUserGenerated: false)
-//        let photoContent = SharePhotoContent()
-//        photoContent.photos = [photo]
-//        //photoContent.contentURL = URL(string: link)
-//        //photoContent.
 }
 
 

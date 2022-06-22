@@ -221,6 +221,10 @@ extension SignInSignUpViewControllerViewController {
             self.loginPassTextField.textColor = .black
             self.loginNewsletterTextField.textColor = .black
             
+            let logoImageView = self.loginView.subviews[1] as! UIImageView
+            logoImageView.image = UIImage(named: "ITN_logo_blackText.png")
+            logoImageView.alpha = 0.8
+            
             let darkView = self.loginView.subviews[3]
             darkView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         }
@@ -325,6 +329,10 @@ extension SignInSignUpViewControllerViewController {
             }
             let extraLabel = regFormView.subviews[8] as! UILabel
             extraLabel.textColor = .black
+            
+            let logoImageView = self.registrationView.subviews[1] as! UIImageView
+            logoImageView.image = UIImage(named: "ITN_logo_blackText.png")
+            logoImageView.alpha = 0.8
         }
     
     

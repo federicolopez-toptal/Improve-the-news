@@ -826,6 +826,10 @@ class FAQFooter: UICollectionReusableView {
         ])
         */
         
+        if(!DARKMODE()) {
+            self.titleImage.image = UIImage(named: "ITN_logo_blackText.png")
+            self.titleImage.alpha = 0.8
+        }
     }
     
     @objc func sharePressed(_ sender: UIButton!) {
