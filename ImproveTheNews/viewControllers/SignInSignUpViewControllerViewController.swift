@@ -228,6 +228,7 @@ extension SignInSignUpViewControllerViewController {
             let darkView = self.loginView.subviews[3]
             darkView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         }
+        self.loginNewsletterTextField.delegate = self
     
     // REGISTRATION
     let gesture2 = UITapGestureRecognizer(target: self, action: #selector(viewOnTap(sender:)))
@@ -334,7 +335,7 @@ extension SignInSignUpViewControllerViewController {
             logoImageView.image = UIImage(named: "ITN_logo_blackText.png")
             logoImageView.alpha = 0.8
         }
-    
+        self.regNewsletterTextField.delegate = self
     
     // misc
         self.showLogin()
@@ -402,9 +403,9 @@ extension SignInSignUpViewControllerViewController {
         self.dismissKeyboard()
     }
     
-    private func dismissKeyboard() {
+    private func dismissKeyboard(_ scrollToTop: Bool = true) {
         self.view.endEditing(true)
-        self.scrollFormsToTop()
+        if(scrollToTop){ self.scrollFormsToTop() }
     }
     
 }
@@ -428,6 +429,24 @@ extension SignInSignUpViewControllerViewController: UITextFieldDelegate {
             self.regPassConfirmTextField.becomeFirstResponder()
         } else if(textField == self.regPassConfirmTextField) {
             self.performRegistration()
+        }
+        
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
+        replacementString string: String) -> Bool {
+        
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        if(textField == self.loginEmailTextField || textField == self.regEmailTextField || textField == self.loginNewsletterTextField || textField == self.regNewsletterTextField) {
+            return updatedText.count <= 200
+        }
+
+        if(textField == self.loginPassTextField || textField == self.regPassTextField || textField == self.regPassConfirmTextField) {
+            return updatedText.count <= 25
         }
         
         return true
@@ -476,8 +495,9 @@ extension SignInSignUpViewControllerViewController {
         
         if(!VALIDATE_EMAIL(email)) {
             ALERT(vc: self, title: "Warning", message: "Please, enter a valid email")
-        } else if(!VALIDATE_PASS(pass)) {
-            ALERT(vc: self, title: "Warning", message: "Your password must be 4 characters long minimum")
+        } else if(!VALIDATE_PASS_LOGIN(pass)) {
+            let msg = "Please, enter a valid password"
+            ALERT(vc: self, title: "Warning", message: msg)
         } else {
             self.showLoading()
             let api = ShareAPI.instance
@@ -509,8 +529,9 @@ extension SignInSignUpViewControllerViewController {
         
         if(!VALIDATE_EMAIL(email)) {
             ALERT(vc: self, title: "Warning", message: "Please, enter a valid email")
-        } else if(!VALIDATE_PASS(pass)) {
-            ALERT(vc: self, title: "Warning", message: "Your password must be 4 characters long minimum")
+        } else if(!VALIDATE_PASS_REG(pass)) {
+            let msg = "Please, enter a valid password"
+            ALERT(vc: self, title: "Warning", message: msg)
         } else if(pass != passConfirm) {
             ALERT(vc: self, title: "Warning", message: "The password and its confirmation mismatch")
         } else {
@@ -535,7 +556,7 @@ extension SignInSignUpViewControllerViewController {
     }
     
     private func subscribeToNewsletter(tag: Int) {
-        self.dismissKeyboard()
+        self.dismissKeyboard(false)
         var email = self.loginNewsletterTextField.text!
         if(tag==2){ email = self.regNewsletterTextField.text! }
         

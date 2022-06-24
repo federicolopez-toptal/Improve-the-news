@@ -262,14 +262,56 @@ func VALIDATE_NAME(_ name: String) -> Bool {
     }
 }
 
-func VALIDATE_PASS(_ pass: String) -> Bool {
+func VALIDATE_PASS_LOGIN(_ pass: String) -> Bool {
     if(pass.isEmpty) {
         return false
     } else {
-        if(pass.count<4) {
+        return true
+    }
+}
+
+
+func asdasd() {
+
+}
+
+func VALIDATE_PASS_REG(_ pass: String) -> Bool {
+    if(pass.isEmpty) {
+        return false
+    } else {
+        if(pass.count<8) {
             return false
         } else {
-            return true
+            // LETTERS
+            let letters = "abcdefghijklmnñopqrstuvwxyz"
+            var found1 = false
+            for char in pass {
+                for L in letters {
+                    if(char.lowercased() == String(L)) {
+                        found1 = true
+                        break
+                    }
+                }
+                if(found1){ break }
+            }
+        
+            // NUMBERS
+            let numbers = "0123456789"
+            var found2 = false
+            for char in pass {
+                for N in numbers {
+                    if(char.lowercased() == String(N)) {
+                        found2 = true
+                        break
+                    }
+                }
+                if(found2){ break }
+            }
+            
+            if(found1 && found2) {
+                return true
+            }
+            return false
         }
     }
 }

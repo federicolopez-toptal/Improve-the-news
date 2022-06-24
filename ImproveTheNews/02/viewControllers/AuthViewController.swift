@@ -329,10 +329,10 @@ class AuthViewController: UIViewController {
             }
         }
         
-        if(!VALIDATE_PASS(self.passText.text!)) {
-            self.msg("Please, enter a valid password (4 characters minimum)")
-            return
-        }
+//        if(!VALIDATE_PASS(self.passText.text!)) {
+//            self.msg("Please, enter a valid password (4 characters minimum)")
+//            return
+//        }
         
         let em = self.emailText.text!
         let ps = self.passText.text!

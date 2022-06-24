@@ -55,6 +55,7 @@ class MyAccountV2ViewController: UIViewController {
         self.setButtonTexts()
         self.getUserInfo()
         self.updateSocialButtons()
+        self.setTexts()
         
         DELAY(1.0) {
             let api = ShareAPI.instance
@@ -278,6 +279,15 @@ extension MyAccountV2ViewController {
         }
     }
     
+    private func setAllChecks(_ state: Bool) {
+        self.getSwitchWithTag(101).isEnabled = state
+        self.getSwitchWithTag(102).isEnabled = state
+        self.getSwitchWithTag(103).isEnabled = state
+        self.getSwitchWithTag(104).isEnabled = state
+        self.getSwitchWithTag(105).isEnabled = state
+        self.getSwitchWithTag(106).isEnabled = state
+    }
+    
 }
 
 // MARK: - Component action(s)
@@ -466,8 +476,10 @@ extension MyAccountV2ViewController {
                 
                 if(AppUser.shared.subscribed) {
                     self.subscribeButton.setAsGray()
+                    self.setAllChecks(true)
                 } else {
                     self.subscribeButton.setAsOrange()
+                    self.setAllChecks(false)
                 }
                 
                 for (key, value) in AppUser.shared.newsletterOptions! {
@@ -507,6 +519,7 @@ extension MyAccountV2ViewController {
             ShareAPI.instance.unsubscribeToNewsLetter { success in
                 DispatchQueue.main.async {
                     if(success) { self.subscribeButton.setAsOrange() }
+                    self.setAllChecks(false)
                     self.showLoading(false)
                 }
             }
@@ -523,6 +536,7 @@ extension MyAccountV2ViewController {
             ShareAPI.instance.subscribeToNewsLetter(email: email) { success in
                 DispatchQueue.main.async {
                     if(success) { self.subscribeButton.setAsGray() }
+                    self.setAllChecks(true)
                     self.showLoading(false)
                 }
             }
@@ -568,4 +582,64 @@ extension MyAccountV2ViewController {
         }
     }
 
+}
+
+extension MyAccountV2ViewController: UITextFieldDelegate {
+    
+    private func setTexts() {
+        
+        let texts: [UITextField] = [self.nameTextField, self.lastNameTextField,
+            self.screenNameTextField, self.emailTextField]
+        
+        for T in texts {
+            T.delegate = self
+            
+            if(T==self.emailTextField) {
+                T.keyboardType = .emailAddress
+                T.returnKeyType = .send
+            } else {
+                T.keyboardType = .asciiCapable
+                T.returnKeyType = .next
+            }
+            
+            T.autocapitalizationType = .none
+            T.autocorrectionType = .no
+            T.smartDashesType = .no
+            T.smartInsertDeleteType = .no
+            T.spellCheckingType = .no
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if(textField == self.nameTextField) {
+            self.lastNameTextField.becomeFirstResponder()
+        } else if(textField == self.lastNameTextField) {
+            self.screenNameTextField.becomeFirstResponder()
+        } else if(textField == self.screenNameTextField) {
+            self.emailTextField.becomeFirstResponder()
+        } else if(textField == self.emailTextField) {
+            self.saveUserInfo()
+        }
+        
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
+        replacementString string: String) -> Bool {
+        
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        if(textField == self.nameTextField || textField == self.lastNameTextField || textField == self.screenNameTextField) {
+            return updatedText.count <= 25
+        }
+
+        if(textField == self.emailTextField) {
+            return updatedText.count <= 200
+        }
+        
+        return true
+    }
+    
 }
