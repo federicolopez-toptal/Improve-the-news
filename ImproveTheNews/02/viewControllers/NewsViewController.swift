@@ -1906,8 +1906,10 @@ extension NewsViewController {
             navigationController?.pushViewController(vc, animated: true)
         } else {
             // story
-            let vc = PlainWebViewController(url: link, title: title)
-            navigationController?.pushViewController(vc, animated: true)
+//            let vc = PlainWebViewController(url: link, title: title)
+//            navigationController?.pushViewController(vc, animated: true)
+
+            StoryContent.instance.loadData(link: link)
         }
         
         

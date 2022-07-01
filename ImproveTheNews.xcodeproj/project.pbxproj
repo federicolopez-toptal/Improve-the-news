@@ -60,6 +60,8 @@
 		1FB369A0283E7DF20091A4C1 /* SignInSignUpViewControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3699E283E7DF20091A4C1 /* SignInSignUpViewControllerViewController.swift */; };
 		1FB369A1283E7DF20091A4C1 /* SignInSignUpViewControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1FB3699F283E7DF20091A4C1 /* SignInSignUpViewControllerViewController.xib */; };
 		1FC188FF27B1A75C00CF7CEA /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = 1FC188FE27B1A75B00CF7CEA /* test.html */; };
+		1FC541C3286E2A6E00C5B473 /* StoryContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC541C2286E2A6E00C5B473 /* StoryContent.swift */; };
+		1FC541C5286E3F3C00C5B473 /* StoryEntities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC541C4286E3F3C00C5B473 /* StoryEntities.swift */; };
 		1FCE7D2E27FE197300B4EB66 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE7D2D27FE197300B4EB66 /* UIButtonExtension.swift */; };
 		1FD319AB279898AD00BD65D5 /* notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1FD319AA279898AD00BD65D5 /* notes.txt */; };
 		1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */; };
@@ -464,6 +466,8 @@
 		1FB3699E283E7DF20091A4C1 /* SignInSignUpViewControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInSignUpViewControllerViewController.swift; sourceTree = "<group>"; };
 		1FB3699F283E7DF20091A4C1 /* SignInSignUpViewControllerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SignInSignUpViewControllerViewController.xib; sourceTree = "<group>"; };
 		1FC188FE27B1A75B00CF7CEA /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
+		1FC541C2286E2A6E00C5B473 /* StoryContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContent.swift; sourceTree = "<group>"; };
+		1FC541C4286E3F3C00C5B473 /* StoryEntities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryEntities.swift; sourceTree = "<group>"; };
 		1FCE7D2D27FE197300B4EB66 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 		1FD319AA279898AD00BD65D5 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		1FD319AC27989AC300BD65D5 /* StoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -942,6 +946,7 @@
 				1FE5F21F2805A7B40020D4A4 /* UserIdGeneration.swift */,
 				1FE5F21C2805A78E0020D4A4 /* UI */,
 				1F8F213827FCA132008CB00D /* sharingStuff */,
+				1FC541C1286E2A2500C5B473 /* storyContent */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -966,6 +971,15 @@
 				1FDAEB24283EB388000D4028 /* pastedGraphic.png */,
 			);
 			path = FAQ;
+			sourceTree = "<group>";
+		};
+		1FC541C1286E2A2500C5B473 /* storyContent */ = {
+			isa = PBXGroup;
+			children = (
+				1FC541C2286E2A6E00C5B473 /* StoryContent.swift */,
+				1FC541C4286E3F3C00C5B473 /* StoryEntities.swift */,
+			);
+			path = storyContent;
 			sourceTree = "<group>";
 		};
 		1FCE7D2C27FE195A00B4EB66 /* extensions */ = {
@@ -2131,6 +2145,7 @@
 				A8CA063424EB3B0A00B91778 /* BiasSliders.swift in Sources */,
 				1F587F6D27C7FEE9005181A0 /* AppData.swift in Sources */,
 				BDF37F6C263AE2E5003D910D /* CellTextOnly.swift in Sources */,
+				1FC541C5286E3F3C00C5B473 /* StoryEntities.swift in Sources */,
 				BD51B8E72761160F001A465C /* PulseButton.swift in Sources */,
 				BD88FD52264CA93C00F8BCCB /* FooterCellBigItem0.swift in Sources */,
 				1F24FB352849440100444A19 /* SignInUpTextField.swift in Sources */,
@@ -2171,6 +2186,7 @@
 				A851345224838B0700D56C04 /* SectionsViewController.swift in Sources */,
 				1F7DE51527F56354008923FF /* RED_SDK.swift in Sources */,
 				A81B3B222481E67200A52A97 /* SceneDelegate.swift in Sources */,
+				1FC541C3286E2A6E00C5B473 /* StoryContent.swift in Sources */,
 				BD817A6126D688A8007BE315 /* PrefCell.swift in Sources */,
 				1FAC1679284FD4E50021173A /* SignInUpOrangeButton.swift in Sources */,
 				BDD540D525EEDCB500AF4F91 /* StringExtension.swift in Sources */,
