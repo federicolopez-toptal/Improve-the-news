@@ -1909,7 +1909,9 @@ extension NewsViewController {
 //            let vc = PlainWebViewController(url: link, title: title)
 //            navigationController?.pushViewController(vc, animated: true)
 
-            StoryContent.instance.loadData(link: link)
+            let vc = StoryContentViewController.createInstance()
+            vc.link = link
+            navigationController?.pushViewController(vc, animated: true)
         }
         
         

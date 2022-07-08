@@ -16,22 +16,25 @@ class StoryContent {
 
     static let instance = StoryContent()
     
-    func loadData(link: String) {
+    func loadData(link: String,
+        callback: @escaping (StoryData?, [StoryFact]?, [StorySpin]?, [StoryArticle]?, String?) ->() ) {
+    //) {
         let slug = self.extractSlugFrom(url: link)
         self.getStoryID(slug: slug) { storyID in
             if let _id = storyID {
                 self.getStoryData(storyID: _id) { (storyData, facts, spins, articles, version) in
-                    print("#########################")
-                    print(storyData?.title)
-                    print("FACTS", facts?.count)
-//                    print(facts?.first?.title, facts?.first?.source_title)
-                    print("SPINS", spins?.count)
-                    //print(spins?.first?.title, spins?.first?.time)
-                    print("ARTICLES", articles?.count)
-                    //print(articles?.first?.title, articles?.first?.media_title)
-                    print(version)
-                    
-                    print("")
+                    callback(storyData, facts, spins, articles, version)
+//                    print("#########################")
+//                    print(storyData?.title)
+//                    print("FACTS", facts?.count)
+////                    print(facts?.first?.title, facts?.first?.source_title)
+//                    print("SPINS", spins?.count)
+//                    //print(spins?.first?.title, spins?.first?.time)
+//                    print("ARTICLES", articles?.count)
+//                    //print(articles?.first?.title, articles?.first?.media_title)
+//                    print(version)
+//
+//                    print("")
                 }
             }
         }

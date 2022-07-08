@@ -34,6 +34,9 @@
 		1F5B144D27A03CF100F743FB /* StoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B144C27A03CF100F743FB /* StoryViewCell.swift */; };
 		1F5B144F27A0850100F743FB /* PlainWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B144E27A0850100F743FB /* PlainWebViewController.swift */; };
 		1F5DA1402804C28900C7C81C /* NavBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DA13F2804C28900C7C81C /* NavBarStyle.swift */; };
+		1F62076528774E5C00A97DB9 /* StoryContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F62076328774E5C00A97DB9 /* StoryContentViewController.swift */; };
+		1F62076628774E5C00A97DB9 /* StoryContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F62076428774E5C00A97DB9 /* StoryContentViewController.xib */; };
+		1F6207692878B26900A97DB9 /* StringExtraStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6207682878B26900A97DB9 /* StringExtraStuff.swift */; };
 		1F7DE51527F56354008923FF /* RED_SDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7DE51427F56354008923FF /* RED_SDK.swift */; };
 		1F827C4A279E2B7C0077FB26 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */; };
 		1F8847A528526E3F00667A72 /* ForgotPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8847A328526E3F00667A72 /* ForgotPassViewController.swift */; };
@@ -440,6 +443,9 @@
 		1F5B144C27A03CF100F743FB /* StoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryViewCell.swift; sourceTree = "<group>"; };
 		1F5B144E27A0850100F743FB /* PlainWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainWebViewController.swift; sourceTree = "<group>"; };
 		1F5DA13F2804C28900C7C81C /* NavBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarStyle.swift; sourceTree = "<group>"; };
+		1F62076328774E5C00A97DB9 /* StoryContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContentViewController.swift; sourceTree = "<group>"; };
+		1F62076428774E5C00A97DB9 /* StoryContentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StoryContentViewController.xib; sourceTree = "<group>"; };
+		1F6207682878B26900A97DB9 /* StringExtraStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtraStuff.swift; sourceTree = "<group>"; };
 		1F7DE51427F56354008923FF /* RED_SDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RED_SDK.swift; sourceTree = "<group>"; };
 		1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		1F8847A328526E3F00667A72 /* ForgotPassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassViewController.swift; sourceTree = "<group>"; };
@@ -936,6 +942,8 @@
 				1F8847A428526E3F00667A72 /* ForgotPassViewController.xib */,
 				1F8847A728527A0B00667A72 /* MyAccountV2ViewController.swift */,
 				1F8847A828527A0B00667A72 /* MyAccountV2ViewController.xib */,
+				1F62076328774E5C00A97DB9 /* StoryContentViewController.swift */,
+				1F62076428774E5C00A97DB9 /* StoryContentViewController.xib */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -989,6 +997,7 @@
 				1FCE7D2D27FE197300B4EB66 /* UIButtonExtension.swift */,
 				1F54863327FF2CE000161996 /* UIViewExtension.swift */,
 				1F9318BE282C35CC00058739 /* NSAttributedStringExtension.swift */,
+				1F6207682878B26900A97DB9 /* StringExtraStuff.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -1907,6 +1916,7 @@
 				BDC0586827453EFF00C15F7E /* shareSplitButton.png in Resources */,
 				BDDA45402612301100C9C3AF /* LUX64.png in Resources */,
 				BDDA45472612301100C9C3AF /* GTM64.png in Resources */,
+				1F62076628774E5C00A97DB9 /* StoryContentViewController.xib in Resources */,
 				1F5B144827A0308900F743FB /* reuters.png in Resources */,
 				BDDA45762612301100C9C3AF /* BTN64.png in Resources */,
 				BDDA45A22612301100C9C3AF /* NAM64.png in Resources */,
@@ -2100,6 +2110,7 @@
 				1F54863427FF2CE000161996 /* UIViewExtension.swift in Sources */,
 				BD34F5E925FA8EA200C6CFEE /* BannerView.swift in Sources */,
 				1F5DA1402804C28900C7C81C /* NavBarStyle.swift in Sources */,
+				1F6207692878B26900A97DB9 /* StringExtraStuff.swift in Sources */,
 				1F0CDCCC2799CC2800368282 /* StorySourceManager.swift in Sources */,
 				1F54863627FF55C600161996 /* Alerts.swift in Sources */,
 				1F9318BC282C0AC000058739 /* FAQViewController.swift in Sources */,
@@ -2173,6 +2184,7 @@
 				BD17DB0D266693A700AEFF9A /* SourceCell.swift in Sources */,
 				BDF37F79263B0B09003D910D /* FooterCellTextOnly.swift in Sources */,
 				BDD1512F268CF96300EE256F /* MarkupUser.swift in Sources */,
+				1F62076528774E5C00A97DB9 /* StoryContentViewController.swift in Sources */,
 				BDF71B542677970A0026C615 /* NewsViewController.swift in Sources */,
 				1FCE7D2E27FE197300B4EB66 /* UIButtonExtension.swift in Sources */,
 				1F5B144F27A0850100F743FB /* PlainWebViewController.swift in Sources */,
