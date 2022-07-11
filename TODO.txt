@@ -1,2 +1,4 @@
 - Mostrar un dialogo de Facebook para el share
 - iPad Pro (11") 3rd gen (15.5)
+
+iPhone 11 (15.5)

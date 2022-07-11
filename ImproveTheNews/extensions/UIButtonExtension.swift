@@ -12,6 +12,8 @@ import SwiftUI
 
 extension UIButton {
 
+    
+
     func setCustomAttributedTextColor(_ color: UIColor) {
         let text = self.titleLabel!.text!
         let font = self.titleLabel!.font!
@@ -29,6 +31,18 @@ extension UIButton {
         let font = self.titleLabel!.font!
         let color = self.titleLabel!.textColor!
     
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: color
+        ]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+    
+        self.setAttributedTitle(attributedString, for: .normal)
+    }
+    
+    func setCustomAttributedText(_ text: String, color: UIColor) {
+        let font = self.titleLabel!.font!        
+
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
             .foregroundColor: color
