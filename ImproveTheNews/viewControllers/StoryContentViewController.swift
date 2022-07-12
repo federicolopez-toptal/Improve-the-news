@@ -9,6 +9,7 @@
 import UIKit
 import SDWebImage
 import SwiftUI
+import Charts
 
 
 class StoryContentViewController: UIViewController {
@@ -29,6 +30,7 @@ class StoryContentViewController: UIViewController {
     
     @IBOutlet weak var mainTitle: UILabel!
     @IBOutlet weak var mainImageView: UIImageView!
+    @IBOutlet weak var mainImageViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainImageCreditButton: UIButton!
     @IBOutlet weak var factsSourceSeparation: NSLayoutConstraint!
 
@@ -37,11 +39,11 @@ class StoryContentViewController: UIViewController {
         self.setContentView()
     }
 
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         self.removeAllFacts()
+        self.removeAllSpins()
         if let _link = self.link {
             StoryContent.instance.loadData(link: _link) { (storyData, facts, spins, articles, version) in
                 self.storyData = storyData
@@ -53,6 +55,15 @@ class StoryContentViewController: UIViewController {
                 self.updateUI()
             }
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = DARKMODE() ? .white : darkForBright
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return STATUS_BAR_STYLE()
     }
     
 }
@@ -87,6 +98,7 @@ extension StoryContentViewController {
         DispatchQueue.main.async {
 
             self.mainTitle.textColor = self.C(0xFFFFFF, 0x1D242F)
+            self.mainImageViewHeightConstraint.constant = CGFloat(STORIES_HEIGHT() - 15)
             self.mainImageCreditButton.backgroundColor = .clear
             
             let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
@@ -103,6 +115,8 @@ extension StoryContentViewController {
                     sourcesTitle.textColor = factsTitle.textColor
             let sourcesVContainer = self.contentView.viewWithTag(101) as! UIStackView
                 sourcesVContainer.backgroundColor = self.scrollView.backgroundColor
+            let spinTitleLabel = self.contentView.viewWithTag(102) as! UILabel
+            spinTitleLabel.textColor = self.C(0xFF643C, 0x1D242F)
             
             if let _data = self.storyData {
                 self.title = _data.title
@@ -113,6 +127,7 @@ extension StoryContentViewController {
                 self.mainImageCreditButton.setCustomAttributedText(credit, color: UIColor(hex: 0x93A0B4))
 
                 self.addFacts()
+                self.addSpins()
             } else {
                 self.title = ""
                 self.mainTitle.text = ""
@@ -125,6 +140,7 @@ extension StoryContentViewController {
         }
     }
     
+    // MARK: - Facts
     private func removeAllFacts() {
         let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
         factsVContainer.removeAllArrangedSubviews()
@@ -266,6 +282,168 @@ extension StoryContentViewController {
             spacer.alpha = 0
             sourcesHStack.addArrangedSubview(spacer)
         }
+    }
+    
+    // MARK: - Spins
+    private func removeAllSpins() {
+        let spinsVContainer = self.contentView.viewWithTag(103) as! UIStackView
+        spinsVContainer.removeAllArrangedSubviews()
+    }
+    
+    private func addSpins() {
+        if let _spins = self.spins {
+            for (i, SP) in _spins.enumerated() {
+//                self.addSingleFact(F, isLast: i == 2, index: i)
+                self.addSingleSpin(SP)
+            }
+        }
+    }
+    
+    private func addSingleSpin(_ spin: StorySpin) {
+        let spinsVContainer = self.contentView.viewWithTag(103) as! UIStackView
+        
+        let titleLabel = UILabel()
+        titleLabel.font = UIFont(name: "Merriweather-Bold", size: 16)
+        titleLabel.text = spin.title
+        titleLabel.numberOfLines = 0
+        titleLabel.textColor = self.C(0xFFFFFF, 0xFF643C)
+        
+        let descriptionLabel = UILabel()
+        descriptionLabel.font = UIFont(name: "Roboto-Regular", size: 16)!
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.textColor = self.C(0x93A0B4, 0x1D242F)
+        descriptionLabel.text = spin.description
+        
+        let horizontalStack = UIStackView()
+        horizontalStack.axis = .horizontal
+        horizontalStack.backgroundColor = .clear
+        horizontalStack.spacing = 10.0
+        
+        let factor: CGFloat = 1.3
+        let imageView = UIImageView()
+        imageView.contentMode = self.mainImageView.contentMode
+        imageView.clipsToBounds = true
+        imageView.backgroundColor = .darkGray
+        horizontalStack.addArrangedSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.widthAnchor.constraint(equalToConstant: 112 * factor),
+            imageView.heightAnchor.constraint(equalToConstant: 75 * factor)
+        ])
+        imageView.sd_setImage(with: URL(string: spin.image), placeholderImage: nil)
+        
+        let subVerticalStack = UIStackView()
+        subVerticalStack.axis = .vertical
+        subVerticalStack.spacing = 2.0
+        subVerticalStack.backgroundColor = .clear
+        
+        let spinTitleLabel = UILabel()
+        spinTitleLabel.text = spin.subTitle
+        spinTitleLabel.numberOfLines = 0
+        spinTitleLabel.font = UIFont(name: "Merriweather-Bold", size: 17)
+        spinTitleLabel.textColor = self.C(0xFFFFFF, 0x1D242F)
+        subVerticalStack.addArrangedSubview(spinTitleLabel)
+        
+        let subHorizontalStack = UIStackView()
+        subHorizontalStack.axis = .horizontal
+        subHorizontalStack.backgroundColor = .clear
+        subHorizontalStack.spacing = 7.0
+        
+        if let _countryCode = spin.media_country_code {
+            let flag = UIImageView()
+            flag.contentMode = .scaleAspectFit
+            flag.image = GET_FLAG(id: _countryCode)
+            
+            subHorizontalStack.addArrangedSubview(flag)
+            flag.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                flag.widthAnchor.constraint(equalToConstant: 20),
+                flag.heightAnchor.constraint(equalToConstant: 20)
+            ])
+        }
+        
+        let sourceTime = UILabel()
+        let source = spin.media_title.replacingOccurrences(of: " #", with: "")
+        sourceTime.text = source + " - " + FORMAT_TIME(spin.time)
+        print("TIME", spin.time)
+        
+        sourceTime.textColor = self.C(0x93A0B4, 0x1D242F)
+        sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
+        subHorizontalStack.addArrangedSubview(sourceTime)
+        subVerticalStack.addArrangedSubview(subHorizontalStack)
+        
+        let spacer = UIView()
+        spacer.backgroundColor = .red
+        subVerticalStack.addArrangedSubview(spacer)
+        
+        horizontalStack.addArrangedSubview(subVerticalStack)
+        spinsVContainer.addArrangedSubview(titleLabel)
+        spinsVContainer.addArrangedSubview(descriptionLabel)
+        spinsVContainer.addArrangedSubview(horizontalStack)
+        
+        // ---------
+        
+        let stackSpacer = UIStackView()
+        stackSpacer.axis = .vertical
+        stackSpacer.backgroundColor = .clear
+        spinsVContainer.addArrangedSubview(stackSpacer)
+        stackSpacer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackSpacer.heightAnchor.constraint(equalToConstant: 13)
+        ])
+        
+        for i in 1...3 {
+            let view = UIView()
+            view.backgroundColor = .clear
+            stackSpacer.addArrangedSubview(view)
+            
+            var H: CGFloat = 6.0
+            if(i==2) {
+                H = 1
+                view.backgroundColor = self.C(0x93A0B4, 0x1D242F)
+            }
+            
+            view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                view.heightAnchor.constraint(equalToConstant: H)
+            ])
+        }
+
+        spinsVContainer.backgroundColor = .clear
+    }
+    
+    private func GET_FLAG(id: String) -> UIImage {
+        var result = UIImage(named: "\(id.uppercased())64.png")
+        if(result==nil) {
+            result = UIImage(named: "noFlag.png")
+        }
+        return result!
+    }
+    
+    private func FORMAT_TIME(_ time: Int) -> String {
+        let SEC: CGFloat = 1.0
+        let MIN = SEC * 60
+        let HOUR = MIN * 60
+        let DAY = HOUR * 24
+        let MONTH = DAY * 30
+        let YEAR = MONTH * 12
+        let unityValues = [YEAR, MONTH, DAY, HOUR, MIN, SEC]
+        let unityNames = ["year", "month", "day", "hour", "minute", "second"]
+        
+        var result = ""
+        for (i, UNITY) in unityValues.enumerated() {
+            let div = Int( CGFloat(time) / UNITY )
+            if(div>0) {
+                result = String(div) + " " + unityNames[i]
+                if(div>1){ result += "s"
+                }
+                
+                result += " ago"
+                break
+            }
+        }
+        
+        return result
     }
     
 }
