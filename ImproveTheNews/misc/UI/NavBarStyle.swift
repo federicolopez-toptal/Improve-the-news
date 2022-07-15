@@ -72,14 +72,14 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector?, menuTap:
             target: viewController, action: searchTap)
         if(!isSignInUp){ rightButtons.append(searchButton) }
         
-        if(APP_CFG_MY_ACCOUNT && !isSignInUp) {
-            let userImage = UIImage(systemName: "person")
-            let userButton = UIBarButtonItem(image: userImage, style: .plain,
-                target: viewController, action: userTap)
-            userButton.imageInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
-            
-            rightButtons.append(userButton)
-        }
+//        if(APP_CFG_MY_ACCOUNT && !isSignInUp) {
+//            let userImage = UIImage(systemName: "person")
+//            let userButton = UIBarButtonItem(image: userImage, style: .plain,
+//                target: viewController, action: userTap)
+//            userButton.imageInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
+//            
+//            rightButtons.append(userButton)
+//        }
         
         
         viewController.navigationItem.leftBarButtonItems = leftButtons

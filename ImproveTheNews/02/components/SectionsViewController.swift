@@ -68,7 +68,7 @@ class SectionsViewController: UIViewController {
             self.support.append("More Preferences")
         }
         self.support.append("Tour")
-        self.support.append("My account")
+//        self.support.append("My account")
         
         navigationItem.largeTitleDisplayMode = .never
         safeArea = view.layoutMarginsGuide
