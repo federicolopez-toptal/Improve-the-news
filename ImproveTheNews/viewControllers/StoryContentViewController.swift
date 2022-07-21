@@ -14,6 +14,8 @@ import Charts
 
 class StoryContentViewController: UIViewController {
     
+    private var firstTime: Bool = true
+    private var showMoreFacts: Bool = true
     public var link: String?
     
     private var storyData: StoryData?
@@ -27,6 +29,7 @@ class StoryContentViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
+    private let loadingView = UIView()
     
     @IBOutlet weak var mainTitle: UILabel!
     @IBOutlet weak var mainImageView: UIImageView!
@@ -37,23 +40,38 @@ class StoryContentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setContentView()
+        self.buildLoading()
+        self.showLoading()
+        
+        self.navigationItem.hidesBackButton = true
+        SETUP_NAVBAR(viewController: self,
+            homeTap: nil,
+            menuTap: #selector(self.hamburgerButtonItemClicked(_:)),
+            searchTap: #selector(self.searchItemClicked(_:)),
+            userTap: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        self.removeAllFacts()
-        self.removeAllSpins()
-        if let _link = self.link {
-            StoryContent.instance.loadData(link: _link) { (storyData, facts, spins, articles, version) in
-                self.storyData = storyData
-                self.facts = facts
-                self.spins = spins
-                self.articles = articles
-                self.version = version
+        if(self.firstTime) {
+            self.firstTime = false
+        
+            self.removeAllFacts()
+            self.removeAllSpins()
+            self.removeAllArticles()
+            
+            if let _link = self.link {
+                StoryContent.instance.loadData(link: _link) { (storyData, facts, spins, articles, version) in
+                    self.storyData = storyData
+                    self.facts = facts
+                    self.spins = spins
+                    self.articles = articles
+                    self.version = version
 
-                self.updateUI()
-                self.addTestView()
+                    self.updateUI()
+                    self.showLoading(false)
+                }
             }
         }
     }
@@ -65,6 +83,16 @@ class StoryContentViewController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return STATUS_BAR_STYLE()
+    }
+    
+    // MARK: - Modified TitleBar
+    @objc func hamburgerButtonItemClicked(_ sender: UIBarButtonItem!) {
+        navigationController?.customPushViewController(SectionsViewController())
+    }
+    
+    @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
+        let searchvc = SearchViewController()
+        navigationController?.pushViewController(searchvc, animated: true)
     }
     
 }
@@ -97,6 +125,31 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         self.scrollView.isHidden = true
     }
     
+    private func buildLoading() {
+        let dim: CGFloat = 65
+        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
+        self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        if(!DARKMODE()){ self.loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.25) }
+        self.loadingView.isHidden = true
+        self.loadingView.layer.cornerRadius = 15
+    
+        let loading = UIActivityIndicatorView(style: .medium)
+        loading.color = .white
+        self.loadingView.addSubview(loading)
+        loading.center = CGPoint(x: dim/2, y: dim/2)
+        loading.startAnimating()
+        self.view.addSubview(self.loadingView)
+    }
+    
+    func showLoading(_ visible: Bool = true) {
+        DispatchQueue.main.async {
+            self.loadingView.isHidden = !visible
+            self.view.isUserInteractionEnabled = !visible
+        }
+    }
+    
     private func C(_ darkColorHex: Int, _ brightColorHex: Int) -> UIColor {
         return DARKMODE() ? UIColor(hex: darkColorHex) : UIColor(hex: brightColorHex)
     }
@@ -124,9 +177,11 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
                 sourcesVContainer.backgroundColor = self.scrollView.backgroundColor
             let spinTitleLabel = self.contentView.viewWithTag(102) as! UILabel
             spinTitleLabel.textColor = self.C(0xFF643C, 0x1D242F)
+            let articlesTitleLabel = self.contentView.viewWithTag(104) as! UILabel
+            articlesTitleLabel.textColor = self.C(0xFFFFFF, 0xFF643C)
             
             if let _data = self.storyData {
-                self.title = _data.title
+                //self.title = _data.title
                 self.mainTitle.text = _data.title
                 self.mainImageView.sd_setImage(with: URL(string: _data.image_src), placeholderImage: nil)
                 
@@ -135,13 +190,14 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
 
                 self.addFacts()
                 self.addSpins()
+                self.addArticles()
                 
                 DELAY(0.25) {
                     self.updateContentSize()
                 }
                 
             } else {
-                self.title = ""
+                //self.title = ""
                 self.mainTitle.text = ""
                 self.mainImageView.image = nil
                 self.mainImageCreditButton.setCustomAttributedText("", color: UIColor(hex: 0x93A0B4))
@@ -154,20 +210,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
             self.scrollView.isExclusiveTouch = true
             self.scrollView.canCancelContentTouches = true
             self.scrollView.delaysContentTouches = false
-            
-            
-//            delaysContentTouches = false
         }
-    }
-    
-    private func addTestView() {
-//        DispatchQueue.main.async {
-//            let testView = UIView()
-//            testView.backgroundColor = .green
-//
-//            self.contentView.addSubview(testView)
-//            testView.frame = CGRect(x: 0, y: 325, width: 100, height: 50)
-//        }
     }
     
     private func updateContentSize() {
@@ -175,7 +218,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         bottomGreenView.alpha = 0.0
         
         let screen_W = UIScreen.main.bounds.size.width
-        let height: CGFloat = bottomGreenView.frame.origin.y + bottomGreenView.frame.size.height + 200
+        let height: CGFloat = bottomGreenView.frame.origin.y + bottomGreenView.frame.size.height
         
         self.contentView.frame = CGRect(x: 0, y: 0, width: screen_W, height: height)
         self.scrollView.contentSize = CGSize(width: screen_W, height: height)
@@ -265,11 +308,12 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let factLabel = UILabel()
         factLabel.numberOfLines = 0
         factLabel.backgroundColor = .clear
-        factLabel.font = UIFont(name: "Merriweather-Bold", size: 15)
-        factLabel.text = fact.title
-        factLabel.textColor = self.C(0xFFFFFF, 0x1D242F)
+//        factLabel.font = UIFont(name: "Merriweather-Bold", size: 15)
+//        factLabel.text = fact.title
+        factLabel.attributedText = self.attrText(fact.title, index: index)
         factHStack.addArrangedSubview(factLabel)
         factsVContainer.addArrangedSubview(factHStack)
+
 
         // SOURCE
         if(self.sourceRow == -1) {
@@ -291,7 +335,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         
         let _sourceHeight: CGFloat = 21.0
         let _sourceFont = UIFont(name: "Roboto-Regular", size: 15)!
-        let _sourceText = " " + fact.source_title + " "
+        let _sourceText = " [" + String(index+1) + "] " + fact.source_title + " "
         let _sourceWidth = _sourceText.width(withConstraintedHeight: _sourceHeight,
             font: _sourceFont)
             
@@ -340,25 +384,12 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
             sourceLabel.heightAnchor.constraint(equalToConstant: 21),
             sourceLabel.widthAnchor.constraint(equalToConstant: _sourceWidth)
         ])
+        self.addUnderline(to: sourceLabel)
         self.sourceWidths.append(_sourceWidth)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(sourceLabelTap(_:)))
-//        tap.delegate = self
         sourceLabel.addGestureRecognizer(tap)
         sourceLabel.isUserInteractionEnabled = true
-        
-//        let buttonArea = UIButton(type: .custom)
-//        buttonArea.backgroundColor = .clear
-//        //buttonArea.alpha = 0.1
-//        buttonArea.isUserInteractionEnabled = true
-//        sourceContainer.addSubview(buttonArea)
-//        //sourcesHStack.addArrangedSubview(buttonArea)
-//        buttonArea.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            buttonArea.widthAnchor.constraint(equalTo: sourceLabel.widthAnchor),
-//            buttonArea.heightAnchor.constraint(equalTo: sourceLabel.heightAnchor)
-//        ])
-//        buttonArea.addTarget(self, action: #selector(buttonAreaOnTap(_:)), for: .touchUpInside)
         
         if(isLast) {
             let spacer = UIView()
@@ -367,11 +398,55 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
             sourcesHStack.addArrangedSubview(spacer)
         }
     }
-    @IBAction func buttonAreaOnTap(_ sender: UIButton) {
-        print("BUTTON TAP!")
+    
+    func addUnderline(to label: UILabel) {
+        let attrText = NSMutableAttributedString(string: label.text!)
+        var range = NSRange(location: 3, length: attrText.string.count-3)
+        
+        attrText.addAttribute(NSAttributedString.Key.underlineStyle,
+            value: 1, range: range)
+        
+        label.attributedText = attrText
     }
     
+    func attrText(_ text: String, index: Int) -> NSAttributedString {
+        let fontBold = UIFont(name: "Merriweather-Bold", size: 15)
+        let fontItalic = UIFont(name: "Merriweather-LightItalic", size: 15)
+        let extraText = " [" + String(index+1) + "]"
+        let mText = text + extraText
+        
+        let attr = prettifyText(fullString: mText as NSString, boldPartsOfString: [],
+            font: fontBold, boldFont: fontBold,
+            paths: [], linkedSubstrings: [],
+            accented: [])
     
+        //factLabel.textColor =
+        
+            
+        let mAttr = NSMutableAttributedString(attributedString: attr)
+        
+        var range = NSRange(location: 0, length: attr.string.count)
+        mAttr.addAttribute(NSAttributedString.Key.foregroundColor,
+            value: self.C(0xFFFFFF, 0x1D242F),
+            range: range)
+        
+        range = NSRange(location: attr.string.count - extraText.count, length: extraText.count)
+        
+        mAttr.addAttribute(NSAttributedString.Key.foregroundColor,
+            value: UIColor.orange,
+            range: range)
+        mAttr.addAttribute(NSAttributedString.Key.font,
+            value: fontItalic!,
+            range: range)
+            
+            
+        return mAttr
+    }
+    
+    private func resetFacts() {
+        self.removeAllFacts()
+        self.addFacts()
+    }
     
     
     // MARK: - Spins
@@ -455,7 +530,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         if let _countryCode = spin.media_country_code {
             let flag = UIImageView()
             flag.contentMode = .scaleAspectFit
-            flag.image = GET_FLAG(id: _countryCode)
+            flag.image = self.GET_FLAG(id: _countryCode)
             
             subHorizontalStack.addArrangedSubview(flag)
             flag.translatesAutoresizingMaskIntoConstraints = false
@@ -501,16 +576,32 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
             view.backgroundColor = .clear
             stackSpacer.addArrangedSubview(view)
             
+            //view.backgroundColor = self.C(0x93A0B4, 0x1D242F)
             var H: CGFloat = 6.0
             if(i==2) {
-                H = 1
-                view.backgroundColor = self.C(0x93A0B4, 0x1D242F)
+                H = 2
             }
             
             view.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 view.heightAnchor.constraint(equalToConstant: H)
             ])
+            
+            if(i==2) {
+                let lineImageView = UIImageView()
+                lineImageView.image = UIImage(named: "StoryArticleLineSep.png")
+                lineImageView.backgroundColor = .clear
+                lineImageView.alpha = 0.3
+                view.addSubview(lineImageView)
+                view.clipsToBounds = true
+                lineImageView.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    lineImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                    lineImageView.topAnchor.constraint(equalTo: view.topAnchor),
+                    lineImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                    lineImageView.widthAnchor.constraint(equalToConstant: 1080/2)
+                ])
+            }
         }
 
         spinsVContainer.backgroundColor = .clear
@@ -520,6 +611,13 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(spinOnTap(_:)))
         view.addGestureRecognizer(tap)
         view.isUserInteractionEnabled = true
+    }
+    
+    @IBAction func spinOnTap(_ sender: UITapGestureRecognizer) {
+        let tag = sender.view!.tag - 200
+        
+        let spin = self.spins![tag]
+        self.OPEN_URL(spin.url, title: spin.subTitle)
     }
     
     
@@ -558,30 +656,217 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         return result
     }
     
+    // MARK: - Articles
+    private func removeAllArticles() {
+        let articlesVContainer = self.contentView.viewWithTag(105) as! UIStackView
+        articlesVContainer.removeAllArrangedSubviews()
+    }
+    
+    private func addArticles() {
+        if let _articles = self.articles {
+            for (i, AR) in _articles.enumerated() {
+                self.addSingleArticle(AR, index: i)
+            }
+        }
+    }
+    
+    private func addSingleArticle(_ article: StoryArticle, index: Int) {
+        let articlesVContainer = self.contentView.viewWithTag(105) as! UIStackView
+        
+        let horizontalStack = UIStackView()
+        horizontalStack.axis = .horizontal
+        horizontalStack.backgroundColor = .clear
+        horizontalStack.spacing = 10.0
+        
+        let factor: CGFloat = 1.3
+        let imageView = UIImageView()
+        imageView.contentMode = self.mainImageView.contentMode
+        imageView.clipsToBounds = true
+        imageView.backgroundColor = .darkGray
+        horizontalStack.addArrangedSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.widthAnchor.constraint(equalToConstant: 112 * factor),
+            imageView.heightAnchor.constraint(equalToConstant: 75 * factor)
+        ])
+        imageView.sd_setImage(with: URL(string: article.image), placeholderImage: nil)
+        imageView.tag = 300 + index
+        self.ADD_ARTICLE_TAP(to: imageView)
+        
+        let subVerticalStack = UIStackView()
+        subVerticalStack.axis = .vertical
+        subVerticalStack.spacing = 2.0
+        subVerticalStack.backgroundColor = .clear
+        
+        let articleTitleLabel = UILabel()
+        articleTitleLabel.text = article.title
+        articleTitleLabel.numberOfLines = 3
+        articleTitleLabel.font = UIFont(name: "Merriweather-Bold", size: 17)
+        articleTitleLabel.textColor = self.C(0xFFFFFF, 0x1D242F)
+        articleTitleLabel.adjustsFontSizeToFitWidth = true
+        articleTitleLabel.minimumScaleFactor = 0.5
+        subVerticalStack.addArrangedSubview(articleTitleLabel)
+        articleTitleLabel.tag = 300 + index
+        self.ADD_ARTICLE_TAP(to: articleTitleLabel)
+        
+        let subHorizontalStack = UIStackView()
+        subHorizontalStack.axis = .horizontal
+        subHorizontalStack.backgroundColor = .clear
+        subHorizontalStack.spacing = 7.0
+        
+        if let _countryCode = article.media_country_code {
+            let flag = UIImageView()
+            flag.contentMode = .scaleAspectFit
+            flag.image = self.GET_FLAG(id: _countryCode)
+            
+            subHorizontalStack.addArrangedSubview(flag)
+            flag.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                flag.widthAnchor.constraint(equalToConstant: 20),
+                flag.heightAnchor.constraint(equalToConstant: 20)
+            ])
+        }
+        
+        let sourceTime = UILabel()
+        let source = article.media_title.replacingOccurrences(of: " #", with: "")
+//        sourceTime.text = source + " - " + FORMAT_TIME(spin.time)
+        sourceTime.text = article.media_title // + " - " + FORMAT_TIME(spin.time)
+        print("TIME", article.time)
+        
+        sourceTime.textColor = self.C(0x93A0B4, 0x1D242F)
+        sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
+        subHorizontalStack.addArrangedSubview(sourceTime)
+        subVerticalStack.addArrangedSubview(subHorizontalStack)
+        
+        let spacer = UIView()
+        spacer.backgroundColor = .clear
+        subVerticalStack.addArrangedSubview(spacer)
+        
+        horizontalStack.addArrangedSubview(subVerticalStack)
+        articlesVContainer.addArrangedSubview(horizontalStack)
+        
+        // ---------
+        
+        let stackSpacer = UIStackView()
+        stackSpacer.axis = .vertical
+        stackSpacer.backgroundColor = .clear
+        articlesVContainer.addArrangedSubview(stackSpacer)
+        stackSpacer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackSpacer.heightAnchor.constraint(equalToConstant: 13)
+        ])
+        
+        for i in 1...3 {
+            let view = UIView()
+            view.backgroundColor = .clear
+            stackSpacer.addArrangedSubview(view)
+            
+            //view.backgroundColor = self.C(0x93A0B4, 0x1D242F)
+            var H: CGFloat = 6.0
+            if(i==2) {
+                H = 2
+            }
+            
+            view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                view.heightAnchor.constraint(equalToConstant: H)
+            ])
+            
+            if(i==2) {
+                let lineImageView = UIImageView()
+                lineImageView.image = UIImage(named: "StoryArticleLineSep.png")
+                lineImageView.backgroundColor = .clear
+                lineImageView.alpha = 0.3
+                view.addSubview(lineImageView)
+                view.clipsToBounds = true
+                lineImageView.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    lineImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                    lineImageView.topAnchor.constraint(equalTo: view.topAnchor),
+                    lineImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                    lineImageView.widthAnchor.constraint(equalToConstant: 1080/2)
+                ])
+            }
+        }
+        
+//        let stackSpacer = UIStackView()
+//        stackSpacer.axis = .vertical
+//        stackSpacer.backgroundColor = .clear
+//        articlesVContainer.addArrangedSubview(stackSpacer)
+//        stackSpacer.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            stackSpacer.heightAnchor.constraint(equalToConstant: 13)
+//        ])
+//
+//        for i in 1...3 {
+//            let view = UIView()
+//            view.backgroundColor = .clear
+//            stackSpacer.addArrangedSubview(view)
+//
+//            var H: CGFloat = 6.0
+//            if(i==2) {
+//                H = 1
+//                view.backgroundColor = self.C(0x93A0B4, 0x1D242F)
+//            }
+//
+//            view.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                view.heightAnchor.constraint(equalToConstant: H)
+//            ])
+//        }
+
+        articlesVContainer.backgroundColor = .clear
+    }
+    
+    private func ADD_ARTICLE_TAP(to view: UIView) {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(articleOnTap(_:)))
+        view.addGestureRecognizer(tap)
+        view.isUserInteractionEnabled = true
+    }
+    
+    @IBAction func articleOnTap(_ sender: UITapGestureRecognizer) {
+        let tag = sender.view!.tag - 300
+        
+        let article = self.articles![tag]
+        self.OPEN_URL(article.url, title: article.title)
+    }
+    
 }
 
 // MARK: - Button taps
 extension StoryContentViewController {
     
     @IBAction func showMoreSourcesButtonTap(_ sender: UIButton) {
-        sender.isHidden = true
-        self.factsSourceSeparation.constant = 20
-        self.addFacts()
-
+        if(self.showMoreFacts) {
+            sender.setCustomAttributedText("Show fewer facts")
+            //sender.isHidden = true
+            //self.factsSourceSeparation.constant = 20
+            
+            self.addFacts()
+        } else {
+            sender.setCustomAttributedText("Show more")
+            self.resetFacts()
+        }
+        self.showMoreFacts = !self.showMoreFacts
+    
+        // update/refresh
         DELAY(0.25) {
             self.updateContentSize()
         }
     }
     
-    private func OPEN_URL(_ url: String) {
-        if let url = URL(string: url) {
-            UIApplication.shared.open(url)
-        }
+    private func OPEN_URL(_ url: String, title: String = "") {
+//        if let url = URL(string: url) {
+//            UIApplication.shared.open(url)
+//        }
+
+        let vc = PlainWebViewController(url: url, title: title)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func mainImageCreditButtonTap(_ sender: UIButton) {
         if let _data = self.storyData {
-            self.OPEN_URL(_data.image_credit_url)
+            self.OPEN_URL(_data.image_credit_url, title: _data.image_credit_title)
         }
     }
     
@@ -590,14 +875,11 @@ extension StoryContentViewController {
         let tag = label.tag - 150
         
         let fact = self.facts![tag]
-        self.OPEN_URL(fact.source_url)
+        self.OPEN_URL(fact.source_url, title: fact.source_title)
     }
     
-    @IBAction func spinOnTap(_ sender: UITapGestureRecognizer) {
-        let tag = sender.view!.tag - 200
-        
-        let spin = self.spins![tag]
-        self.OPEN_URL(spin.url)
+    @IBAction func homeButtonTap(_ sender: UITapGestureRecognizer) {
+        self.navigationController?.popViewController(animated: true)
     }
     
 }

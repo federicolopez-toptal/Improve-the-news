@@ -106,11 +106,11 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector?, menuTap:
                     width: 195 * f, height: 30 * f)
         }
         
-        if(APP_CFG_MY_ACCOUNT && uniqueID==1) {
-            var mFrame = homeButton.frame
-            mFrame.origin.x += 20
-            homeButton.frame = mFrame
-        }
+//        if(APP_CFG_MY_ACCOUNT && uniqueID==1) {
+//            var mFrame = homeButton.frame
+//            mFrame.origin.x += 20
+//            homeButton.frame = mFrame
+//        }
 
         view.addSubview(homeButton)
         //view.center = navigationItem.titleView!.center
@@ -138,6 +138,8 @@ private func UNIQUE_ID(fromViewController vc: UIViewController) -> Int {
         return (vc as! NewsTextViewController).uniqueID
     } else if(vc is NewsBigViewController) {
         return (vc as! NewsBigViewController).uniqueID
+    } else if(vc is StoryContentViewController) {
+        return 1
     } else {
         return 20
     }

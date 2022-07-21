@@ -269,6 +269,11 @@ extension SectionsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     private func showOnboarding() {
+        if((self.navigationController?.viewControllers.count)!>2) {
+            let vc = self.navigationController!.viewControllers.first!
+            self.navigationController?.viewControllers = [vc, self]
+        }
+    
         if(Utils.shared.currentLayout == .denseIntense) {
             self.navigationController?.customPopViewController()
             DELAY(0.1) {
