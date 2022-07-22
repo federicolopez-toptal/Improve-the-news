@@ -433,7 +433,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         range = NSRange(location: attr.string.count - extraText.count, length: extraText.count)
         
         mAttr.addAttribute(NSAttributedString.Key.foregroundColor,
-            value: UIColor.orange,
+            value: UIColor(hex: 0xFF643C),
             range: range)
         mAttr.addAttribute(NSAttributedString.Key.font,
             value: fontItalic!,
@@ -467,7 +467,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let spinsVContainer = self.contentView.viewWithTag(103) as! UIStackView
         
         let titleLabel = UILabel()
-        titleLabel.font = UIFont(name: "Merriweather-Bold", size: 16)
+        titleLabel.font = UIFont(name: "Merriweather-Bold", size: 17)
         titleLabel.text = spin.title
         titleLabel.numberOfLines = 0
         titleLabel.backgroundColor = .clear
@@ -591,7 +591,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
                 let lineImageView = UIImageView()
                 lineImageView.image = UIImage(named: "StoryArticleLineSep.png")
                 lineImageView.backgroundColor = .clear
-                lineImageView.alpha = 0.3
+                lineImageView.alpha = 0.7
                 view.addSubview(lineImageView)
                 view.clipsToBounds = true
                 lineImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -700,7 +700,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         
         let articleTitleLabel = UILabel()
         articleTitleLabel.text = article.title
-        articleTitleLabel.numberOfLines = 3
+        articleTitleLabel.numberOfLines = 4
         articleTitleLabel.font = UIFont(name: "Merriweather-Bold", size: 17)
         articleTitleLabel.textColor = self.C(0xFFFFFF, 0x1D242F)
         articleTitleLabel.adjustsFontSizeToFitWidth = true
@@ -776,7 +776,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
                 let lineImageView = UIImageView()
                 lineImageView.image = UIImage(named: "StoryArticleLineSep.png")
                 lineImageView.backgroundColor = .clear
-                lineImageView.alpha = 0.3
+                lineImageView.alpha = 0.35
                 view.addSubview(lineImageView)
                 view.clipsToBounds = true
                 lineImageView.translatesAutoresizingMaskIntoConstraints = false
