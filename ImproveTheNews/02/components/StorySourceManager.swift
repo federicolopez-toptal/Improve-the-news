@@ -12,8 +12,10 @@ class StorySourceManager {
     
     public static var shared = StorySourceManager()
     
-    private let api_url = API_BASE_URL() + "/php/api/news/sources.php"
+    private let api_url = API_BASE_URL() + "/news.json" //"/php/api/news/sources.php"
     private var sources = [String: String]()
+    private var sources_LR = [String: Int]()
+    private var sources_PE = [String: Int]()
     private var loaded = false
     
     public func getIconForSource(_ sourceName: String) -> String {
@@ -58,14 +60,23 @@ class StorySourceManager {
 
                 if let json = self.json(fromData: data) {
                     
-                    for item in json {   
-                        if let _key = item["shortname"] as? String, let _icon = item["icon"] as? String  {
+                    for item in json {
+                    
+                        // icon
+                        if let _key = item["shortname"] as? String, let _icon = item["icon"] as? String {
                             var value = _icon
                             if(!value.contains("http") && !value.contains("www")) {
                                 value = API_BASE_URL() + "/" + value
                             }
-                        
                             self.sources[_key] = value
+                        }
+                        
+                        // LR, PE
+                        if let _key = item["name"] as? String, let _LR = item["lr"] as? String, let _PE = item["pe"] as? String {
+                            let _keyLower = _key.lowercased()
+
+                            self.sources_LR[_keyLower] = Int(_LR)
+                            self.sources_PE[_keyLower] = Int(_PE)
                         }
                     }
                     
@@ -80,6 +91,23 @@ class StorySourceManager {
         
         task.resume()
     }
+    
+    func getLR(name: String) -> Int {
+        if let _value = self.sources_LR[name] {
+            return _value
+        } else {
+            return 0
+        }
+    }
+    func getPE(name: String) -> Int {
+        if let _value = self.sources_PE[name] {
+            return _value
+        } else {
+            return 0
+        }
+    }
+    
+    
     
     private func json(fromData data: Data?) -> [[String: Any]]? {
         if let _data = data {

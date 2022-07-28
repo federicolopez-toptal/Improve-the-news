@@ -20,6 +20,7 @@ class StoryContentViewController: UIViewController {
     
     private var storyData: StoryData?
     private var facts: [StoryFact]?
+    private var sources: [String]?
     private var spins: [StorySpin]?
     private var articles: [StoryArticle]?
     private var version: String?
@@ -44,6 +45,7 @@ class StoryContentViewController: UIViewController {
         self.showLoading()
         
         self.navigationItem.hidesBackButton = true
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         SETUP_NAVBAR(viewController: self,
             homeTap: nil,
             menuTap: #selector(self.hamburgerButtonItemClicked(_:)),
@@ -226,6 +228,8 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
     
     // MARK: - Facts
     private func removeAllFacts() {
+        self.sources = [String]()
+    
         let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
         factsVContainer.removeAllArrangedSubviews()
         
@@ -281,6 +285,17 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
         let sourcesVContainer = self.contentView.viewWithTag(101) as! UIStackView
         
+        var _index = self.sources!.count + 1
+        var mustAddSource = true
+        for (i, S) in self.sources!.enumerated() {
+            if(S==fact.source_url) {
+                mustAddSource = false
+                _index = i + 1
+                break
+            }
+        }
+        
+        
         // FACT
         let factHStack = UIStackView()
         factHStack.backgroundColor  = .clear
@@ -310,12 +325,24 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         factLabel.backgroundColor = .clear
 //        factLabel.font = UIFont(name: "Merriweather-Bold", size: 15)
 //        factLabel.text = fact.title
-        factLabel.attributedText = self.attrText(fact.title, index: index)
+        factLabel.attributedText = self.attrText(fact.title, index: _index)
         factHStack.addArrangedSubview(factLabel)
         factsVContainer.addArrangedSubview(factHStack)
 
+        print("> FACT", fact.title, _index)
+
 
         // SOURCE
+        var mustAdd = false
+        if(!(self.sources?.contains(fact.source_url))!) {
+            self.sources?.append(fact.source_url)
+            mustAdd = true
+        }
+        
+        print("SOURCES", self.sources)
+        print("SOURCES", "-------")
+        if(!mustAdd){ return }
+        
         if(self.sourceRow == -1) {
             let sourcesHStack = UIStackView()
             sourcesHStack.backgroundColor  = self.scrollView.backgroundColor
@@ -335,7 +362,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         
         let _sourceHeight: CGFloat = 21.0
         let _sourceFont = UIFont(name: "Roboto-Regular", size: 15)!
-        let _sourceText = " [" + String(index+1) + "] " + fact.source_title + " "
+        let _sourceText = " [" + String(self.sources!.count) + "] " + fact.source_title + " "
         let _sourceWidth = _sourceText.width(withConstraintedHeight: _sourceHeight,
             font: _sourceFont)
             
@@ -346,7 +373,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         }
         if(_widthSum + _sourceWidth > _widthTotal) {
             let spacer = UIView()
-            spacer.backgroundColor = .green
+            spacer.backgroundColor = .clear
             spacer.alpha = 0
             sourcesHStack.addArrangedSubview(spacer)
             
@@ -376,7 +403,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         sourceLabel.backgroundColor = .clear //self.scrollView.backgroundColor
         sourceLabel.font = _sourceFont
         sourceLabel.text = _sourceText
-        sourceLabel.tag = 150 + index
+        sourceLabel.tag = 150 + _index
         sourceLabel.textColor = UIColor(hex: 0xFF643C)
         sourceContainer.addSubview(sourceLabel)
         sourceLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -412,17 +439,14 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
     func attrText(_ text: String, index: Int) -> NSAttributedString {
         let fontBold = UIFont(name: "Merriweather-Bold", size: 15)
         let fontItalic = UIFont(name: "Merriweather-LightItalic", size: 15)
-        let extraText = " [" + String(index+1) + "]"
+        let extraText = " [" + String(index) + "]"
         let mText = text + extraText
         
         let attr = prettifyText(fullString: mText as NSString, boldPartsOfString: [],
             font: fontBold, boldFont: fontBold,
             paths: [], linkedSubstrings: [],
             accented: [])
-    
-        //factLabel.textColor =
         
-            
         let mAttr = NSMutableAttributedString(attributedString: attr)
         
         var range = NSRange(location: 0, length: attr.string.count)
@@ -526,6 +550,9 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         subHorizontalStack.axis = .horizontal
         subHorizontalStack.backgroundColor = .clear
         subHorizontalStack.spacing = 7.0
+        NSLayoutConstraint.activate([
+            subHorizontalStack.heightAnchor.constraint(equalToConstant: 28.0)
+        ])
         
         if let _countryCode = spin.media_country_code {
             let flag = UIImageView()
@@ -541,14 +568,29 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         }
         
         let sourceTime = UILabel()
-        let source = spin.media_title.replacingOccurrences(of: " #", with: "")
+        //let source = spin.media_title.replacingOccurrences(of: " #", with: "")
 //        sourceTime.text = source + " - " + FORMAT_TIME(spin.time)
-        sourceTime.text = spin.media_title // + " - " + FORMAT_TIME(spin.time)
-        print("TIME", spin.time)
+        sourceTime.text = spin.media_title.components(separatedBy: " #").first! // + " - " + FORMAT_TIME(spin.time)
+        //self.LR_PE(name: spin.media_title)
         
         sourceTime.textColor = self.C(0x93A0B4, 0x1D242F)
         sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
         subHorizontalStack.addArrangedSubview(sourceTime)
+        
+        let miniSlider = MiniSlidersCircView(some: "")
+        miniSlider.insertInto(stackView: subHorizontalStack)
+        let LR_PE = self.LR_PE(name: spin.media_title)
+        if(LR_PE.0==0 && LR_PE.1==0) {
+            miniSlider.isHidden = true
+        } else {
+            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
+        }
+        
+        let spacer2 = UIView()
+        spacer2.backgroundColor = .clear
+        subHorizontalStack.addArrangedSubview(spacer2)
+        
+        
         subVerticalStack.addArrangedSubview(subHorizontalStack)
         
         let spacer = UIView()
@@ -605,6 +647,16 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         }
 
         spinsVContainer.backgroundColor = .clear
+    }
+    
+    private func LR_PE(name: String) -> (Int, Int) {
+        let parts = name.components(separatedBy: " #")
+        let extName = parts.first!.lowercased()
+        
+        let LR = StorySourceManager.shared.getLR(name: extName)
+        let PE = StorySourceManager.shared.getPE(name: extName)
+        
+        return (LR, PE)
     }
     
     private func ADD_SPIN_TAP(to view: UIView) {
@@ -713,6 +765,9 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         subHorizontalStack.axis = .horizontal
         subHorizontalStack.backgroundColor = .clear
         subHorizontalStack.spacing = 7.0
+        NSLayoutConstraint.activate([
+            subHorizontalStack.heightAnchor.constraint(equalToConstant: 28.0)
+        ])
         
         if let _countryCode = article.media_country_code {
             let flag = UIImageView()
@@ -728,14 +783,27 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         }
         
         let sourceTime = UILabel()
-        let source = article.media_title.replacingOccurrences(of: " #", with: "")
+//        let source = article.media_title.replacingOccurrences(of: " #", with: "")
 //        sourceTime.text = source + " - " + FORMAT_TIME(spin.time)
-        sourceTime.text = article.media_title // + " - " + FORMAT_TIME(spin.time)
-        print("TIME", article.time)
-        
+        sourceTime.text = article.media_title.components(separatedBy: " #").first! // + " - " + FORMAT_TIME(spin.time)
         sourceTime.textColor = self.C(0x93A0B4, 0x1D242F)
         sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
         subHorizontalStack.addArrangedSubview(sourceTime)
+        
+        let miniSlider = MiniSlidersCircView(some: "")
+        miniSlider.insertInto(stackView: subHorizontalStack)
+        let LR_PE = self.LR_PE(name: article.media_title)
+        if(LR_PE.0==0 && LR_PE.1==0) {
+            miniSlider.isHidden = true
+        } else {
+            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
+        }
+
+
+        
+        let spacer2 = UIView()
+        spacer2.backgroundColor = .clear
+        subHorizontalStack.addArrangedSubview(spacer2)
         subVerticalStack.addArrangedSubview(subHorizontalStack)
         
         let spacer = UIView()
@@ -874,12 +942,32 @@ extension StoryContentViewController {
         let label = sender.view as! UILabel
         let tag = label.tag - 150
         
-        let fact = self.facts![tag]
-        self.OPEN_URL(fact.source_url, title: fact.source_title)
+        //print("SOURCE TAG", tag)
+        var title = ""
+        let link = self.sources![tag-1]
+        
+        for F in self.facts! {
+            if(F.source_url == link) {
+                title = F.source_title
+                break
+            }
+        }
+        
+//        let fact = self.facts![tag]
+        self.OPEN_URL(link, title: title)
     }
     
     @IBAction func homeButtonTap(_ sender: UITapGestureRecognizer) {
         self.navigationController?.popViewController(animated: true)
     }
     
+}
+
+
+extension StoryContentViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+        shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+        return true
+    }
 }

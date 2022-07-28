@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1F06F408280D0EA1001E3A5E /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1F06F407280D0EA1001E3A5E /* TODO.txt */; };
+		1F0ABD6E2891CD7D00FCDE93 /* MiniSlidersCircView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0ABD6D2891CD7D00FCDE93 /* MiniSlidersCircView.swift */; };
 		1F0CB8F627EBE3C4000F388A /* TW_SDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CB8F527EBE3C4000F388A /* TW_SDK.swift */; };
 		1F0CDCCA2799BBDF00368282 /* updatedIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F0CDCC92799BBDF00368282 /* updatedIcon.png */; };
 		1F0CDCCC2799CC2800368282 /* StorySourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0CDCCB2799CC2800368282 /* StorySourceManager.swift */; };
@@ -420,6 +421,7 @@
 /* Begin PBXFileReference section */
 		14F78899320DBC683DD84507 /* Pods-ImproveTheNewsTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImproveTheNewsTests.app store.xcconfig"; path = "Target Support Files/Pods-ImproveTheNewsTests/Pods-ImproveTheNewsTests.app store.xcconfig"; sourceTree = "<group>"; };
 		1F06F407280D0EA1001E3A5E /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
+		1F0ABD6D2891CD7D00FCDE93 /* MiniSlidersCircView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiniSlidersCircView.swift; sourceTree = "<group>"; };
 		1F0CB8F527EBE3C4000F388A /* TW_SDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TW_SDK.swift; sourceTree = "<group>"; };
 		1F0CDCC92799BBDF00368282 /* updatedIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = updatedIcon.png; sourceTree = "<group>"; };
 		1F0CDCCB2799CC2800368282 /* StorySourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorySourceManager.swift; sourceTree = "<group>"; };
@@ -1241,6 +1243,7 @@
 				BDC3A17025DC481A00F15C34 /* seeMoreFooterLast.swift */,
 				BD34F5E825FA8EA200C6CFEE /* BannerView.swift */,
 				BD4D53E4260A546F00635C48 /* MiniSlidersView.swift */,
+				1F0ABD6D2891CD7D00FCDE93 /* MiniSlidersCircView.swift */,
 				BD9D55D1264ACFDE00509722 /* HorizontalMenuView.swift */,
 				BD7881412686282F00824D1C /* SubtopicHeaderForSplit.swift */,
 				BDF72F62269DC960006B095D /* CookiesAlert.swift */,
@@ -2117,6 +2120,7 @@
 				1F5B144D27A03CF100F743FB /* StoryViewCell.swift in Sources */,
 				1F92D8FC27AC648000AA58B4 /* FooterCellBig1Topic.swift in Sources */,
 				1FA57C4727D08CBF0027DE26 /* AppUtility.swift in Sources */,
+				1F0ABD6E2891CD7D00FCDE93 /* MiniSlidersCircView.swift in Sources */,
 				1F9318BF282C35CC00058739 /* NSAttributedStringExtension.swift in Sources */,
 				1FD319AD27989AC300BD65D5 /* StoryCollectionViewCell.swift in Sources */,
 				1F54863427FF2CE000161996 /* UIViewExtension.swift in Sources */,

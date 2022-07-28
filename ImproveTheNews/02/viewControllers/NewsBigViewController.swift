@@ -1052,7 +1052,11 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
             navigationController?.pushViewController(vc, animated: true)
         } else {
             // story
-            let vc = PlainWebViewController(url: link, title: title)
+//            let vc = PlainWebViewController(url: link, title: title)
+//            navigationController?.pushViewController(vc, animated: true)
+
+            let vc = StoryContentViewController.createInstance()
+            vc.link = link
             navigationController?.pushViewController(vc, animated: true)
         }
     }

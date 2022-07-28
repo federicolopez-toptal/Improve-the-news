@@ -39,6 +39,10 @@ class StoryContent {
             }
         }
     }
+    
+    func loadAlgo() {
+    
+    }
 
 }
 
@@ -51,6 +55,7 @@ extension StoryContent {
         var url = storyData_url.replacingOccurrences(of: "<ID>", with: storyID)
         url = url.replacingOccurrences(of: "<FILTERS>", with: "123")
         
+        print("URL", url)
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         
