@@ -1911,6 +1911,7 @@ extension NewsViewController {
 
             let vc = StoryContentViewController.createInstance()
             vc.link = link
+            vc.api_call = self.buildApiCall()
             navigationController?.pushViewController(vc, animated: true)
         }
         

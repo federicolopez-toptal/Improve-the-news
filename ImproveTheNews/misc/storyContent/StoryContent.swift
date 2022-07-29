@@ -16,13 +16,13 @@ class StoryContent {
 
     static let instance = StoryContent()
     
-    func loadData(link: String,
+    func loadData(link: String, filter: String,
         callback: @escaping (StoryData?, [StoryFact]?, [StorySpin]?, [StoryArticle]?, String?) ->() ) {
     //) {
         let slug = self.extractSlugFrom(url: link)
         self.getStoryID(slug: slug) { storyID in
             if let _id = storyID {
-                self.getStoryData(storyID: _id) { (storyData, facts, spins, articles, version) in
+                self.getStoryData(storyID: _id, filter: filter) { (storyData, facts, spins, articles, version) in
                     callback(storyData, facts, spins, articles, version)
 //                    print("#########################")
 //                    print(storyData?.title)
@@ -49,11 +49,11 @@ class StoryContent {
 // MARK: - misc
 extension StoryContent {
 
-    private func getStoryData(storyID: String,
+    private func getStoryData(storyID: String, filter: String,
         callback: @escaping (StoryData?, [StoryFact]?, [StorySpin]?, [StoryArticle]?, String?) ->() ) {
         
         var url = storyData_url.replacingOccurrences(of: "<ID>", with: storyID)
-        url = url.replacingOccurrences(of: "<FILTERS>", with: "123")
+        url = url.replacingOccurrences(of: "<FILTERS>", with: filter)
         
         print("URL", url)
         var request = URLRequest(url: URL(string: url)!)
