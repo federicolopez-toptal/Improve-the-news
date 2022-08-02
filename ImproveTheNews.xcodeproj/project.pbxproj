@@ -46,6 +46,8 @@
 		1F8847AA28527A0B00667A72 /* MyAccountV2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F8847A828527A0B00667A72 /* MyAccountV2ViewController.xib */; };
 		1F8847AC2852837800667A72 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8847AB2852837800667A72 /* AppUser.swift */; };
 		1F8BFDFB2783BC76004632F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F8BFDFA2783BC76004632F3 /* Main.storyboard */; };
+		1F8D32DC28984B0200B0A25B /* StoryContentIPADViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8D32DA28984B0200B0A25B /* StoryContentIPADViewController.swift */; };
+		1F8D32DD28984B0200B0A25B /* StoryContentIPADViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F8D32DB28984B0200B0A25B /* StoryContentIPADViewController.xib */; };
 		1F8F214B27FCBF16008CB00D /* MyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8F214927FCBF16008CB00D /* MyAccountViewController.swift */; };
 		1F8F214C27FCBF16008CB00D /* MyAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F8F214A27FCBF16008CB00D /* MyAccountViewController.xib */; };
 		1F92D8F727AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F92D8F527AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.swift */; };
@@ -459,6 +461,8 @@
 		1F8847A828527A0B00667A72 /* MyAccountV2ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyAccountV2ViewController.xib; sourceTree = "<group>"; };
 		1F8847AB2852837800667A72 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		1F8BFDFA2783BC76004632F3 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		1F8D32DA28984B0200B0A25B /* StoryContentIPADViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContentIPADViewController.swift; sourceTree = "<group>"; };
+		1F8D32DB28984B0200B0A25B /* StoryContentIPADViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StoryContentIPADViewController.xib; sourceTree = "<group>"; };
 		1F8F214927FCBF16008CB00D /* MyAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAccountViewController.swift; sourceTree = "<group>"; };
 		1F8F214A27FCBF16008CB00D /* MyAccountViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyAccountViewController.xib; sourceTree = "<group>"; };
 		1F92D8F527AC5D9A00AA58B4 /* FooterCellTextOnly1Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterCellTextOnly1Topic.swift; sourceTree = "<group>"; };
@@ -953,6 +957,8 @@
 				1F8847A828527A0B00667A72 /* MyAccountV2ViewController.xib */,
 				1F62076328774E5C00A97DB9 /* StoryContentViewController.swift */,
 				1F62076428774E5C00A97DB9 /* StoryContentViewController.xib */,
+				1F8D32DA28984B0200B0A25B /* StoryContentIPADViewController.swift */,
+				1F8D32DB28984B0200B0A25B /* StoryContentIPADViewController.xib */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -1946,6 +1952,7 @@
 				BDB1DF1E26E6E67B00879C4B /* onboardingCheckOFF.png in Resources */,
 				BDDA45772612301100C9C3AF /* VGB64.png in Resources */,
 				BDDA450B2612301100C9C3AF /* SVN64.png in Resources */,
+				1F8D32DD28984B0200B0A25B /* StoryContentIPADViewController.xib in Resources */,
 				BD2813F525F6B5EC00A91E38 /* text1.txt in Resources */,
 				BDDA45852612301100C9C3AF /* NIU64.png in Resources */,
 				1F0CDCD22799E10D00368282 /* gradient_light.png in Resources */,
@@ -2141,6 +2148,7 @@
 				1F0CB8F627EBE3C4000F388A /* TW_SDK.swift in Sources */,
 				1FE640C4285AE61400785A12 /* OrangeGrayButton.swift in Sources */,
 				1FA083BC27BAD71A00C2E01D /* ArticleLayouts.swift in Sources */,
+				1F8D32DC28984B0200B0A25B /* StoryContentIPADViewController.swift in Sources */,
 				B6B87DA225626E9F00707A5C /* CustomSlider.swift in Sources */,
 				BDF37F65263AE026003D910D /* HeaderCellTextOnly.swift in Sources */,
 				BD26A82B26DD5E48001EC167 /* OrangeRoundedButton.swift in Sources */,

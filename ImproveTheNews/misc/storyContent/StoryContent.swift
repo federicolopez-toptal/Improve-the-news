@@ -68,9 +68,10 @@ extension StoryContent {
                 if let json = ShareAPI.json(fromData: data) {
                     //Story content
                     let storyDataJson = json["storyData"] as! [String: Any]
-                    let storyFactsArray = json["facts"] as! [[String: Any]]
-                    let storySpinsArray = json["spinSection"] as! [[String: Any]]
-                    let storyArticles = json["articles"] as! [[String: Any]]
+                    
+                    let storyFactsArray = self.removeNullFrom(json["facts"])
+                    let storySpinsArray = self.removeNullFrom(json["spinSection"])
+                    let storyArticles = self.removeNullFrom(json["articles"])
                     let version = json["version"] as! String
                     
                     let storyData = StoryData(storyDataJson)
@@ -100,6 +101,20 @@ extension StoryContent {
             }
         }
         task.resume()
+    }
+    
+    private func removeNullFrom(_ node: Any?) -> [[String: Any]] {
+        let array = node as! [Any?]
+        var filteredArray = [Any?]()
+        
+        for obj in array {
+            if let _ = obj as? [String: Any] {
+                filteredArray.append(obj)
+            }
+        }
+        
+        //let filteredArray = array.filter { $0 != nil }
+        return filteredArray as! [[String: Any]]
     }
 
     private func getStoryID(slug: String,

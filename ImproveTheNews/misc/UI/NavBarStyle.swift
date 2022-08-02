@@ -138,7 +138,7 @@ private func UNIQUE_ID(fromViewController vc: UIViewController) -> Int {
         return (vc as! NewsTextViewController).uniqueID
     } else if(vc is NewsBigViewController) {
         return (vc as! NewsBigViewController).uniqueID
-    } else if(vc is StoryContentViewController) {
+    } else if(vc is StoryContentViewController || vc is StoryContentIPADViewController) {
         return 1
     } else {
         return 20
