@@ -27,6 +27,8 @@ class StoryContentIPADViewController: UIViewController {
     // ---------------
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
+    private let loadingView = UIView()
+    
     @IBOutlet weak var mainTitle: UILabel!
     @IBOutlet weak var mainImageView: UIImageView!
     @IBOutlet weak var mainImageCreditButton: UIButton!
@@ -37,12 +39,18 @@ class StoryContentIPADViewController: UIViewController {
     private var spinCol = 1
     private var artCol = 1
     
+    private var showMoreFacts: Bool = true
+    private var sourceRow: Int = 0
+    private var sourceWidths = [CGFloat]()
+    
     // ---------------
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setContentView()
+        self.buildLoading()
+        self.showLoading()
         
         self.navigationItem.hidesBackButton = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -78,7 +86,7 @@ class StoryContentIPADViewController: UIViewController {
         }
 
 
-//        self.removeAllFacts()
+        self.removeAllFacts()
         self.spinCol = 1
         self.removeAllSpins()
         self.artCol = 1
@@ -93,7 +101,7 @@ class StoryContentIPADViewController: UIViewController {
                 self.version = version
 
                 self.updateUI()
-                //self.showLoading(false)
+                self.showLoading(false)
             }
         }
     }
@@ -145,7 +153,32 @@ extension StoryContentIPADViewController {
         self.contentView.backgroundColor = self.scrollView.backgroundColor
         self.scrollView.contentSize = CGSize(width: screen_W, height: self.contentView.frame.size.height)
 
-//        self.scrollView.isHidden = true
+        self.scrollView.isHidden = true
+    }
+    
+    private func buildLoading() {
+        let dim: CGFloat = 65
+        self.loadingView.frame = CGRect(x: (UIScreen.main.bounds.width-dim)/2,
+                                        y: ((UIScreen.main.bounds.height-dim)/2) - 88,
+                                        width: dim, height: dim)
+        self.loadingView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        if(!DARKMODE()){ self.loadingView.backgroundColor = UIColor.black.withAlphaComponent(0.25) }
+        self.loadingView.isHidden = true
+        self.loadingView.layer.cornerRadius = 15
+    
+        let loading = UIActivityIndicatorView(style: .medium)
+        loading.color = .white
+        self.loadingView.addSubview(loading)
+        loading.center = CGPoint(x: dim/2, y: dim/2)
+        loading.startAnimating()
+        self.view.addSubview(self.loadingView)
+    }
+    
+    func showLoading(_ visible: Bool = true) {
+        DispatchQueue.main.async {
+            self.loadingView.isHidden = !visible
+            self.view.isUserInteractionEnabled = !visible
+        }
     }
     
     private func updateUI() {
@@ -154,12 +187,30 @@ extension StoryContentIPADViewController {
         DispatchQueue.main.async {
         
             self.mainTitle.textColor = self.C(0xFFFFFF, 0x1D242F)
+            self.mainTitle.backgroundColor = .clear
+            self.mainTitle.superview?.backgroundColor = .clear
+            self.mainTitle.superview?.superview?.backgroundColor = .clear
             self.mainImageViewWidthConstraint.constant = screen_W * self.mainImageViewWidthFactor
-        
+            self.mainImageCreditButton.backgroundColor = .clear
             let spinTitleLabel = self.contentView.viewWithTag(102) as! UILabel
             spinTitleLabel.textColor = self.C(0xFF643C, 0x1D242F)
             let articlesTitleLabel = self.contentView.viewWithTag(104) as! UILabel
             articlesTitleLabel.textColor = self.C(0xFFFFFF, 0xFF643C)
+        
+            let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
+            factsVContainer.backgroundColor = self.scrollView.backgroundColor
+                let factsView = factsVContainer.superview
+                factsView?.backgroundColor = self.scrollView.backgroundColor
+                factsView?.layer.borderWidth = 8.0
+                factsView?.layer.borderColor = self.C(0x1D2530, 0xE1E3E3).cgColor
+                    let factsTitle = factsView?.subviews.first as! UILabel
+                    factsTitle.textColor = self.C(0xFFFFFF, 0x1D242F)
+                    let line = factsView?.subviews[3] as! UIView
+                    line.backgroundColor = self.C(0x1E2634, 0xE2E3E3)
+                    let sourcesTitle = factsView?.subviews[4] as! UILabel
+                    sourcesTitle.textColor = factsTitle.textColor
+            let sourcesVContainer = self.contentView.viewWithTag(101) as! UIStackView
+                sourcesVContainer.backgroundColor = self.scrollView.backgroundColor
         
             if let _data = self.storyData {
                 self.mainTitle.text = _data.title
@@ -170,6 +221,7 @@ extension StoryContentIPADViewController {
                 self.mainImageCreditButton.setCustomAttributedText(credit, color: UIColor(hex: 0x93A0B4))
                 
                 // DATA
+                self.addFacts()
                 self.addSpins()
                 self.addArticles()
                 
@@ -181,6 +233,12 @@ extension StoryContentIPADViewController {
                 self.mainImageView.image = nil
                 self.mainImageCreditButton.setCustomAttributedText("", color: UIColor(hex: 0x93A0B4))
             }
+            
+            self.scrollView.isHidden = false
+            self.scrollView.isUserInteractionEnabled = true
+            self.scrollView.isExclusiveTouch = true
+            self.scrollView.canCancelContentTouches = true
+            self.scrollView.delaysContentTouches = false
         }
     }
     
@@ -264,6 +322,271 @@ extension StoryContentIPADViewController {
     
 }
 
+// PRAGMA MARK: Fact(s)
+extension StoryContentIPADViewController {
+    
+    private func removeAllFacts() {
+        self.sources = [String]()
+    
+        let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
+        factsVContainer.removeAllArrangedSubviews()
+        
+        let sourcesVContainer = self.contentView.viewWithTag(101) as! UIStackView
+        sourcesVContainer.removeAllArrangedSubviews()
+        
+        self.sourceRow = -1
+        self.sourceWidths = [CGFloat]()
+    }
+    
+    private func addFacts() {
+        let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
+                
+        if let _facts = self.facts {
+        
+            if(factsVContainer.arrangedSubviews.count==0) {
+                // Initial 3
+                for (i, F) in _facts.enumerated() {
+                    if(i<=2) {
+                        self.addSingleFact(F, isLast: i == 2, index: i)
+                    }
+                }
+            } else {
+                // The rest
+                for (i, F) in _facts.enumerated() {
+                    if(i>2) {
+                        self.addSingleFact(F, isLast: i == self.facts!.count-1, index: i)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func addSingleFact(_ fact: StoryFact, isLast: Bool = false, index: Int) {
+        let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
+        let sourcesVContainer = self.contentView.viewWithTag(101) as! UIStackView
+        
+        var _index = self.sources!.count + 1
+        var mustAddSource = true
+        for (i, S) in self.sources!.enumerated() {
+            if(S==fact.source_url) {
+                mustAddSource = false
+                _index = i + 1
+                break
+            }
+        }
+        
+        
+        // FACT
+        let factHStack = UIStackView()
+        factHStack.backgroundColor  = .clear
+        factHStack.axis = .horizontal
+        
+        let dotContainer = UIView()
+        dotContainer.backgroundColor = .clear
+        factHStack.addArrangedSubview(dotContainer)
+        dotContainer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dotContainer.widthAnchor.constraint(equalToConstant: 20)
+        ])
+        
+        let dot = UIView()
+        dot.backgroundColor = UIColor(hex: 0xFF643C)
+        dotContainer.addSubview(dot)
+        dot.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dot.centerXAnchor.constraint(equalTo: dotContainer.centerXAnchor),
+            dot.topAnchor.constraint(equalTo: dotContainer.topAnchor, constant: 6),
+            dot.widthAnchor.constraint(equalToConstant: 8),
+            dot.heightAnchor.constraint(equalToConstant: 8)
+        ])
+        
+        let factLabel = UILabel()
+        factLabel.numberOfLines = 0
+        factLabel.backgroundColor = .clear
+//        factLabel.font = UIFont(name: "Merriweather-Bold", size: 15)
+//        factLabel.text = fact.title
+        factLabel.attributedText = self.attrText(fact.title, index: _index)
+        factHStack.addArrangedSubview(factLabel)
+        factsVContainer.addArrangedSubview(factHStack)
+
+        print("> FACT", fact.title, _index)
+
+
+        // SOURCE
+        var mustAdd = false
+        if(!(self.sources?.contains(fact.source_url))!) {
+            self.sources?.append(fact.source_url)
+            mustAdd = true
+        }
+        
+        print("SOURCES", self.sources)
+        print("SOURCES", "-------")
+        if(!mustAdd){ return }
+        
+        if(self.sourceRow == -1) {
+            let sourcesHStack = UIStackView()
+            sourcesHStack.backgroundColor  = self.scrollView.backgroundColor
+            sourcesHStack.axis = .horizontal
+            sourcesHStack.spacing = 10
+            sourcesVContainer.addArrangedSubview(sourcesHStack)
+            
+            self.sourceRow = 0
+        }
+        var sourcesHStack = sourcesVContainer.arrangedSubviews[self.sourceRow] as! UIStackView
+        
+        if(!isLast) {
+            if let _last = sourcesHStack.arrangedSubviews.last, _last.alpha == 0 {
+                _last.removeFromSuperview()
+            }
+        }
+        
+        let _sourceHeight: CGFloat = 21.0
+        let _sourceFont = UIFont(name: "Roboto-Regular", size: 15)!
+        let _sourceText = " [" + String(self.sources!.count) + "] " + fact.source_title + " "
+        let _sourceWidth = _sourceText.width(withConstraintedHeight: _sourceHeight,
+            font: _sourceFont)
+            
+        var _widthSum: CGFloat = 0
+        let _widthTotal = UIScreen.main.bounds.width - 20 - 40
+        for W in self.sourceWidths {
+            _widthSum += W + sourcesHStack.spacing
+        }
+        if(_widthSum + _sourceWidth > _widthTotal) {
+            let spacer = UIView()
+            spacer.backgroundColor = .clear
+            spacer.alpha = 0
+            sourcesHStack.addArrangedSubview(spacer)
+            
+            let newSourcesHStack = UIStackView()
+            newSourcesHStack.backgroundColor  = self.scrollView.backgroundColor
+            newSourcesHStack.axis = .horizontal
+            newSourcesHStack.spacing = 10
+            sourcesVContainer.addArrangedSubview(newSourcesHStack)
+            
+            self.sourceRow += 1
+            self.sourceWidths = [CGFloat]()
+            sourcesHStack = sourcesVContainer.arrangedSubviews[self.sourceRow] as! UIStackView
+        }
+        
+        let sourceContainer = UIView()
+        sourceContainer.backgroundColor = .clear
+        sourcesHStack.addArrangedSubview(sourceContainer)
+        sourceContainer.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            sourceContainer.heightAnchor.constraint(equalToConstant: 21),
+            sourceContainer.widthAnchor.constraint(equalToConstant: _sourceWidth)
+        ])
+        
+        
+        let sourceLabel = UILabel()
+        sourceLabel.numberOfLines = 1
+        sourceLabel.backgroundColor = .clear //self.scrollView.backgroundColor
+        sourceLabel.font = _sourceFont
+        sourceLabel.text = _sourceText
+        sourceLabel.tag = 150 + _index
+        sourceLabel.textColor = UIColor(hex: 0xFF643C)
+        sourceContainer.addSubview(sourceLabel)
+        sourceLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            sourceLabel.heightAnchor.constraint(equalToConstant: 21),
+            sourceLabel.widthAnchor.constraint(equalToConstant: _sourceWidth)
+        ])
+        self.addUnderline(to: sourceLabel)
+        self.sourceWidths.append(_sourceWidth)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(sourceLabelTap(_:)))
+        sourceLabel.addGestureRecognizer(tap)
+        sourceLabel.isUserInteractionEnabled = true
+        
+        if(isLast) {
+            let spacer = UIView()
+            spacer.backgroundColor = .green
+            spacer.alpha = 0
+            sourcesHStack.addArrangedSubview(spacer)
+        }
+    }
+    
+    func attrText(_ text: String, index: Int) -> NSAttributedString {
+        let fontBold = UIFont(name: "Merriweather-Bold", size: 15)
+        let fontItalic = UIFont(name: "Merriweather-LightItalic", size: 15)
+        let extraText = " [" + String(index) + "]"
+        let mText = text + extraText
+        
+        let attr = prettifyText(fullString: mText as NSString, boldPartsOfString: [],
+            font: fontBold, boldFont: fontBold,
+            paths: [], linkedSubstrings: [],
+            accented: [])
+        
+        let mAttr = NSMutableAttributedString(attributedString: attr)
+        
+        var range = NSRange(location: 0, length: attr.string.count)
+        mAttr.addAttribute(NSAttributedString.Key.foregroundColor,
+            value: self.C(0xFFFFFF, 0x1D242F),
+            range: range)
+        
+        range = NSRange(location: attr.string.count - extraText.count, length: extraText.count)
+        
+        mAttr.addAttribute(NSAttributedString.Key.foregroundColor,
+            value: UIColor(hex: 0xFF643C),
+            range: range)
+        mAttr.addAttribute(NSAttributedString.Key.font,
+            value: fontItalic!,
+            range: range)
+            
+            
+        return mAttr
+    }
+    
+    func addUnderline(to label: UILabel) {
+        let attrText = NSMutableAttributedString(string: label.text!)
+        var range = NSRange(location: 3, length: attrText.string.count-3)
+        
+        attrText.addAttribute(NSAttributedString.Key.underlineStyle,
+            value: 1, range: range)
+        
+        label.attributedText = attrText
+    }
+    
+    @IBAction func sourceLabelTap(_ sender: UITapGestureRecognizer) {
+        let label = sender.view as! UILabel
+        let tag = label.tag - 150
+        
+        var title = ""
+        let link = self.sources![tag-1]
+        
+        for F in self.facts! {
+            if(F.source_url == link) {
+                title = F.source_title
+                break
+            }
+        }
+        
+        self.OPEN_URL(link, title: title)
+    }
+    
+    @IBAction func showMoreSourcesButtonTap(_ sender: UIButton) {
+        if(self.showMoreFacts) {
+            sender.setCustomAttributedText("Show fewer facts")
+            self.addFacts()
+        } else {
+            sender.setCustomAttributedText("Show more")
+            self.resetFacts()
+        }
+        self.showMoreFacts = !self.showMoreFacts
+    
+        // update/refresh
+        DELAY(0.25) {
+            self.updateContentSize()
+        }
+    }
+    
+    private func resetFacts() {
+        self.removeAllFacts()
+        self.addFacts()
+    }
+    
+}
+
 // PRAGMA MARK: Spin(s)
 extension StoryContentIPADViewController {
     
@@ -288,7 +611,7 @@ extension StoryContentIPADViewController {
             // New col
             h_colS_container = UIStackView()
             h_colS_container.axis = .horizontal
-            h_colS_container.spacing = 20
+            h_colS_container.spacing = 40
             h_colS_container.backgroundColor = .clear //.green
             v_main_container.addArrangedSubview(h_colS_container)
         } else {
@@ -423,54 +746,11 @@ extension StoryContentIPADViewController {
 
         // ---------
 
-//        let stackSpacer = UIStackView()
-//        stackSpacer.axis = .vertical
-//        stackSpacer.backgroundColor = .clear
-//        main_V_container.addArrangedSubview(stackSpacer)
-//        stackSpacer.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            stackSpacer.heightAnchor.constraint(equalToConstant: 13)
-//        ])
-//
-//        for i in 1...3 {
-//            let view = UIView()
-//            view.backgroundColor = .clear
-//            stackSpacer.addArrangedSubview(view)
-//
-//            //view.backgroundColor = self.C(0x93A0B4, 0x1D242F)
-//            var H: CGFloat = 6.0
-//            if(i==2) {
-//                H = 2
-//            }
-//
-//            view.translatesAutoresizingMaskIntoConstraints = false
-//            NSLayoutConstraint.activate([
-//                view.heightAnchor.constraint(equalToConstant: H)
-//            ])
-//
-//            if(i==2) {
-//                let lineImageView = UIImageView()
-//                lineImageView.image = UIImage(named: "StoryArticleLineSep.png")
-//                lineImageView.backgroundColor = .clear
-//                lineImageView.alpha = 0.7
-//                view.addSubview(lineImageView)
-//                view.clipsToBounds = true
-//                lineImageView.translatesAutoresizingMaskIntoConstraints = false
-//                NSLayoutConstraint.activate([
-//                    lineImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//                    lineImageView.topAnchor.constraint(equalTo: view.topAnchor),
-//                    lineImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//                    lineImageView.widthAnchor.constraint(equalToConstant: 1080/2)
-//                ])
-//            }
-//        }
-//
-//
-
         if(self.spinCol==2 && index<self.spins!.count-1) {
             // VERTICAL LINE
             let vLine = UIView()
-            vLine.backgroundColor = .cyan
+            vLine.backgroundColor = .clear //.red.withAlphaComponent(0.2)
+            vLine.clipsToBounds = true
             h_colS_container.addSubview(vLine)
             
             vLine.translatesAutoresizingMaskIntoConstraints = false
@@ -479,6 +759,23 @@ extension StoryContentIPADViewController {
                 vLine.bottomAnchor.constraint(equalTo: h_colS_container.bottomAnchor),
                 vLine.widthAnchor.constraint(equalToConstant: 4),
                 vLine.centerXAnchor.constraint(equalTo: h_colS_container.centerXAnchor)
+            ])
+            
+            let lineImageView = UIImageView()
+            lineImageView.image = UIImage(named: "StoryArticleLineSep_vert_iPad.png")
+            lineImageView.backgroundColor = .clear
+            lineImageView.alpha = 0.7
+            vLine.addSubview(lineImageView)
+            vLine.clipsToBounds = true
+            lineImageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+//                lineImageView.topAnchor.constraint(equalTo: vLine.topAnchor),
+//                lineImageView.bottomAnchor.constraint(equalTo: vLine.bottomAnchor),
+                
+                lineImageView.heightAnchor.constraint(equalToConstant: 300),
+                lineImageView.widthAnchor.constraint(equalToConstant: 2),
+                lineImageView.centerXAnchor.constraint(equalTo: vLine.centerXAnchor),
+                lineImageView.centerYAnchor.constraint(equalTo: vLine.centerYAnchor)
             ])
         }
         
@@ -507,7 +804,7 @@ extension StoryContentIPADViewController {
         if(add_H_line) {
         // HORIZONTAL LINE
             let hLine = UIView()
-            hLine.backgroundColor = .systemPink
+            hLine.backgroundColor = .clear
             v_main_container.addArrangedSubview(hLine)
             
             hLine.translatesAutoresizingMaskIntoConstraints = false
@@ -515,6 +812,20 @@ extension StoryContentIPADViewController {
                 hLine.leadingAnchor.constraint(equalTo: v_main_container.leadingAnchor),
                 hLine.trailingAnchor.constraint(equalTo: v_main_container.trailingAnchor),
                 hLine.heightAnchor.constraint(equalToConstant: 4)
+            ])
+            
+            let lineImageView = UIImageView()
+            lineImageView.image = UIImage(named: "StoryArticleLineSep_iPad.png")
+            lineImageView.backgroundColor = .clear
+            lineImageView.alpha = 0.7
+            hLine.addSubview(lineImageView)
+            hLine.clipsToBounds = true
+            lineImageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                lineImageView.leadingAnchor.constraint(equalTo: hLine.leadingAnchor),
+                lineImageView.trailingAnchor.constraint(equalTo: hLine.trailingAnchor),
+                lineImageView.heightAnchor.constraint(equalToConstant: 2),
+                lineImageView.centerYAnchor.constraint(equalTo: hLine.centerYAnchor)
             ])
         }
         
@@ -545,6 +856,8 @@ extension StoryContentIPADViewController {
     }
     
     private func addArticles() {
+    
+        print("ARTICLES", self.articles?.count)
         if let _articles = self.articles {
             for (i, AR) in _articles.enumerated() {
                 self.addSingleArticle(AR, index: i)
@@ -560,8 +873,8 @@ extension StoryContentIPADViewController {
             // New col
             h_colS_container = UIStackView()
             h_colS_container.axis = .horizontal
-            h_colS_container.spacing = 15
-            h_colS_container.backgroundColor = .green
+            h_colS_container.spacing = 25
+            h_colS_container.backgroundColor = .clear
             v_main_container.addArrangedSubview(h_colS_container)
         } else {
             h_colS_container = (v_main_container.subviews.last as! UIStackView)
@@ -570,30 +883,26 @@ extension StoryContentIPADViewController {
         if(self.artCol>3){ self.artCol = 1 }
         
         
-        let h_img_container = UIStackView()
-        h_img_container.axis = .horizontal
-        h_img_container.backgroundColor = .blue
-        h_img_container.spacing = 10.0
-        
+        let v_img_container = UIStackView()
+        v_img_container.axis = .vertical
+        v_img_container.backgroundColor = .clear
+        v_img_container.spacing = 8
+        h_colS_container.addArrangedSubview(v_img_container)
+
         let factor: CGFloat = 1.3
         let imageView = UIImageView()
         imageView.contentMode = self.mainImageView.contentMode
         imageView.clipsToBounds = true
         imageView.backgroundColor = .darkGray
-        h_img_container.addArrangedSubview(imageView)
+        v_img_container.addArrangedSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: 112 * factor),
-            imageView.heightAnchor.constraint(equalToConstant: 75 * factor)
+//            imageView.widthAnchor.constraint(equalToConstant: 112 * factor),
+            imageView.heightAnchor.constraint(equalToConstant: 185)
         ])
         imageView.sd_setImage(with: URL(string: article.image), placeholderImage: nil)
         imageView.tag = 300 + index
         self.ADD_ARTICLE_TAP(to: imageView)
-        
-        let v_data_container = UIStackView()
-        v_data_container.axis = .vertical
-        v_data_container.spacing = 2.0
-        v_data_container.backgroundColor = .clear
         
         let articleTitleLabel = UILabel()
         articleTitleLabel.text = article.title
@@ -602,23 +911,24 @@ extension StoryContentIPADViewController {
         articleTitleLabel.textColor = self.C(0xFFFFFF, 0x1D242F)
         articleTitleLabel.adjustsFontSizeToFitWidth = true
         articleTitleLabel.minimumScaleFactor = 0.5
-        v_data_container.addArrangedSubview(articleTitleLabel)
         articleTitleLabel.tag = 300 + index
         self.ADD_ARTICLE_TAP(to: articleTitleLabel)
-        
+        v_img_container.addArrangedSubview(articleTitleLabel)
+
         let h_flag_container = UIStackView()
         h_flag_container.axis = .horizontal
         h_flag_container.backgroundColor = .clear
         h_flag_container.spacing = 7.0
+        v_img_container.addArrangedSubview(h_flag_container)
         NSLayoutConstraint.activate([
             h_flag_container.heightAnchor.constraint(equalToConstant: 28.0)
         ])
-        
+
         if let _countryCode = article.media_country_code {
             let flag = UIImageView()
             flag.contentMode = .scaleAspectFit
             flag.image = self.GET_FLAG(id: _countryCode)
-            
+
             h_flag_container.addArrangedSubview(flag)
             flag.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -626,7 +936,7 @@ extension StoryContentIPADViewController {
                 flag.heightAnchor.constraint(equalToConstant: 20)
             ])
         }
-        
+
         let sourceTime = UILabel()
 //        let source = article.media_title.replacingOccurrences(of: " #", with: "")
 //        sourceTime.text = source + " - " + FORMAT_TIME(spin.time)
@@ -634,7 +944,7 @@ extension StoryContentIPADViewController {
         sourceTime.textColor = self.C(0x93A0B4, 0x1D242F)
         sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
         h_flag_container.addArrangedSubview(sourceTime)
-        
+
         let miniSlider = MiniSlidersCircView(some: "")
         miniSlider.insertInto(stackView: h_flag_container)
         let LR_PE = self.LR_PE(name: article.media_title)
@@ -643,18 +953,15 @@ extension StoryContentIPADViewController {
         } else {
             miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
         }
-        
+
         let spacer2 = UIView()
         spacer2.backgroundColor = .clear
         h_flag_container.addArrangedSubview(spacer2)
-        v_data_container.addArrangedSubview(h_flag_container)
-        
+        v_img_container.addArrangedSubview(h_flag_container)
+
         let spacer = UIView()
         spacer.backgroundColor = .clear
-        v_data_container.addArrangedSubview(spacer)
-        
-        h_img_container.addArrangedSubview(v_data_container)
-        h_colS_container.addArrangedSubview(h_img_container)
+        v_img_container.addArrangedSubview(spacer)
         
         // ---------
         
@@ -678,9 +985,8 @@ extension StoryContentIPADViewController {
                 }
             }
         }
-
-
-        //v_main_container.backgroundColor = .clear
+        
+        v_main_container.backgroundColor = .clear
     }
     
     private func ADD_ARTICLE_TAP(to view: UIView) {

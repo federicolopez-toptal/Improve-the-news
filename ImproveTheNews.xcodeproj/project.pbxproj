@@ -38,6 +38,8 @@
 		1F62076528774E5C00A97DB9 /* StoryContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F62076328774E5C00A97DB9 /* StoryContentViewController.swift */; };
 		1F62076628774E5C00A97DB9 /* StoryContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F62076428774E5C00A97DB9 /* StoryContentViewController.xib */; };
 		1F6207692878B26900A97DB9 /* StringExtraStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6207682878B26900A97DB9 /* StringExtraStuff.swift */; };
+		1F6D9176289AEBDF000D7B46 /* StoryArticleLineSep_iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F6D9175289AEBDF000D7B46 /* StoryArticleLineSep_iPad.png */; };
+		1F6D9178289AECB7000D7B46 /* StoryArticleLineSep_vert_iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F6D9177289AECB7000D7B46 /* StoryArticleLineSep_vert_iPad.png */; };
 		1F7DE51527F56354008923FF /* RED_SDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7DE51427F56354008923FF /* RED_SDK.swift */; };
 		1F827C4A279E2B7C0077FB26 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */; };
 		1F8847A528526E3F00667A72 /* ForgotPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8847A328526E3F00667A72 /* ForgotPassViewController.swift */; };
@@ -453,6 +455,8 @@
 		1F62076328774E5C00A97DB9 /* StoryContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryContentViewController.swift; sourceTree = "<group>"; };
 		1F62076428774E5C00A97DB9 /* StoryContentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StoryContentViewController.xib; sourceTree = "<group>"; };
 		1F6207682878B26900A97DB9 /* StringExtraStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtraStuff.swift; sourceTree = "<group>"; };
+		1F6D9175289AEBDF000D7B46 /* StoryArticleLineSep_iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StoryArticleLineSep_iPad.png; sourceTree = "<group>"; };
+		1F6D9177289AECB7000D7B46 /* StoryArticleLineSep_vert_iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StoryArticleLineSep_vert_iPad.png; sourceTree = "<group>"; };
 		1F7DE51427F56354008923FF /* RED_SDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RED_SDK.swift; sourceTree = "<group>"; };
 		1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		1F8847A328526E3F00667A72 /* ForgotPassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassViewController.swift; sourceTree = "<group>"; };
@@ -882,6 +886,8 @@
 			isa = PBXGroup;
 			children = (
 				1FD1853C2889F5130030B355 /* StoryArticleLineSep.png */,
+				1F6D9175289AEBDF000D7B46 /* StoryArticleLineSep_iPad.png */,
+				1F6D9177289AECB7000D7B46 /* StoryArticleLineSep_vert_iPad.png */,
 				A8D61B3524F1633100A0F8F5 /* fonts */,
 				BDDA441D2612301000C9C3AF /* flags */,
 				1F8F214D27FCC5D9008CB00D /* socialLogos */,
@@ -1933,6 +1939,7 @@
 				BDDA452B2612301100C9C3AF /* BMU64.png in Resources */,
 				1F5B144527A0308900F743FB /* slate.png in Resources */,
 				BDDA45752612301100C9C3AF /* MNE64.png in Resources */,
+				1F6D9178289AECB7000D7B46 /* StoryArticleLineSep_vert_iPad.png in Resources */,
 				A81B3B292481E67500A52A97 /* Assets.xcassets in Resources */,
 				BDC0586827453EFF00C15F7E /* shareSplitButton.png in Resources */,
 				BDDA45402612301100C9C3AF /* LUX64.png in Resources */,
@@ -1967,6 +1974,7 @@
 				BDDA45172612301100C9C3AF /* JOR64.png in Resources */,
 				BDDA44FF2612301100C9C3AF /* BRA64.png in Resources */,
 				BDDA45212612301100C9C3AF /* THA64.png in Resources */,
+				1F6D9176289AEBDF000D7B46 /* StoryArticleLineSep_iPad.png in Resources */,
 				1F5B144627A0308900F743FB /* wsj.png in Resources */,
 				BDDA45322612301100C9C3AF /* UZB64.png in Resources */,
 				BD28140225F6BDCD00A91E38 /* text3.txt in Resources */,
