@@ -45,12 +45,37 @@ class StoryContentIPADViewController: UIViewController {
     
     // ---------------
     
+    var uniqueID = -1
+    let biasSliders = SliderPopup() // Preferences (orange) panel
+    var biasMiniButton = UIView()
+    var miniButtonTimer: Timer?
+    let shadeView = UIView()
+    var biasButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setBackgroundImage(UIImage(named: "prefsButton.png"), for: .normal)
+        button.addTarget(self, action: #selector(showBiasSliders(_:)), for: .touchUpInside)
+        button.clipsToBounds = true
+        return button
+    }()
+    let NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES = Notification.Name("reloadNewsInOtherInstances")
+    
+    
+    
+    
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setContentView()
         self.buildLoading()
         self.showLoading()
+        
+        self.uniqueID = Utils.shared.newsViewController_ID
+        self.biasSliders.sliderDelegate = self
+        self.biasSliders.shadeDelegate = self
+        self.setUpBiasButton()
+        self.initBiasMiniButton()
         
         self.navigationItem.hidesBackButton = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -64,6 +89,14 @@ class StoryContentIPADViewController: UIViewController {
             menuTap: #selector(self.hamburgerButtonItemClicked(_:)),
             searchTap: #selector(self.searchItemClicked(_:)),
             userTap: nil)
+            
+        self.loadSplitForPrefsPanel()
+    }
+    private func loadSplitForPrefsPanel() {
+        let index = UserDefaults.standard.integer(forKey: "userSplitPrefs")-1
+        if(index > -1) {
+            self.biasSliders.setSplitValue(index)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -73,6 +106,10 @@ class StoryContentIPADViewController: UIViewController {
             self.firstTime = false
             self.loadData()
         }
+    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.biasSliders.adaptToScreen()
     }
     
     private func loadData() {
@@ -250,6 +287,9 @@ extension StoryContentIPADViewController {
         self.contentView.frame = mFrame
         
         self.mainImageViewWidthConstraint.constant = screen_W * self.mainImageViewWidthFactor
+        
+        self.updateBiasButtonPosition()
+        self.biasSliders.adaptToScreen()
     }
     
     private func updateContentSize() {
@@ -1005,3 +1045,341 @@ extension StoryContentIPADViewController {
 }
 
 
+
+extension StoryContentIPADViewController: BiasSliderDelegate, ShadeDelegate {
+    
+    func biasSliderDidChange(sliderId: Int) {
+    
+        let dict = ["id": self.uniqueID]
+        NotificationCenter.default.post(name: NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES,
+                                        object: nil,
+                                        userInfo: dict)
+        
+        self.scrollView.isHidden = true
+        biasSliders.showLoading(true)
+        self.showLoading()
+        
+        DispatchQueue.main.async {
+            self.loadData()
+            DELAY(2.0) {
+                if(sliderId == self.biasSliders.latestBiasSliderUsed) {
+                    self.biasSliders.showLoading(false)
+                    self.scrollView.isHidden = false
+                    self.showLoading(false)
+                }
+            }
+        }
+    }
+    private func mustSplit() -> Bool {
+        let stancevalues =  self.biasSliders.stanceValues()
+        if(stancevalues.0 || stancevalues.1) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func splitValueChange() {
+        if(self.firstTime){ return }
+        
+        for vc in self.navigationController!.viewControllers {
+            if(vc != self) {
+                if let _vc = vc as? NewsViewController { // NewsViewController
+                    if(self.mustSplit()) {
+                        _vc.biasSliders.enableSplitForSharing()
+                    } else {
+                        _vc.biasSliders.disableSplitFromOutside()
+                    }
+                } else if let _vc = vc as? NewsTextViewController { // NewsTextViewController
+                    if(self.mustSplit()) {
+                        _vc.biasSliders.enableSplitForSharing()
+                    } else {
+                        _vc.biasSliders.disableSplitFromOutside()
+                    }
+                } else if let _vc = vc as? NewsBigViewController { // NewsBigViewController
+                    if(self.mustSplit()) {
+                        _vc.biasSliders.enableSplitForSharing()
+                    } else {
+                        _vc.biasSliders.disableSplitFromOutside()
+                    }
+                }
+            }
+        }
+    
+    
+    
+//        let dict = ["id": self.uniqueID]
+//        NotificationCenter.default.post(name: NOTIFICATION_RELOAD_NEWS_IN_OTHER_INSTANCES,
+//                                        object: nil,
+//                                        userInfo: dict)
+//
+        self.scrollView.isHidden = true
+        biasSliders.showLoading(true)
+        self.showLoading()
+
+        DispatchQueue.main.async {
+            self.loadData()
+            DELAY(2.0) {
+//                if(sliderId == self.biasSliders.latestBiasSliderUsed) {
+                    self.biasSliders.showLoading(false)
+                    self.scrollView.isHidden = false
+                    self.showLoading(false)
+//                }
+            }
+        }
+    
+    
+//        if(!self.mustSplit()) {
+//            //self.firstTime = true
+//            self.loadData()
+//
+////            let offset = CGPoint(x: 0, y: 0)
+////            self.tableView.setContentOffset(offset, animated: true)
+////            self.horizontalMenu.backToZero()
+//        } else {
+//            DELAY(0.3) {
+//                Utils.shared.newsViewController_ID = 0
+//                let vc = NewsViewController(topic: self.topic)
+//                vc.param_A = self.param_A
+//                self.navigationController?.viewControllers = [vc]
+//            }
+//        }
+    }
+    // ShadeDelegate
+    func dismissShade() {
+        if Globals.isSliderOn {
+            Globals.isSliderOn = false
+        }
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.shadeView.alpha = 0
+            self.updateBiasButtonPosition()
+        }, completion: nil)
+    }
+    func panelFullyOpened() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.updateBiasButtonPosition()
+        })
+    }
+    
+    func updateBiasButtonPosition() {
+    
+    
+    let factor: CGFloat = 0.9
+        
+//        let screenSize = UIScreen.main.bounds
+//
+//        self.view.addSubview(self.biasButton)
+//        let posX = screenSize.width - size.width - 5
+//
+//        var posY = screenSize.height - size.height
+//        if let nav = self.navigationController {
+//            if(!nav.navigationBar.isTranslucent) {
+//                posY -= 88
+//            }
+//        }
+//        posY += size.height - self.biasSliders.state01_height + 15
+//
+//        biasButton.frame = CGRect(x: posX, y: posY,
+//                                width: size.width, height: size.height)
+//        //biasButton.layer.cornerRadius = size * 0.5
+//        let y = view.frame.height - self.biasSliders.state01_height
+//        biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550)
+//
+//        biasSliders.buildViews()
+//        self.biasSliders.status = "SL00"
+//        self.updateBiasButtonPosition()
+        ///////////////////////////////////////////////////////
+        let size = CGSize(width: 78 * factor, height: 82 *  factor)
+    
+        var mFrame = self.biasButton.frame
+        let screenSize = UIScreen.main.bounds
+        
+        let posX = screenSize.width - size.width - 5
+        var posY = screenSize.height - mFrame.size.height
+        /*if let nav = navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                posY -= 88
+            }
+        }*/
+        posY += mFrame.size.height
+        
+        //let margin: CGFloat = 6
+        let status = self.biasSliders.status
+        
+        /*
+        if(status == "SL02") {
+            posY -= self.biasSliders.state02_height - margin
+        } else {
+            posY -= self.biasSliders.state01_height - margin
+        }*/
+        if(status == "SL02") {
+            posY -= self.biasSliders.state02_height + 110
+        } else if(status == "SL01") {
+            posY -= self.biasSliders.state01_height + 85
+            if(SAFE_AREA()!.bottom>0) { posY -= 25 }
+        } else {
+            posY -= self.biasSliders.state01_height - 20
+        }
+        
+        mFrame.origin.y = posY
+        mFrame.origin.x = posX
+        self.biasButton.frame = mFrame
+        
+        self.biasMiniButtonUpdatePosition()
+        self.biasMiniButton.superview?.bringSubviewToFront(self.biasMiniButton)
+    }
+    func biasMiniButtonUpdatePosition(offset: CGFloat = 20) {
+        var mFrame = self.biasMiniButton.frame
+        mFrame.origin.x = self.biasButton.frame.origin.x - offset
+        mFrame.origin.y = self.biasButton.frame.origin.y - offset
+        self.biasMiniButton.frame = mFrame
+    }
+    
+    @objc func showBiasSliders(_ sender:UIButton!) {
+        HAPTIC_CLICK()
+    
+        if !Globals.isSliderOn {
+            Globals.isSliderOn = true
+        }
+        
+        if(self.biasSliders.status == "SL00") {
+            configureBiasSliders()
+        } else {
+            self.biasSliders.handleDismiss()
+        }
+    }
+    func configureBiasSliders() {
+        
+        let y = view.frame.height - self.biasSliders.state01_height
+        biasSliders.addShowMore()
+        biasSliders.backgroundColor = accentOrange
+        
+        shadeView.backgroundColor = UIColor.black.withAlphaComponent(0)
+        shadeView.isUserInteractionEnabled = false
+        
+        view.addSubview(shadeView)
+        view.addSubview(biasSliders)
+        
+        var mFrame = view.frame
+        mFrame.origin.y = 0
+        shadeView.frame = mFrame
+        shadeView.alpha = 0
+        
+        self.biasSliders.reloadSliderValues()
+        self.biasSliders.status = "SL01"
+        self.biasSliders.separatorView.isHidden = false
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.shadeView.alpha = 1
+                
+                var mFrame = self.biasSliders.frame
+                mFrame.origin.y = y
+                self.biasSliders.frame = mFrame
+                
+                self.updateBiasButtonPosition()
+                
+            }, completion: nil)
+        
+        self.biasButton.superview?.bringSubviewToFront(self.biasButton)
+    }
+    
+    private func setUpBiasButton() {
+        let factor: CGFloat = 0.9
+        let size = CGSize(width: 78 * factor, height: 82 *  factor)
+        let screenSize = UIScreen.main.bounds
+        
+        self.view.addSubview(self.biasButton)
+        let posX = screenSize.width - size.width - 5
+        
+        var posY = screenSize.height - size.height
+        if let nav = self.navigationController {
+            if(!nav.navigationBar.isTranslucent) {
+                posY -= 88
+            }
+        }
+        posY += size.height - self.biasSliders.state01_height + 15
+        
+        biasButton.frame = CGRect(x: posX, y: posY,
+                                width: size.width, height: size.height)
+        //biasButton.layer.cornerRadius = size * 0.5
+        let y = view.frame.height - self.biasSliders.state01_height
+        biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550)
+        
+        biasSliders.buildViews()
+        self.biasSliders.status = "SL00"
+        self.updateBiasButtonPosition()
+        
+//        let longPressGesture = UILongPressGestureRecognizer(target: self,
+//            action: #selector(biasButtonOnLongPress(gesture:)))
+//        self.biasButton.addGestureRecognizer(longPressGesture)
+    }
+    
+    func initBiasMiniButton() {
+        let dim: CGFloat = 45.0
+        
+        self.biasMiniButton.frame = CGRect(x: 0, y: 0, width: dim, height: dim)
+        self.biasMiniButton.backgroundColor = .clear
+        view.addSubview(self.biasMiniButton)
+        
+        let icon = UIImageView()
+        icon.image = UIImage(named: "shareSplitButton.png")
+        icon.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+        self.biasMiniButton.addSubview(icon)
+        icon.center = CGPoint(x: dim/2, y: dim/2)
+        icon.tag = 767
+        
+        let buttonArea = UIButton(type: .custom)
+        buttonArea.frame = CGRect(x: 0, y: 0, width: dim, height: dim)
+        buttonArea.backgroundColor = .clear
+        self.biasMiniButton.addSubview(buttonArea)
+        buttonArea.addTarget(self, action: #selector(biasMiniButtonOnTap(sender:)),
+            for: .touchUpInside)
+        
+        self.biasMiniButtonUpdatePosition()
+        self.biasMiniButton.isHidden = true
+    }
+    
+    @objc func biasButtonOnLongPress(gesture: UILongPressGestureRecognizer) {
+        if(gesture.state != .began){ return }
+        
+        if(APP_CFG_SPLITSHARING) {
+            HAPTIC_CLICK()
+        
+            if(self.biasMiniButton.isHidden) {
+                self.biasMiniButtonUpdatePosition(offset: 0)
+                self.biasMiniButton.alpha = 1.0
+                self.biasMiniButton.isHidden = false
+                self.biasButton.superview?.bringSubviewToFront(self.biasButton)
+
+                UIView.animate(withDuration: 0.4) {
+                    self.biasMiniButton.alpha = 1.0
+                    self.biasMiniButtonUpdatePosition()
+                } completion: { succeed in
+                    if(self.miniButtonTimer != nil) {
+                        self.miniButtonTimer?.invalidate()
+                    }
+                    self.miniButtonTimer = Timer.scheduledTimer(withTimeInterval: 4.0,
+                        repeats: false) { timer in
+
+                        self.biasButton.superview?.bringSubviewToFront(self.biasButton)
+                        UIView.animate(withDuration: 0.4) {
+                            self.biasMiniButton.alpha = 1.0
+                            self.biasMiniButtonUpdatePosition(offset: 0)
+                        } completion: { (succeed) in
+                            self.biasMiniButton.isHidden = true
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    
+    @objc func biasMiniButtonOnTap(sender: UIButton) {
+        HAPTIC_CLICK()
+        
+        ENABLE_SPLIT_SHARING_AFTER_LOADING = true
+        self.biasSliders.enableSplitForSharing()
+    }
+    
+    
+}

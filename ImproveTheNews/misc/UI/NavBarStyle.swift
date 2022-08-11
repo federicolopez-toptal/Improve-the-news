@@ -59,13 +59,13 @@ func SETUP_NAVBAR(viewController: UIViewController, homeTap: Selector?, menuTap:
 
 
 
-        if(uniqueID == 1) {
+        //if(uniqueID == 1) {
             // LEFT
             let hamburgerButton = UIBarButtonItem(image: UIImage(imageLiteralResourceName: "hamburger"),
             style: .plain, target: viewController, action: menuTap)
             
             leftButtons.append(hamburgerButton)
-        }
+        //}
         
         // RIGHT
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search,
