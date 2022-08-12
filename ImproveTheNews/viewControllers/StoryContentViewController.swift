@@ -619,7 +619,8 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let sourceTime = UILabel()
         //let source = spin.media_title.replacingOccurrences(of: " #", with: "")
 //        sourceTime.text = source + " - " + FORMAT_TIME(spin.time)
-        sourceTime.text = spin.media_title.components(separatedBy: " #").first! // + " - " + FORMAT_TIME(spin.time)
+        let sourceName = spin.media_title.components(separatedBy: " #").first!
+        sourceTime.text = sourceName // + " - " + FORMAT_TIME(spin.time)
         //self.LR_PE(name: spin.media_title)
         
         sourceTime.textColor = self.C(0x93A0B4, 0x1D242F)
@@ -632,8 +633,15 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         if(LR_PE.0==0 && LR_PE.1==0) {
             miniSlider.isHidden = true
         } else {
-            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
+            var cCode = ""
+            if let _countryCode = spin.media_country_code {
+                cCode = _countryCode
+            }
+        
+            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1,
+                                 source: sourceName, countryID: cCode)
         }
+        miniSlider.viewController = self
         
         let spacer2 = UIView()
         spacer2.backgroundColor = .clear
@@ -834,7 +842,8 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let sourceTime = UILabel()
 //        let source = article.media_title.replacingOccurrences(of: " #", with: "")
 //        sourceTime.text = source + " - " + FORMAT_TIME(spin.time)
-        sourceTime.text = article.media_title.components(separatedBy: " #").first! // + " - " + FORMAT_TIME(spin.time)
+        let sourceName = article.media_title.components(separatedBy: " #").first!
+        sourceTime.text = sourceName // + " - " + FORMAT_TIME(spin.time)
         sourceTime.textColor = self.C(0x93A0B4, 0x1D242F)
         sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
         subHorizontalStack.addArrangedSubview(sourceTime)
@@ -845,9 +854,15 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         if(LR_PE.0==0 && LR_PE.1==0) {
             miniSlider.isHidden = true
         } else {
-            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
+            var cCode = ""
+            if let _countryCode = article.media_country_code {
+                cCode = _countryCode
+            }
+        
+            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1,
+                                 source: sourceName, countryID: cCode)
         }
-
+        miniSlider.viewController = self
 
         
         let spacer2 = UIView()
@@ -977,7 +992,10 @@ extension StoryContentViewController {
 //            UIApplication.shared.open(url)
 //        }
 
-        let vc = PlainWebViewController(url: url, title: title)
+//        let vc = PlainWebViewController(url: url, title: title)
+//        navigationController?.pushViewController(vc, animated: true)
+        
+        let vc = WebViewController(url: url, title: title, annotations: [])
         navigationController?.pushViewController(vc, animated: true)
     }
     

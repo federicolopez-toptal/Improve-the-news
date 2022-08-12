@@ -312,7 +312,10 @@ extension StoryContentIPADViewController {
     }
 
     private func OPEN_URL(_ url: String, title: String = "") {
-        let vc = PlainWebViewController(url: url, title: title)
+//        let vc = PlainWebViewController(url: url, title: title)
+//        navigationController?.pushViewController(vc, animated: true)
+
+        let vc = WebViewController(url: url, title: title, annotations: [])
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -761,6 +764,7 @@ extension StoryContentIPADViewController {
         } else {
             miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
         }
+        miniSlider.viewController = self
 
         let spacer2 = UIView()
         spacer2.backgroundColor = .clear
@@ -993,6 +997,7 @@ extension StoryContentIPADViewController {
         } else {
             miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
         }
+        miniSlider.viewController = self
 
         let spacer2 = UIView()
         spacer2.backgroundColor = .clear
