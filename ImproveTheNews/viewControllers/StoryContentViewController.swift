@@ -41,6 +41,7 @@ class StoryContentViewController: UIViewController {
 
 
     var uniqueID = -1
+    var biasButtonState = 1         // 1: normal icon, 2: share-split icon
     let biasSliders = SliderPopup() // Preferences (orange) panel
     var biasMiniButton = UIView()
     var miniButtonTimer: Timer?
@@ -83,6 +84,29 @@ class StoryContentViewController: UIViewController {
         if(index > -1) {
             self.biasSliders.setSplitValue(index)
         }
+        
+        if( mustSplit() ) { // SPLIT
+            self.biasButtonState = 2
+        } else { // NORMAL
+            self.biasButtonState = 1
+        }
+        
+        let iconImageView = self.biasMiniButton.viewWithTag(767) as! UIImageView
+        iconImageView.image = UIImage(named: "shareSplitButton.png")
+        
+        if(!APP_CFG_SPLITSHARING) {
+            self.biasButtonState = 1
+        }
+
+        self.biasSliders.canDismiss = true
+        var buttonIcon = UIImage(named: "prefsButton.png")
+        if(self.biasButtonState == 2) {
+            //self.biasSliders.canDismiss = false
+            buttonIcon = UIImage(named: "shareSplitButton.png")
+            iconImageView.image = UIImage(named: "prefsButton.png")
+        }
+        self.biasButton.setBackgroundImage(buttonIcon, for: .normal)
+        self.biasMiniButton.superview?.bringSubviewToFront(self.biasMiniButton)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -108,13 +132,15 @@ class StoryContentViewController: UIViewController {
         if let _url = URL(string: _api_call) {
             _filter = _url.params()["sliders"] as! String
         }
-
+        
         self.removeAllFacts()
         self.removeAllSpins()
         self.removeAllArticles()
         
         if let _link = self.link {
-            StoryContent.instance.loadData(link: _link, filter: _filter) { (storyData, facts, spins, articles, version) in
+            print("LOAD DATA", _link, _filter)
+        
+            StoryContent.instance.loadData(link: _link, filter: _filter, mustSplit: self.mustSplit()) { (storyData, facts, spins, articles, version) in
                 self.storyData = storyData
                 self.facts = facts
                 self.spins = spins
@@ -1053,6 +1079,18 @@ extension StoryContentViewController: BiasSliderDelegate, ShadeDelegate {
         biasSliders.showLoading(true)
         self.showLoading()
         
+        for (i, vc) in self.navigationController!.viewControllers.enumerated() {
+            if(vc == self) {
+                let prev = self.navigationController!.viewControllers[i-1]
+                
+                if let _vc = prev as? NewsViewController {
+                    self.api_call = _vc.buildApiCall()
+                }
+                
+                break
+            }
+        }
+        
         DispatchQueue.main.async {
             self.loadData()
             DELAY(2.0) {
@@ -1075,6 +1113,12 @@ extension StoryContentViewController: BiasSliderDelegate, ShadeDelegate {
     
     func splitValueChange() {
         if(self.firstTime){ return }
+        
+        if( mustSplit() ) { // SPLIT
+            self.biasButtonState = 2
+        } else { // NORMAL
+            self.biasButtonState = 1
+        }
         
         for vc in self.navigationController!.viewControllers {
             if(vc != self) {
@@ -1122,6 +1166,23 @@ extension StoryContentViewController: BiasSliderDelegate, ShadeDelegate {
             }
         }
     
+        let iconImageView = self.biasMiniButton.viewWithTag(767) as! UIImageView
+        iconImageView.image = UIImage(named: "shareSplitButton.png")
+        
+        if(!APP_CFG_SPLITSHARING) {
+            self.biasButtonState = 1
+        }
+
+        self.biasSliders.canDismiss = true
+        var buttonIcon = UIImage(named: "prefsButton.png")
+        if(self.biasButtonState == 2) {
+            //self.biasSliders.canDismiss = false
+            buttonIcon = UIImage(named: "shareSplitButton.png")
+            iconImageView.image = UIImage(named: "prefsButton.png")
+        }
+        self.biasButton.setBackgroundImage(buttonIcon, for: .normal)
+        self.biasMiniButton.superview?.bringSubviewToFront(self.biasMiniButton)
+    
     
 //        if(!self.mustSplit()) {
 //            //self.firstTime = true
@@ -1139,6 +1200,8 @@ extension StoryContentViewController: BiasSliderDelegate, ShadeDelegate {
 //            }
 //        }
     }
+    
+    
     // ShadeDelegate
     func dismissShade() {
         if Globals.isSliderOn {
@@ -1271,9 +1334,9 @@ extension StoryContentViewController: BiasSliderDelegate, ShadeDelegate {
         self.biasSliders.status = "SL00"
         self.updateBiasButtonPosition()
         
-//        let longPressGesture = UILongPressGestureRecognizer(target: self,
-//            action: #selector(biasButtonOnLongPress(gesture:)))
-//        self.biasButton.addGestureRecognizer(longPressGesture)
+        let longPressGesture = UILongPressGestureRecognizer(target: self,
+            action: #selector(biasButtonOnLongPress(gesture:)))
+        self.biasButton.addGestureRecognizer(longPressGesture)
     }
     
     func initBiasMiniButton() {

@@ -1055,9 +1055,17 @@ extension NewsBigViewController: UITableViewDelegate, UITableViewDataSource,
 //            let vc = PlainWebViewController(url: link, title: title)
 //            navigationController?.pushViewController(vc, animated: true)
 
-            let vc = StoryContentViewController.createInstance()
-            vc.link = link
-            navigationController?.pushViewController(vc, animated: true)
+            if(IS_iPAD()) {
+                let vc = StoryContentIPADViewController.createInstance()
+                vc.link = link
+                vc.api_call = self.buildApiCall()
+                navigationController?.pushViewController(vc, animated: true)
+            } else {
+                let vc = StoryContentViewController.createInstance()
+                vc.link = link
+                vc.api_call = self.buildApiCall()
+                navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
     

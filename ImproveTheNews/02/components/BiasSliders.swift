@@ -847,7 +847,8 @@ extension SliderPopup {
     
     
     func disableSplitFromOutside() {
-        let index = UserDefaults.standard.integer(forKey: "userSplitPrefs")-1
+        var index = UserDefaults.standard.integer(forKey: "userSplitPrefs")-1
+        if(index < 0){ index = 0 }
         
         for miniView in stackView.subviews {
             if(miniView.tag == 400+index) {
