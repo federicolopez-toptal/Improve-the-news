@@ -38,9 +38,9 @@ class StoryData {
 
 class StoryFact {
     
-    let title: String
-    let source_title: String
-    let source_url: String
+    let title: String           // text
+    let source_title: String    // source name
+    let source_url: String      // source url
 
     init(_ json: [String: Any]) {
         self.title = json["title"] as! String

@@ -144,6 +144,7 @@ class StoryContentViewController: UIViewController {
                 self.storyData = storyData
                 
                 self.facts = [StoryFact]()
+                // Remove empty sources
                 for F in facts! {
                     if(!F.source_url.isEmpty && !F.source_title.isEmpty) {
                         self.facts?.append(F)
@@ -326,15 +327,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
     private func addFacts() {
         let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
         
-//        let limit = 3
-        
         if let _facts = self.facts {
-//            for (i, F) in _facts.enumerated() {
-//                if(i<=limit) {
-//                    //self.addSingleFact(F, isLast: i == self.facts!.count-1, index: i)
-//                    self.addSingleFact(F, isLast: i == limit, index: i)
-//                }
-//            }
         
             if(factsVContainer.arrangedSubviews.count==0) {
                 // Initial 3
@@ -350,17 +343,9 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
                         self.addSingleFact(F, isLast: i == self.facts!.count-1, index: i)
                     }
                 }
-
-//                let sourcesVContainer = self.contentView.viewWithTag(101) as! UIStackView
-//                sourcesVContainer.removeAllArrangedSubviews()
-//                self.sourceRow = -1
-//                self.sourceWidths = [CGFloat]()
-//
-//                for (i, F) in _facts.enumerated() {
-////                    self.addSingleFact(F, isLast: i == self.facts!.count-1, index: i)
-//                    self.addSingleSource(F, isLast: i == self.facts!.count-1, index: i)
-//                }
             }
+            
+            //self.renameDuplicatedSources()
         }
     }
     
@@ -459,12 +444,12 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         
         let _sourceHeight: CGFloat = 21.0
         let _sourceFont = UIFont(name: "Roboto-Regular", size: 15)!
-        let _sourceText = " [" + String(self.sources!.count) + "] " + fact.source_title + " "
+        let _sourceText = " [" + String(self.sources!.count) + "] " + fact.source_title + " " + self.sufix(index: _index-1)
         let _sourceWidth = _sourceText.width(withConstraintedHeight: _sourceHeight,
             font: _sourceFont)
             
         var _widthSum: CGFloat = 0
-        let _widthTotal = UIScreen.main.bounds.width - 20 - 40
+        let _widthTotal = UIScreen.main.bounds.width - 20 - 40 - 20
         for W in self.sourceWidths {
             _widthSum += W + sourcesHStack.spacing
         }
@@ -520,6 +505,51 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
             spacer.backgroundColor = .green
             spacer.alpha = 0
             sourcesHStack.addArrangedSubview(spacer)
+        }
+    }
+    
+    func sufix(index: Int) -> String {
+        
+        var _sources: [(name: String, url: String)] = []
+        
+        // remove repeated url(s)
+        for F in self.facts! {
+            var found = false
+            for _S in _sources {
+                if(_S.url == F.source_url) {
+                    found = true
+                    break
+                }
+            }
+            
+            if(!found) {
+                _sources.append((name: F.source_title, url: F.source_url))
+            }
+        }
+
+        let name = _sources[index].name
+        var count = 0
+        for _S in _sources {
+            if(_S.name == name) {
+                count += 1
+            }
+        }
+        
+        if(count == 1) {
+            return ""
+        } else {
+            var num = 0
+            for (i, _S) in _sources.enumerated() {
+                if(_S.name == name) {
+                    num += 1
+                    if(i==index) {
+                        break
+                    }
+                }
+            }
+            
+            let letters = "abcdefghijklmnopqrstuvwxyz"
+            return "(" + String(letters[num-1]) + ") "
         }
     }
     

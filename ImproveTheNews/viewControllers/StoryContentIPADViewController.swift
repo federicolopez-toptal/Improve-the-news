@@ -523,7 +523,7 @@ extension StoryContentIPADViewController {
         
         let _sourceHeight: CGFloat = 21.0
         let _sourceFont = UIFont(name: "Roboto-Regular", size: 15)!
-        let _sourceText = " [" + String(self.sources!.count) + "] " + fact.source_title + " "
+        let _sourceText = " [" + String(self.sources!.count) + "] " + fact.source_title + " " + self.sufix(index: _index-1)
         let _sourceWidth = _sourceText.width(withConstraintedHeight: _sourceHeight,
             font: _sourceFont)
             
@@ -589,6 +589,51 @@ extension StoryContentIPADViewController {
             spacer.backgroundColor = .green
             spacer.alpha = 0
             sourcesHStack.addArrangedSubview(spacer)
+        }
+    }
+    
+    func sufix(index: Int) -> String {
+        
+        var _sources: [(name: String, url: String)] = []
+        
+        // remove repeated url(s)
+        for F in self.facts! {
+            var found = false
+            for _S in _sources {
+                if(_S.url == F.source_url) {
+                    found = true
+                    break
+                }
+            }
+            
+            if(!found) {
+                _sources.append((name: F.source_title, url: F.source_url))
+            }
+        }
+
+        let name = _sources[index].name
+        var count = 0
+        for _S in _sources {
+            if(_S.name == name) {
+                count += 1
+            }
+        }
+        
+        if(count == 1) {
+            return ""
+        } else {
+            var num = 0
+            for (i, _S) in _sources.enumerated() {
+                if(_S.name == name) {
+                    num += 1
+                    if(i==index) {
+                        break
+                    }
+                }
+            }
+            
+            let letters = "abcdefghijklmnopqrstuvwxyz"
+            return "(" + String(letters[num-1]) + ") "
         }
     }
     
