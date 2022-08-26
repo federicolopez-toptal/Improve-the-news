@@ -142,7 +142,15 @@ class StoryContentViewController: UIViewController {
         
             StoryContent.instance.loadData(link: _link, filter: _filter, mustSplit: self.mustSplit()) { (storyData, facts, spins, articles, version) in
                 self.storyData = storyData
-                self.facts = facts
+                
+                self.facts = [StoryFact]()
+                for F in facts! {
+                    if(!F.source_url.isEmpty && !F.source_title.isEmpty) {
+                        self.facts?.append(F)
+                    }
+                }
+                
+                
                 self.spins = spins
                 self.articles = articles
                 self.version = version
@@ -357,6 +365,8 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
     }
     
     private func addSingleFact(_ fact: StoryFact, isLast: Bool = false, index: Int) {
+//        print("IS LAST:", isLast)
+        
         let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
         let sourcesVContainer = self.contentView.viewWithTag(101) as! UIStackView
         
@@ -416,7 +426,6 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         
         print("SOURCES", self.sources)
         print("SOURCES", "-------")
-        if(!mustAdd){ return }
         
         if(self.sourceRow == -1) {
             let sourcesHStack = UIStackView()
@@ -428,6 +437,19 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
             self.sourceRow = 0
         }
         var sourcesHStack = sourcesVContainer.arrangedSubviews[self.sourceRow] as! UIStackView
+        
+        if(!mustAdd){
+            if(isLast) {
+                let spacer = UIView()
+                spacer.backgroundColor = .green
+                spacer.alpha = 0
+                sourcesHStack.addArrangedSubview(spacer)
+            }
+            
+            return
+        }
+        
+        
         
         if(!isLast) {
             if let _last = sourcesHStack.arrangedSubviews.last, _last.alpha == 0 {
@@ -448,7 +470,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         }
         if(_widthSum + _sourceWidth > _widthTotal) {
             let spacer = UIView()
-            spacer.backgroundColor = .clear
+            spacer.backgroundColor = .systemPink //.clear
             spacer.alpha = 0
             sourcesHStack.addArrangedSubview(spacer)
             

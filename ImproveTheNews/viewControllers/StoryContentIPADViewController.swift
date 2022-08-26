@@ -488,7 +488,7 @@ extension StoryContentIPADViewController {
         
         print("SOURCES", self.sources)
         print("SOURCES", "-------")
-        if(!mustAdd){ return }
+        
         
         if(self.sourceRow == -1) {
             let sourcesHStack = UIStackView()
@@ -500,6 +500,20 @@ extension StoryContentIPADViewController {
             self.sourceRow = 0
         }
         var sourcesHStack = sourcesVContainer.arrangedSubviews[self.sourceRow] as! UIStackView
+        //sourcesHStack.backgroundColor = .green
+        
+        if(!mustAdd){
+            if(isLast) {
+                let spacer = UIView()
+                spacer.backgroundColor = .green
+                spacer.alpha = 0
+                sourcesHStack.addArrangedSubview(spacer)
+            }
+        
+            return
+        }
+        
+        
         
         if(!isLast) {
             if let _last = sourcesHStack.arrangedSubviews.last, _last.alpha == 0 {
@@ -514,7 +528,10 @@ extension StoryContentIPADViewController {
             font: _sourceFont)
             
         var _widthSum: CGFloat = 0
-        let _widthTotal = UIScreen.main.bounds.width - 20 - 40
+        //let _widthTotal = UIScreen.main.bounds.width - 20 - 40
+        
+        let _widthTotal = UIScreen.main.bounds.width - 20 - 20 - 10 - self.mainImageViewWidthConstraint.constant
+        
         for W in self.sourceWidths {
             _widthSum += W + sourcesHStack.spacing
         }
@@ -532,7 +549,9 @@ extension StoryContentIPADViewController {
             
             self.sourceRow += 1
             self.sourceWidths = [CGFloat]()
-            sourcesHStack = sourcesVContainer.arrangedSubviews[self.sourceRow] as! UIStackView
+            
+            //sourcesHStack = sourcesVContainer.arrangedSubviews[self.sourceRow] as! UIStackView
+            sourcesHStack = sourcesVContainer.arrangedSubviews.last as! UIStackView
         }
         
         let sourceContainer = UIView()
