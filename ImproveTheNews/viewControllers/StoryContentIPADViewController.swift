@@ -92,7 +92,18 @@ class StoryContentIPADViewController: UIViewController {
             userTap: nil)
             
         self.loadSplitForPrefsPanel()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadAll),
+            name: NOTIFICATION_FORCE_RELOAD_NEWS,
+            object: nil)
     }
+    
+    @objc func reloadAll() {
+        DispatchQueue.main.async {
+            self.loadData()
+        }
+    }
+    
     private func loadSplitForPrefsPanel() {
         let index = UserDefaults.standard.integer(forKey: "userSplitPrefs")-1
         if(index > -1) {
@@ -821,7 +832,7 @@ extension StoryContentIPADViewController {
             h_flag_container.heightAnchor.constraint(equalToConstant: 28.0)
         ])
 
-        if let _countryCode = spin.media_country_code {
+        if let _countryCode = spin.media_country_code, MorePrefsViewController.showFlags() {
             let flag = UIImageView()
             flag.contentMode = .scaleAspectFit
             flag.image = self.GET_FLAG(id: _countryCode)
@@ -844,15 +855,17 @@ extension StoryContentIPADViewController {
         sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
         h_flag_container.addArrangedSubview(sourceTime)
 
-        let miniSlider = MiniSlidersCircView(some: "")
-        miniSlider.insertInto(stackView: h_flag_container)
-        let LR_PE = self.LR_PE(name: spin.media_title)
-        if(LR_PE.0==0 && LR_PE.1==0) {
-            miniSlider.isHidden = true
-        } else {
-            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
+        if(MorePrefsViewController.showStanceInsets()) {
+            let miniSlider = MiniSlidersCircView(some: "")
+            miniSlider.insertInto(stackView: h_flag_container)
+            let LR_PE = self.LR_PE(name: spin.media_title)
+            if(LR_PE.0==0 && LR_PE.1==0) {
+                miniSlider.isHidden = true
+            } else {
+                miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
+            }
+            miniSlider.viewController = self
         }
-        miniSlider.viewController = self
 
         let spacer2 = UIView()
         spacer2.backgroundColor = .clear
@@ -1056,7 +1069,7 @@ extension StoryContentIPADViewController {
             h_flag_container.heightAnchor.constraint(equalToConstant: 28.0)
         ])
 
-        if let _countryCode = article.media_country_code {
+        if let _countryCode = article.media_country_code, MorePrefsViewController.showFlags() {
             let flag = UIImageView()
             flag.contentMode = .scaleAspectFit
             flag.image = self.GET_FLAG(id: _countryCode)
@@ -1077,15 +1090,17 @@ extension StoryContentIPADViewController {
         sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
         h_flag_container.addArrangedSubview(sourceTime)
 
-        let miniSlider = MiniSlidersCircView(some: "")
-        miniSlider.insertInto(stackView: h_flag_container)
-        let LR_PE = self.LR_PE(name: article.media_title)
-        if(LR_PE.0==0 && LR_PE.1==0) {
-            miniSlider.isHidden = true
-        } else {
-            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
+        if(MorePrefsViewController.showStanceInsets()) {
+            let miniSlider = MiniSlidersCircView(some: "")
+            miniSlider.insertInto(stackView: h_flag_container)
+            let LR_PE = self.LR_PE(name: article.media_title)
+            if(LR_PE.0==0 && LR_PE.1==0) {
+                miniSlider.isHidden = true
+            } else {
+                miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1)
+            }
+            miniSlider.viewController = self
         }
-        miniSlider.viewController = self
 
         let spacer2 = UIView()
         spacer2.backgroundColor = .clear
@@ -1151,6 +1166,18 @@ extension StoryContentIPADViewController: BiasSliderDelegate, ShadeDelegate {
         self.scrollView.isHidden = true
         biasSliders.showLoading(true)
         self.showLoading()
+        
+        for (i, vc) in self.navigationController!.viewControllers.enumerated() {
+            if(vc == self) {
+                let prev = self.navigationController!.viewControllers[i-1]
+                
+                if let _vc = prev as? NewsViewController {
+                    self.api_call = _vc.buildApiCall()
+                }
+                
+                break
+            }
+        }
         
         DispatchQueue.main.async {
             self.loadData()

@@ -45,11 +45,23 @@ class StoryFact {
     init(_ json: [String: Any]) {
         self.title = json["title"] as! String
         
+        /*
         let sourceArray = json["source"] as! [[String: String]]
         if(sourceArray.count>0) {
             let first = sourceArray[0]
             self.source_title = first["title"]!
             self.source_url = first["url"]!
+        } else {
+            self.source_title = ""
+            self.source_url = ""
+        }
+        */
+        
+        let sourceArray = json["source"] as! [[String: Any]]
+        if(sourceArray.count>0) {
+            let first = sourceArray[0]
+            self.source_title = first["title"] as! String
+            self.source_url = first["url"] as! String
         } else {
             self.source_title = ""
             self.source_url = ""
@@ -63,6 +75,7 @@ class StorySpin {
 
     let title: String
     let description: String
+    let timeStamp: String?
     let subTitle: String
     let url: String
     let image: String
@@ -73,6 +86,7 @@ class StorySpin {
     init(_ json: [String: Any]) {
         self.title = json["title"] as! String
         self.description = json["description"] as! String
+        self.timeStamp = json["timestamp"] as? String
         
         let spinsArray = json["spins"] as! [[String: Any]]
         if(spinsArray.count>0) {
@@ -115,7 +129,7 @@ class StoryArticle {
         self.image = json["image"] as! String
         self.time = json["time"] as! Int
         
-        let mediaObj = json["media"] as! [String: String]
+        let mediaObj = json["media"] as! [String: Any]
         self.media_title = mediaObj["title"] as! String
         self.media_country_code = mediaObj["country_code"] as? String
     }

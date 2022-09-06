@@ -19,4 +19,9 @@ class CustomNavigationController: UINavigationController {
         return self.visibleViewController
     }
     
+    override var shouldAutorotate: Bool {
+        if(IS_iPHONE()){ return false }
+        else { return true }
+    }
+    
 }

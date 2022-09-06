@@ -14,5 +14,5 @@ let APP_CFG_MY_ACCOUNT = true
 let APP_CFG_NEW_USERID = true
 // Use new method (generate) to get the userID
 
-let APP_CFG_SPLITSHARING = true
+let APP_CFG_SPLITSHARING = false
 // Enable/Disable Split sharing

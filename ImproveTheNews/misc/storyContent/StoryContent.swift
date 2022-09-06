@@ -74,7 +74,6 @@ extension StoryContent {
                     let storySpinsArray = self.removeNullFrom(json["spinSection"])
                     let storyArticles = self.removeNullFrom(json["articles"])
                     let version = json["version"] as! String
-                    
                     let storyData = StoryData(storyDataJson)
                     
                     var facts = [StoryFact]()

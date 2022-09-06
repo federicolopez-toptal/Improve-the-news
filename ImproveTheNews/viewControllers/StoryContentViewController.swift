@@ -77,6 +77,16 @@ class StoryContentViewController: UIViewController {
             userTap: nil)
             
         self.loadSplitForPrefsPanel()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadAll),
+            name: NOTIFICATION_FORCE_RELOAD_NEWS,
+            object: nil)
+    }
+    
+    @objc func reloadAll() {
+        DispatchQueue.main.async {
+            self.loadData()
+        }
     }
 
     private func loadSplitForPrefsPanel() {
@@ -637,6 +647,20 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         descriptionLabel.textColor = self.C(0x93A0B4, 0x1D242F)
         descriptionLabel.text = spin.description
         
+        // Incomplete spin
+        if(spin.image.isEmpty && spin.subTitle.isEmpty
+            && spin.media_country_code == nil && spin.media_title.isEmpty) {
+        
+            spinsVContainer.addArrangedSubview(titleLabel)
+            spinsVContainer.addArrangedSubview(descriptionLabel)
+            self.addSpinSeparator(verticalStackView: spinsVContainer)
+        
+            return
+        }
+        
+        
+        
+        
         let horizontalStack = UIStackView()
         horizontalStack.axis = .horizontal
         horizontalStack.backgroundColor = .clear
@@ -681,7 +705,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
             subHorizontalStack.heightAnchor.constraint(equalToConstant: 28.0)
         ])
         
-        if let _countryCode = spin.media_country_code {
+        if let _countryCode = spin.media_country_code, MorePrefsViewController.showFlags() {
             let flag = UIImageView()
             flag.contentMode = .scaleAspectFit
             flag.image = self.GET_FLAG(id: _countryCode)
@@ -705,21 +729,23 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
         subHorizontalStack.addArrangedSubview(sourceTime)
         
-        let miniSlider = MiniSlidersCircView(some: "")
-        miniSlider.insertInto(stackView: subHorizontalStack)
-        let LR_PE = self.LR_PE(name: spin.media_title)
-        if(LR_PE.0==0 && LR_PE.1==0) {
-            miniSlider.isHidden = true
-        } else {
-            var cCode = ""
-            if let _countryCode = spin.media_country_code {
-                cCode = _countryCode
+        if(MorePrefsViewController.showStanceInsets()) {
+            let miniSlider = MiniSlidersCircView(some: "")
+            miniSlider.insertInto(stackView: subHorizontalStack)
+            let LR_PE = self.LR_PE(name: spin.media_title)
+            if(LR_PE.0==0 && LR_PE.1==0) {
+                miniSlider.isHidden = true
+            } else {
+                var cCode = ""
+                if let _countryCode = spin.media_country_code {
+                    cCode = _countryCode
+                }
+            
+                miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1,
+                                     source: sourceName, countryID: cCode)
             }
-        
-            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1,
-                                 source: sourceName, countryID: cCode)
+            miniSlider.viewController = self
         }
-        miniSlider.viewController = self
         
         let spacer2 = UIView()
         spacer2.backgroundColor = .clear
@@ -739,15 +765,20 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         
         // ---------
         
+        self.addSpinSeparator(verticalStackView: spinsVContainer)
+        spinsVContainer.backgroundColor = .clear
+    }
+    
+    private func addSpinSeparator(verticalStackView: UIStackView) {
         let stackSpacer = UIStackView()
         stackSpacer.axis = .vertical
         stackSpacer.backgroundColor = .clear
-        spinsVContainer.addArrangedSubview(stackSpacer)
+        verticalStackView.addArrangedSubview(stackSpacer)
         stackSpacer.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackSpacer.heightAnchor.constraint(equalToConstant: 13)
         ])
-        
+    
         for i in 1...3 {
             let view = UIView()
             view.backgroundColor = .clear
@@ -780,8 +811,6 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
                 ])
             }
         }
-
-        spinsVContainer.backgroundColor = .clear
     }
     
     private func LR_PE(name: String) -> (Int, Int) {
@@ -904,7 +933,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
             subHorizontalStack.heightAnchor.constraint(equalToConstant: 28.0)
         ])
         
-        if let _countryCode = article.media_country_code {
+        if let _countryCode = article.media_country_code, MorePrefsViewController.showFlags() {
             let flag = UIImageView()
             flag.contentMode = .scaleAspectFit
             flag.image = self.GET_FLAG(id: _countryCode)
@@ -926,22 +955,23 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
         subHorizontalStack.addArrangedSubview(sourceTime)
         
-        let miniSlider = MiniSlidersCircView(some: "")
-        miniSlider.insertInto(stackView: subHorizontalStack)
-        let LR_PE = self.LR_PE(name: article.media_title)
-        if(LR_PE.0==0 && LR_PE.1==0) {
-            miniSlider.isHidden = true
-        } else {
-            var cCode = ""
-            if let _countryCode = article.media_country_code {
-                cCode = _countryCode
+        if(MorePrefsViewController.showStanceInsets()) {
+            let miniSlider = MiniSlidersCircView(some: "")
+            miniSlider.insertInto(stackView: subHorizontalStack)
+            let LR_PE = self.LR_PE(name: article.media_title)
+            if(LR_PE.0==0 && LR_PE.1==0) {
+                miniSlider.isHidden = true
+            } else {
+                var cCode = ""
+                if let _countryCode = article.media_country_code {
+                    cCode = _countryCode
+                }
+            
+                miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1,
+                                     source: sourceName, countryID: cCode)
             }
-        
-            miniSlider.setValues(val1: LR_PE.0, val2: LR_PE.1,
-                                 source: sourceName, countryID: cCode)
+            miniSlider.viewController = self
         }
-        miniSlider.viewController = self
-
         
         let spacer2 = UIView()
         spacer2.backgroundColor = .clear

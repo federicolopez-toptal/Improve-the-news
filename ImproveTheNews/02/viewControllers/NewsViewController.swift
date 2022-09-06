@@ -1064,6 +1064,8 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
         self.biasButton.addGestureRecognizer(tapGesture)
         */
         
+        
+        
         let longPressGesture = UILongPressGestureRecognizer(target: self,
             action: #selector(biasButtonOnLongPress(gesture:)))
         self.biasButton.addGestureRecognizer(longPressGesture)
