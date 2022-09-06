@@ -151,23 +151,32 @@ class StoryContentViewController: UIViewController {
             print("LOAD DATA", _link, _filter)
         
             StoryContent.instance.loadData(link: _link, filter: _filter, mustSplit: self.mustSplit()) { (storyData, facts, spins, articles, version) in
-                self.storyData = storyData
                 
-                self.facts = [StoryFact]()
-                // Remove empty sources
-                for F in facts! {
-                    if(!F.source_url.isEmpty && !F.source_title.isEmpty) {
-                        self.facts?.append(F)
+                if(storyData == nil || facts == nil || spins == nil || articles == nil || version == nil) {
+                    ALERT(vc: self, title: "Error",
+                    message: "There was an error loading your content. Try again later") {
+                        self.navigationController?.popViewController(animated: true)
                     }
                 }
-                
-                
-                self.spins = spins
-                self.articles = articles
-                self.version = version
+                else {
+                    self.storyData = storyData
+                    
+                    self.facts = [StoryFact]()
+                    // Remove empty sources
+                    for F in facts! {
+                        if(!F.source_url.isEmpty && !F.source_title.isEmpty) {
+                            self.facts?.append(F)
+                        }
+                    }
+                    
+                    
+                    self.spins = spins
+                    self.articles = articles
+                    self.version = version
 
-                self.updateUI()
-                self.showLoading(false)
+                    self.updateUI()
+                    self.showLoading(false)
+                }
             }
         }
     }
