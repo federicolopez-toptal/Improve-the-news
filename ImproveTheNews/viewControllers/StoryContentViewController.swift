@@ -646,7 +646,6 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(spinOnTap(_:)))
         tap.cancelsTouchesInView = false
         titleLabel.isUserInteractionEnabled = true
-        titleLabel.addGestureRecognizer(tap)
         
         
         let descriptionLabel = UILabel()
@@ -666,9 +665,7 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         
             return
         }
-        
-        
-        
+        //titleLabel.addGestureRecognizer(tap)
         
         let horizontalStack = UIStackView()
         horizontalStack.axis = .horizontal

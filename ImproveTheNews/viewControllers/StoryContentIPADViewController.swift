@@ -39,6 +39,7 @@ class StoryContentIPADViewController: UIViewController {
     private var spinCol = 1
     private var artCol = 1
     
+    private var factsAdded: Int = 0
     private var showMoreFacts: Bool = true
     private var sourceRow: Int = 0
     private var sourceWidths = [CGFloat]()
@@ -166,14 +167,39 @@ class StoryContentIPADViewController: UIViewController {
         
         if let _link = self.link {
             StoryContent.instance.loadData(link: _link, filter: _filter, mustSplit: self.mustSplit()) { (storyData, facts, spins, articles, version) in
-                self.storyData = storyData
-                self.facts = facts
-                self.spins = spins
-                self.articles = articles
-                self.version = version
+            
+                if(storyData == nil || facts == nil || spins == nil || articles == nil || version == nil) {
+                    ALERT(vc: self, title: "Error",
+                        message: "There was an error loading your content. Try again later") {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                } else {
+                    self.storyData = storyData
+                    
+                    self.facts = [StoryFact]()
+                    // Remove empty sources
+                    for F in facts! {
+                        if(!F.source_url.isEmpty && !F.source_title.isEmpty) {
+                            self.facts?.append(F)
+                        }
+                    }
+                    
+                    self.spins = spins
+                    self.articles = articles
+                    self.version = version
 
-                self.updateUI()
-                self.showLoading(false)
+                    self.updateUI()
+                    self.showLoading(false)
+                }
+            
+//                self.storyData = storyData
+//                self.facts = facts
+//                self.spins = spins
+//                self.articles = articles
+//                self.version = version
+//
+//                self.updateUI()
+//                self.showLoading(false)
             }
         }
     }
@@ -282,7 +308,7 @@ extension StoryContentIPADViewController {
                     let sourcesTitle = factsView?.subviews[4] as! UILabel
                     sourcesTitle.textColor = factsTitle.textColor
             let sourcesVContainer = self.contentView.viewWithTag(101) as! UIStackView
-                sourcesVContainer.backgroundColor = self.scrollView.backgroundColor
+            sourcesVContainer.backgroundColor = self.scrollView.backgroundColor
         
             if let _data = self.storyData {
                 self.mainTitle.text = _data.title
@@ -325,6 +351,18 @@ extension StoryContentIPADViewController {
         
         self.updateBiasButtonPosition()
         self.biasSliders.adaptToScreen()
+        
+        self.removeAllFacts()
+        if(self.factsAdded == 1) {
+            self.addFacts()
+        } else {
+            self.addAllFacts()
+        }
+        
+        DELAY(0.5) {
+            self.updateContentSize()
+        }
+        
     }
     
     private func updateContentSize() {
@@ -423,6 +461,7 @@ extension StoryContentIPADViewController {
         
             if(factsVContainer.arrangedSubviews.count==0) {
                 // Initial 3
+                self.factsAdded = 1
                 for (i, F) in _facts.enumerated() {
                     if(i<=2) {
                         self.addSingleFact(F, isLast: i == 2, index: i)
@@ -430,6 +469,7 @@ extension StoryContentIPADViewController {
                 }
             } else {
                 // The rest
+                self.factsAdded = 2
                 for (i, F) in _facts.enumerated() {
                     if(i>2) {
                         self.addSingleFact(F, isLast: i == self.facts!.count-1, index: i)
@@ -437,6 +477,37 @@ extension StoryContentIPADViewController {
                 }
             }
         }
+        
+        /*
+        let X: CGFloat = 20 + self.mainImageViewWidthConstraint.constant + 10 + 20
+        self.sourcesTotalWidth = UIScreen.main.bounds.width - X - 20 - 20
+        */
+        
+//        let testView = UIView()
+//        testView.backgroundColor = .cyan
+//        testView.alpha = 0.5
+//        self.view.addSubview(testView)
+//        testView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            testView.widthAnchor.constraint(equalToConstant: self.sourcesTotalWidth),
+//            testView.heightAnchor.constraint(equalToConstant: 200),
+//            testView.topAnchor.constraint(equalTo: self.view.topAnchor,
+//                constant: 300),
+//            testView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+//                constant: X)
+//        ])
+    }
+    
+    private func addAllFacts() {
+        let factsVContainer = self.contentView.viewWithTag(100) as! UIStackView
+                
+        self.factsAdded = 2
+        if let _facts = self.facts {
+            for (i, F) in _facts.enumerated() {
+                self.addSingleFact(F, isLast: i == self.facts!.count-1, index: i)
+            }
+        }
+        
     }
     
     private func addSingleFact(_ fact: StoryFact, isLast: Bool = false, index: Int) {
@@ -511,7 +582,8 @@ extension StoryContentIPADViewController {
             self.sourceRow = 0
         }
         var sourcesHStack = sourcesVContainer.arrangedSubviews[self.sourceRow] as! UIStackView
-        //sourcesHStack.backgroundColor = .green
+        sourcesHStack.backgroundColor = .clear
+        
         
         if(!mustAdd){
             if(isLast) {
@@ -541,8 +613,12 @@ extension StoryContentIPADViewController {
         var _widthSum: CGFloat = 0
         //let _widthTotal = UIScreen.main.bounds.width - 20 - 40
         
-        let _widthTotal = UIScreen.main.bounds.width - 20 - 20 - 10 - self.mainImageViewWidthConstraint.constant
-        
+//        let _widthTotal = UIScreen.main.bounds.width - 20 - 20 - 10 - self.mainImageViewWidthConstraint.constant
+  
+        let X: CGFloat = 20 + self.mainImageViewWidthConstraint.constant + 10 + 20
+//        self.sourcesTotalWidth = UIScreen.main.bounds.width - X - 20 - 20
+        let _widthTotal = UIScreen.main.bounds.width - X - 20 - 20
+  
         for W in self.sourceWidths {
             _widthSum += W + sourcesHStack.spacing
         }
@@ -601,6 +677,8 @@ extension StoryContentIPADViewController {
             spacer.alpha = 0
             sourcesHStack.addArrangedSubview(spacer)
         }
+        
+        
     }
     
     func sufix(index: Int) -> String {
@@ -776,7 +854,7 @@ extension StoryContentIPADViewController {
         titleLabel.textColor = self.C(0xFFFFFF, 0xFF643C)
         v_col_container.addArrangedSubview(titleLabel)
         titleLabel.tag = 200 + index
-        self.ADD_SPIN_TAP(to: titleLabel)
+        
 
         let descriptionLabel = UILabel()
         descriptionLabel.font = UIFont(name: "Roboto-Regular", size: 16)!
@@ -786,6 +864,23 @@ extension StoryContentIPADViewController {
         descriptionLabel.text = spin.description
         v_col_container.addArrangedSubview(descriptionLabel)
         descriptionLabel.tag = 200 + index
+
+        // Incomplete spin
+        if(spin.image.isEmpty && spin.subTitle.isEmpty
+            && spin.media_country_code == nil && spin.media_title.isEmpty) {
+        
+//            spinsVContainer.addArrangedSubview(titleLabel)
+//            spinsVContainer.addArrangedSubview(descriptionLabel)
+//            self.addSpinSeparator(verticalStackView: spinsVContainer)
+        
+            let spacer = UIView()
+            spacer.backgroundColor = .clear
+            v_col_container.addArrangedSubview(spacer)
+        
+            return
+        }
+
+        self.ADD_SPIN_TAP(to: titleLabel)
         self.ADD_SPIN_TAP(to: descriptionLabel)
 
         let h_img_container = UIStackView()
