@@ -76,11 +76,12 @@ class StorySpin {
     let title: String
     let description: String
     let timeStamp: String?
-    let subTitle: String
-    let url: String
-    let image: String
-    let time: Int
-    let media_title: String
+    
+    let subTitle: String?
+    let url: String?
+    let image: String?
+    let time: Int?
+    let media_title: String?
     let media_country_code: String?
 
     init(_ json: [String: Any]) {
@@ -91,14 +92,19 @@ class StorySpin {
         let spinsArray = json["spins"] as! [[String: Any]]
         if(spinsArray.count>0) {
             let first = spinsArray[0]
-            self.subTitle = first["title"] as! String
-            self.url = first["url"] as! String
-            self.image = first["image"] as! String
-            self.time = first["time"] as! Int
+            self.subTitle = first["title"] as? String
+            self.url = first["url"] as? String
+            self.image = first["image"] as? String
+            self.time = first["time"] as? Int
             
-            let mediaObj = first["media"] as! [String: Any]
-            self.media_title = mediaObj["title"] as! String
-            self.media_country_code = mediaObj["country_code"] as? String
+            if let mediaObj = first["media"] as? [String: Any] {
+                self.media_title = mediaObj["title"] as? String
+                self.media_country_code = mediaObj["country_code"] as? String
+            } else {
+                self.media_title = ""
+                self.media_country_code = ""
+            }
+            
         } else {
             self.subTitle = ""
             self.image = ""

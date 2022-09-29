@@ -44,7 +44,7 @@ class TopicSliderPopup: UIView {
     // pie chart stuff
     let allcolors: [UIColor] = [UIColor(rgb: 0xc60b42), UIColor(rgb: 0xc980f1), UIColor(rgb: 0xe45552), UIColor(rgb: 0xc133203), UIColor(rgb: 0xc727ba9), UIColor(rgb: 0xcd987c), UIColor(rgb: 0xb908dd), UIColor(rgb: 0x441ff2), UIColor(rgb: 0xac3ce5), UIColor(rgb: 0x8f0a4e), UIColor(rgb: 0x975c4b), UIColor(rgb: 0x6ffd2e), UIColor(rgb: 0x5e7b6b), UIColor(rgb: 0x172eb6), UIColor(rgb: 0xc45c5e), UIColor(rgb: 0x2e68c6), UIColor(rgb: 0xff0000), UIColor(rgb: 0x0000ff)]
     var usedColors = [UIColor]()
-    var pieChart = PieChartView()
+//    var pieChart = PieChartView()
     var colorMapping: [String : UIColor] = [:]
     
     // to calculate popularities
@@ -400,22 +400,22 @@ extension TopicSliderPopup {
     
     // the pie chart
     func createChart() {
-        setChart() // set data
-        pieChart.backgroundColor = accentOrange
-        pieChart.holeColor = accentOrange
-        pieChart.legend.enabled = true
-        pieChart.legend.orientation = .horizontal
-        pieChart.legend.horizontalAlignment = .center
-        pieChart.legend.font = UIFont(name: "Poppins-SemiBold", size: 12)!
-        pieChart.drawEntryLabelsEnabled = false
-        
-        self.sliderStack.insertArrangedSubview(pieChart, at: 1)
-        pieChart.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            pieChart.leadingAnchor.constraint(equalTo: sliderStack.leadingAnchor),
-            pieChart.trailingAnchor.constraint(equalTo: sliderStack.trailingAnchor),
-            pieChart.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width - 40)
-        ])
+//        setChart() // set data
+//        pieChart.backgroundColor = accentOrange
+//        pieChart.holeColor = accentOrange
+//        pieChart.legend.enabled = true
+//        pieChart.legend.orientation = .horizontal
+//        pieChart.legend.horizontalAlignment = .center
+//        pieChart.legend.font = UIFont(name: "Poppins-SemiBold", size: 12)!
+//        pieChart.drawEntryLabelsEnabled = false
+//
+//        self.sliderStack.insertArrangedSubview(pieChart, at: 1)
+//        pieChart.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            pieChart.leadingAnchor.constraint(equalTo: sliderStack.leadingAnchor),
+//            pieChart.trailingAnchor.constraint(equalTo: sliderStack.trailingAnchor),
+//            pieChart.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width - 40)
+//        ])
     }
    
     func colorChart(base: UIColor) -> [UIColor] {
@@ -433,29 +433,29 @@ extension TopicSliderPopup {
     func setChart() {
         
         // Set ChartDataEntry
-        var dataEntries: [ChartDataEntry] = []
-        
-        // get subtopic data if exists else default to popularities
-        var v: Float
-        for i in 0..<subtopics.count {
-            let topickey = Globals.slidercodes[self.subtopics[i]]
-            
-            if topickey != nil {
-                if UserDefaults.exists(key: topickey!) {
-                    v = UserDefaults.getValue(key: topickey!)
-                } else {
-                    if(i<self.popularities.count) {
-                        v = self.popularities[i]
-                        UserDefaults.setSliderValue(value: self.popularities[i], slider: topickey!)
-                    } else {
-                        v = 0
-                    }
-                }
-                let dataEntry = PieChartDataEntry(value: Double(v), label: subtopics[i])
-                dataEntries.append(dataEntry)
-            }
-        }
-        
+//        var dataEntries: [ChartDataEntry] = []
+//
+//        // get subtopic data if exists else default to popularities
+//        var v: Float
+//        for i in 0..<subtopics.count {
+//            let topickey = Globals.slidercodes[self.subtopics[i]]
+//
+//            if topickey != nil {
+//                if UserDefaults.exists(key: topickey!) {
+//                    v = UserDefaults.getValue(key: topickey!)
+//                } else {
+//                    if(i<self.popularities.count) {
+//                        v = self.popularities[i]
+//                        UserDefaults.setSliderValue(value: self.popularities[i], slider: topickey!)
+//                    } else {
+//                        v = 0
+//                    }
+//                }
+//                let dataEntry = PieChartDataEntry(value: Double(v), label: subtopics[i])
+//                dataEntries.append(dataEntry)
+//            }
+//        }
+//
         /*
         for de in dataEntries {
             print( "GATO5", (de as! PieChartDataEntry).label )
@@ -481,25 +481,25 @@ extension TopicSliderPopup {
         */
         
         // Set ChartDataSet
-        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
-        //let orangeAccents = colorChart(base: accentOrange)
-        //self.colors = colorChart(base: .gray)
-        
-        // first time loading this pie chart
-        let n = self.subtopics.count
-        self.usedColors = Array(self.allcolors[..<n])
-
-        pieChartDataSet.colors = usedColors
-        pieChartDataSet.drawValuesEnabled = false
-        
-        // Set ChartData
-        let pieChartData = PieChartData(dataSet: pieChartDataSet)
-        let format = NumberFormatter()
-        format.numberStyle = .none
-        let formatter = DefaultValueFormatter(formatter: format)
-        pieChartData.setValueFormatter(formatter)
-        
-        pieChart.data = pieChartData
+//        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
+//        //let orangeAccents = colorChart(base: accentOrange)
+//        //self.colors = colorChart(base: .gray)
+//        
+//        // first time loading this pie chart
+//        let n = self.subtopics.count
+//        self.usedColors = Array(self.allcolors[..<n])
+//
+//        pieChartDataSet.colors = usedColors
+//        pieChartDataSet.drawValuesEnabled = false
+//        
+//        // Set ChartData
+//        let pieChartData = PieChartData(dataSet: pieChartDataSet)
+//        let format = NumberFormatter()
+//        format.numberStyle = .none
+//        let formatter = DefaultValueFormatter(formatter: format)
+//        pieChartData.setValueFormatter(formatter)
+//        
+//        pieChart.data = pieChartData
        
     }
     

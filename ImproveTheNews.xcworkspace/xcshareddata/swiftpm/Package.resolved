@@ -1,52 +1,41 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Charts",
-        "repositoryURL": "https://github.com/danielgindi/Charts.git",
-        "state": {
-          "branch": null,
-          "revision": "66546404a6739173b8e436ab6bc1f2897cd08594",
-          "version": "3.6.0"
-        }
-      },
-      {
-        "package": "Cosmos",
-        "repositoryURL": "https://github.com/evgenyneu/Cosmos.git",
-        "state": {
-          "branch": null,
-          "revision": "9295433932eb3fc3620e620f103de5de1f2e0f23",
-          "version": "22.1.0"
-        }
-      },
-      {
-        "package": "LBTATools",
-        "repositoryURL": "https://github.com/bhlvoong/LBTATools.git",
-        "state": {
-          "branch": null,
-          "revision": "dce147bfbdc0417a4b430ec220c088629e9dc81d",
-          "version": "1.0.17"
-        }
-      },
-      {
-        "package": "SDWebImage",
-        "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
-        "state": {
-          "branch": null,
-          "revision": "76dd4b49110b8624317fc128e7fa0d8a252018bc",
-          "version": "5.11.1"
-        }
-      },
-      {
-        "package": "SwiftyJSON",
-        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
-        "state": {
-          "branch": null,
-          "revision": "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
-          "version": "5.0.1"
-        }
+  "pins" : [
+    {
+      "identity" : "cosmos",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/evgenyneu/Cosmos.git",
+      "state" : {
+        "revision" : "9295433932eb3fc3620e620f103de5de1f2e0f23",
+        "version" : "22.1.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "lbtatools",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bhlvoong/LBTATools.git",
+      "state" : {
+        "revision" : "dce147bfbdc0417a4b430ec220c088629e9dc81d",
+        "version" : "1.0.17"
+      }
+    },
+    {
+      "identity" : "sdwebimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImage.git",
+      "state" : {
+        "revision" : "76dd4b49110b8624317fc128e7fa0d8a252018bc",
+        "version" : "5.11.1"
+      }
+    },
+    {
+      "identity" : "swiftyjson",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyJSON/SwiftyJSON.git",
+      "state" : {
+        "revision" : "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
+        "version" : "5.0.1"
+      }
+    }
+  ],
+  "version" : 2
 }

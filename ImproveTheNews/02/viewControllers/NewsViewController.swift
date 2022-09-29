@@ -65,7 +65,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     // -----------
     var firstTime = true
     var scrollToTopOnLoad = false
-    let pieChartVC = PieChartViewController()
+//    let pieChartVC = PieChartViewController()
     
     let shadeView = UIView()
     var biasButton: UIButton = {
@@ -225,7 +225,7 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.view.backgroundColor = bgBlue_LIGHT
         self.collectionView.backgroundColor = DARKMODE() ? bgBlue_LIGHT : bgWhite_LIGHT
         
-        pieChartVC.delegate = self
+//        pieChartVC.delegate = self
         
         
         /*
@@ -827,34 +827,25 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     @objc func homeButtonTapped() {
         if(self.onBoard == nil) {
-        if let firstVC = navigationController?.viewControllers.first as? NewsViewController {
-            /*
-            if(firstVC == self) {
-                // I'm in the first screen
-                if(self.topic == "news") {
-                    UIView.animate(withDuration: 0.5, animations: {
-                        self.collectionView.contentOffset.y = 0
-                    })
-                } else {
-                    self.firstTime = true
-                    self.topic = "news"
-                    self.loadData()
-                }
+//        if let firstVC = navigationController?.viewControllers.first as? NewsViewController {
+////            self.firstTime = true
+////            self.loadData()
+//            self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+//        } else {
+//
+//        }
+
+        navigationController?.popToRootViewController(animated: true)
+        let firstIndexPath = IndexPath(row: 0, section: 0)
+
+        if let _vc = navigationController?.viewControllers.first as? NewsViewController {
+            if(self == _vc){
+                _vc.collectionView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 10, height: 10), animated: true)
             } else {
-                let newsVC = navigationController!.viewControllers[0] as! NewsViewController
-                
-                if(newsVC.topic == "news") {
-                    newsVC.collectionView.contentOffset.y = 0
-                } else {
-                    newsVC.firstTime = true
-                    newsVC.topic = "news"
+                DELAY(0.2) {
+                    _vc.collectionView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 10, height: 10), animated: true)
                 }
-                navigationController!.popToRootViewController(animated: true)
             }
-            */
-            
-            self.firstTime = true
-            self.loadData()
         }
     }}
     
@@ -928,6 +919,7 @@ extension NewsViewController: TopicSelectorDelegate {
     
     // MARK: - TopicSelectorDelegate Delegate
     func pushNewTopic(newTopic: String) {
+        print("GATO - ", newTopic)
         let vc = NewsViewController(topic: newTopic)
         
         // PARAM (A) // --------------------------------
@@ -1246,27 +1238,27 @@ extension NewsViewController: BiasSliderDelegate, ShadeDelegate {
     }
 }
 
-// MARK: Pie chart
-extension NewsViewController: PieChartViewControllerDelegate {
-    
-    func showPieChart() {
-        //self.pieChartVC.modalPresentationStyle = .fullScreen
-        if(!self.pieChartVC.isBeingPresented) {
-            self.pieChartVC.set(topics: newsParser.getAllTopics(),
-                        popularities: newsParser.getGlobalPopularities())
-                        //popularities: newsParser.getPopularities())
-        
-            self.present(self.pieChartVC, animated: true) {
-            }
-        }
-    }
-    
-    // For protocol PieChartViewControllerDelegate
-    func someValueDidChange() {
-        self.firstTime = true
-        self.loadData()
-    }
-}
+//// MARK: Pie chart
+//extension NewsViewController: PieChartViewControllerDelegate {
+//
+//    func showPieChart() {
+//        //self.pieChartVC.modalPresentationStyle = .fullScreen
+//        if(!self.pieChartVC.isBeingPresented) {
+//            self.pieChartVC.set(topics: newsParser.getAllTopics(),
+//                        popularities: newsParser.getGlobalPopularities())
+//                        //popularities: newsParser.getPopularities())
+//
+//            self.present(self.pieChartVC, animated: true) {
+//            }
+//        }
+//    }
+//
+//    // For protocol PieChartViewControllerDelegate
+//    func someValueDidChange() {
+//        self.firstTime = true
+//        self.loadData()
+//    }
+//}
 
 
 // MARK: Topic sliders
@@ -1274,7 +1266,7 @@ extension NewsViewController: TopicSliderDelegate, dismissTopicSlidersDelegate {
     
     func showTopicSliders() {
         // Tap on a pie chart button
-        self.showPieChart()
+//        self.showPieChart()
     }
     
     func showTopicSliders2() {

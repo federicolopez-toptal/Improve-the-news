@@ -519,12 +519,26 @@ class NewsBigViewController: UIViewController {
     
     @objc func homeButtonTapped() {
         if(self.onBoard == nil) {
-            self.firstTime = true
-            self.loadData()
-        
-            let offset = CGPoint(x: 0, y: 0)
-            self.tableView.setContentOffset(offset, animated: true)
-            self.horizontalMenu.backToZero()
+//            self.firstTime = true
+//            self.loadData()
+//
+//            let offset = CGPoint(x: 0, y: 0)
+//            self.tableView.setContentOffset(offset, animated: true)
+//            self.horizontalMenu.backToZero()
+
+            navigationController?.popToRootViewController(animated: true)
+            let firstIndexPath = IndexPath(row: 0, section: 0)
+
+            if let _vc = navigationController?.viewControllers.first as? NewsBigViewController {
+                if(self == _vc){
+                    _vc.tableView.scrollToRow(at: firstIndexPath, at: .top, animated: true)
+                } else {
+                    DELAY(0.2) {
+                        _vc.tableView.scrollToRow(at: firstIndexPath, at: .top, animated: true)
+                    }
+                }
+            }
+            // ------
         }
     }
     

@@ -103,7 +103,6 @@
 		A8B4D72524B103A4004EEE73 /* RatingsLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B4D72424B103A4004EEE73 /* RatingsLauncher.swift */; };
 		A8C5B9D424B67A0E0077E306 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C5B9D324B67A0E0077E306 /* Globals.swift */; };
 		A8CA063424EB3B0A00B91778 /* BiasSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CA063324EB3B0A00B91778 /* BiasSliders.swift */; };
-		A8D189ED24D4C6010075EFA2 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = A8D189EC24D4C6010075EFA2 /* Charts */; };
 		A8D61B3724F1656C00A0F8F5 /* Pages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D61B3624F1656C00A0F8F5 /* Pages.swift */; };
 		A8D61B3924F1A10000A0F8F5 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8D61B3824F1A10000A0F8F5 /* Launch Screen.storyboard */; };
 		A8E94A1524F08E9200936E07 /* SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E94A1424F08E9200936E07 /* SupplementaryViews.swift */; };
@@ -846,7 +845,6 @@
 				A8B4D72324B1032C004EEE73 /* Cosmos in Frameworks */,
 				A8A7935A2482F61D009A55FE /* LBTATools in Frameworks */,
 				B6AF872E2544658000227CCC /* SwiftyJSON in Frameworks */,
-				A8D189ED24D4C6010075EFA2 /* Charts in Frameworks */,
 				B6FBE1682569298500424BF8 /* SDWebImage in Frameworks */,
 				D8C1E0E4AAAC3176E6A67953 /* Pods_ImproveTheNews.framework in Frameworks */,
 			);
@@ -1615,7 +1613,6 @@
 			packageProductDependencies = (
 				A8A793592482F61D009A55FE /* LBTATools */,
 				A8B4D72224B1032C004EEE73 /* Cosmos */,
-				A8D189EC24D4C6010075EFA2 /* Charts */,
 				B6AF872D2544658000227CCC /* SwiftyJSON */,
 				B6FBE1672569298500424BF8 /* SDWebImage */,
 			);
@@ -1698,7 +1695,6 @@
 				A8A793582482F61D009A55FE /* XCRemoteSwiftPackageReference "LBTATools" */,
 				A885CAEF24ABB81000FA7F26 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				A8B4D72124B1032C004EEE73 /* XCRemoteSwiftPackageReference "Cosmos" */,
-				A8D189EB24D4C6010075EFA2 /* XCRemoteSwiftPackageReference "Charts" */,
 				B6FBE1662569298500424BF8 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			productRefGroup = A81B3B1D2481E67200A52A97 /* Products */;
@@ -2741,14 +2737,6 @@
 				minimumVersion = 22.1.0;
 			};
 		};
-		A8D189EB24D4C6010075EFA2 /* XCRemoteSwiftPackageReference "Charts" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/danielgindi/Charts.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.5.0;
-			};
-		};
 		B6FBE1662569298500424BF8 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
@@ -2769,11 +2757,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A8B4D72124B1032C004EEE73 /* XCRemoteSwiftPackageReference "Cosmos" */;
 			productName = Cosmos;
-		};
-		A8D189EC24D4C6010075EFA2 /* Charts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A8D189EB24D4C6010075EFA2 /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = Charts;
 		};
 		B6AF872D2544658000227CCC /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -367,7 +367,7 @@ class News {
                                 
                                 let news = NewsData(
                                     source: article[0].stringValue,
-                                    subtopic: articles[1].stringValue,
+                                        subtopic: articles[1].stringValue,
                                     date: article[1].stringValue,
                                     title: article[2].stringValue,
                                     URL: article[3].stringValue,

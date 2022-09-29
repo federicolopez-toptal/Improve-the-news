@@ -656,9 +656,39 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         descriptionLabel.text = spin.description
         
         // Incomplete spin
-        if(spin.image.isEmpty && spin.subTitle.isEmpty
-            && spin.media_country_code == nil && spin.media_title.isEmpty) {
+//        if pin.image, !_image.isEmpty, let _subTitle = spin.subTitle, !_subTitle.isEmpty,
+//            let _mediaCountryCode = spin.media_country_code, !_mediaCountryCode.isEmpty,
+//            let _mediaTitle = spin.media_title, !_mediaTitle.isEmpty {
         
+//        if(spin.image?.isEmpty && ((spin.subTitle?.isEmpty) != nil)
+//           && spin.media_country_code == nil && spin.media_title?.isEmpty) {
+        
+        let A = (spin.image == nil)
+        var A2 = false
+        if let _field = spin.image, _field.isEmpty {
+            A2 = true
+        }
+        
+        let B = (spin.subTitle == nil)
+        var B2 = false
+        if let _field = spin.subTitle, _field.isEmpty {
+            B2 = true
+        }
+        
+        let C = (spin.media_country_code == nil)
+        var C2 = false
+        if let _field = spin.media_country_code, _field.isEmpty {
+            C2 = true
+        }
+        
+        let D = (spin.media_title == nil)
+        var D2 = false
+        if let _field = spin.media_title, _field.isEmpty {
+            D2 = true
+        }
+        
+        if( (A || A2) && (B || B2) && (C || C2) && (D || D2)) {
+            spinsVContainer.backgroundColor = .clear
             spinsVContainer.addArrangedSubview(titleLabel)
             spinsVContainer.addArrangedSubview(descriptionLabel)
             self.addSpinSeparator(verticalStackView: spinsVContainer)
@@ -683,7 +713,12 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
             imageView.widthAnchor.constraint(equalToConstant: 112 * factor),
             imageView.heightAnchor.constraint(equalToConstant: 75 * factor)
         ])
-        imageView.sd_setImage(with: URL(string: spin.image), placeholderImage: nil)
+        
+        if let _image = spin.image {
+            imageView.sd_setImage(with: URL(string: _image), placeholderImage: nil)
+        } else {
+            imageView.image = nil
+        }
         imageView.tag = 200 + index
         self.ADD_SPIN_TAP(to: imageView)
 
@@ -727,7 +762,10 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let sourceTime = UILabel()
         //let source = spin.media_title.replacingOccurrences(of: " #", with: "")
 //        sourceTime.text = source + " - " + FORMAT_TIME(spin.time)
-        let sourceName = spin.media_title.components(separatedBy: " #").first!
+        var sourceName = ""
+        if let _media_title = spin.media_title {
+            sourceName = _media_title.components(separatedBy: " #").first!
+        }
         sourceTime.text = sourceName // + " - " + FORMAT_TIME(spin.time)
         //self.LR_PE(name: spin.media_title)
         
@@ -738,7 +776,11 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         if(MorePrefsViewController.showStanceInsets()) {
             let miniSlider = MiniSlidersCircView(some: "")
             miniSlider.insertInto(stackView: subHorizontalStack)
-            let LR_PE = self.LR_PE(name: spin.media_title)
+            var LR_PE = (1, 1)
+            if let _mediaTitle = spin.media_title {
+                LR_PE = self.LR_PE(name: _mediaTitle)
+            }
+
             if(LR_PE.0==0 && LR_PE.1==0) {
                 miniSlider.isHidden = true
             } else {
@@ -839,7 +881,9 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let tag = sender.view!.tag - 200
         
         let spin = self.spins![tag]
-        self.OPEN_URL(spin.url, title: spin.subTitle)
+        if let _url = spin.url, let _subTitle = spin.subTitle {
+            self.OPEN_URL(_url, title: _subTitle)
+        }
     }
     
     
@@ -1167,15 +1211,17 @@ extension StoryContentViewController: BiasSliderDelegate, ShadeDelegate {
         biasSliders.showLoading(true)
         self.showLoading()
         
-        for (i, vc) in self.navigationController!.viewControllers.enumerated() {
-            if(vc == self) {
-                let prev = self.navigationController!.viewControllers[i-1]
-                
-                if let _vc = prev as? NewsViewController {
-                    self.api_call = _vc.buildApiCall()
+        if let _navController = self.navigationController {
+            for (i, vc) in _navController.viewControllers.enumerated() {
+                if(vc == self) {
+                    let prev = _navController.viewControllers[i-1]
+                    
+                    if let _vc = prev as? NewsViewController {
+                        self.api_call = _vc.buildApiCall()
+                    }
+                    
+                    break
                 }
-                
-                break
             }
         }
         
@@ -1190,6 +1236,7 @@ extension StoryContentViewController: BiasSliderDelegate, ShadeDelegate {
             }
         }
     }
+    
     private func mustSplit() -> Bool {
         let stancevalues =  self.biasSliders.stanceValues()
         if(stancevalues.0 || stancevalues.1) {
@@ -1208,29 +1255,34 @@ extension StoryContentViewController: BiasSliderDelegate, ShadeDelegate {
             self.biasButtonState = 1
         }
         
-        for vc in self.navigationController!.viewControllers {
-            if(vc != self) {
-                if let _vc = vc as? NewsViewController { // NewsViewController
-                    if(self.mustSplit()) {
-                        _vc.biasSliders.enableSplitForSharing()
-                    } else {
-                        _vc.biasSliders.disableSplitFromOutside()
-                    }
-                } else if let _vc = vc as? NewsTextViewController { // NewsTextViewController
-                    if(self.mustSplit()) {
-                        _vc.biasSliders.enableSplitForSharing()
-                    } else {
-                        _vc.biasSliders.disableSplitFromOutside()
-                    }
-                } else if let _vc = vc as? NewsBigViewController { // NewsBigViewController
-                    if(self.mustSplit()) {
-                        _vc.biasSliders.enableSplitForSharing()
-                    } else {
-                        _vc.biasSliders.disableSplitFromOutside()
+        if let _navController = self.navigationController {
+            for vc in _navController.viewControllers {
+                if(vc != self) {
+                    if let _vc = vc as? NewsViewController { // NewsViewController
+                        if(self.mustSplit()) {
+                            _vc.biasSliders.enableSplitForSharing()
+                        } else {
+                            _vc.biasSliders.disableSplitFromOutside()
+                        }
+                    } else if let _vc = vc as? NewsTextViewController { // NewsTextViewController
+                        if(self.mustSplit()) {
+                            _vc.biasSliders.enableSplitForSharing()
+                        } else {
+                            _vc.biasSliders.disableSplitFromOutside()
+                        }
+                    } else if let _vc = vc as? NewsBigViewController { // NewsBigViewController
+                        if(self.mustSplit()) {
+                            _vc.biasSliders.enableSplitForSharing()
+                        } else {
+                            _vc.biasSliders.disableSplitFromOutside()
+                        }
                     }
                 }
             }
+            //---
         }
+        
+        
     
     
     
