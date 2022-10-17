@@ -73,8 +73,8 @@ class StoryFact {
 
 class StorySpin {
 
-    let title: String
-    let description: String
+    var title: String
+    var description: String
     let timeStamp: String?
     
     let subTitle: String?
@@ -85,8 +85,16 @@ class StorySpin {
     let media_country_code: String?
 
     init(_ json: [String: Any]) {
-        self.title = json["title"] as! String
-        self.description = json["description"] as! String
+        self.title = "Title not available"
+        if let _title = json["title"] as? String {
+            self.title = _title
+        }
+        
+        self.description = "Description not available"
+        if let _description = json["description"] as? String {
+            self.description = _description
+        }
+        
         self.timeStamp = json["timestamp"] as? String
         
         let spinsArray = json["spins"] as! [[String: Any]]

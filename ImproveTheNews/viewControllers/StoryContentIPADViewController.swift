@@ -87,7 +87,7 @@ class StoryContentIPADViewController: UIViewController {
             object: nil)
             
         SETUP_NAVBAR(viewController: self,
-            homeTap: nil,
+            homeTap: #selector(self.homeButtonTapped),
             menuTap: #selector(self.hamburgerButtonItemClicked(_:)),
             searchTap: #selector(self.searchItemClicked(_:)),
             userTap: nil)
@@ -218,6 +218,25 @@ class StoryContentIPADViewController: UIViewController {
     }
     
     // MARK: - Modified TitleBar
+    @objc func homeButtonTapped() {
+        navigationController?.popToRootViewController(animated: true)
+        let firstIndexPath = IndexPath(row: 0, section: 0)
+
+        if let _vc = navigationController?.viewControllers.first as? NewsViewController {
+            DELAY(0.2) {
+                _vc.collectionView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 10, height: 10), animated: true)
+            }
+        } else if let _vc = navigationController?.viewControllers.first as? NewsTextViewController {
+            DELAY(0.2) {
+                _vc.tableView.scrollToRow(at: firstIndexPath, at: .top, animated: true)
+            }
+        } else if let _vc = navigationController?.viewControllers.first as? NewsBigViewController {
+            DELAY(0.2) {
+                _vc.tableView.scrollToRow(at: firstIndexPath, at: .top, animated: true)
+            }
+        }
+    }
+    
     @objc func hamburgerButtonItemClicked(_ sender: UIBarButtonItem!) {
         navigationController?.customPushViewController(SectionsViewController())
     }
