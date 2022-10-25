@@ -72,8 +72,11 @@ class WebViewController: UIViewController, WKUIDelegate {
         self.loadingView.isHidden = false
         WebViewController.startTime = CFAbsoluteTimeGetCurrent()
         
-        let url = URL(string: url)!
-        let request = URLRequest(url: url)
+        var _url = URL(string: "about:blank")
+        if(!url.isEmpty) {
+            _url = URL(string: url)!
+        }
+        let request = URLRequest(url: _url!)
         webView.load(request)
         
         navigationItem.largeTitleDisplayMode = .never

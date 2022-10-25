@@ -164,6 +164,7 @@ class StoryContentViewController: UIViewController {
                     self.facts = [StoryFact]()
                     // Remove empty sources
                     for F in facts! {
+                        print(F.title, F.source_title, F.source_url)
                         if(!F.source_url.isEmpty && !F.source_title.isEmpty) {
                             self.facts?.append(F)
                         }
@@ -948,6 +949,20 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
     }
     
     private func addArticles() {
+        var hideArticlesTitle = false
+        if self.articles == nil {
+            hideArticlesTitle = true
+        } else if (self.articles!.count==0) {
+            hideArticlesTitle = true
+        }
+        if(hideArticlesTitle) {
+            let articlesTitleLabel = self.contentView.viewWithTag(104) as! UILabel
+            articlesTitleLabel.isHidden = true
+        }
+    
+    
+    
+    
         if let _articles = self.articles {
             for (i, AR) in _articles.enumerated() {
                 self.addSingleArticle(AR, index: i)

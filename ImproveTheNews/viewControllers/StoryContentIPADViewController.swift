@@ -1162,8 +1162,20 @@ extension StoryContentIPADViewController {
     }
     
     private func addArticles() {
-    
-        print("ARTICLES", self.articles?.count)
+        var hideArticlesTitle = false
+        if self.articles == nil {
+            hideArticlesTitle = true
+        } else if (self.articles!.count==0) {
+            hideArticlesTitle = true
+        }
+        if(hideArticlesTitle) {
+            let articlesTitleLabel = self.contentView.viewWithTag(104) as! UILabel
+            articlesTitleLabel.isHidden = true
+        }
+        
+        
+        
+        
         if let _articles = self.articles {
             for (i, AR) in _articles.enumerated() {
                 self.addSingleArticle(AR, index: i)
