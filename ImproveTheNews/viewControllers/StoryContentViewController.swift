@@ -722,17 +722,25 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         horizontalStack.backgroundColor = .clear
         horizontalStack.spacing = 10.0
         
+        let imgVStack = UIStackView()
+        imgVStack.axis = .vertical
+        imgVStack.backgroundColor = .clear
+        
         let factor: CGFloat = 1.3
         let imageView = UIImageView()
         imageView.contentMode = self.mainImageView.contentMode
         imageView.clipsToBounds = true
         imageView.backgroundColor = .darkGray
-        horizontalStack.addArrangedSubview(imageView)
+        imgVStack.addArrangedSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(equalToConstant: 112 * factor),
             imageView.heightAnchor.constraint(equalToConstant: 75 * factor)
         ])
+        
+        let vSpacer = UIView()
+        imgVStack.addArrangedSubview(vSpacer)
+        horizontalStack.addArrangedSubview(imgVStack)
         
         if let _image = spin.image {
             imageView.sd_setImage(with: URL(string: _image), placeholderImage: nil)
@@ -818,9 +826,18 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         let spacer2 = UIView()
         spacer2.backgroundColor = .clear
         subHorizontalStack.addArrangedSubview(spacer2)
-        
-        
         subVerticalStack.addArrangedSubview(subHorizontalStack)
+        
+        let newTime = UILabel()
+        newTime.font = sourceTime.font
+        newTime.textColor = sourceTime.textColor
+        newTime.text = ""
+        subVerticalStack.addArrangedSubview(newTime)
+        if let _time = spin.timeRelative {
+            newTime.text = _time
+        }
+        
+        
         
         let spacer = UIView()
         spacer.backgroundColor = .clear
@@ -978,12 +995,16 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         horizontalStack.backgroundColor = .clear
         horizontalStack.spacing = 10.0
         
+        let imgVStack = UIStackView()
+        imgVStack.axis = .vertical
+        imgVStack.backgroundColor = .yellow.withAlphaComponent(0)
+        
         let factor: CGFloat = 1.3
         let imageView = UIImageView()
         imageView.contentMode = self.mainImageView.contentMode
         imageView.clipsToBounds = true
         imageView.backgroundColor = .darkGray
-        horizontalStack.addArrangedSubview(imageView)
+        imgVStack.addArrangedSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(equalToConstant: 112 * factor),
@@ -992,6 +1013,10 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         imageView.sd_setImage(with: URL(string: article.image), placeholderImage: nil)
         imageView.tag = 300 + index
         self.ADD_ARTICLE_TAP(to: imageView)
+        
+        let vSpacer = UIView()
+        imgVStack.addArrangedSubview(vSpacer)
+        horizontalStack.addArrangedSubview(imgVStack)
         
         let subVerticalStack = UIStackView()
         subVerticalStack.axis = .vertical
@@ -1061,6 +1086,18 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
         spacer2.backgroundColor = .clear
         subHorizontalStack.addArrangedSubview(spacer2)
         subVerticalStack.addArrangedSubview(subHorizontalStack)
+        
+        let newTime = UILabel()
+        newTime.font = sourceTime.font
+        newTime.textColor = sourceTime.textColor
+        newTime.text = ""
+        subVerticalStack.addArrangedSubview(newTime)
+        if let _time = article.timeRelative {
+            newTime.text = _time
+            print("TIME-RELATIVE:", _time)
+        } else {
+            print("NO TIENE TIME-RELATIVE")
+        }
         
         let spacer = UIView()
         spacer.backgroundColor = .clear

@@ -96,8 +96,10 @@ class StorySpin {
     var url: String? = ""
     var image: String? = ""
     var time: Int? = 0
+    var timeRelative: String? = ""
     var media_title: String? = ""
     var media_country_code: String? = ""
+    
 
     init(_ json: [String: Any]) {
         
@@ -118,6 +120,7 @@ class StorySpin {
                 self.url = first["url"] as? String
                 self.image = first["image"] as? String
                 self.time = first["time"] as? Int
+                self.timeRelative = first["timeRelative"] as? String
                 
                 if let mediaObj = first["media"] as? [String: Any] {
                     self.media_title = mediaObj["title"] as? String
@@ -139,6 +142,7 @@ class StoryArticle {
     var url: String = ""
     var image: String = ""
     var time: Int = 0
+    var timeRelative: String? = ""
     var media_title: String = ""
     var media_country_code: String? = nil
 
@@ -151,6 +155,7 @@ class StoryArticle {
         if let _time = json["time"] as? Int {
             self.time = _time
         }
+        self.timeRelative = json["timeRelative"] as? String
         
         if let _mediaObj = json["media"] as? [String: Any] {
             if let _title = _mediaObj["title"] as? String {

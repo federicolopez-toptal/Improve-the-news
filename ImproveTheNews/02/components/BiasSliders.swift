@@ -9,12 +9,12 @@
 import Foundation
 import UIKit
 
-@objc protocol BiasSliderDelegate {
+@objc protocol BiasSliderDelegate: AnyObject {
     func biasSliderDidChange(sliderId: Int)
     @objc optional func splitValueChange()
 }
 
-protocol ShadeDelegate {
+protocol ShadeDelegate: AnyObject {
     func dismissShade()
     func panelFullyOpened()
 }
@@ -65,8 +65,8 @@ class SliderPopup: UIView {
         return button
     }()
     
-    var sliderDelegate: BiasSliderDelegate?
-    var shadeDelegate: ShadeDelegate?
+    weak var sliderDelegate: BiasSliderDelegate?
+    weak var shadeDelegate: ShadeDelegate?
     
     var isShowingMore = false
     var loadingView = UIView()

@@ -65,7 +65,9 @@ class StoryContentIPADViewController: UIViewController {
     
     
     
-    
+    deinit {
+        print("BYE!")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -854,7 +856,17 @@ extension StoryContentIPADViewController {
             h_colS_container.backgroundColor = .clear //.green
             v_main_container.addArrangedSubview(h_colS_container)
         } else {
-            h_colS_container = (v_main_container.subviews.last as! UIStackView)
+            if let _h_colS_container = v_main_container.subviews.last as? UIStackView {
+                h_colS_container = _h_colS_container
+            } else {
+                h_colS_container = UIStackView()
+                h_colS_container.axis = .horizontal
+                h_colS_container.spacing = 40
+                h_colS_container.backgroundColor = .clear //.green
+                v_main_container.addArrangedSubview(h_colS_container)
+            }
+            
+            //h_colS_container = (v_main_container.subviews.last as! UIStackView)
         }
         self.spinCol += 1
         if(self.spinCol>2){ self.spinCol = 1 }
@@ -936,12 +948,16 @@ extension StoryContentIPADViewController {
         h_img_container.backgroundColor = .clear
         h_img_container.spacing = 10.0
 
+        let imgVStack = UIStackView()
+        imgVStack.axis = .vertical
+        imgVStack.backgroundColor = .yellow.withAlphaComponent(0)
+
         let factor: CGFloat = 1.3
         let imageView = UIImageView()
         imageView.contentMode = self.mainImageView.contentMode
         imageView.clipsToBounds = true
         imageView.backgroundColor = .darkGray
-        h_img_container.addArrangedSubview(imageView)
+        imgVStack.addArrangedSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(equalToConstant: 112 * factor),
@@ -955,6 +971,13 @@ extension StoryContentIPADViewController {
         }
         imageView.tag = 200 + index
         self.ADD_SPIN_TAP(to: imageView)
+
+        let vSpacer = UIView()
+        imgVStack.addArrangedSubview(vSpacer)
+        h_img_container.addArrangedSubview(imgVStack)
+
+        //h_img_container
+
 
         let v_data_container = UIStackView()
         v_data_container.axis = .vertical
@@ -1003,6 +1026,7 @@ extension StoryContentIPADViewController {
         }
         //self.LR_PE(name: spin.media_title)
 
+        sourceTime.text = sourceName
         sourceTime.textColor = self.C(0x93A0B4, 0x1D242F)
         sourceTime.font = UIFont(name: "Roboto-Regular", size: 14)!
         h_flag_container.addArrangedSubview(sourceTime)
@@ -1031,6 +1055,15 @@ extension StoryContentIPADViewController {
 
 
         v_data_container.addArrangedSubview(h_flag_container)
+        let newTime = UILabel()
+        newTime.font = sourceTime.font
+        newTime.textColor = sourceTime.textColor
+        newTime.text = ""
+        v_data_container.addArrangedSubview(newTime)
+        if let _time = spin.timeRelative {
+            newTime.text = _time
+        }
+
 
         let spacer = UIView()
         spacer.backgroundColor = .clear
@@ -1279,6 +1312,16 @@ extension StoryContentIPADViewController {
         spacer2.backgroundColor = .clear
         h_flag_container.addArrangedSubview(spacer2)
         v_img_container.addArrangedSubview(h_flag_container)
+
+        let newTime = UILabel()
+        newTime.font = sourceTime.font
+        newTime.textColor = sourceTime.textColor
+        newTime.text = ""
+        v_img_container.addArrangedSubview(newTime)
+        if let _time = article.timeRelative {
+            print(">> TIME", _time)
+            newTime.text = _time
+        }
 
         let spacer = UIView()
         spacer.backgroundColor = .clear
