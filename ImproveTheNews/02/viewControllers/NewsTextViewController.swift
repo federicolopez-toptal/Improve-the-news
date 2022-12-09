@@ -68,7 +68,11 @@ class NewsTextViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        AppUtility.lockOrientation(.all)
+        if(IS_iPHONE()) {
+            AppUtility.lockOrientation(.portrait)
+        } else {
+            AppUtility.lockOrientation(.all)
+        }
     
         Utils.shared.navController = self.navigationController as? CustomNavigationController
         Utils.shared.newsViewController_ID += 1
@@ -1223,7 +1227,11 @@ extension NewsTextViewController: OnBoardingViewDelegate {
             self.onBoard = nil
         }
         
-        AppUtility.lockOrientation(.all)
+        if(IS_iPHONE()) {
+            AppUtility.lockOrientation(.portrait)
+        } else {
+            AppUtility.lockOrientation(.all)
+        }
     }
     
     @objc func showOnboardingAgain() {

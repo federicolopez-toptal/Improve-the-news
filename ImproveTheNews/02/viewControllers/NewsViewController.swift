@@ -130,7 +130,12 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     override func viewDidLoad() {
-        AppUtility.lockOrientation(.all)
+        if(IS_iPHONE()) {
+            AppUtility.lockOrientation(.portrait)
+        } else {
+            AppUtility.lockOrientation(.all)
+        }
+        
         self.enableSplitSharingAfterLoading = ENABLE_SPLIT_SHARING_AFTER_LOADING
         ENABLE_SPLIT_SHARING_AFTER_LOADING = false
         
@@ -324,8 +329,6 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     @objc func onDeviceOrientationChanged() {
         if(!self.firstTime) {
-            print("CHANGE ORIENTATION")
-            
             self.collectionView.collectionViewLayout.invalidateLayout()
             
             // horizontal menu
@@ -2735,7 +2738,11 @@ extension NewsViewController: OnBoardingViewDelegate {
             self.onBoard = nil
         }
         
-        AppUtility.lockOrientation(.all)
+        if(IS_iPHONE()) {
+            AppUtility.lockOrientation(.portrait)
+        } else {
+            AppUtility.lockOrientation(.all)
+        }
     }
     
     @objc func showOnboardingAgain() {
