@@ -191,19 +191,23 @@ class SliderDoc: UIViewController {
         filename = "text1"
         if(!APP_CFG_SHOW_SUPER_SLIDERS){ filename += "b" }
         text = self.readTextFile(filename)
+
         textView1.attributedText = prettifyText(fullString: text as NSString, boldPartsOfString: bold, font: UIFont(name: "Poppins-Regular", size: 14), boldFont: UIFont(name: "Poppins-Regular", size: 22), paths: paths, linkedSubstrings: linked, accented: accented)
+        
         textView1.textColor = DARKMODE() ? articleHeadLineColor : textBlack
         textView1.backgroundColor = .black
         textView1.isEditable = false
         contentView.addSubview(textView1)
         
-        self.resize(textView1, width: screenSize.width-10, height: 100)
-        textView1.sizeToFit()
-        self.move(textView1, x: 5, y: posY, bgColor: self.view.backgroundColor!)
         
+        let tmpSize1 = textView1.sizeThatFits(CGSize(width: screenSize.width-10, height: 100))
+        self.resize(textView1, width: tmpSize1.width, height: tmpSize1.height)
+        
+        self.move(textView1, x: 5, y: posY, bgColor: self.view.backgroundColor!)
+
         posY += textView1.frame.size.height + 5
         self.resize(contentView, width: contentView.frame.size.width, height: posY)
-        
+
     // slider 1
         let slider1a = sliderView(title: "Political Stance",
                         leftText: "LEFT", rightText: "RIGHT", sliderID: 0)
@@ -227,8 +231,11 @@ class SliderDoc: UIViewController {
         textView2.isEditable = false
         contentView.addSubview(textView2)
         
-        self.resize(textView2, width: screenSize.width-10, height: 100)
-        textView2.sizeToFit()
+        //self.resize(textView2, width: screenSize.width-10, height: 100)
+        //textView2.sizeToFit()
+        let tmpSize2 = textView2.sizeThatFits(CGSize(width: screenSize.width-10, height: 100))
+        self.resize(textView2, width: tmpSize2.width, height: tmpSize2.height)
+        
         self.move(textView2, x: 5, y: posY, bgColor: self.view.backgroundColor!)
         
         posY += textView2.frame.size.height + 5
@@ -258,8 +265,11 @@ class SliderDoc: UIViewController {
         textView3.isEditable = false
         contentView.addSubview(textView3)
         
-        self.resize(textView3, width: screenSize.width-10, height: 100)
-        textView3.sizeToFit()
+//        self.resize(textView3, width: screenSize.width-10, height: 100)
+//        textView3.sizeToFit()
+        let tmpSize3 = textView3.sizeThatFits(CGSize(width: screenSize.width-10, height: 100))
+        self.resize(textView3, width: tmpSize3.width, height: tmpSize3.height)
+
         self.move(textView3, x: 5, y: posY, bgColor: self.view.backgroundColor!)
         
         posY += textView3.frame.size.height + 5

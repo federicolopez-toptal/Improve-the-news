@@ -838,19 +838,37 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
 //
 //        }
 
-        navigationController?.popToRootViewController(animated: true)
-        let firstIndexPath = IndexPath(row: 0, section: 0)
+            navigationController?.popToRootViewController(animated: true)
+            //let firstIndexPath = IndexPath(row: 0, section: 0)
 
-        if let _vc = navigationController?.viewControllers.first as? NewsViewController {
-            if(self == _vc){
-                _vc.collectionView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 10, height: 10), animated: true)
-            } else {
-                DELAY(0.2) {
-                    _vc.collectionView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 10, height: 10), animated: true)
+            if let _vc = navigationController?.viewControllers.first as? NewsViewController {
+                if(_vc.topic=="news") {
+                    if(self == _vc){
+                        _vc.collectionView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 10, height: 10), animated: true)
+                    } else {
+                        DELAY(0.2) {
+                            _vc.collectionView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 10, height: 10), animated: true)
+                        }
+                    }
+                } else {
+                    Utils.shared.newsViewController_ID = 0
+                    let vc = NewsViewController(topic: "news")
+                    self.navigationController?.viewControllers = [vc]
+                
+//                    if(self == _vc) {
+//                        Utils.shared.newsViewController_ID = 0
+//                        let vc = NewsViewController(topic: "news")
+//                        self.navigationController?.viewControllers = [vc]
+//                    } else {
+//                        DELAY(0.2) {
+//                            Utils.shared.newsViewController_ID = 0
+//                            let vc = NewsViewController(topic: "news")
+//                            self.navigationController?.viewControllers = [vc]
+//                        }
+//                    }
                 }
             }
-        }
-    }}
+        }}
     
     @objc func searchItemClicked(_ sender:UIBarButtonItem!) {
         let searchvc = SearchViewController()

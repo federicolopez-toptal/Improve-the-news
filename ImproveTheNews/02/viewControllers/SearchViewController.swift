@@ -76,21 +76,46 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                 self.insertNewVCInNavigationStack(vc)
             } else if(Utils.shared.currentLayout == .textOnly) {
                 //"Text only"
-                let vc = NewsTextViewController(topic: topicCode)
-                vc.firstTime = false
-                vc.topicCodeFromSearch = topicCode
-                self.insertNewVCInNavigationStack(vc)
+                if(!self.mustSplit()) {
+                    let vc = NewsTextViewController(topic: topicCode)
+                    vc.firstTime = false
+                    vc.topicCodeFromSearch = topicCode
+                    self.insertNewVCInNavigationStack(vc)
+                } else {
+                    let vc = NewsViewController(topic: topicCode)
+                    vc.firstTime = false
+                    vc.topicCodeFromSearch = topicCode
+                    self.insertNewVCInNavigationStack(vc)
+                }
             } else if(Utils.shared.currentLayout == .bigBeautiful) {
                 //"Big & Beautiful"
-                let vc = NewsBigViewController(topic: topicCode)
-                vc.firstTime = false
-                vc.topicCodeFromSearch = topicCode
-                self.insertNewVCInNavigationStack(vc)
+                if(!self.mustSplit()) {
+                    let vc = NewsBigViewController(topic: topicCode)
+                    vc.firstTime = false
+                    vc.topicCodeFromSearch = topicCode
+                    self.insertNewVCInNavigationStack(vc)
+                } else {
+                    let vc = NewsViewController(topic: topicCode)
+                    vc.firstTime = false
+                    vc.topicCodeFromSearch = topicCode
+                    self.insertNewVCInNavigationStack(vc)
+                }
             }
             
             self.navigationController?.popViewController(animated: true)
             NotificationCenter.default.post(name: NOTIFICATION_CLOSE_ONBOARDING_FROM_OUTSIDE,
                 object: nil)
+        }
+        
+        func mustSplit() -> Bool {
+            var result = true
+        
+            let splitValue = UserDefaults.standard.integer(forKey: "userSplitPrefs")
+            if(splitValue == 0) {
+                result = false
+            }
+            
+            return result
         }
         
         func insertNewVCInNavigationStack(_ vc: UIViewController) {
