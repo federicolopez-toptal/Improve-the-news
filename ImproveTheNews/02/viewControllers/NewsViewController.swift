@@ -459,6 +459,8 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
             let link = self.buildApiCall()
             
             print("GATO", "should load " + link)
+            
+            //ALERT(vc: self, title: "URL", message: link)
             self.newsParser.getJSONContents(jsonName: link)
         }
     }
