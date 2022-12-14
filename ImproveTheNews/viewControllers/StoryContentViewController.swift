@@ -18,6 +18,7 @@ class StoryContentViewController: UIViewController {
     private var showMoreFacts: Bool = true
     public var link: String?
     public var api_call: String?
+    var widthForSliders: CGFloat = 0
     
     private var storyData: StoryData?
     private var facts: [StoryFact]?
@@ -125,6 +126,8 @@ class StoryContentViewController: UIViewController {
         if(self.firstTime) {
             self.firstTime = false
             self.loadData()
+            
+//            self.biasSliders.buildViews()
         }
     }
     
@@ -1539,8 +1542,9 @@ extension StoryContentViewController: BiasSliderDelegate, ShadeDelegate {
                                 width: size.width, height: size.height)
         //biasButton.layer.cornerRadius = size * 0.5
         let y = view.frame.height - self.biasSliders.state01_height
-        biasSliders.frame = CGRect(x: 0, y: y, width: view.frame.width, height: 550)
         
+        print(">> W", view.frame.width)
+        biasSliders.frame = CGRect(x: 0, y: y, width: self.widthForSliders, height: 550)
         biasSliders.buildViews()
         self.biasSliders.status = "SL00"
         self.updateBiasButtonPosition()

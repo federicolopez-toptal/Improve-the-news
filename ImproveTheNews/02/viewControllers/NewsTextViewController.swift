@@ -1036,6 +1036,7 @@ extension NewsTextViewController: UITableViewDelegate, UITableViewDataSource,
                 navigationController?.pushViewController(vc, animated: true)
             } else {
                 let vc = StoryContentViewController.createInstance()
+                vc.widthForSliders = view.frame.width
                 vc.link = link
                 vc.api_call = self.buildApiCall()
                 navigationController?.pushViewController(vc, animated: true)

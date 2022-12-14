@@ -164,11 +164,11 @@ extension SliderPopup {
             let miniview = UIView()
             
             stackView.addArrangedSubview(miniview)
+            
             miniview.translatesAutoresizingMaskIntoConstraints = false
             miniview.heightAnchor.constraint(equalToConstant: 60).isActive = true
             miniview.isUserInteractionEnabled = true
 
-            
             let name = UILabel(text: labels[i], font: UIFont(name: "Poppins-SemiBold", size: 17), textColor: biasSliderTitles, textAlignment: .left, numberOfLines: 1)
             
             //let w: CGFloat = stackView.frame.width-(margin*2)
@@ -180,12 +180,21 @@ extension SliderPopup {
             let minLabel = createLabel(name: descriptions[i][0])
             let maxLabel = createLabel(name: descriptions[i][1])
             
-            let sliderX = (UIScreen.main.bounds.width-(stackView.frame.width - 210))/2
+            minLabel.backgroundColor = accentOrange
+            maxLabel.backgroundColor = accentOrange
+            
+            let sliderX = (UIScreen.main.bounds.width-(stackView.frame.width - 230))/2
             let sliderY = name.frame.maxY+3
             let slider = UISlider(backgroundColor: .clear)
             slider.frame = CGRect(x: sliderX, y: sliderY,
-                width: stackView.frame.width - 210,
+                width: stackView.frame.width - 230,
                 height: 20)
+                
+//            print("sliderX", sliderX)
+//            print("sliderW", stackView.frame.width - 230)
+
+            print("* Screen", UIScreen.main.bounds.width)
+            print("* StackView", stackView.frame.width)
                 
             miniview.addSubview(slider)
             slider.translatesAutoresizingMaskIntoConstraints = false
