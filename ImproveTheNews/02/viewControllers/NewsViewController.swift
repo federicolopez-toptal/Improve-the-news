@@ -1645,8 +1645,11 @@ extension NewsViewController {
         
         // SubtopicHeader
         var h: CGFloat = 120
+        let A = !MorePrefsViewController.showStories()
+        let B = MorePrefsViewController.showStories() && section==0
+        
         if(mustSplit()){
-            if(!MorePrefsViewController.showStories()) {
+            if(A || B) {
                 h += 45
             }
         }
@@ -1972,7 +1975,7 @@ extension NewsViewController {
                     sectionHeader.ssDelegate = self
                     sectionHeader.topicDelegate = self
                     sectionHeader.tag = indexPath.section
-                    sectionHeader.configure(biasSliders.stanceValues())
+                    sectionHeader.configure(biasSliders.stanceValues(), section: indexPath.section)
                     
                     
                     let subTopic = newsParser.getTopic(index: indexPath.section)

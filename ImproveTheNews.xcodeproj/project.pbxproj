@@ -40,6 +40,7 @@
 		1F6207692878B26900A97DB9 /* StringExtraStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6207682878B26900A97DB9 /* StringExtraStuff.swift */; };
 		1F6D9176289AEBDF000D7B46 /* StoryArticleLineSep_iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F6D9175289AEBDF000D7B46 /* StoryArticleLineSep_iPad.png */; };
 		1F6D9178289AECB7000D7B46 /* StoryArticleLineSep_vert_iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F6D9177289AECB7000D7B46 /* StoryArticleLineSep_vert_iPad.png */; };
+		1F773C00294CE8FB005E8BB8 /* InfoCopy.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F773BFF294CE8FB005E8BB8 /* InfoCopy.plist */; };
 		1F7DE51527F56354008923FF /* RED_SDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7DE51427F56354008923FF /* RED_SDK.swift */; };
 		1F827C4A279E2B7C0077FB26 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */; };
 		1F8847A528526E3F00667A72 /* ForgotPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8847A328526E3F00667A72 /* ForgotPassViewController.swift */; };
@@ -457,6 +458,7 @@
 		1F6207682878B26900A97DB9 /* StringExtraStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtraStuff.swift; sourceTree = "<group>"; };
 		1F6D9175289AEBDF000D7B46 /* StoryArticleLineSep_iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StoryArticleLineSep_iPad.png; sourceTree = "<group>"; };
 		1F6D9177289AECB7000D7B46 /* StoryArticleLineSep_vert_iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StoryArticleLineSep_vert_iPad.png; sourceTree = "<group>"; };
+		1F773BFF294CE8FB005E8BB8 /* InfoCopy.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = InfoCopy.plist; sourceTree = "<group>"; };
 		1F7DE51427F56354008923FF /* RED_SDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RED_SDK.swift; sourceTree = "<group>"; };
 		1F827C49279E2B7C0077FB26 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		1F8847A328526E3F00667A72 /* ForgotPassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassViewController.swift; sourceTree = "<group>"; };
@@ -1194,6 +1196,7 @@
 			isa = PBXGroup;
 			children = (
 				A81B3B302481E67500A52A97 /* Info.plist */,
+				1F773BFF294CE8FB005E8BB8 /* InfoCopy.plist */,
 				1F587F6C27C7FEE9005181A0 /* AppData.swift */,
 				A81B3B1F2481E67200A52A97 /* AppDelegate.swift */,
 				A81B3B212481E67200A52A97 /* SceneDelegate.swift */,
@@ -1819,6 +1822,7 @@
 				BDDA45072612301100C9C3AF /* RWA64.png in Resources */,
 				BDDA459B2612301100C9C3AF /* KHM64.png in Resources */,
 				BDDA45202612301100C9C3AF /* ARE64.png in Resources */,
+				1F773C00294CE8FB005E8BB8 /* InfoCopy.plist in Resources */,
 				BDDA45462612301100C9C3AF /* PRI64.png in Resources */,
 				BDDA45702612301100C9C3AF /* GRC64.png in Resources */,
 				BDDA457A2612301100C9C3AF /* MUS64.png in Resources */,
@@ -2402,12 +2406,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Beta";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 52;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ImproveTheNews/app/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "ITN Beta";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2432,12 +2437,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 52;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ImproveTheNews/app/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "ITN Beta";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2603,12 +2609,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Beta";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 52;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"ImproveTheNews/Preview Content\"";
 				DEVELOPMENT_TEAM = U7V2C7L759;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ImproveTheNews/app/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "ITN Beta";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

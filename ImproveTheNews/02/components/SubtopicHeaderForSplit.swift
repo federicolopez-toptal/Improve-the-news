@@ -59,7 +59,7 @@ class SubtopicHeaderForSplit: UICollectionReusableView {
     var stackView = UIStackView()
     var stackViewSplit = UIStackView()
     
-    public func configure(_ stancevalues: (Bool, Bool)) {
+    public func configure(_ stancevalues: (Bool, Bool), section: Int) {
         
         backgroundColor = .systemBackground
         addSubview(stackView)
@@ -165,7 +165,7 @@ class SubtopicHeaderForSplit: UICollectionReusableView {
             ])
             
             if(MorePrefsViewController.showStories()) {
-                labelSplit.textColor = .clear
+                if(section != 0){ labelSplit.textColor = .clear }
             }
         }
         
