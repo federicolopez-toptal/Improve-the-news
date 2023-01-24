@@ -103,9 +103,9 @@ class StorySpin {
 
     init(_ json: [String: Any]) {
         
-//        if let _title = json["title"] as? String {
-//            self.title = _title
-//        }
+        if let _title = json["title"] as? String {
+            self.title = _title
+        }
                 
         if let _description = json["description"] as? String {
             self.description = _description
