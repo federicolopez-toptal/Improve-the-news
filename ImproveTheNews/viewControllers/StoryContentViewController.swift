@@ -659,9 +659,15 @@ extension StoryContentViewController {//}: UIGestureRecognizerDelegate {
     private func addSingleSpin(_ spin: StorySpin, index: Int) {
         let spinsVContainer = self.contentView.viewWithTag(103) as! UIStackView
         
+        var _title = spin.title
+        if(_title.isEmpty) {
+            let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            _title = "Narrative " + String(letters[index])
+        }
+        
         let titleLabel = UILabel()
         titleLabel.font = UIFont(name: "Merriweather-Bold", size: 17)
-        titleLabel.text = spin.title
+        titleLabel.text = _title
         titleLabel.numberOfLines = 0
         titleLabel.backgroundColor = .clear
         titleLabel.textColor = self.C(0xFFFFFF, 0xFF643C)
