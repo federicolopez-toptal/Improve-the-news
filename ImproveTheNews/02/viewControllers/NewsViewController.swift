@@ -493,6 +493,11 @@ class NewsViewController: UICollectionViewController, UICollectionViewDelegateFl
                     ]
         }
         
+        if(self.mustSplit()) {
+            ABS[0] = 8
+            ABS[1] = 6
+        }
+        
         var banner: String?
         for bannerID in BannerView.bannerHeights.keys {
             let key = "banner_apiParam_" + bannerID

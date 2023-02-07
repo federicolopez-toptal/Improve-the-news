@@ -381,11 +381,19 @@ class News {
                                     story: self.buildStory(from: article)
                                 )
                                 
-                                self.data.append(news)
-                                count += 1
+                                var mustAdd = true
+                                if(self.mustSplit() && news.story != nil) {
+                                    mustAdd = false
+                                }
+                                if(mustAdd) {
+                                    self.data.append(news)
+                                    count += 1
+                                }
+                                
                             }
                             
-                            self.sectionCounts.append(articles.count)
+                            //self.sectionCounts.append(articles.count)
+                            self.sectionCounts.append(count)
                         }
                     }
                 }
@@ -416,6 +424,18 @@ class News {
         
         
     }
+    
+    func mustSplit() -> Bool {
+        var result = true
+    
+        let splitValue = UserDefaults.standard.integer(forKey: "userSplitPrefs")
+        if(splitValue == 0) {
+            result = false
+        }
+        
+        return result
+    }
+    
     
     func buildStory(from json: JSON) -> Story? {
     
