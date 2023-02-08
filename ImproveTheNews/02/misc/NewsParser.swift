@@ -382,9 +382,9 @@ class News {
                                 )
                                 
                                 var mustAdd = true
-                                if(self.mustSplit() && news.story != nil) {
-                                    mustAdd = false
-                                }
+//                                if(self.mustSplit() && news.story != nil) { // remove story from split view
+//                                    mustAdd = false
+//                                }
                                 if(mustAdd) {
                                     self.data.append(news)
                                     count += 1
